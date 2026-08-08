@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "younoya-storefront",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "NEXT_PUBLIC_MEDUSA_BACKEND_URL": "http://140.245.7.165",
+    "NEXT_PUBLIC_RAZORPAY_KEY_ID": "rzp_test_TNGgxOeUADZzEF"
+  }
+}
