@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Razorpay-Signature, x-shiprocket-token');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -9,111 +9,179 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+function getDB() {
+    static $pdo = null;
+    if ($pdo === null) {
+        try {
+            $pdo = new PDO("mysql:host=127.0.0.1;dbname=younoya_db;charset=utf8mb4", "younoya_user", "YounoyaPass2026!", [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]);
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
+            exit;
+        }
+    }
+    return $pdo;
+}
+
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 // 1. Health Endpoint
 if ($uri === '/' || $uri === '/health') {
+    $db = getDB();
+    $count = $db->query("SELECT COUNT(*) FROM products")->fetchColumn();
     echo json_encode([
         'status' => 'healthy',
         'engine' => 'YOUNOYA Production Micro-Commerce API',
         'php_version' => PHP_VERSION,
-        'database' => 'MariaDB 10.11+',
+        'database' => 'MariaDB 10.11+ (Active)',
+        'products_in_db' => (int)$count,
         'shipping' => '100% Free Express Shipping across India',
         'tax' => 'Inclusive of all taxes',
-        'returns' => 'Mandatory uncut unboxing video required',
         'payment' => 'Razorpay Online Only'
     ]);
     exit;
 }
 
-// 2. Product Catalog API
+// 2. Product Catalog API (Live from MariaDB)
 if ($uri === '/api/v1/products' || $uri === '/products') {
-    echo json_encode([
-        'success' => true,
-        'data' => [
-            [
-                'id' => 'prod_001',
-                'handle' => 'vedic-prosperity-rakhi',
-                'sku' => 'HOFK0009275279',
-                'title' => 'Vedic Prosperity Rakhi Set with Dry Fruits & Consecrated Thread',
-                'subtitle' => 'अब ग्रहों से डरने की ज़रूरत नहीं - vedic rakhi करेगी भाई बहन की रक्षा',
-                'price' => 1099,
-                'original_price' => 1299,
-                'badge' => 'Bestseller',
-                'free_shipping' => true,
-                'tax_inclusive' => true,
-                'description' => 'In cherished traditions, this designer handcrafted Vedic Rakhi set in vibrant colors tells a story of elegance and affection.',
-                'features' => [
-                    'Designer Beads Rakhi Set: 1 N',
-                    'Sacred Symbolism & Vedic Elements: 1 N',
-                    'Almonds: 100 Gm',
-                    'Cashews: 100 Gm',
-                    'Complimentary Roli & Chawal Packets'
-                ]
-            ],
-            [
-                'id' => 'prod_002',
-                'handle' => 'vedic-prosperity-wealth-attraction-rakhi',
-                'sku' => 'HOFK0009275280',
-                'title' => 'Vedic Prosperity & Wealth Attraction Rakhi',
-                'subtitle' => 'Astrologically selected crystal, oyster shells & sacred red-yellow mauli',
-                'price' => 999,
-                'original_price' => 1199,
-                'badge' => 'Popular',
-                'free_shipping' => true,
-                'tax_inclusive' => true,
-                'description' => 'Featuring an astrologically selected crystal, oyster shells, and sacred red-yellow mauli for wealth attraction.',
-                'features' => [
-                    'Astrologically Curated Crystal: 1 N',
-                    'Natural Conch & Oyster Shell Details',
-                    'Sacred Red-Yellow Mauli Thread',
-                    'Complimentary Roli & Chawal Packets'
-                ]
-            ],
-            [
-                'id' => 'prod_003',
-                'handle' => 'vedic-abundance-blessing-rakhi',
-                'sku' => 'HOFK0009275281',
-                'title' => 'Vedic Abundance & Blessing Rakhi',
-                'subtitle' => 'Honour tradition while becoming a keepsake your brother can treasure',
-                'price' => 999,
-                'original_price' => 1199,
-                'badge' => 'New',
-                'free_shipping' => true,
-                'tax_inclusive' => true,
-                'description' => 'Celebrate Raksha Bandhan with a handcrafted Vedic Rakhi where every element has been chosen with intention.',
-                'features' => [
-                    'Handcrafted Vedic Thread: 1 N',
-                    'Sacred Symbolism',
-                    'Reusable Keepsake Box',
-                    'Complimentary Roli & Chawal Packets'
-                ]
-            ],
-            [
-                'id' => 'prod_004',
-                'handle' => 'navagraha-om-protection-kaudi-rakhi',
-                'sku' => 'HOFK0009275282',
-                'title' => 'Navagraha Om Protection Kaudi Rakhi',
-                'subtitle' => 'Sacred kaudis, Om motif & Navagraha-inspired harmony thread',
-                'price' => 1099,
-                'original_price' => 1299,
-                'badge' => 'Sacred',
-                'free_shipping' => true,
-                'tax_inclusive' => true,
-                'description' => 'Sacred kaudis symbolising Goddess Lakshmi blessings with an Om motif representing divine planetary harmony.',
-                'features' => [
-                    'Navagraha-Inspired Crystal Accents',
-                    'Sacred Kaudi Detailing & Om Motif',
-                    'Evil Eye Protection Thread',
-                    'Complimentary Roli & Chawal Packets'
-                ]
-            ]
-        ]
-    ]);
+    $db = getDB();
+    $stmt = $db->query("SELECT * FROM products ORDER BY created_at ASC");
+    $products = $stmt->fetchAll();
+
+    $formatted = array_map(function($p) {
+        return [
+            'id' => $p['id'],
+            'handle' => $p['handle'],
+            'sku' => $p['sku'],
+            'title' => $p['title'],
+            'subtitle' => $p['subtitle'],
+            'price' => (int)$p['price'],
+            'original_price' => (int)$p['original_price'],
+            'badge' => $p['badge'],
+            'free_shipping' => true,
+            'tax_inclusive' => true,
+            'description' => $p['description'],
+            'features' => json_decode($p['features'] ?: '[]', true),
+            'images' => json_decode($p['images'] ?: '[]', true),
+            'meta_title' => $p['meta_title'],
+            'meta_description' => $p['meta_description'],
+            'inventory_count' => (int)$p['inventory_count']
+        ];
+    }, $products);
+
+    echo json_encode(['success' => true, 'data' => $formatted]);
     exit;
 }
 
-// 3. Razorpay Payment Intent API
+// 3. Admin Product CRUD Endpoints
+if (strpos($uri, '/api/v1/admin/products') === 0) {
+    $db = getDB();
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    // List All Products for Admin
+    if ($method === 'GET' && $uri === '/api/v1/admin/products') {
+        $stmt = $db->query("SELECT * FROM products ORDER BY created_at DESC");
+        echo json_encode(['success' => true, 'data' => $stmt->fetchAll()]);
+        exit;
+    }
+
+    // Create New Product
+    if ($method === 'POST' && $uri === '/api/v1/admin/products') {
+        $input = json_decode(file_get_contents('php://input'), true) ?? [];
+        $id = $input['id'] ?? ('prod_' . time());
+        $handle = $input['handle'] ?? preg_replace('/[^a-z0-9]+/', '-', strtolower($input['title'] ?? 'product-' . time()));
+        
+        $stmt = $db->prepare("INSERT INTO products 
+            (id, handle, sku, title, subtitle, price, original_price, badge, description, features, images, meta_title, meta_description, inventory_count)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        
+        $stmt->execute([
+            $id,
+            $handle,
+            $input['sku'] ?? 'HOFK' . time(),
+            $input['title'] ?? 'New Consecrated Item',
+            $input['subtitle'] ?? '',
+            (int)($input['price'] ?? 999),
+            (int)($input['original_price'] ?? 1199),
+            $input['badge'] ?? 'New',
+            $input['description'] ?? '',
+            is_array($input['features'] ?? null) ? json_encode($input['features']) : ($input['features'] ?? '[]'),
+            is_array($input['images'] ?? null) ? json_encode($input['images']) : ($input['images'] ?? '[]'),
+            $input['meta_title'] ?? ($input['title'] . ' | YOUNOYA'),
+            $input['meta_description'] ?? ($input['subtitle'] ?? ''),
+            (int)($input['inventory_count'] ?? 100)
+        ]);
+
+        echo json_encode(['success' => true, 'message' => 'Product published successfully', 'id' => $id]);
+        exit;
+    }
+
+    // Update Product
+    if ($method === 'PUT' && preg_match('#^/api/v1/admin/products/([^/]+)$#', $uri, $matches)) {
+        $id = $matches[1];
+        $input = json_decode(file_get_contents('php://input'), true) ?? [];
+
+        $stmt = $db->prepare("UPDATE products SET 
+            title = ?, subtitle = ?, price = ?, original_price = ?, badge = ?, 
+            description = ?, features = ?, images = ?, meta_title = ?, meta_description = ?, inventory_count = ?
+            WHERE id = ? OR handle = ?");
+        
+        $stmt->execute([
+            $input['title'],
+            $input['subtitle'],
+            (int)$input['price'],
+            (int)$input['original_price'],
+            $input['badge'],
+            $input['description'],
+            is_array($input['features']) ? json_encode($input['features']) : $input['features'],
+            is_array($input['images']) ? json_encode($input['images']) : $input['images'],
+            $input['meta_title'],
+            $input['meta_description'],
+            (int)$input['inventory_count'],
+            $id,
+            $id
+        ]);
+
+        echo json_encode(['success' => true, 'message' => 'Product updated successfully']);
+        exit;
+    }
+
+    // Delete Product
+    if ($method === 'DELETE' && preg_match('#^/api/v1/admin/products/([^/]+)$#', $uri, $matches)) {
+        $id = $matches[1];
+        $stmt = $db->prepare("DELETE FROM products WHERE id = ? OR handle = ?");
+        $stmt->execute([$id, $id]);
+        echo json_encode(['success' => true, 'message' => 'Product deleted successfully']);
+        exit;
+    }
+}
+
+// 4. Image Upload Endpoint for Admin
+if ($uri === '/api/v1/admin/upload' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_FILES['file'])) {
+        $uploadDir = __DIR__ . '/uploads/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $_FILES['file']['name']);
+        $target = $uploadDir . $fileName;
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $target)) {
+            echo json_encode([
+                'success' => true,
+                'url' => 'https://api.younoya.com/uploads/' . $fileName
+            ]);
+            exit;
+        }
+    }
+    http_response_code(400);
+    echo json_encode(['error' => 'Upload failed']);
+    exit;
+}
+
+// 5. Razorpay Payment Intent API
 if ($uri === '/api/v1/checkout/payment-intent') {
     $input = json_decode(file_get_contents('php://input'), true) ?? [];
     $amount = (int) (($input['amount'] ?? 1099) * 100);
@@ -130,24 +198,6 @@ if ($uri === '/api/v1/checkout/payment-intent') {
             'name' => $input['fullName'] ?? 'Customer',
             'email' => $input['email'] ?? 'customer@example.com',
             'contact' => $input['telephone'] ?? '+919876543210'
-        ]
-    ]);
-    exit;
-}
-
-// 4. Live Tracking API
-if (strpos($uri, '/api/v1/orders/track/') === 0) {
-    $awb = basename($uri);
-    echo json_encode([
-        'success' => true,
-        'data' => [
-            'awb' => $awb,
-            'status' => 'IN TRANSIT',
-            'courier_name' => 'Bluedart Express',
-            'scans' => [
-                ['date' => date('Y-m-d H:i:s', time() - 14400), 'activity' => 'Shipment dispatched from Varanasi Consecration Center', 'location' => 'Varanasi Central Hub'],
-                ['date' => date('Y-m-d H:i:s'), 'activity' => 'In transit to destination sorting hub', 'location' => 'National Express Sorting Facility']
-            ]
         ]
     ]);
     exit;
