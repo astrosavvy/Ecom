@@ -1,6 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 
+export async function generateStaticParams() {
+  return [
+    { id: "sample_order_1" },
+    { id: "ord_confirmed" }
+  ];
+}
+
 export default async function OrderConfirmedPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 

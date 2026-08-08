@@ -65,6 +65,15 @@ const SIMILAR_PRODUCTS = [
   { handle: "navagraha-om-protection-kaudi-rakhi", title: "Navagraha Om Protection Kaudi Rakhi", price: 1099, originalPrice: 1299 },
 ];
 
+export async function generateStaticParams() {
+  return [
+    { handle: "vedic-prosperity-rakhi" },
+    { handle: "vedic-prosperity-wealth-attraction-rakhi" },
+    { handle: "vedic-abundance-blessing-rakhi" },
+    { handle: "navagraha-om-protection-kaudi-rakhi" }
+  ];
+}
+
 export default async function ProductDetailPage({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params;
   const product = PRODUCT_MAP[handle] || PRODUCT_MAP["vedic-prosperity-rakhi"];

@@ -1,4 +1,9 @@
-import React from 'react';
+export async function generateStaticParams() {
+  return [
+    { slug: "vedic-symbolism-raksha-bandhan" },
+    { slug: "navagraha-protection-thread" }
+  ];
+}
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
