@@ -1,140 +1,104 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { ChevronDown, Infinity as InfinityIcon, Menu, X } from "lucide-react";
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const navLinks = [
+    { label: "Home", href: "/", active: true },
+    { label: "Wellness", href: "/search", dropdown: true },
+    { label: "Routine", href: "/blog" },
+    { label: "Our Team", href: "/about" },
+  ];
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 transition-all duration-300 ${
-          scrolled ? "bg-[#0a0608]/90 backdrop-blur-xl border-b border-white/10 py-4 shadow-2xl" : "bg-transparent"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Brand Logo - Dancing Script */}
-          <Link
-            href="/"
-            className="font-dancing text-white text-2xl md:text-3xl font-bold tracking-wide hover:opacity-90 transition-opacity"
-          >
-            Serene
-          </Link>
+      <header className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-5 sm:px-8 py-5">
+        {/* Left: Brand Logo with Infinity Icon */}
+        <Link href="/" className="flex items-center gap-2 text-white font-medium text-base hover:opacity-90 transition-opacity">
+          <InfinityIcon size={22} strokeWidth={1.5} className="text-white" />
+          <span className="tracking-tight">Equilibrium</span>
+        </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-12 text-white/80 text-sm tracking-wide font-inter">
-            <Link href="/about" className="hover:text-white transition-colors">
-              About
-            </Link>
-            <Link href="/search" className="hover:text-white transition-colors">
-              Services
-            </Link>
-            <Link href="/blog" className="hover:text-white transition-colors">
-              Journal
-            </Link>
-            <Link href="/contact" className="hover:text-white transition-colors">
-              Contact
-            </Link>
-          </nav>
-
-          {/* Right Desktop CTA */}
-          <div className="hidden md:flex items-center gap-6">
+        {/* Center: Desktop Nav Pill */}
+        <nav className="hidden md:flex liquid-glass items-center gap-1 rounded-xl px-2 py-2">
+          {navLinks.map((link) => (
             <Link
-              href="/checkout"
-              className="bg-white text-black px-7 py-3 rounded-full font-medium text-sm tracking-wide hover:bg-white/90 transition-all duration-300 button-glow"
+              key={link.label}
+              href={link.href}
+              className={`flex items-center gap-0.5 px-3 py-1.5 rounded-md text-sm transition-colors ${
+                link.active ? "bg-white/15 text-white" : "text-white/70 hover:text-white"
+              }`}
             >
-              Book a consultation
+              <span>{link.label}</span>
+              {link.dropdown && <ChevronDown size={13} className="mt-px" />}
             </Link>
-          </div>
+          ))}
+        </nav>
 
-          {/* Mobile Hamburger Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 z-50 relative focus:outline-none"
-            aria-label="Toggle Menu"
+        {/* Right: Desktop Action CTAs */}
+        <div className="hidden md:flex items-center gap-3">
+          <Link
+            href="/account"
+            className="liquid-glass text-white text-sm font-medium px-4 py-2.5 rounded-full hover:bg-white/5 transition-colors"
           >
-            <span
-              className={`w-6 h-0.5 bg-white transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                mobileMenuOpen ? "rotate-45 translate-y-[8px]" : ""
-              }`}
-            />
-            <span
-              className={`w-6 h-0.5 bg-white transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                mobileMenuOpen ? "opacity-0 scale-0" : ""
-              }`}
-            />
-            <span
-              className={`w-6 h-0.5 bg-white transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                mobileMenuOpen ? "-rotate-45 -translate-y-[8px]" : ""
-              }`}
-            />
-          </button>
+            Log in
+          </Link>
+          <Link
+            href="/checkout"
+            className="bg-white text-black text-sm font-medium px-4 py-2.5 rounded-full hover:bg-white/90 transition-colors"
+          >
+            Begin Now
+          </Link>
         </div>
+
+        {/* Mobile Hamburger Toggle */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="md:hidden liquid-glass text-white p-2 rounded-lg focus:outline-none"
+          aria-label="Toggle Navigation"
+        >
+          {menuOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
       </header>
 
-      {/* Mobile Slide-in Menu */}
-      <div
-        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ${
-          mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-        onClick={() => setMobileMenuOpen(false)}
-      >
-        <div
-          className={`fixed top-0 right-0 h-full w-[85%] max-w-[340px] bg-[#0a0608]/95 backdrop-blur-xl border-l border-white/10 p-8 flex flex-col justify-between transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="pt-16 space-y-6">
-            <div className="font-dancing text-white text-3xl font-bold mb-8">Serene</div>
-            <nav className="flex flex-col gap-6 text-lg tracking-wide font-inter">
-              {[
-                { name: "About", href: "/about", delay: "150ms" },
-                { name: "Services", href: "/search", delay: "225ms" },
-                { name: "Journal", href: "/blog", delay: "300ms" },
-                { name: "Contact", href: "/contact", delay: "375ms" },
-              ].map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  style={{ transitionDelay: item.delay }}
-                  className={`text-white/80 hover:text-white transition-all transform ${
-                    mobileMenuOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
-          </div>
+      {/* Mobile Menu Dropdown */}
+      {menuOpen && (
+        <div className="absolute top-[72px] left-4 right-4 z-30 md:hidden liquid-glass rounded-2xl p-4 flex flex-col gap-1 shadow-2xl">
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center justify-between w-full px-4 py-3 rounded-lg text-sm text-white/80 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              <span>{link.label}</span>
+              {link.dropdown && <ChevronDown size={14} />}
+            </Link>
+          ))}
 
-          <div
-            style={{ transitionDelay: "450ms" }}
-            className={`transition-all duration-300 transform ${
-              mobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
+          {/* Bottom Mobile Action Buttons */}
+          <div className="flex gap-2 mt-2 pt-3 border-t border-white/10">
+            <Link
+              href="/account"
+              onClick={() => setMenuOpen(false)}
+              className="flex-1 text-center liquid-glass text-white text-sm font-medium px-4 py-2.5 rounded-full hover:bg-white/5 transition-colors"
+            >
+              Log in
+            </Link>
             <Link
               href="/checkout"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block w-full text-center bg-white text-black py-4 rounded-full font-medium text-sm tracking-wide hover:bg-white/90 transition-all button-glow"
+              onClick={() => setMenuOpen(false)}
+              className="flex-1 text-center bg-white text-black text-sm font-medium px-4 py-2.5 rounded-full hover:bg-white/90 transition-colors"
             >
-              Book a consultation
+              Begin Now
             </Link>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
