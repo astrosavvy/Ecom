@@ -11,4 +11,4 @@ WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app ./
 EXPOSE 9000
-CMD ["sh", "-c", "npx medusa db:migrate && npm run start"]
+CMD ["sh", "-c", "npx medusa db:create --db younoya || true && npx medusa db:migrate && npm run start"]
