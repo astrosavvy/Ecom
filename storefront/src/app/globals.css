@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  /* YOUNOYA Design Tokens */
+  --yn-primary: hsl(24, 75%, 48%);
+  --yn-primary-hover: hsl(24, 75%, 40%);
+  --yn-primary: hsl(28, 90%, 52%);
+  --yn-primary-hover: hsl(28, 90%, 46%);
+  --yn-secondary: hsl(36, 40%, 95%);
+  --yn-accent: hsl(22, 95%, 45%);
+  --yn-accent-hover: hsl(168, 55%, 28%);
+  --yn-surface: hsl(35, 100%, 98%);
+  --yn-surface-alt: hsl(30, 10%, 94%);
+  --yn-card: hsl(0, 0%, 100%);
+  --yn-text: hsl(20, 15%, 18%);
+  --yn-text-muted: hsl(20, 10%, 48%);
+  --yn-error: hsl(0, 65%, 50%);
+  --yn-success: hsl(145, 45%, 42%);
+  --yn-warning: hsl(38, 90%, 50%);
+  --yn-border: hsl(30, 20%, 90%);
+
+  --yn-font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --yn-font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --yn-radius-sm: 8px;
+  --yn-radius-md: 12px;
+  --yn-radius-lg: 24px;
+
+  --yn-shadow-sm: 0 1px 3px hsla(20, 15%, 18%, 0.08);
+  --yn-shadow-md: 0 4px 12px hsla(20, 15%, 18%, 0.1);
+  --yn-shadow-lg: 0 8px 30px hsla(20, 15%, 18%, 0.12);
+}
+
+body {
+  font-family: var(--yn-font-body);
+  color: var(--yn-text);
+  background-color: var(--yn-surface);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--yn-font-heading);
+  color: var(--yn-text);
+}
+
+a {
+  color: var(--yn-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--yn-primary-hover);
+}
+
+button, a, input[type="submit"], input[type="button"] {
+  min-height: 44px;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--yn-accent);
+  outline-offset: 2px;
+}
