@@ -15,8 +15,7 @@ module.exports = defineConfig({
     },
   },
   admin: {
-    disable: false,
-    path: '/app',
+    disable: true,
   },
   modules: [
     { resolve: "./src/modules/younoya-otp" },
