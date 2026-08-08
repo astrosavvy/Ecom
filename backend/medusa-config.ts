@@ -5,7 +5,11 @@ loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/younoya',
-    redisUrl: process.env.REDIS_URL || 'redis://localhost:6379',
+    databaseDriverOptions: {
+      connection: {
+        ssl: false,
+      },
+    },
     http: {
       storeCors: process.env.STORE_CORS || 'http://localhost:8000',
       adminCors: process.env.ADMIN_CORS || 'http://localhost:9000',
