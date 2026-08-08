@@ -5,7 +5,6 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN chmod +x ./node_modules/.bin/* || true
-RUN npx medusa build
 
 FROM node:20-alpine AS runner
 WORKDIR /app
