@@ -5,7 +5,7 @@ import { Infinity as InfinityIcon } from "lucide-react";
 export function Footer() {
   return (
     <footer className="w-full bg-[#0a0a0c] text-white/70 border-t border-white/10 relative z-20">
-      <div className="max-w-7xl mx-auto px-6 sm:px-12 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-10">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-10 text-left">
         {/* Brand & Purpose */}
         <div className="md:col-span-5 space-y-4">
           <Link
