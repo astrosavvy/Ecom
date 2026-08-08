@@ -1,82 +1,140 @@
-import React from 'react';
-import Link from 'next/link';
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 export function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="w-full bg-white font-body border-b border-orange-100 sticky top-0 z-50 shadow-xs">
-      {/* Top Warm Orange Announcement Bar */}
-      <div className="bg-[#f97316] text-white text-xs font-semibold py-1.5 px-4 text-center tracking-wide flex justify-between items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <span>Free Express Shipping across India on Rakhi Collection | Consecrated & Astrologically Blessed</span>
-        <span className="hidden sm:inline">Customer Helpline: +91 (022) 8000-9090</span>
-      </div>
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 transition-all duration-300 ${
+          scrolled ? "bg-[#0a0608]/90 backdrop-blur-xl border-b border-white/10 py-4 shadow-2xl" : "bg-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* Brand Logo - Dancing Script */}
+          <Link
+            href="/"
+            className="font-dancing text-white text-2xl md:text-3xl font-bold tracking-wide hover:opacity-90 transition-opacity"
+          >
+            Serene
+          </Link>
 
-      {/* Main Header Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group shrink-0 transition-transform hover:scale-105">
-          <div className="h-11 w-11 rounded-full bg-gradient-to-tr from-amber-600 to-orange-500 text-white flex items-center justify-center font-heading text-2xl font-bold italic shadow-md">
-            y
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-12 text-white/80 text-sm tracking-wide font-inter">
+            <Link href="/about" className="hover:text-white transition-colors">
+              About
+            </Link>
+            <Link href="/search" className="hover:text-white transition-colors">
+              Services
+            </Link>
+            <Link href="/blog" className="hover:text-white transition-colors">
+              Journal
+            </Link>
+            <Link href="/contact" className="hover:text-white transition-colors">
+              Contact
+            </Link>
+          </nav>
+
+          {/* Right Desktop CTA */}
+          <div className="hidden md:flex items-center gap-6">
+            <Link
+              href="/checkout"
+              className="bg-white text-black px-7 py-3 rounded-full font-medium text-sm tracking-wide hover:bg-white/90 transition-all duration-300 button-glow"
+            >
+              Book a consultation
+            </Link>
           </div>
-          <span className="font-heading italic text-3xl tracking-tight text-stone-900 font-bold">
-            YOUNOYA
-          </span>
-        </Link>
 
-        {/* Search Bar */}
-        <div className="flex-1 max-w-xl hidden md:block">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search Vedic Rakhis, Ritual Kits & Blessing Sets..."
-              className="w-full h-11 px-5 pr-12 text-xs border border-orange-200 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500/50 bg-orange-50/30 transition-all"
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 z-50 relative focus:outline-none"
+            aria-label="Toggle Menu"
+          >
+            <span
+              className={`w-6 h-0.5 bg-white transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                mobileMenuOpen ? "rotate-45 translate-y-[8px]" : ""
+              }`}
             />
-            <button className="absolute right-4 top-3 text-orange-500 hover:text-orange-700 transition-colors">
-              🔍
-            </button>
+            <span
+              className={`w-6 h-0.5 bg-white transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                mobileMenuOpen ? "opacity-0 scale-0" : ""
+              }`}
+            />
+            <span
+              className={`w-6 h-0.5 bg-white transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                mobileMenuOpen ? "-rotate-45 -translate-y-[8px]" : ""
+              }`}
+            />
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Slide-in Menu */}
+      <div
+        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ${
+          mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        <div
+          className={`fixed top-0 right-0 h-full w-[85%] max-w-[340px] bg-[#0a0608]/95 backdrop-blur-xl border-l border-white/10 p-8 flex flex-col justify-between transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="pt-16 space-y-6">
+            <div className="font-dancing text-white text-3xl font-bold mb-8">Serene</div>
+            <nav className="flex flex-col gap-6 text-lg tracking-wide font-inter">
+              {[
+                { name: "About", href: "/about", delay: "150ms" },
+                { name: "Services", href: "/search", delay: "225ms" },
+                { name: "Journal", href: "/blog", delay: "300ms" },
+                { name: "Contact", href: "/contact", delay: "375ms" },
+              ].map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{ transitionDelay: item.delay }}
+                  className={`text-white/80 hover:text-white transition-all transform ${
+                    mobileMenuOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          <div
+            style={{ transitionDelay: "450ms" }}
+            className={`transition-all duration-300 transform ${
+              mobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            }`}
+          >
+            <Link
+              href="/checkout"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block w-full text-center bg-white text-black py-4 rounded-full font-medium text-sm tracking-wide hover:bg-white/90 transition-all button-glow"
+            >
+              Book a consultation
+            </Link>
           </div>
         </div>
-
-        {/* Header Actions */}
-        <div className="flex items-center gap-6 text-xs font-semibold text-stone-700 shrink-0">
-          <Link href="/account/orders" className="flex flex-col items-center gap-1 hover:text-orange-600 transition-colors">
-            <span className="text-lg">📍</span>
-            <span className="hidden sm:inline">Track Order</span>
-          </Link>
-          <Link href="/account" className="flex flex-col items-center gap-1 hover:text-orange-600 transition-colors">
-            <span className="text-lg">🤍</span>
-            <span className="hidden sm:inline">Wishlist</span>
-          </Link>
-          <Link href="/cart" className="flex flex-col items-center gap-1 hover:text-orange-600 transition-colors relative">
-            <span className="text-lg">🛒</span>
-            <span className="hidden sm:inline">Cart</span>
-            <span className="absolute -top-1 -right-2 bg-orange-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold animate-pulse">
-              1
-            </span>
-          </Link>
-          <Link href="/account" className="flex flex-col items-center gap-1 hover:text-orange-600 transition-colors">
-            <span className="text-lg">👤</span>
-            <span className="hidden sm:inline">Sign In</span>
-          </Link>
-        </div>
       </div>
-
-      {/* Category Navigation Bar - Filtered specifically to Rakhi Collections */}
-      <nav className="border-t border-orange-100 bg-orange-50/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-10 text-xs font-bold text-stone-800 py-3 uppercase tracking-wider">
-          <Link href="/" className="text-orange-600 font-extrabold border-b-2 border-orange-600 pb-0.5">
-            Sacred Vedic Rakhi Collection
-          </Link>
-          <Link href="/search?category=bhaiya-bhabhi" className="hover:text-orange-600 transition-colors">
-            Bhaiya Bhabhi Sets
-          </Link>
-          <Link href="/search?category=navagraha" className="hover:text-orange-600 transition-colors">
-            Navagraha Protection Rakhi
-          </Link>
-          <Link href="/search?category=puja-kits" className="hover:text-orange-600 transition-colors">
-            Complimentary Roli-Chawal Kits
-          </Link>
-        </div>
-      </nav>
-    </header>
+    </>
   );
 }
