@@ -1,7 +1,11 @@
-name: Deploy YOUNOYA Stack to VPS
+name: Deploy Backend & Database Stack to VPS
 
 on:
   push:
+    paths:
+      - 'backend/**'
+      - 'docker-compose.prod.yml'
+      - '.github/workflows/deploy.yml'
     branches:
       - main
       - master
@@ -13,7 +17,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Deploy via SSH (Pull Latest Code & Rebuild Fast)
+      - name: Deploy Backend & Database via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -25,7 +29,6 @@ jobs:
             mkdir -p /home/ubuntu/younoya
             cd /home/ubuntu/younoya
             if [ ! -d ".git" ]; then
-              echo "Initializing Git repository..."
               git init
               git remote add origin https://github.com/astrosavvy/Ecom.git
             fi

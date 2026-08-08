@@ -1,68 +1,40 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: younoya_backend
-    restart: always
-    env_file: ./backend/.env.production
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_started
-    ports:
-      - "9000:9000"
-    networks:
-      - younoya_network
-
-  storefront:
-    build:
-      context: ./storefront
-      dockerfile: Dockerfile
-    container_name: younoya_storefront
-    restart: always
-    env_file: ./storefront/.env.production
-    depends_on:
-      - backend
-    ports:
-      - "8000:8000"
-    networks:
-      - younoya_network
-
+  # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
     container_name: younoya_db
     restart: always
     environment:
-      POSTGRES_DB: younoya
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres_prod_pass_123
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: younoya
     volumes:
       - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - younoya_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d younoya"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
       timeout: 5s
       retries: 5
 
+  # Redis Cache & Queue
   redis:
     image: redis:7-alpine
     container_name: younoya_redis
     restart: always
-    ports:
-      - "6379:6379"
     volumes:
       - redisdata:/data
+    ports:
+      - "6379:6379"
     networks:
       - younoya_network
 
+  # Mailpit (Dev SMTP)
   mailpit:
     image: axllent/mailpit:latest
     container_name: younoya_mailpit
@@ -72,17 +44,41 @@ services:
       - "1025:1025"
     networks:
       - younoya_network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "1025"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # Medusa.js v2 Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: younoya_backend
+    restart: always
+    env_file:
+      - ./backend/.env.production
+    ports:
+      - "9000:9000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - younoya_network
+
+  # Cloudflare Zero Trust Tunnel
   tunnel:
     image: cloudflare/cloudflared:latest
     container_name: younoya_tunnel
     restart: always
-    command: tunnel --no-autoupdate run --token eyJhIjoiOGExNzgxNWYwNDg4NzM3MDJlODUyMTUzZTg0ZjZmNTYiLCJ0IjoiNmQ3NzUxOWItMDA1ZC00YmU5LWJmMGYtMzBiYTlkMjliZDNiIiwicyI6Ik5EY3dPV016TTJJdE5EUTFOQzAwTldZNExXRXdNall0TWpBNVpERmlNRGN5WmpReiJ9
-    networks:
-      - younoya_network
+    command: tunnel run --token eyJhIjoiOGExNzgxNWYwNDg4NzM3MDJlODUyMTUzZTg0ZjZmNTYiLCJ0IjoiNmQ3NzUxOWItMDA1ZC00YmU5LWJmMGYtMzBiYTlkMjliZDNiIiwicyI6Ik5EY3dPV016TTJJdE5EUTFOQzAwTldZNExXRXdNall0TWpBNVpERmlNRGN5WmpReiJ9
     depends_on:
       - backend
-      - storefront
+    networks:
+      - younoya_network
 
 volumes:
   pgdata:
