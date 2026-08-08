@@ -1,0 +1,6 @@
+name = "younoya-edge-bff"
+main = "src/index.ts"
+compatibility_date = "2026-08-08"
+
+[vars]
+BACKEND_ORIGIN = "http://140.245.7.165"
