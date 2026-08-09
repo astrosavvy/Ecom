@@ -210,22 +210,17 @@ export default function DynamicMonochromeProductPage() {
     }
   };
 
-  const rawImages: string[] = Array.isArray(product.images)
+  const rawImages: string[] = Array.isArray(product?.images)
     ? product.images
-    : (typeof product.images === "string" ? JSON.parse(product.images || "[]") : []);
+    : (typeof product?.images === "string" ? JSON.parse(product.images || "[]") : []);
 
-  const rawFeatures: string[] = Array.isArray(product.features)
+  const rawFeatures: string[] = Array.isArray(product?.features)
     ? product.features
-    : (typeof product.features === "string" ? JSON.parse(product.features || "[]") : []);
+    : (typeof product?.features === "string" ? JSON.parse(product.features || "[]") : []);
 
-  const images = rawImages.length >= 4 
+  const images = rawImages.length > 0 
     ? rawImages 
-    : [
-        rawImages[0] || "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800",
-        "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800",
-        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
-        "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&q=80&w=800"
-      ];
+    : ["/younoya_logo.png"];
 
   const handleAddToCart = () => {
     addItem({

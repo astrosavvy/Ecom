@@ -20,63 +20,9 @@ interface Product {
   features: string[] | string;
 }
 
-const FALLBACK_PRODUCTS: Product[] = [
-  {
-    id: "prod_1",
-    handle: "vedic-prosperity-rakhi",
-    sku: "HOFK0009275279",
-    title: "Vedic Prosperity Rakhi Set with Dry Fruits & Consecrated Thread",
-    subtitle: "Sacred consecration for sibling grace and planetary harmony",
-    price: 1099,
-    original_price: 1299,
-    badge: "Signature Edition",
-    description: "An authentic consecrated Vedic Rakhi energized with sacred mantras, hand-threaded with Resham, accompanied by premium California almonds and sacred Akshat-Roli.",
-    images: ["https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"],
-    features: ["Prana Pratishtha Consecration", "Sacred Resham & Gold Wire", "Includes Roli, Chawal & Dry Fruits"]
-  },
-  {
-    id: "prod_2",
-    handle: "vedic-prosperity-wealth-attraction-rakhi",
-    sku: "HOFK0009275280",
-    title: "Vedic Prosperity & Wealth Attraction Rakhi",
-    subtitle: "Astrologically selected crystal, oyster shells & sacred mauli",
-    price: 989,
-    original_price: 1199,
-    badge: "Prosperity",
-    description: "Handcrafted with natural Gomti Chakra and energized yellow Kaudi, dedicated to invoking Goddess Lakshmi's perpetual blessings for brothers.",
-    images: ["https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800"],
-    features: ["Natural Gomti Chakra", "Yellow Kaudi Shell", "Energized by Vedic Pandits"]
-  },
-  {
-    id: "prod_3",
-    handle: "vedic-abundance-blessing-rakhi",
-    sku: "HOFK0009275281",
-    title: "Vedic Abundance & Blessing Rakhi",
-    subtitle: "A keepsake designed to be treasured long after the festive hour",
-    price: 999,
-    original_price: 1199,
-    badge: "Abundance",
-    description: "Created using pure silver-plated motifs and blessed Rudraksha beads for health, vitality, and shielding negative energies.",
-    images: ["https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800"],
-    features: ["5 Mukhi Rudraksha Bead", "Silver-Plated Centerpiece", "100% Organic Silk Threads"]
-  },
-  {
-    id: "prod_4",
-    handle: "navagraha-om-protection-kaudi-rakhi",
-    sku: "HOFK0009275282",
-    title: "Navagraha Om Protection Kaudi Rakhi",
-    subtitle: "Sacred kaudi, Om motif & Navagraha-inspired planetary harmony",
-    price: 1099,
-    original_price: 1299,
-    badge: "Sacred Shield",
-    description: "Harmonizes the 9 astrological planets with 9 colored sacred silk threads and a central energized brass Om talisman.",
-    images: ["https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&q=80&w=800"],
-    features: ["9 Astrological Silk Strands", "Pure Brass Om Talisman", "Planetary Shielding Blessing"]
-  }
-];
-
 export default function ProductsCatalogPage() {
-  const [products, setProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [addedItem, setAddedItem] = useState<string | null>(null);
@@ -90,7 +36,8 @@ export default function ProductsCatalogPage() {
           setProducts(data.data);
         }
       })
-      .catch((e) => console.log("Using cached products:", e));
+      .catch((e) => console.log("Error loading live products from database:", e))
+      .finally(() => setLoading(false));
   }, []);
 
   const categories = ["All", "Signature", "Prosperity", "Sacred Shield", "Abundance"];
@@ -174,77 +121,96 @@ export default function ProductsCatalogPage() {
         </div>
 
         {/* Product Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((prod) => {
-            const prodImgs: string[] = Array.isArray(prod.images)
-              ? prod.images
-              : (typeof prod.images === "string" ? JSON.parse(prod.images || "[]") : []);
-            const thumb = prodImgs[0] || "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800";
-
-            return (
-              <div
-                key={prod.id}
-                className="clinical-card p-6 flex flex-col justify-between space-y-5"
-              >
-                <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4]">
-                  <img
-                    src={thumb}
-                    alt={prod.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
-                  {prod.badge && (
-                    <span className="absolute top-3 left-3 bg-[#1C1C1C] text-white text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-1 rounded-md shadow-sm">
-                      {prod.badge}
-                    </span>
-                  )}
-                </div>
-
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((n) => (
+              <div key={n} className="clinical-card p-6 flex flex-col justify-between space-y-5 animate-pulse">
+                <div className="w-full aspect-square rounded-2xl bg-stone-200" />
                 <div className="space-y-2">
-                  <Link href={`/products/${prod.handle}`}>
-                    <h3 className="text-sm font-bold font-heading text-[#1C1C1C] hover:text-[#D4AF37] transition-colors line-clamp-2 leading-snug">
-                      {prod.title}
-                    </h3>
-                  </Link>
-                  <p className="text-[11px] text-stone-500 line-clamp-1">
-                    {prod.subtitle}
-                  </p>
-
-                  <div className="flex items-baseline gap-2 pt-1">
-                    <span className="text-lg font-extrabold font-mono text-[#1C1C1C]">₹{prod.price}</span>
-                    <span className="text-xs text-stone-400 line-through">₹{prod.original_price}</span>
-                  </div>
+                  <div className="h-4 bg-stone-200 rounded w-3/4" />
+                  <div className="h-3 bg-stone-100 rounded w-1/2" />
+                  <div className="h-5 bg-stone-200 rounded w-1/3 pt-1" />
                 </div>
-
                 <div className="grid grid-cols-2 gap-2 pt-1">
-                  <button
-                    onClick={() => handleAddToCart(prod)}
-                    className="py-2.5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold hover:bg-[#D4DFD7] transition-colors flex items-center justify-center gap-1"
-                  >
-                    {addedItem === prod.id ? (
-                      <>
-                        <Check size={13} className="text-emerald-700" />
-                        <span className="text-emerald-700">Added</span>
-                      </>
-                    ) : (
-                      <>
-                        <ShoppingBag size={13} />
-                        <span>Add</span>
-                      </>
-                    )}
-                  </button>
-
-                  <Link
-                    href="/checkout"
-                    onClick={() => handleAddToCart(prod)}
-                    className="py-2.5 rounded-full bg-[#1C1C1C] text-white text-xs font-bold uppercase tracking-wider text-center flex items-center justify-center hover:bg-[#333333] transition-colors"
-                  >
-                    Buy Now
-                  </Link>
+                  <div className="h-9 bg-stone-200 rounded-full" />
+                  <div className="h-9 bg-stone-200 rounded-full" />
                 </div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredProducts.map((prod) => {
+              const prodImgs: string[] = Array.isArray(prod.images)
+                ? prod.images
+                : (typeof prod.images === "string" ? JSON.parse(prod.images || "[]") : []);
+              const thumb = prodImgs[0] || "/younoya_logo.png";
+
+              return (
+                <div
+                  key={prod.id}
+                  className="clinical-card p-6 flex flex-col justify-between space-y-5"
+                >
+                  <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4]">
+                    <img
+                      src={thumb}
+                      alt={prod.title}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                    {prod.badge && (
+                      <span className="absolute top-3 left-3 bg-[#1C1C1C] text-white text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-1 rounded-md shadow-sm">
+                        {prod.badge}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Link href={`/products/${prod.handle}`}>
+                      <h3 className="text-sm font-bold font-heading text-[#1C1C1C] hover:text-[#D4AF37] transition-colors line-clamp-2 leading-snug">
+                        {prod.title}
+                      </h3>
+                    </Link>
+                    <p className="text-[11px] text-stone-500 line-clamp-1">
+                      {prod.subtitle}
+                    </p>
+
+                    <div className="flex items-baseline gap-2 pt-1">
+                      <span className="text-lg font-extrabold font-mono text-[#1C1C1C]">₹{prod.price}</span>
+                      <span className="text-xs text-stone-400 line-through">₹{prod.original_price}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <button
+                      onClick={() => handleAddToCart(prod)}
+                      className="py-2.5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold hover:bg-[#D4DFD7] transition-colors flex items-center justify-center gap-1"
+                    >
+                      {addedItem === prod.id ? (
+                        <>
+                          <Check size={13} className="text-emerald-700" />
+                          <span className="text-emerald-700">Added</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingBag size={13} />
+                          <span>Add</span>
+                        </>
+                      )}
+                    </button>
+
+                    <Link
+                      href="/checkout"
+                      onClick={() => handleAddToCart(prod)}
+                      className="py-2.5 rounded-full bg-[#1C1C1C] text-white text-xs font-bold uppercase tracking-wider text-center flex items-center justify-center hover:bg-[#333333] transition-colors"
+                    >
+                      Buy Now
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <MobileStickyCart />
