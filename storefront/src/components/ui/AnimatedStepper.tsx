@@ -91,42 +91,49 @@ export function AnimatedStepper({
       {...rest}
     >
       <div
-        className={`mx-auto w-full max-w-2xl overflow-hidden rounded-3xl bg-[#121520]/80 border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.5)] backdrop-blur-2xl ${stepCircleContainerClassName}`}
+        className={`mx-auto w-full max-w-2xl overflow-hidden rounded-[32px] bg-white border border-[#E2E8E4] shadow-md ${stepCircleContainerClassName}`}
       >
         {/* Indicators */}
         <div className={`flex w-full items-center px-8 pt-8 pb-4 ${stepContainerClassName}`}>
           {stepsArray.map((_, index) => {
             const stepNumber = index + 1;
             const isNotLastStep = index < totalSteps - 1;
-            return (
-              <React.Fragment key={stepNumber}>
-                {renderStepIndicator ? (
-                  renderStepIndicator({
+
+            if (renderStepIndicator) {
+              return (
+                <React.Fragment key={stepNumber}>
+                  {renderStepIndicator({
                     step: stepNumber,
                     currentStep,
-                    onStepClick: (clicked) => {
-                      if (clicked > currentStep && onBeforeStepChange && !onBeforeStepChange(currentStep)) {
-                        return;
+                    onStepClick: (step) => {
+                      if (!disableStepIndicators) {
+                        setDirection(step > currentStep ? 1 : -1);
+                        updateStep(step);
                       }
-                      setDirection(clicked > currentStep ? 1 : -1);
-                      updateStep(clicked);
+                    },
+                  })}
+                  {isNotLastStep && (
+                    <StepConnector isComplete={currentStep > stepNumber} />
+                  )}
+                </React.Fragment>
+              );
+            }
+
+            return (
+              <React.Fragment key={stepNumber}>
+                <StepIndicator
+                  step={stepNumber}
+                  currentStep={currentStep}
+                  onStepClick={(step) => {
+                    if (!disableStepIndicators) {
+                      setDirection(step > currentStep ? 1 : -1);
+                      updateStep(step);
                     }
-                  })
-                ) : (
-                  <StepIndicator
-                    step={stepNumber}
-                    disableStepIndicators={disableStepIndicators}
-                    currentStep={currentStep}
-                    onClickStep={(clicked) => {
-                      if (clicked > currentStep && onBeforeStepChange && !onBeforeStepChange(currentStep)) {
-                        return;
-                      }
-                      setDirection(clicked > currentStep ? 1 : -1);
-                      updateStep(clicked);
-                    }}
-                  />
+                  }}
+                />
+                {isNotLastStep && (
+                  <StepConnector isComplete={currentStep > stepNumber} />
                 )}
-                {isNotLastStep && <StepConnector isComplete={currentStep > stepNumber} />}
               </React.Fragment>
             );
           })}
@@ -261,8 +268,8 @@ const stepVariants: Variants = {
 export function Step({ children, title }: { children: ReactNode; title?: string }) {
   return (
     <div className="py-2">
-      {title && <h2 className="mb-3 text-lg font-bold font-space tracking-tight text-white">{title}</h2>}
-      <div className="text-stone-300 leading-relaxed text-xs sm:text-sm">{children}</div>
+      {title && <h2 className="mb-3 text-lg font-bold font-heading tracking-tight text-[#1C1C1C]">{title}</h2>}
+      <div className="text-stone-700 leading-relaxed text-xs sm:text-sm">{children}</div>
     </div>
   );
 }
@@ -275,7 +282,7 @@ function StepIndicator({
 }: {
   step: number;
   currentStep: number;
-  onClickStep: (clicked: number) => void;
+  onClickStep?: (clicked: number) => void;
   disableStepIndicators?: boolean;
 }) {
   const isComplete = currentStep > step;
@@ -283,16 +290,16 @@ function StepIndicator({
 
   return (
     <motion.div
-      onClick={() => !disableStepIndicators && onClickStep(step)}
+      onClick={() => !disableStepIndicators && onClickStep && onClickStep(step)}
       className={`relative flex items-center justify-center ${!disableStepIndicators ? "cursor-pointer" : ""}`}
     >
       <div
         className={`flex h-9 w-9 items-center justify-center rounded-full border text-xs font-mono font-bold transition-all duration-300 ${
           isComplete
-            ? "bg-amber-400 text-black border-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.5)]"
+            ? "bg-[#1C1C1C] text-[#D4AF37] border-[#1C1C1C] shadow-sm"
             : isActive
-            ? "bg-white text-black border-white shadow-[0_0_14px_rgba(255,255,255,0.6)]"
-            : "bg-white/5 text-stone-400 border-white/10"
+            ? "bg-[#1C1C1C] text-white border-[#1C1C1C] shadow-md ring-2 ring-[#D4AF37]/50"
+            : "bg-[#F5F5F0] text-stone-400 border-[#E2E8E4]"
         }`}
       >
         {isComplete ? <Check className="h-4 w-4 stroke-[3]" /> : step}
@@ -301,7 +308,7 @@ function StepIndicator({
       {isActive && (
         <motion.div
           layoutId="active-glow"
-          className="absolute -inset-1 rounded-full bg-white/20 blur-sm"
+          className="absolute -inset-1 rounded-full bg-[#D4AF37]/20 blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -313,9 +320,9 @@ function StepIndicator({
 
 function StepConnector({ isComplete }: { isComplete: boolean }) {
   return (
-    <div className="relative mx-3 h-[2px] flex-1 overflow-hidden rounded-full bg-white/10">
+    <div className="relative mx-3 h-[2px] flex-1 overflow-hidden rounded-full bg-[#E2E8E4]">
       <motion.div
-        className="absolute inset-0 bg-amber-400 origin-left"
+        className="absolute inset-0 bg-[#1C1C1C] origin-left"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: isComplete ? 1 : 0 }}
         transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
