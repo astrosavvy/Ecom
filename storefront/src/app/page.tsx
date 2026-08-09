@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { TestimonialMarquee } from "@/components/ui/TestimonialMarquee";
+import { useCart } from "@/lib/CartContext";
 import { 
   ArrowRight, Sparkles, ShieldCheck, HeartHandshake, Feather, 
   ShoppingBag, Check, Star, RefreshCw, Truck, Zap 
@@ -80,19 +81,35 @@ const FALLBACK_PRODUCTS: Product[] = [
 export default function Home() {
   const [products, setProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
   const [addedItem, setAddedItem] = useState<string | null>(null);
+  const { addItem } = useCart();
 
   useEffect(() => {
     fetch("https://api.younoya.com/api/v1/products")
       .then((res) => res.json())
       .then((data) => {
         if (data?.success && Array.isArray(data.data) && data.data.length > 0) {
-          setProducts(data.data);
+          setProducts(data.data.slice(0, 4));
         }
       })
       .catch((e) => console.log("Using cached items:", e));
   }, []);
 
   const handleAddToCart = (prod: Product) => {
+    const prodImgs: string[] = Array.isArray(prod.images)
+      ? prod.images
+      : (typeof prod.images === "string" ? JSON.parse(prod.images || "[]") : []);
+    const img = prodImgs[0] || "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800";
+
+    addItem({
+      id: prod.id,
+      handle: prod.handle,
+      title: prod.title,
+      subtitle: prod.subtitle,
+      price: prod.price,
+      original_price: prod.original_price,
+      image: img
+    });
+
     setAddedItem(prod.id);
     setTimeout(() => setAddedItem(null), 2000);
   };
@@ -178,7 +195,7 @@ export default function Home() {
               <Star size={14} className="fill-current" />
             </div>
             <div>
-              100% Free Express Delivery across India • <span className="text-stone-200">14,000+ Blessed Rakhis Shipped</span>
+              100% Free Express Air Delivery across India • <span className="text-stone-200">14,000+ Blessed Rakhis Shipped</span>
             </div>
           </div>
         </div>
@@ -226,7 +243,7 @@ export default function Home() {
 
           <div className="flex items-center gap-3 text-xs font-mono tracking-wider text-stone-200">
             <Truck size={18} className="text-cyan-400" />
-            <span>FREE EXPRESS BLUEDART SHIPPING</span>
+            <span>FREE EXPRESS AIR SHIPPING</span>
           </div>
 
           <div className="flex items-center gap-3 text-xs font-mono tracking-wider text-stone-200">
@@ -258,12 +275,13 @@ export default function Home() {
             </p>
           </div>
 
+          {/* REPLACED BUTTON: Now links directly to All Products */}
           <Link
-            href="/checkout"
-            className="aero-btn-secondary text-stone-200 text-xs font-medium px-5 py-2.5 rounded-full inline-flex items-center gap-2 self-start md:self-auto hover:text-white"
+            href="/products"
+            className="aero-btn-secondary text-stone-200 text-xs font-medium px-6 py-3 rounded-full inline-flex items-center gap-2 self-start md:self-auto hover:text-white"
           >
-            <span>Express Cart Checkout</span>
-            <ArrowRight size={13} />
+            <span>Explore All Products</span>
+            <ArrowRight size={14} />
           </Link>
         </div>
 
@@ -339,6 +357,7 @@ export default function Home() {
 
                   <Link
                     href="/checkout"
+                    onClick={() => handleAddToCart(prod)}
                     className="py-2.5 rounded-xl aero-btn-primary text-white text-xs font-bold uppercase tracking-wider text-center flex items-center justify-center"
                   >
                     Buy Now

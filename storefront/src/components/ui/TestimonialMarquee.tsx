@@ -20,7 +20,7 @@ const TESTIMONIALS: Testimonial[] = [
   {
     name: "Vikramaditya Rathore",
     location: "Jaipur, Rajasthan",
-    review: "The uncut unboxing experience and keepsake box are stunning. Arrived via Bluedart in under 48 hours to Jaipur. My sister was genuinely touched.",
+    review: "The uncut unboxing experience and keepsake box are stunning. Arrived via express air in under 48 hours to Jaipur. My sister was genuinely touched.",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150"
   },
   {
@@ -58,9 +58,9 @@ export function TestimonialMarquee() {
         </p>
       </div>
 
-      {/* Infinite Horizontal Marquee Container with Left & Right Alpha Masks */}
+      {/* Infinite Horizontal Marquee Container with 75s Gentle Glide and Alpha Fade Masks */}
       <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-        <div className="flex gap-6 w-max animate-[marquee_35s_linear_infinite] hover:[animation-play-state:paused]">
+        <div className="flex gap-6 w-max animate-[marquee_75s_linear_infinite] hover:[animation-play-state:paused]">
           {[...TESTIMONIALS, ...TESTIMONIALS].map((item, idx) => (
             <div
               key={idx}

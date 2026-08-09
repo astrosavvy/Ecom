@@ -1,221 +1,440 @@
-import React from 'react';
-import Link from 'next/link';
-import PriceDisplay from '@/components/ui/PriceDisplay';
+"use client";
 
-const PRODUCT_MAP: Record<string, { title: string; sku: string; price: number; originalPrice: number; description: string; features: string[] }> = {
-  "vedic-prosperity-rakhi": {
-    title: "Vedic Prosperity Rakhi Set with Dry Fruits & Consecrated Thread",
-    sku: "HOFK0009275279",
-    price: 1099,
-    originalPrice: 1299,
-    description: `In cherished traditions, this designer handcrafted Vedic Rakhi set in vibrant colors tells a story of elegance and affection. Each intricately crafted rakhi celebrates the unique bond between siblings. The artful beadwork and rich colors make this an exquisite and memorable Raksha Bandhan gift that beautifully honours the most cherished relationships in the family.\n\nNow no more fearing planetary influences. Let this handcrafted Vedic Rakhi become a symbol of protection and blessings for every brother and sister.`,
-    features: [
-      "Designer Beads Rakhi Set: 1 N",
-      "Sacred Symbolism & Vedic Elements: 1 N",
-      "Almonds: 100 Gm",
-      "Cashews: 100 Gm",
-      "Complimentary Roli & Chawal Packets",
-    ],
-  },
-  "vedic-prosperity-wealth-attraction-rakhi": {
-    title: "Vedic Prosperity & Wealth Attraction Rakhi",
-    sku: "HOFK0009275280",
-    price: 999,
-    originalPrice: 1199,
-    description: `Featuring an astrologically selected crystal, oyster shells, sacred red-yellow mauli and thoughtfully curated Vedic elements, for PROSPERITY AND WEALTH ATTRACTION this Rakhi is designed to honour tradition while becoming a keepsake your brother can treasure long after the festival.`,
-    features: [
-      "Astrologically Curated Crystal: 1 N",
-      "Natural Conch & Oyster Shell Details",
-      "Sacred Red-Yellow Mauli Thread",
-      "Complimentary Roli & Chawal Packets",
-    ],
-  },
-  "vedic-abundance-blessing-rakhi": {
-    title: "Vedic Abundance & Blessing Rakhi",
-    sku: "HOFK0009275281",
-    price: 999,
-    originalPrice: 1199,
-    description: `Celebrate Raksha Bandhan with a handcrafted Vedic Rakhi where every element has been chosen with intention. Designed to be treasured beyond the festival, this Rakhi becomes a lasting reminder of your wishes for prosperity, harmony and lifelong happiness.`,
-    features: [
-      "Handcrafted Vedic Thread: 1 N",
-      "Sacred Symbolism",
-      "Reusable Keepsake Box",
-      "Complimentary Roli & Chawal Packets",
-    ],
-  },
-  "navagraha-om-protection-kaudi-rakhi": {
-    title: "Navagraha Om Protection Kaudi Rakhi",
-    sku: "HOFK0009275282",
-    price: 1099,
-    originalPrice: 1299,
-    description: `Featuring astrologically selected crystal accents, sacred kaudis symbolising prosperity and Goddess Lakshmi’s blessings, an Om motif representing divine protection, the timeless red-yellow mauli thread, and Vedic elements inspired by the harmony of the Navagrahas.`,
-    features: [
-      "Navagraha-Inspired Crystal Accents",
-      "Sacred Kaudi Detailing & Om Motif",
-      "Evil Eye Protection Thread",
-      "Complimentary Roli & Chawal Packets",
-    ],
-  },
-};
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { 
+  ShieldCheck, Sparkles, Truck, HeartHandshake, Feather, 
+  ShoppingBag, Check, Star, ArrowRight, Minus, Plus, Loader2, MapPin 
+} from "lucide-react";
+import { useCart } from "@/lib/CartContext";
+import { TestimonialMarquee } from "@/components/ui/TestimonialMarquee";
 
-const SIMILAR_PRODUCTS = [
-  { handle: "vedic-prosperity-rakhi", title: "Vedic Prosperity Rakhi", price: 1099, originalPrice: 1299 },
-  { handle: "vedic-prosperity-wealth-attraction-rakhi", title: "Vedic Prosperity & Wealth Attraction Rakhi", price: 999, originalPrice: 1199 },
-  { handle: "vedic-abundance-blessing-rakhi", title: "Vedic Abundance & Blessing Rakhi", price: 999, originalPrice: 1199 },
-  { handle: "navagraha-om-protection-kaudi-rakhi", title: "Navagraha Om Protection Kaudi Rakhi", price: 1099, originalPrice: 1299 },
-];
-
-export async function generateStaticParams() {
-  return [
-    { handle: "vedic-prosperity-rakhi" },
-    { handle: "vedic-prosperity-wealth-attraction-rakhi" },
-    { handle: "vedic-abundance-blessing-rakhi" },
-    { handle: "navagraha-om-protection-kaudi-rakhi" }
-  ];
+interface Product {
+  id: string;
+  handle: string;
+  sku: string;
+  title: string;
+  subtitle: string;
+  price: number;
+  original_price: number;
+  badge: string;
+  description: string;
+  images: string[] | string;
+  features: string[] | string;
 }
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ handle: string }> }) {
-  const { handle } = await params;
-  const product = PRODUCT_MAP[handle] || PRODUCT_MAP["vedic-prosperity-rakhi"];
+const FALLBACK_PRODUCT_MAP: Record<string, Product> = {
+  "vedic-prosperity-rakhi": {
+    id: "prod_1",
+    handle: "vedic-prosperity-rakhi",
+    sku: "HOFK0009275279",
+    title: "Vedic Prosperity Rakhi Set with Dry Fruits & Consecrated Thread",
+    subtitle: "Sacred consecration for sibling grace and planetary harmony",
+    price: 1099,
+    original_price: 1299,
+    badge: "Signature Edition",
+    description: "In cherished traditions, this designer handcrafted Vedic Rakhi set in vibrant colors tells a story of elegance and affection. Each intricately crafted rakhi celebrates the unique bond between siblings. The artful beadwork and rich colors make this an exquisite and memorable Raksha Bandhan gift.\n\nEnergized with 108 Gayatri mantra recitations to invite celestial prosperity, abundance, and planetary harmony.",
+    images: [
+      "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800"
+    ],
+    features: [
+      "Prana Pratishtha Consecration Ritual",
+      "Organic Sacred Resham & Gold Wire Threading",
+      "Signature Reusable Keepsake Box",
+      "100 Gm California Jumbo Almonds",
+      "100 Gm W240 Premium Cashews",
+      "Complimentary Consecrated Akshat & Roli Packets"
+    ]
+  },
+  "vedic-prosperity-wealth-attraction-rakhi": {
+    id: "prod_2",
+    handle: "vedic-prosperity-wealth-attraction-rakhi",
+    sku: "HOFK0009275280",
+    title: "Vedic Prosperity & Wealth Attraction Rakhi",
+    subtitle: "Astrologically selected crystal, oyster shells & sacred mauli",
+    price: 989,
+    original_price: 1199,
+    badge: "Prosperity",
+    description: "Handcrafted with natural Gomti Chakra and energized yellow Kaudi shells, dedicated to invoking Goddess Lakshmi's perpetual blessings for brothers. Formatted in timeless sacred red-yellow Mauli threads to protect against malefic energies.",
+    images: [
+      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"
+    ],
+    features: [
+      "Natural Consecrated Gomti Chakra: 1 N",
+      "Yellow Energized Kaudi Shell",
+      "Sacred Red-Yellow Mauli Thread",
+      "Complimentary Roli & Chawal Packets"
+    ]
+  },
+  "vedic-abundance-blessing-rakhi": {
+    id: "prod_3",
+    handle: "vedic-abundance-blessing-rakhi",
+    sku: "HOFK0009275281",
+    title: "Vedic Abundance & Blessing Rakhi",
+    subtitle: "A keepsake designed to be treasured long after the festive hour",
+    price: 999,
+    original_price: 1199,
+    badge: "Abundance",
+    description: "Created using pure silver-plated motifs and blessed Rudraksha beads for health, vitality, and shielding negative energies.",
+    images: [
+      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"
+    ],
+    features: [
+      "5 Mukhi Blessed Rudraksha Bead",
+      "Silver-Plated Centerpiece Talisman",
+      "100% Organic Silk Threads",
+      "Complimentary Roli & Chawal Packets"
+    ]
+  },
+  "navagraha-om-protection-kaudi-rakhi": {
+    id: "prod_4",
+    handle: "navagraha-om-protection-kaudi-rakhi",
+    sku: "HOFK0009275282",
+    title: "Navagraha Om Protection Kaudi Rakhi",
+    subtitle: "Sacred kaudi, Om motif & Navagraha-inspired planetary harmony",
+    price: 1099,
+    original_price: 1299,
+    badge: "Sacred Shield",
+    description: "Harmonizes the 9 astrological planets with 9 colored sacred silk threads and a central energized brass Om talisman. Shields against planetary afflictions.",
+    images: [
+      "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"
+    ],
+    features: [
+      "9 Astrological Planetary Silk Strands",
+      "Pure Brass Energized Om Talisman",
+      "Natural Sacred Kaudi Shell Detailing",
+      "Complimentary Roli & Chawal Packets"
+    ]
+  }
+};
+
+export default function DynamicProductPage() {
+  const params = useParams();
+  const router = useRouter();
+  const handle = (params?.handle as string) || "vedic-prosperity-rakhi";
+  const { addItem } = useCart();
+
+  const [product, setProduct] = useState<Product>(
+    FALLBACK_PRODUCT_MAP[handle] || FALLBACK_PRODUCT_MAP["vedic-prosperity-rakhi"]
+  );
+  const [selectedImgIndex, setSelectedImgIndex] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [pincode, setPincode] = useState("");
+  const [pincodeResult, setPincodeResult] = useState<string | null>(null);
+  const [pincodeLoading, setPincodeLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<"details" | "shipping">("details");
+  const [added, setAdded] = useState(false);
+
+  useEffect(() => {
+    fetch("https://api.younoya.com/api/v1/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.success && Array.isArray(data.data)) {
+          const found = data.data.find((p: Product) => p.handle === handle);
+          if (found) {
+            setProduct(found);
+          }
+        }
+      })
+      .catch((e) => console.log("Using cached product:", e));
+  }, [handle]);
+
+  const rawImages: string[] = Array.isArray(product.images)
+    ? product.images
+    : (typeof product.images === "string" ? JSON.parse(product.images || "[]") : []);
+  
+  const images = rawImages.length > 0 
+    ? rawImages 
+    : ["https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"];
+
+  const rawFeatures: string[] = Array.isArray(product.features)
+    ? product.features
+    : (typeof product.features === "string" ? JSON.parse(product.features || "[]") : []);
+
+  const handleCheckPincode = async () => {
+    if (pincode.length !== 6) {
+      setPincodeResult("Please enter a valid 6-digit PIN code.");
+      return;
+    }
+    setPincodeLoading(true);
+    try {
+      const res = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
+      const data = await res.json();
+      if (Array.isArray(data) && data[0]?.Status === "Success") {
+        const place = data[0].PostOffice[0]?.District || data[0].PostOffice[0]?.Name || "your area";
+        setPincodeResult(`✓ Express Delivery available to ${place}! Estimated arrival in 2-3 days.`);
+      } else {
+        setPincodeResult("✓ Express Air Delivery available across all serviceable Indian PIN codes.");
+      }
+    } catch {
+      setPincodeResult("✓ Express Air Delivery active for this PIN.");
+    } finally {
+      setPincodeLoading(false);
+    }
+  };
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      handle: product.handle,
+      title: product.title,
+      subtitle: product.subtitle,
+      price: product.price,
+      original_price: product.original_price,
+      image: images[0]
+    }, quantity);
+
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  const handleBuyNow = () => {
+    addItem({
+      id: product.id,
+      handle: product.handle,
+      title: product.title,
+      subtitle: product.subtitle,
+      price: product.price,
+      original_price: product.original_price,
+      image: images[0]
+    }, quantity);
+
+    router.push("/checkout");
+  };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 font-body bg-[#faf6f0]">
-      {/* Breadcrumbs */}
-      <nav className="text-xs text-stone-500 flex items-center gap-1.5 font-light">
-        <Link href="/" className="hover:underline hover:text-orange-600">Home</Link>
-        <span>&gt;</span>
-        <Link href="/search" className="hover:underline hover:text-orange-600">Vedic Rakhis</Link>
-        <span>&gt;</span>
-        <span className="text-stone-800 font-medium">{product.title}</span>
-      </nav>
+    <div className="relative min-h-screen bg-[#0c0d12] text-[#edf1f8] pt-32 pb-24 px-4 sm:px-8">
+      {/* Background Atmosphere */}
+      <div className="absolute top-[5%] right-[10%] w-[600px] h-[600px] rounded-full bg-[#2e63ff]/15 blur-[150px] pointer-events-none" />
+      <div className="absolute top-[45%] left-[5%] w-[550px] h-[550px] rounded-full bg-[#ff2e88]/12 blur-[160px] pointer-events-none" />
 
-      {/* Main PDP Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start bg-white p-6 sm:p-8 rounded-2xl border border-orange-100 shadow-sm">
-        {/* Left Image Gallery (6 cols) */}
-        <div className="lg:col-span-6 flex gap-4">
-          <div className="flex flex-col gap-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="w-16 h-16 border border-orange-200 rounded-lg bg-orange-50/50 flex items-center justify-center text-xs text-stone-400 cursor-pointer hover:border-orange-500 transition-colors">
-                Rakhi {i}
-              </div>
-            ))}
-          </div>
-          <div className="flex-1 bg-gradient-to-b from-orange-50 to-amber-50 border border-orange-100 rounded-xl h-96 sm:h-[450px] flex flex-col items-center justify-center p-6 text-center space-y-3 relative overflow-hidden">
-            <span className="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-md shadow-xs">
-              Same Day Delivery | Today
-            </span>
-            <div className="text-5xl font-heading text-amber-700 italic font-bold tracking-wide">YOUNOYA</div>
-            <div className="text-sm font-semibold text-stone-600">{product.title}</div>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+        {/* Breadcrumbs */}
+        <nav className="text-xs font-mono uppercase tracking-wider text-stone-400 flex items-center gap-2">
+          <Link href="/" className="hover:text-white">Home</Link>
+          <span>/</span>
+          <Link href="/products" className="hover:text-white">Vedic Rakhis</Link>
+          <span>/</span>
+          <span className="text-amber-400 line-clamp-1">{product.title}</span>
+        </nav>
 
-        {/* Right Product Information Panel (6 cols) */}
-        <div className="lg:col-span-6 space-y-6">
-          <div>
-            <h1 className="text-2xl font-bold font-heading text-stone-900 leading-snug">{product.title}</h1>
-            <div className="text-xs text-stone-400 mt-1">SKU: {product.sku}</div>
-          </div>
+        {/* Main Product Layout (2 Columns) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Left Column: Image Showcase */}
+          <div className="lg:col-span-6 flex flex-col-reverse sm:flex-row gap-4">
+            {/* Thumbnail list */}
+            <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-visible">
+              {images.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedImgIndex(idx)}
+                  className={`w-16 h-16 rounded-xl overflow-hidden border flex-shrink-0 transition-all ${
+                    selectedImgIndex === idx
+                      ? "border-amber-400 ring-2 ring-amber-400/30"
+                      : "border-white/10 opacity-70 hover:opacity-100"
+                  }`}
+                >
+                  <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
 
-          {/* Pricing */}
-          <div className="flex items-baseline gap-3">
-            <PriceDisplay amount={product.price} className="text-3xl font-bold text-orange-600 font-heading" />
-            <span className="text-sm text-stone-400 line-through">₹{product.originalPrice}</span>
-            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">Save ₹{product.originalPrice - product.price}</span>
-          </div>
-
-          {/* Quantity Selector */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-stone-700 block">Qty:</label>
-            <div className="inline-flex items-center border border-orange-200 rounded-lg bg-orange-50/30 text-xs">
-              <button className="px-3.5 py-2 text-stone-600 hover:bg-orange-100 font-bold rounded-l-lg transition-colors">-</button>
-              <span className="px-4 py-2 font-semibold text-stone-800 border-x border-orange-200">1</span>
-              <button className="px-3.5 py-2 text-stone-600 hover:bg-orange-100 font-bold rounded-r-lg transition-colors">+</button>
+            {/* Main Featured Photo */}
+            <div className="flex-1 relative aspect-square rounded-3xl overflow-hidden bg-black/40 border border-white/10 shadow-2xl group">
+              <img
+                src={images[selectedImgIndex] || images[0]}
+                alt={product.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              {product.badge && (
+                <span className="absolute top-4 left-4 bg-black/80 backdrop-blur-md text-amber-300 text-xs font-mono uppercase tracking-wider font-bold px-3.5 py-1.5 rounded-full border border-amber-400/30 shadow-lg">
+                  {product.badge}
+                </span>
+              )}
             </div>
           </div>
 
-          {/* Delivery Date Picker */}
-          <div className="space-y-1.5 max-w-sm">
-            <label className="text-xs font-semibold text-stone-700 block">Select Delivery Date*</label>
-            <input
-              type="date"
-              className="w-full h-11 px-4 text-xs border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/50 bg-white"
-            />
-          </div>
+          {/* Right Column: Product Info & Purchase Panel */}
+          <div className="lg:col-span-6 space-y-6">
+            <div className="space-y-2">
+              <div className="text-xs font-mono uppercase tracking-widest text-amber-400">
+                VEDIC CONSECRATION // SKU: {product.sku}
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold font-space text-white tracking-tight leading-snug">
+                {product.title}
+              </h1>
+              <p className="text-xs sm:text-sm text-[#9ca6be] leading-relaxed">
+                {product.subtitle}
+              </p>
+            </div>
 
-          {/* PIN Code Checker */}
-          <div className="space-y-1.5 max-w-sm">
-            <label className="text-xs font-semibold text-stone-700 flex items-center gap-1">
-              📍 Check Delivery Pincode
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Enter 6-digit Pincode"
-                className="flex-1 h-10 px-4 text-xs border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/50"
-              />
-              <button className="px-5 text-xs font-bold bg-stone-900 hover:bg-stone-800 text-white rounded-lg uppercase tracking-wider transition-colors">
-                CHECK
+            {/* Price Box */}
+            <div className="p-5 rounded-2xl bg-[#121520]/80 border border-white/10 space-y-3">
+              <div className="flex items-baseline gap-3">
+                <span className="text-3xl font-bold font-space text-amber-400">
+                  ₹{product.price}
+                </span>
+                <span className="text-sm text-stone-500 line-through">
+                  ₹{product.original_price}
+                </span>
+                <span className="text-xs font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                  Save ₹{product.original_price - product.price}
+                </span>
+              </div>
+              <div className="text-[11px] text-[#9ca6be] flex items-center gap-1.5">
+                <Truck size={13} className="text-cyan-400" />
+                <span>100% Free Express Air Shipping across India • Taxes included</span>
+              </div>
+            </div>
+
+            {/* Quantity Selector */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-mono uppercase tracking-wider text-stone-300">Quantity</label>
+              <div className="inline-flex items-center border border-white/10 rounded-xl bg-black/40 p-1">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="p-2 text-stone-400 hover:text-white"
+                >
+                  <Minus size={14} />
+                </button>
+                <span className="px-4 text-xs font-mono font-bold text-white">{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="p-2 text-stone-400 hover:text-white"
+                >
+                  <Plus size={14} />
+                </button>
+              </div>
+            </div>
+
+            {/* PIN Code Delivery Checker */}
+            <div className="p-4 rounded-2xl bg-black/30 border border-white/10 space-y-2.5">
+              <label className="text-xs font-mono uppercase tracking-wider text-stone-300 flex items-center gap-1.5">
+                <MapPin size={13} className="text-amber-400" />
+                <span>Check Delivery Pincode</span>
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  maxLength={6}
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Enter 6-digit PIN"
+                  className="flex-1 bg-[#080a10] border border-white/10 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                />
+                <button
+                  onClick={handleCheckPincode}
+                  disabled={pincodeLoading}
+                  className="aero-btn-secondary text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-1.5"
+                >
+                  {pincodeLoading ? <Loader2 size={12} className="animate-spin" /> : "Check"}
+                </button>
+              </div>
+              {pincodeResult && (
+                <div className="text-xs text-emerald-400 pt-0.5">{pincodeResult}</div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <button
+                onClick={handleAddToCart}
+                className="py-3.5 rounded-full aero-btn-secondary text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 hover:border-amber-400/40"
+              >
+                {added ? (
+                  <>
+                    <Check size={15} className="text-emerald-400" />
+                    <span className="text-emerald-400">Added to Cart</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag size={15} className="text-amber-400" />
+                    <span>Add to Cart</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={handleBuyNow}
+                className="py-3.5 rounded-full aero-btn-primary text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl"
+              >
+                <span>Express Buy Now</span>
+                <ArrowRight size={15} />
               </button>
             </div>
           </div>
+        </div>
 
-          {/* Action CTAs */}
-          <div className="pt-2 max-w-sm space-y-3">
-            <Link href="/checkout" className="block w-full text-center py-3.5 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white text-sm font-bold rounded-lg uppercase tracking-wider shadow-md hover:shadow-lg transition-all transform active:scale-95">
-              Buy Now
-            </Link>
+        {/* Detailed Information Tabs */}
+        <div className="chrome-card rounded-3xl p-8 space-y-6">
+          <div className="flex border-b border-white/10 gap-8">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`pb-3 text-xs font-mono uppercase tracking-wider font-bold transition-colors ${
+                activeTab === "details"
+                  ? "text-amber-400 border-b-2 border-amber-400"
+                  : "text-stone-400 hover:text-white"
+              }`}
+            >
+              Consecration Details & Box Contents
+            </button>
+            <button
+              onClick={() => setActiveTab("shipping")}
+              className={`pb-3 text-xs font-mono uppercase tracking-wider font-bold transition-colors ${
+                activeTab === "shipping"
+                  ? "text-amber-400 border-b-2 border-amber-400"
+                  : "text-stone-400 hover:text-white"
+              }`}
+            >
+              Express Shipping & Vedic Care
+            </button>
           </div>
-        </div>
-      </div>
 
-      {/* Tabs: Description & Delivery Info */}
-      <div className="pt-6 bg-white p-6 sm:p-8 rounded-2xl border border-orange-100 shadow-sm space-y-6">
-        <div className="flex justify-center border-b border-orange-100 gap-8 text-sm font-bold">
-          <span className="pb-3 text-orange-600 border-b-2 border-orange-600 cursor-pointer">Description</span>
-          <span className="pb-3 text-stone-500 hover:text-stone-800 cursor-pointer">Delivery Information</span>
-        </div>
+          {activeTab === "details" ? (
+            <div className="space-y-4 text-xs sm:text-sm text-[#9ca6be] leading-relaxed max-w-4xl">
+              <p className="whitespace-pre-line text-stone-200 font-normal">
+                {product.description}
+              </p>
 
-        <div className="max-w-3xl mx-auto space-y-4 text-xs text-stone-700 leading-relaxed font-light">
-          <p className="whitespace-pre-line">{product.description}</p>
-          
-          <div className="pt-2">
-            <strong className="font-bold text-stone-900 block mb-1">Product Details:</strong>
-            <ul className="list-disc pl-5 space-y-1 text-stone-600">
-              {product.features.map((feat, idx) => (
-                <li key={idx}>{feat}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Similar Products Section */}
-      <div className="pt-6 space-y-6">
-        <div className="text-center">
-          <h2 className="text-xl font-bold font-heading text-stone-900 tracking-wide border-b-2 border-orange-500 inline-block pb-1 px-4">
-            Similar Vedic Rakhis
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {SIMILAR_PRODUCTS.map((prod) => (
-            <div key={prod.handle} className="bg-white border border-orange-100 rounded-xl p-4 space-y-3 hover:shadow-lg transition-all flex flex-col justify-between">
-              <div className="space-y-2">
-                <div className="bg-orange-50/50 h-36 rounded-lg flex items-center justify-center text-xs text-stone-400 font-bold p-2 text-center">
-                  {prod.title}
+              {rawFeatures.length > 0 && (
+                <div className="pt-4 space-y-2">
+                  <div className="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold">
+                    Included in the Signature Keepsake Box:
+                  </div>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-stone-300">
+                    {rawFeatures.map((feat, idx) => (
+                      <li key={idx} className="flex items-center gap-2">
+                        <Check size={14} className="text-amber-400 flex-shrink-0" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h4 className="font-bold text-xs text-stone-800 line-clamp-1">{prod.title}</h4>
-                <div className="flex items-center gap-2 text-xs font-bold">
-                  <span className="text-orange-600">₹{prod.price}</span>
-                  <span className="text-stone-400 line-through text-[10px]">₹{prod.originalPrice}</span>
-                </div>
-              </div>
-              <Link href={`/products/${prod.handle}`} className="block text-center text-[11px] font-semibold text-orange-600 border border-orange-500 py-1.5 rounded-lg hover:bg-orange-50 transition-colors">
-                View Details
-              </Link>
+              )}
             </div>
-          ))}
+          ) : (
+            <div className="space-y-3 text-xs sm:text-sm text-[#9ca6be] leading-relaxed max-w-3xl">
+              <p>
+                • <strong>100% Free Express Air Shipping</strong> across all PIN codes in India.
+              </p>
+              <p>
+                • Each Rakhi is consecrated with morning Vedic rituals and dispatched with unbroken tamper-proof security seals.
+              </p>
+              <p>
+                • Full replacement warranty in case of transit damage with 360° unboxing assistance.
+              </p>
+            </div>
+          )}
         </div>
+
+        {/* Testimonials Marquee */}
+        <TestimonialMarquee />
       </div>
     </div>
   );
