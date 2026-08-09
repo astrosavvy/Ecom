@@ -294,6 +294,54 @@ export default function DynamicMonochromeProductPage() {
               </div>
             </div>
 
+            {/* Quantity Selector */}
+            <div className="space-y-1.5 pt-2">
+              <label className="text-xs font-mono uppercase tracking-wider text-stone-600 font-bold">Quantity</label>
+              <div className="inline-flex items-center border border-[#E2E8E4] rounded-full bg-white p-1">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="p-2 text-stone-600 hover:text-[#1C1C1C]"
+                >
+                  <Minus size={14} />
+                </button>
+                <span className="px-4 text-xs font-mono font-bold text-[#1C1C1C]">{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="p-2 text-stone-600 hover:text-[#1C1C1C]"
+                >
+                  <Plus size={14} />
+                </button>
+              </div>
+            </div>
+
+            {/* PIN Code Delivery Checker */}
+            <div className="p-5 rounded-[24px] bg-white border border-[#E2E8E4] space-y-2.5 shadow-sm">
+              <label className="text-xs font-mono uppercase tracking-wider text-stone-700 font-bold flex items-center gap-1.5">
+                <MapPin size={14} className="text-[#D4AF37]" />
+                <span>Check Delivery Pincode</span>
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  maxLength={6}
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Enter 6-digit PIN"
+                  className="flex-1 bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                />
+                <button
+                  onClick={handleCheckPincode}
+                  disabled={pincodeLoading}
+                  className="px-5 py-2 rounded-xl bg-[#1C1C1C] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#333333]"
+                >
+                  {pincodeLoading ? <Loader2 size={12} className="animate-spin" /> : "Check"}
+                </button>
+              </div>
+              {pincodeResult && (
+                <div className="text-xs text-emerald-700 font-medium pt-0.5">{pincodeResult}</div>
+              )}
+            </div>
+
             {/* Action CTAs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <button
@@ -323,6 +371,73 @@ export default function DynamicMonochromeProductPage() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* ========================================================
+            PRODUCT DESCRIPTION & CONSECRATION DETAILS TABS
+           ======================================================== */}
+        <div className="rounded-[32px] bg-white border border-[#E2E8E4] p-8 space-y-6 shadow-sm">
+          <div className="flex border-b border-[#E2E8E4] gap-8">
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`pb-3 text-xs font-mono uppercase tracking-wider font-bold transition-colors ${
+                activeTab === "details"
+                  ? "text-[#1C1C1C] border-b-2 border-[#1C1C1C]"
+                  : "text-stone-400 hover:text-[#1C1C1C]"
+              }`}
+            >
+              Product Description & Consecration Details
+            </button>
+            <button
+              onClick={() => setActiveTab("shipping")}
+              className={`pb-3 text-xs font-mono uppercase tracking-wider font-bold transition-colors ${
+                activeTab === "shipping"
+                  ? "text-[#1C1C1C] border-b-2 border-[#1C1C1C]"
+                  : "text-stone-400 hover:text-[#1C1C1C]"
+              }`}
+            >
+              Express Air Shipping & Box Guarantee
+            </button>
+          </div>
+
+          {activeTab === "details" ? (
+            <div className="space-y-4 text-xs sm:text-sm text-stone-600 leading-relaxed max-w-4xl">
+              <div className="space-y-2">
+                <h3 className="text-base font-bold font-heading text-[#1C1C1C]">About This Sacred Creation</h3>
+                <p className="whitespace-pre-line text-[#1C1C1C] font-normal leading-relaxed">
+                  {product.description}
+                </p>
+              </div>
+
+              {rawFeatures.length > 0 && (
+                <div className="pt-4 space-y-3">
+                  <div className="text-xs font-mono uppercase tracking-wider text-[#D4AF37] font-bold">
+                    Included in the Signature Keepsake Box:
+                  </div>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-stone-700">
+                    {rawFeatures.map((feat, idx) => (
+                      <li key={idx} className="flex items-center gap-2">
+                        <Check size={14} className="text-emerald-700 flex-shrink-0" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-3 text-xs sm:text-sm text-stone-600 leading-relaxed max-w-3xl">
+              <p>
+                • <strong>100% Free Express Air Shipping</strong> across all PIN codes in India.
+              </p>
+              <p>
+                • Each Rakhi is consecrated with morning Vedic rituals and dispatched with unbroken tamper-proof security seals.
+              </p>
+              <p>
+                • Full replacement warranty in case of transit damage with 360° unboxing assistance.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* ========================================================
