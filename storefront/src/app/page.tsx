@@ -92,7 +92,7 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         if (data?.success && Array.isArray(data.data) && data.data.length > 0) {
-          setProducts(data.data.slice(0, 4));
+          setProducts(data.data);
         }
       })
       .catch((e) => console.log("Using fallback products:", e));
