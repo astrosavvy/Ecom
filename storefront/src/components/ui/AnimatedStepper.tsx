@@ -124,7 +124,7 @@ export function AnimatedStepper({
                 <StepIndicator
                   step={stepNumber}
                   currentStep={currentStep}
-                  onStepClick={(step) => {
+                  onClickStep={(step: number) => {
                     if (!disableStepIndicators) {
                       setDirection(step > currentStep ? 1 : -1);
                       updateStep(step);
