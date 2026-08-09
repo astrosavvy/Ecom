@@ -1,5 +1,5 @@
 <?php
-// YOUNOYA Micro-Commerce API with Admin Auth and MariaDB Persistence
+// YOUNOYA Full Enterprise E-Commerce API Engine
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -30,43 +30,46 @@ function getDB() {
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// Helper function to read input payload safely
 function getRequestPayload() {
     $raw = file_get_contents('php://input');
     if (!empty($raw)) {
         $json = json_decode($raw, true);
         if (is_array($json)) return $json;
     }
-    if (!empty($_POST)) {
-        return $_POST;
-    }
+    if (!empty($_POST)) return $_POST;
     return [];
 }
 
 // 1. Health Endpoint
 if ($uri === '/' || $uri === '/health') {
     $db = getDB();
-    $count = $db->query("SELECT COUNT(*) FROM products")->fetchColumn();
+    $prodCount = $db->query("SELECT COUNT(*) FROM products")->fetchColumn();
+    $orderCount = $db->query("SELECT COUNT(*) FROM orders")->fetchColumn();
     echo json_encode([
         'status' => 'healthy',
-        'engine' => 'YOUNOYA Production Micro-Commerce API',
+        'engine' => 'YOUNOYA Full Enterprise E-Commerce API',
         'php_version' => PHP_VERSION,
-        'database' => 'MariaDB 10.11+ (Active)',
-        'products_in_db' => (int)$count,
+        'database' => 'MariaDB 10.11+ (Enterprise Schema Active)',
+        'products_in_db' => (int)$prodCount,
+        'orders_in_db' => (int)$orderCount,
+        'features' => ['Products', 'Variants', 'Orders (OMS)', 'Discounts', 'Customers', 'Razorpay', 'Uploads'],
         'shipping' => '100% Free Express Shipping across India',
-        'tax' => 'Inclusive of all taxes',
-        'payment' => 'Razorpay Online Only'
+        'tax' => 'Inclusive of all taxes'
     ]);
     exit;
 }
 
-// 2. Product Catalog API (Public Storefront fetch from MariaDB)
+// 2. Public Storefront Products API
 if ($uri === '/api/v1/products' || $uri === '/products') {
     $db = getDB();
     $stmt = $db->query("SELECT * FROM products ORDER BY created_at ASC");
     $products = $stmt->fetchAll();
 
-    $formatted = array_map(function($p) {
+    $formatted = array_map(function($p) use ($db) {
+        $vStmt = $db->prepare("SELECT * FROM product_variants WHERE product_id = ?");
+        $vStmt->execute([$p['id']]);
+        $variants = $vStmt->fetchAll();
+
         return [
             'id' => $p['id'],
             'handle' => $p['handle'],
@@ -81,6 +84,7 @@ if ($uri === '/api/v1/products' || $uri === '/products') {
             'description' => $p['description'],
             'features' => json_decode($p['features'] ?: '[]', true),
             'images' => json_decode($p['images'] ?: '[]', true),
+            'variants' => $variants,
             'meta_title' => $p['meta_title'],
             'meta_description' => $p['meta_description'],
             'inventory_count' => (int)$p['inventory_count']
@@ -97,7 +101,6 @@ if ($uri === '/api/v1/admin/login') {
     $username = trim($input['username'] ?? '');
     $password = trim($input['password'] ?? '');
 
-    // Allow admin credentials
     if (strtolower($username) === 'admin' && ($password === 'YounoyaAdmin2026!' || $password === 'admin123' || $password === 'admin')) {
         $token = 'yn_sec_' . bin2hex(random_bytes(24));
         echo json_encode([
@@ -109,10 +112,7 @@ if ($uri === '/api/v1/admin/login') {
     }
 
     http_response_code(401);
-    echo json_encode([
-        'success' => false, 
-        'error' => 'Invalid username or password'
-    ]);
+    echo json_encode(['success' => false, 'error' => 'Invalid username or password']);
     exit;
 }
 
@@ -121,11 +121,12 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
     $db = getDB();
     $method = $_SERVER['REQUEST_METHOD'];
 
-    // List All Products for Admin
     if ($method === 'GET' && $uri === '/api/v1/admin/products') {
         $stmt = $db->query("SELECT * FROM products ORDER BY created_at DESC");
         $prods = $stmt->fetchAll();
-        $formatted = array_map(function($p) {
+        $formatted = array_map(function($p) use ($db) {
+            $vStmt = $db->prepare("SELECT * FROM product_variants WHERE product_id = ?");
+            $vStmt->execute([$p['id']]);
             return [
                 'id' => $p['id'],
                 'handle' => $p['handle'],
@@ -138,6 +139,7 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
                 'description' => $p['description'],
                 'features' => json_decode($p['features'] ?: '[]', true),
                 'images' => json_decode($p['images'] ?: '[]', true),
+                'variants' => $vStmt->fetchAll(),
                 'meta_title' => $p['meta_title'],
                 'meta_description' => $p['meta_description'],
                 'inventory_count' => (int)$p['inventory_count']
@@ -147,7 +149,6 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
         exit;
     }
 
-    // Create New Product
     if ($method === 'POST' && $uri === '/api/v1/admin/products') {
         $input = getRequestPayload();
         $id = $input['id'] ?? ('prod_' . time());
@@ -178,7 +179,6 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
         exit;
     }
 
-    // Update Product
     if ($method === 'PUT' && preg_match('#^/api/v1/admin/products/([^/]+)$#', $uri, $matches)) {
         $id = $matches[1];
         $input = getRequestPayload();
@@ -208,7 +208,6 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
         exit;
     }
 
-    // Delete Product
     if ($method === 'DELETE' && preg_match('#^/api/v1/admin/products/([^/]+)$#', $uri, $matches)) {
         $id = $matches[1];
         $stmt = $db->prepare("DELETE FROM products WHERE id = ? OR handle = ?");
@@ -218,7 +217,130 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
     }
 }
 
-// 5. Image Upload Endpoint for Admin
+// 5. Order Management System (OMS) Endpoints
+if (strpos($uri, '/api/v1/admin/orders') === 0) {
+    $db = getDB();
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    // List All Orders
+    if ($method === 'GET') {
+        $stmt = $db->query("SELECT * FROM orders ORDER BY created_at DESC");
+        $orders = $stmt->fetchAll();
+        $formatted = array_map(function($o) {
+            return [
+                'id' => $o['id'],
+                'order_number' => $o['order_number'],
+                'customer_name' => $o['customer_name'],
+                'customer_email' => $o['customer_email'],
+                'customer_phone' => $o['customer_phone'],
+                'shipping_address' => json_decode($o['shipping_address'] ?: '{}', true),
+                'items' => json_decode($o['items'] ?: '[]', true),
+                'total_amount' => (int)$o['total_amount'],
+                'payment_status' => $o['payment_status'],
+                'fulfillment_status' => $o['fulfillment_status'],
+                'awb_number' => $o['awb_number'],
+                'courier_name' => $o['courier_name'],
+                'created_at' => $o['created_at']
+            ];
+        }, $orders);
+        echo json_encode(['success' => true, 'data' => $formatted]);
+        exit;
+    }
+
+    // Update Order Status (Fulfillment / Tracking AWB)
+    if ($method === 'PUT' && preg_match('#^/api/v1/admin/orders/([^/]+)$#', $uri, $matches)) {
+        $orderId = $matches[1];
+        $input = getRequestPayload();
+
+        $stmt = $db->prepare("UPDATE orders SET 
+            fulfillment_status = COALESCE(?, fulfillment_status),
+            payment_status = COALESCE(?, payment_status),
+            awb_number = COALESCE(?, awb_number),
+            courier_name = COALESCE(?, courier_name)
+            WHERE id = ? OR order_number = ?");
+        
+        $stmt->execute([
+            $input['fulfillment_status'] ?? null,
+            $input['payment_status'] ?? null,
+            $input['awb_number'] ?? null,
+            $input['courier_name'] ?? null,
+            $orderId,
+            $orderId
+        ]);
+
+        echo json_encode(['success' => true, 'message' => 'Order status updated successfully']);
+        exit;
+    }
+}
+
+// 6. Discounts & Coupon Engine Endpoints
+if (strpos($uri, '/api/v1/discounts') === 0 || strpos($uri, '/api/v1/admin/discounts') === 0) {
+    $db = getDB();
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    // Validate Coupon for Checkout
+    if ($uri === '/api/v1/discounts/validate' && $method === 'POST') {
+        $input = getRequestPayload();
+        $code = strtoupper(trim($input['code'] ?? ''));
+        $subtotal = (int)($input['subtotal'] ?? 0);
+
+        $stmt = $db->prepare("SELECT * FROM discounts WHERE code = ? AND is_active = 1");
+        $stmt->execute([$code]);
+        $discount = $stmt->fetch();
+
+        if (!$discount) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Invalid or expired coupon code']);
+            exit;
+        }
+
+        if ($subtotal < (int)$discount['min_order_value']) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => "Minimum order value for this coupon is ₹{$discount['min_order_value']}"]);
+            exit;
+        }
+
+        $discountAmount = ($discount['type'] === 'percentage')
+            ? (int)(($subtotal * (int)$discount['value']) / 100)
+            : (int)$discount['value'];
+
+        echo json_encode([
+            'success' => true,
+            'code' => $discount['code'],
+            'type' => $discount['type'],
+            'discount_amount' => $discountAmount,
+            'new_total' => max(0, $subtotal - $discountAmount)
+        ]);
+        exit;
+    }
+
+    // List All Discounts for Admin
+    if ($uri === '/api/v1/admin/discounts' && $method === 'GET') {
+        $stmt = $db->query("SELECT * FROM discounts ORDER BY created_at DESC");
+        echo json_encode(['success' => true, 'data' => $stmt->fetchAll()]);
+        exit;
+    }
+
+    // Create New Discount for Admin
+    if ($uri === '/api/v1/admin/discounts' && $method === 'POST') {
+        $input = getRequestPayload();
+        $id = 'disc_' . time();
+        $stmt = $db->prepare("INSERT INTO discounts (id, code, type, value, min_order_value, usage_limit, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $id,
+            strtoupper(trim($input['code'])),
+            $input['type'] ?? 'percentage',
+            (int)$input['value'],
+            (int)($input['min_order_value'] ?? 0),
+            (int)($input['usage_limit'] ?? 500),
+            isset($input['is_active']) ? (int)$input['is_active'] : 1
+        ]);
+        echo json_encode(['success' => true, 'message' => 'Discount created successfully', 'id' => $id]);
+        exit;
+    }
+}
+
+// 7. Image Upload Endpoint for Admin
 if ($uri === '/api/v1/admin/upload' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES['file'])) {
         $uploadDir = __DIR__ . '/uploads/';
@@ -240,15 +362,45 @@ if ($uri === '/api/v1/admin/upload' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// 6. Razorpay Payment Intent API
+// 8. Razorpay Payment Intent API & Order Creation
 if ($uri === '/api/v1/checkout/payment-intent') {
     $input = getRequestPayload();
     $amount = (int) (($input['amount'] ?? 1099) * 100);
     $orderId = 'ord_' . time() . '_' . random_int(1000, 9999);
+    $orderNumber = 'YN-' . strtoupper(dechex(time()));
+
+    // Record Order in Database
+    $db = getDB();
+    $stmt = $db->prepare("INSERT INTO orders 
+        (id, order_number, customer_name, customer_email, customer_phone, shipping_address, items, subtotal, discount_amount, total_amount, payment_status, fulfillment_status, payment_method, razorpay_order_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    
+    $stmt->execute([
+        $orderId,
+        $orderNumber,
+        $input['fullName'] ?? 'Customer',
+        $input['email'] ?? 'customer@example.com',
+        $input['telephone'] ?? '+919876543210',
+        json_encode([
+            'address' => $input['address'] ?? '',
+            'city' => $input['city'] ?? '',
+            'state' => $input['state'] ?? '',
+            'pincode' => $input['pincode'] ?? ''
+        ]),
+        json_encode($input['items'] ?? []),
+        (int)($input['subtotal'] ?? 1099),
+        (int)($input['discountAmount'] ?? 0),
+        (int)($input['amount'] ?? 1099),
+        'paid',
+        'processing',
+        'Razorpay',
+        'order_rzp_' . time()
+    ]);
 
     echo json_encode([
         'success' => true,
         'order_id' => $orderId,
+        'order_number' => $orderNumber,
         'razorpay_order_id' => 'order_rzp_' . time(),
         'amount' => $amount,
         'currency' => 'INR',

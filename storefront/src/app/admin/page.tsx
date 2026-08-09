@@ -5,7 +5,7 @@ import Link from "next/link";
 import { 
   Plus, Edit, Trash2, Image as ImageIcon, Save, ArrowLeft, 
   CheckCircle, AlertCircle, Sparkles, RefreshCw, Eye, ExternalLink, Globe, Lock, LogOut,
-  Upload, X, Link as LinkIcon
+  Upload, X, Link as LinkIcon, ShoppingBag, Tag, Users, BarChart3, Package, Truck
 } from "lucide-react";
 
 interface Product {
@@ -25,6 +25,33 @@ interface Product {
   inventory_count: number;
 }
 
+interface Order {
+  id: string;
+  order_number: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  shipping_address: any;
+  items: any[];
+  total_amount: number;
+  payment_status: string;
+  fulfillment_status: string;
+  awb_number: string;
+  courier_name: string;
+  created_at: string;
+}
+
+interface Discount {
+  id: string;
+  code: string;
+  type: string;
+  value: number;
+  min_order_value: number;
+  usage_limit: number;
+  used_count: number;
+  is_active: boolean | number;
+}
+
 const BACKEND_URL = "https://api.younoya.com";
 
 export default function AdminPage() {
@@ -34,13 +61,31 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
 
+  // Active Admin Tab: 'products' | 'orders' | 'discounts'
+  const [activeTab, setActiveTab] = useState<"products" | "orders" | "discounts">("products");
+
+  // Data states
   const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [discounts, setDiscounts] = useState<Discount[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // Product Editing state
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [saving, setSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
+
+  // New Discount Form state
+  const [showNewDiscountModal, setShowNewDiscountModal] = useState(false);
+  const [newDiscount, setNewDiscount] = useState({
+    code: "",
+    type: "percentage",
+    value: 10,
+    min_order_value: 0,
+    usage_limit: 500
+  });
 
   // Media upload state
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -86,13 +131,28 @@ export default function AdminPage() {
     setIsAuthenticated(false);
   };
 
-  const fetchProducts = async () => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${BACKEND_URL}/api/v1/admin/products`);
-      const json = await res.json();
-      if (json.success && Array.isArray(json.data)) {
-        setProducts(json.data);
+      // Fetch Products
+      const pRes = await fetch(`${BACKEND_URL}/api/v1/admin/products`);
+      const pJson = await pRes.json();
+      if (pJson.success && Array.isArray(pJson.data)) {
+        setProducts(pJson.data);
+      }
+
+      // Fetch Orders
+      const oRes = await fetch(`${BACKEND_URL}/api/v1/admin/orders`);
+      const oJson = await oRes.json();
+      if (oJson.success && Array.isArray(oJson.data)) {
+        setOrders(oJson.data);
+      }
+
+      // Fetch Discounts
+      const dRes = await fetch(`${BACKEND_URL}/api/v1/admin/discounts`);
+      const dJson = await dRes.json();
+      if (dJson.success && Array.isArray(dJson.data)) {
+        setDiscounts(dJson.data);
       }
     } catch (e) {
       console.error(e);
@@ -103,7 +163,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      fetchProducts();
+      fetchData();
     }
   }, [isAuthenticated]);
 
@@ -221,7 +281,7 @@ export default function AdminPage() {
       if (json.success) {
         setStatusMsg("✓ Product published successfully to MariaDB & Storefront!");
         setIsEditing(false);
-        fetchProducts();
+        fetchData();
       } else {
         setStatusMsg("❌ Error saving: " + (json.error || "Unknown error"));
       }
@@ -240,7 +300,44 @@ export default function AdminPage() {
       });
       const json = await res.json();
       if (json.success) {
-        fetchProducts();
+        fetchData();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleUpdateOrderStatus = async (orderId: string, status: string, awb?: string) => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/orders/${orderId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fulfillment_status: status, awb_number: awb })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setStatusMsg("✓ Order status updated successfully!");
+        fetchData();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleCreateDiscount = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/discounts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newDiscount)
+      });
+      const json = await res.json();
+      if (json.success) {
+        setStatusMsg("✓ Coupon code created successfully!");
+        setShowNewDiscountModal(false);
+        setNewDiscount({ code: "", type: "percentage", value: 10, min_order_value: 0, usage_limit: 500 });
+        fetchData();
       }
     } catch (e) {
       console.error(e);
@@ -257,7 +354,7 @@ export default function AdminPage() {
               <Lock size={24} />
             </div>
             <h1 className="text-2xl font-bold tracking-tight">YOUNOYA Admin</h1>
-            <p className="text-xs text-white/60">Enter credentials to manage products, photos, and store settings.</p>
+            <p className="text-xs text-white/60">Enter credentials to manage products, orders, discounts, and store settings.</p>
           </div>
 
           {loginError && (
@@ -316,6 +413,8 @@ export default function AdminPage() {
     ? (selectedProduct?.images as string[])
     : (typeof selectedProduct?.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
 
+  const totalRevenue = orders.reduce((sum, o) => sum + (o.total_amount || 0), 0);
+
   return (
     <div className="min-h-screen bg-[#0d0f12] text-stone-200 font-inter">
       {/* Top Admin Header */}
@@ -331,6 +430,39 @@ export default function AdminPage() {
           </div>
         </div>
 
+        {/* Center Tabs */}
+        <div className="hidden md:flex items-center gap-1 bg-[#0d0f12] p-1 rounded-xl border border-white/10">
+          <button
+            onClick={() => { setIsEditing(false); setActiveTab("products"); }}
+            className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              activeTab === "products" && !isEditing ? "bg-white text-black" : "text-stone-400 hover:text-white"
+            }`}
+          >
+            <Package size={14} />
+            <span>Products ({products.length})</span>
+          </button>
+
+          <button
+            onClick={() => { setIsEditing(false); setActiveTab("orders"); }}
+            className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              activeTab === "orders" ? "bg-white text-black" : "text-stone-400 hover:text-white"
+            }`}
+          >
+            <ShoppingBag size={14} />
+            <span>Orders ({orders.length})</span>
+          </button>
+
+          <button
+            onClick={() => { setIsEditing(false); setActiveTab("discounts"); }}
+            className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              activeTab === "discounts" ? "bg-white text-black" : "text-stone-400 hover:text-white"
+            }`}
+          >
+            <Tag size={14} />
+            <span>Discounts ({discounts.length})</span>
+          </button>
+        </div>
+
         <div className="flex items-center gap-4 text-xs">
           <Link 
             href="/" 
@@ -341,7 +473,7 @@ export default function AdminPage() {
             <ExternalLink size={13} />
           </Link>
           <button 
-            onClick={fetchProducts}
+            onClick={fetchData}
             className="p-2 hover:bg-white/5 rounded-lg text-stone-400 hover:text-white transition-colors"
             title="Refresh database"
           >
@@ -361,15 +493,30 @@ export default function AdminPage() {
       {/* Main Admin Workspace */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {statusMsg && (
-          <div className="mb-6 p-4 rounded-xl liquid-glass border border-emerald-500/30 text-emerald-300 text-sm font-medium">
-            {statusMsg}
+          <div className="mb-6 p-4 rounded-xl liquid-glass border border-emerald-500/30 text-emerald-300 text-sm font-medium flex items-center justify-between">
+            <span>{statusMsg}</span>
+            <button onClick={() => setStatusMsg("")}><X size={14} /></button>
           </div>
         )}
 
-        {!isEditing ? (
-          /* ========================================================
-             PRODUCT LIST VIEW (Shopify Products Table)
-             ======================================================== */
+        {/* Quick Analytics Bar */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          <div className="p-5 rounded-2xl bg-[#14171d] border border-white/10 shadow-lg">
+            <div className="text-xs text-stone-400 font-medium">Total Products</div>
+            <div className="text-2xl font-bold text-white mt-1">{products.length}</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-[#14171d] border border-white/10 shadow-lg">
+            <div className="text-xs text-stone-400 font-medium">Total Orders (OMS)</div>
+            <div className="text-2xl font-bold text-amber-400 mt-1">{orders.length}</div>
+          </div>
+          <div className="p-5 rounded-2xl bg-[#14171d] border border-white/10 shadow-lg">
+            <div className="text-xs text-stone-400 font-medium">Active Coupons</div>
+            <div className="text-2xl font-bold text-emerald-400 mt-1">{discounts.length}</div>
+          </div>
+        </div>
+
+        {/* Tab 1: Products */}
+        {activeTab === "products" && !isEditing && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
@@ -472,10 +619,224 @@ export default function AdminPage() {
               </table>
             </div>
           </div>
-        ) : (
-          /* ========================================================
-             SHOPIFY-STYLE PRODUCT EDITOR VIEW
-             ======================================================== */
+        )}
+
+        {/* Tab 2: Orders (OMS) */}
+        {activeTab === "orders" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-white tracking-tight">Orders & Fulfillment ({orders.length})</h1>
+                <p className="text-xs text-stone-400 mt-1">Manage customer orders, track payments, and update Bluedart AWB shipping numbers.</p>
+              </div>
+            </div>
+
+            <div className="border border-white/10 rounded-2xl bg-[#14171d] overflow-hidden shadow-xl">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-white/10 bg-white/[0.02] text-stone-400 uppercase font-mono text-[10px] tracking-wider">
+                    <th className="py-3.5 px-6">Order</th>
+                    <th className="py-3.5 px-6">Customer</th>
+                    <th className="py-3.5 px-6">Total</th>
+                    <th className="py-3.5 px-6">Payment</th>
+                    <th className="py-3.5 px-6">Fulfillment</th>
+                    <th className="py-3.5 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {orders.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-12 text-center text-stone-400">
+                        No orders recorded yet. New customer checkout orders will appear here automatically.
+                      </td>
+                    </tr>
+                  ) : (
+                    orders.map((o) => (
+                      <tr key={o.id} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="py-4 px-6 font-mono font-semibold text-white">
+                          <div>{o.order_number}</div>
+                          <div className="text-[10px] text-stone-500 font-normal">{new Date(o.created_at).toLocaleDateString()}</div>
+                        </td>
+                        <td className="py-4 px-6">
+                          <div className="font-semibold text-white">{o.customer_name}</div>
+                          <div className="text-stone-400 text-[11px]">{o.customer_phone}</div>
+                          <div className="text-stone-500 text-[10px]">{o.customer_email}</div>
+                        </td>
+                        <td className="py-4 px-6 font-semibold text-amber-400">
+                          ₹{o.total_amount}
+                        </td>
+                        <td className="py-4 px-6">
+                          <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold bg-emerald-950/60 text-emerald-400 border border-emerald-500/20">
+                            {o.payment_status}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] uppercase font-bold ${
+                            o.fulfillment_status === "delivered" 
+                              ? "bg-emerald-950/60 text-emerald-400 border border-emerald-500/20"
+                              : o.fulfillment_status === "shipped"
+                              ? "bg-blue-950/60 text-blue-400 border border-blue-500/20"
+                              : "bg-amber-950/60 text-amber-400 border border-amber-500/20"
+                          }`}>
+                            {o.fulfillment_status}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6 text-right space-x-2">
+                          <button
+                            onClick={() => {
+                              const awb = prompt("Enter Bluedart AWB Tracking Number:", o.awb_number || "BLUEDART" + Date.now());
+                              if (awb) handleUpdateOrderStatus(o.id, "shipped", awb);
+                            }}
+                            className="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs transition-colors"
+                          >
+                            Dispatch AWB
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 3: Discounts & Coupons */}
+        {activeTab === "discounts" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-white tracking-tight">Discounts & Promo Codes ({discounts.length})</h1>
+                <p className="text-xs text-stone-400 mt-1">Create promotional coupons for checkout discounts.</p>
+              </div>
+
+              <button
+                onClick={() => setShowNewDiscountModal(true)}
+                className="bg-white text-black text-xs font-semibold px-5 py-2.5 rounded-lg hover:bg-white/90 transition-all flex items-center gap-2 shadow-lg"
+              >
+                <Plus size={16} />
+                <span>Create Coupon</span>
+              </button>
+            </div>
+
+            <div className="border border-white/10 rounded-2xl bg-[#14171d] overflow-hidden shadow-xl">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-white/10 bg-white/[0.02] text-stone-400 uppercase font-mono text-[10px] tracking-wider">
+                    <th className="py-3.5 px-6">Coupon Code</th>
+                    <th className="py-3.5 px-6">Discount</th>
+                    <th className="py-3.5 px-6">Min Order Value</th>
+                    <th className="py-3.5 px-6">Usage Limit</th>
+                    <th className="py-3.5 px-6 text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {discounts.map((d) => (
+                    <tr key={d.id} className="hover:bg-white/[0.02] transition-colors">
+                      <td className="py-4 px-6 font-mono font-bold text-amber-300 text-sm">
+                        {d.code}
+                      </td>
+                      <td className="py-4 px-6 font-semibold text-white">
+                        {d.type === "percentage" ? `${d.value}% OFF` : `₹${d.value} FLAT OFF`}
+                      </td>
+                      <td className="py-4 px-6 text-stone-300">
+                        ₹{d.min_order_value || 0}
+                      </td>
+                      <td className="py-4 px-6 text-stone-400">
+                        {d.used_count || 0} / {d.usage_limit || 500}
+                      </td>
+                      <td className="py-4 px-6 text-right">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold bg-emerald-950/60 text-emerald-400 border border-emerald-500/20">
+                          Active
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Create Discount Modal */}
+            {showNewDiscountModal && (
+              <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+                <div className="w-full max-w-md bg-[#14171d] border border-white/10 rounded-2xl p-6 space-y-4 shadow-2xl">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-white text-base">Create New Coupon</h3>
+                    <button onClick={() => setShowNewDiscountModal(false)}><X size={18} /></button>
+                  </div>
+
+                  <form onSubmit={handleCreateDiscount} className="space-y-4 text-xs">
+                    <div>
+                      <label className="block text-stone-300 mb-1">Coupon Code*</label>
+                      <input
+                        type="text"
+                        required
+                        value={newDiscount.code}
+                        onChange={(e) => setNewDiscount({ ...newDiscount, code: e.target.value.toUpperCase() })}
+                        placeholder="e.g. SPECIAL20"
+                        className="w-full bg-[#0d0f12] border border-white/10 rounded-xl px-4 py-2 text-white font-mono uppercase focus:outline-none focus:border-amber-500"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-stone-300 mb-1">Discount Type</label>
+                        <select
+                          value={newDiscount.type}
+                          onChange={(e) => setNewDiscount({ ...newDiscount, type: e.target.value })}
+                          className="w-full bg-[#0d0f12] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                        >
+                          <option value="percentage">Percentage (%)</option>
+                          <option value="fixed_amount">Flat (₹)</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-stone-300 mb-1">Value*</label>
+                        <input
+                          type="number"
+                          required
+                          value={newDiscount.value}
+                          onChange={(e) => setNewDiscount({ ...newDiscount, value: parseInt(e.target.value) || 0 })}
+                          className="w-full bg-[#0d0f12] border border-white/10 rounded-xl px-3 py-2 text-white font-bold focus:outline-none focus:border-amber-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-stone-300 mb-1">Minimum Order Value (₹)</label>
+                      <input
+                        type="number"
+                        value={newDiscount.min_order_value}
+                        onChange={(e) => setNewDiscount({ ...newDiscount, min_order_value: parseInt(e.target.value) || 0 })}
+                        className="w-full bg-[#0d0f12] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500"
+                      />
+                    </div>
+
+                    <div className="pt-2 flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowNewDiscountModal(false)}
+                        className="flex-1 py-2.5 rounded-xl border border-white/10 text-stone-400 hover:text-white"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="flex-1 py-2.5 rounded-xl bg-white text-black font-bold uppercase tracking-wider hover:bg-white/90"
+                      >
+                        Create Coupon
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Product Editor Modal / View */}
+        {isEditing && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <button

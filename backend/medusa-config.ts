@@ -1,6 +1,6 @@
 import { loadEnv, defineConfig } from '@medusajs/framework/utils'
 
-loadEnv(process.env.NODE_ENV || 'development', process.cwd())
+loadEnv(process.env.NODE_ENV || 'production', process.cwd())
 
 module.exports = defineConfig({
   projectConfig: {
@@ -11,11 +11,11 @@ module.exports = defineConfig({
       },
     },
     http: {
-      storeCors: process.env.STORE_CORS || 'http://localhost:8000',
-      adminCors: process.env.ADMIN_CORS || 'http://localhost:9000',
-      authCors: process.env.AUTH_CORS || 'http://localhost:8000,http://localhost:9000',
-      jwtSecret: process.env.JWT_SECRET || 'supersecret_jwt_key_younoya',
-      cookieSecret: process.env.COOKIE_SECRET || 'supersecret_cookie_key_younoya',
+      storeCors: process.env.STORE_CORS || 'https://younoya.com,http://localhost:3000',
+      adminCors: process.env.ADMIN_CORS || 'https://younoya.com,http://localhost:3000,http://localhost:9000',
+      authCors: process.env.AUTH_CORS || 'https://younoya.com,http://localhost:3000,http://localhost:9000',
+      jwtSecret: process.env.JWT_SECRET || 'supersecret_jwt_key_younoya_production_2026',
+      cookieSecret: process.env.COOKIE_SECRET || 'supersecret_cookie_key_younoya_production_2026',
     },
   },
   admin: {
@@ -32,8 +32,8 @@ module.exports = defineConfig({
             resolve: "./src/modules/younoya-razorpay",
             id: "razorpay",
             options: {
-              key_id: process.env.RAZORPAY_KEY_ID,
-              key_secret: process.env.RAZORPAY_KEY_SECRET,
+              key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_TNGgxOeUADZzEF",
+              key_secret: process.env.RAZORPAY_KEY_SECRET || "dummy_secret",
             },
           },
         ],
