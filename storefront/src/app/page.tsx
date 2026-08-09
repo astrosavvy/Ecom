@@ -139,7 +139,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
         <div className="relative w-full rounded-[32px] sm:rounded-[40px] overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] p-8 sm:p-16 min-h-[75vh] flex flex-col justify-between shadow-sm">
           {/* Background Ambient Image Overlay */}
-          <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=1600')] bg-cover bg-center pointer-events-none" />
+          <div className="absolute inset-0 z-0 opacity-35 bg-[url('/younoya_hero_banner.jpg')] bg-cover bg-center pointer-events-none" />
           
           <div className="relative z-10 max-w-2xl space-y-6">
             {/* Urgency Indicator Tag */}
