@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { TestimonialMarquee } from "@/components/ui/TestimonialMarquee";
 import { 
   ArrowRight, Sparkles, ShieldCheck, HeartHandshake, Feather, 
   ShoppingBag, Check, Star, RefreshCw, Truck, Zap 
@@ -118,17 +119,17 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative w-full min-h-screen bg-[#0c0e17] text-[#edf1f8] overflow-hidden">
-      {/* Background Atmosphere Glows */}
-      <div className="absolute top-[-10%] right-[5%] w-[680px] h-[680px] rounded-full bg-[#2e63ff]/22 blur-[140px] pointer-events-none z-0" />
-      <div className="absolute top-[12%] right-[22%] w-[540px] h-[540px] rounded-full bg-[#ff2e88]/18 blur-[150px] pointer-events-none z-0" />
-      <div className="absolute top-[28%] right-[2%] w-[580px] h-[580px] rounded-full bg-[#25e0ff]/18 blur-[160px] pointer-events-none z-0" />
-      <div className="absolute top-[65%] left-[-8%] w-[680px] h-[680px] rounded-full bg-[#2e63ff]/15 blur-[170px] pointer-events-none z-0" />
+    <div className="relative w-full min-h-screen bg-[#0c0d12] text-[#edf1f8] overflow-hidden">
+      {/* Atmospheric Ambient Glows */}
+      <div className="absolute top-[-10%] right-[5%] w-[680px] h-[680px] rounded-full bg-[#2e63ff]/18 blur-[140px] pointer-events-none z-0" />
+      <div className="absolute top-[12%] right-[22%] w-[540px] h-[540px] rounded-full bg-[#ff2e88]/15 blur-[150px] pointer-events-none z-0" />
+      <div className="absolute top-[28%] right-[2%] w-[580px] h-[580px] rounded-full bg-[#25e0ff]/15 blur-[160px] pointer-events-none z-0" />
+      <div className="absolute top-[65%] left-[-8%] w-[680px] h-[680px] rounded-full bg-[#2e63ff]/12 blur-[170px] pointer-events-none z-0" />
 
       {/* ========================================================
           HERO SECTION (Two-Column Split)
          ======================================================== */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 sm:px-12 pt-36 sm:pt-44 pb-20 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center min-h-[85vh]">
+      <section className="relative z-10 max-w-7xl mx-auto px-6 sm:px-12 pt-32 sm:pt-40 pb-20 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center min-h-[85vh]">
         {/* Left Column: Hero Text Stack */}
         <div className="lg:col-span-7 space-y-7 text-left">
           {/* Eyebrow Pill */}
@@ -241,7 +242,7 @@ export default function Home() {
       </section>
 
       {/* ========================================================
-          INTERACTIVE PRODUCTS SHOWCASE / CAROUSEL
+          INTERACTIVE PRODUCTS SHOWCASE
          ======================================================== */}
       <section id="products" className="relative z-10 max-w-7xl mx-auto px-6 sm:px-12 py-28 space-y-14">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -348,6 +349,11 @@ export default function Home() {
           })}
         </div>
       </section>
+
+      {/* ========================================================
+          INFINITE MARQUEE TESTIMONIALS (Alpha Masked)
+         ======================================================== */}
+      <TestimonialMarquee />
 
       {/* ========================================================
           CONSECRATION RITUALS FEATURE TRIO
