@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, ShoppingBag, ArrowRight } from "lucide-react";
 
@@ -23,15 +22,15 @@ export function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full px-6 sm:px-12 py-4 border-b border-white/5 bg-[#07080d]/80 backdrop-blur-xl transition-all">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full px-6 sm:px-12 py-3.5 border-b border-white/10 bg-[#0c0e17]/85 backdrop-blur-2xl transition-all">
       <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-        {/* Left: Authentic Gold YOUNOYA Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative h-10 w-36 sm:w-44">
+        {/* Left: ENLARGED Authentic Gold YOUNOYA Logo */}
+        <Link href="/" className="flex items-center gap-3 group py-1">
+          <div className="relative h-14 sm:h-16 w-44 sm:w-56 flex items-center">
             <img
               src="/younoya_logo.png"
               alt="YOUNOYA"
-              className="object-contain h-full w-auto filter drop-shadow-[0_0_12px_rgba(255,180,50,0.35)] group-hover:scale-105 transition-transform duration-300"
+              className="object-contain h-full w-auto filter drop-shadow-[0_0_16px_rgba(255,190,60,0.55)] group-hover:scale-105 transition-transform duration-300"
             />
           </div>
         </Link>
@@ -42,7 +41,7 @@ export function Header() {
             <Link
               key={link.label}
               href={link.href}
-              className="text-xs font-mono tracking-wider uppercase text-[#8b93a8] hover:text-[#eef1f8] transition-colors"
+              className="text-xs font-mono tracking-wider uppercase text-[#9ca6be] hover:text-[#ffffff] transition-colors"
             >
               {link.label}
             </Link>
@@ -77,19 +76,19 @@ export function Header() {
           className="md:hidden text-white/80 p-2 hover:text-white"
           aria-label="Toggle navigation"
         >
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {menuOpen && (
-        <div className="fixed top-[73px] left-4 right-4 z-50 md:hidden chrome-card rounded-2xl p-5 flex flex-col gap-3 shadow-2xl border border-white/10 bg-[#0c0e15]/95 backdrop-blur-2xl">
+        <div className="fixed top-[82px] left-4 right-4 z-50 md:hidden chrome-card rounded-2xl p-6 flex flex-col gap-3 shadow-2xl border border-white/15 bg-[#121624]/95 backdrop-blur-2xl">
           {navLinks.map((link) => (
             <Link
               key={link.label}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="text-sm font-medium text-stone-300 hover:text-white py-2"
+              className="text-sm font-medium text-stone-200 hover:text-white py-2"
             >
               {link.label}
             </Link>

@@ -78,7 +78,6 @@ const FALLBACK_PRODUCTS: Product[] = [
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
-  const [activeProduct, setActiveProduct] = useState<Product>(FALLBACK_PRODUCTS[0]);
   const [addedItem, setAddedItem] = useState<string | null>(null);
 
   useEffect(() => {
@@ -87,7 +86,6 @@ export default function Home() {
       .then((data) => {
         if (data?.success && Array.isArray(data.data) && data.data.length > 0) {
           setProducts(data.data);
-          setActiveProduct(data.data[0]);
         }
       })
       .catch((e) => console.log("Using cached items:", e));
@@ -120,14 +118,12 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative w-full min-h-screen bg-[#07080d] text-[#eef1f8] overflow-hidden">
-      {/* ========================================================
-          BACKGROUND GRADIENT-MESH GLOW (Blurred Electric Colors)
-         ======================================================== */}
-      <div className="absolute top-[-10%] right-[5%] w-[650px] h-[650px] rounded-full bg-[#2e63ff]/20 blur-[130px] pointer-events-none z-0" />
-      <div className="absolute top-[12%] right-[22%] w-[500px] h-[500px] rounded-full bg-[#ff2e88]/18 blur-[140px] pointer-events-none z-0" />
-      <div className="absolute top-[28%] right-[2%] w-[540px] h-[540px] rounded-full bg-[#25e0ff]/18 blur-[150px] pointer-events-none z-0" />
-      <div className="absolute top-[65%] left-[-8%] w-[650px] h-[650px] rounded-full bg-[#2e63ff]/12 blur-[170px] pointer-events-none z-0" />
+    <div className="relative w-full min-h-screen bg-[#0c0e17] text-[#edf1f8] overflow-hidden">
+      {/* Background Atmosphere Glows */}
+      <div className="absolute top-[-10%] right-[5%] w-[680px] h-[680px] rounded-full bg-[#2e63ff]/22 blur-[140px] pointer-events-none z-0" />
+      <div className="absolute top-[12%] right-[22%] w-[540px] h-[540px] rounded-full bg-[#ff2e88]/18 blur-[150px] pointer-events-none z-0" />
+      <div className="absolute top-[28%] right-[2%] w-[580px] h-[580px] rounded-full bg-[#25e0ff]/18 blur-[160px] pointer-events-none z-0" />
+      <div className="absolute top-[65%] left-[-8%] w-[680px] h-[680px] rounded-full bg-[#2e63ff]/15 blur-[170px] pointer-events-none z-0" />
 
       {/* ========================================================
           HERO SECTION (Two-Column Split)
@@ -136,8 +132,8 @@ export default function Home() {
         {/* Left Column: Hero Text Stack */}
         <div className="lg:col-span-7 space-y-7 text-left">
           {/* Eyebrow Pill */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-[11px] font-mono tracking-[0.16em] uppercase text-stone-300 backdrop-blur-md shadow-lg">
-            <span className="w-2 h-2 rounded-full bg-[#c6ff3d] shadow-[0_0_10px_#c6ff3d] animate-pulse" />
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/12 text-[11px] font-mono tracking-[0.16em] uppercase text-stone-200 backdrop-blur-md shadow-lg">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#c6ff3d] shadow-[0_0_10px_#c6ff3d] animate-pulse" />
             <span>VEDIC CONSECRATION // 2026 EDITION</span>
           </div>
 
@@ -148,7 +144,7 @@ export default function Home() {
           </h1>
 
           {/* Subhead */}
-          <p className="text-[#8b93a8] text-base sm:text-lg leading-relaxed max-w-[520px] font-normal">
+          <p className="text-[#9ca6be] text-base sm:text-lg leading-relaxed max-w-[520px] font-normal">
             Sacred <strong className="text-white font-medium">astrology-consecrated Rakhis</strong> and Vedic ritual keepsakes, crafted with natural gemstones and energized for <strong className="text-white font-medium">planetary harmony & sibling prosperity</strong>.
           </p>
 
@@ -172,8 +168,8 @@ export default function Home() {
           </div>
 
           {/* Trust Line */}
-          <div className="flex items-center gap-4 pt-4 text-xs text-[#8b93a8]">
-            <div className="flex items-center gap-1.5 text-amber-400 font-semibold">
+          <div className="flex items-center gap-4 pt-4 text-xs text-[#9ca6be]">
+            <div className="flex items-center gap-1 text-amber-400 font-semibold">
               <Star size={14} className="fill-current" />
               <Star size={14} className="fill-current" />
               <Star size={14} className="fill-current" />
@@ -181,7 +177,7 @@ export default function Home() {
               <Star size={14} className="fill-current" />
             </div>
             <div>
-              100% Free Express Delivery across India • <span className="text-stone-300">Over 14,000+ Blessed Rakhis Shipped</span>
+              100% Free Express Delivery across India • <span className="text-stone-200">14,000+ Blessed Rakhis Shipped</span>
             </div>
           </div>
         </div>
@@ -190,10 +186,10 @@ export default function Home() {
         <div className="lg:col-span-5 flex flex-col items-center justify-center relative py-6">
           {/* Sparkles */}
           <div className="absolute top-[12%] right-[15%] text-white animate-bounce pointer-events-none">
-            <Sparkles size={24} className="text-[#25e0ff] drop-shadow-[0_0_12px_#25e0ff]" />
+            <Sparkles size={26} className="text-[#25e0ff] drop-shadow-[0_0_14px_#25e0ff]" />
           </div>
           <div className="absolute bottom-[25%] left-[10%] text-white pointer-events-none animate-pulse">
-            <Sparkles size={18} className="text-[#ff2e88] drop-shadow-[0_0_12px_#ff2e88]" />
+            <Sparkles size={20} className="text-[#ff2e88] drop-shadow-[0_0_14px_#ff2e88]" />
           </div>
 
           {/* The Chrome Sphere */}
@@ -203,11 +199,11 @@ export default function Home() {
             <div className="chrome-orb-rim" />
             
             {/* Center Monogram Insignia Glow */}
-            <div className="relative z-10 w-24 h-24 opacity-85 group-hover:opacity-100 transition-opacity">
+            <div className="relative z-10 w-28 h-28 opacity-90 group-hover:opacity-100 transition-opacity">
               <img
                 src="/younoya_icon.png"
                 alt="YOUNOYA Monogram"
-                className="w-full h-full object-contain filter drop-shadow-[0_0_16px_rgba(255,200,60,0.6)]"
+                className="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(255,200,60,0.7)]"
               />
             </div>
           </div>
@@ -220,24 +216,24 @@ export default function Home() {
       {/* ========================================================
           TRUST STRIP (Vedic Assurance)
          ======================================================== */}
-      <section className="w-full border-y border-white/10 bg-[#090b11]/80 backdrop-blur-md py-6 relative z-10">
+      <section className="w-full border-y border-white/10 bg-[#10131f]/80 backdrop-blur-md py-6 relative z-10">
         <div className="max-w-7xl mx-auto px-6 sm:px-12 flex flex-wrap items-center justify-between gap-6">
-          <div className="flex items-center gap-3 text-xs font-mono tracking-wider text-stone-300">
+          <div className="flex items-center gap-3 text-xs font-mono tracking-wider text-stone-200">
             <ShieldCheck size={18} className="text-amber-400" />
             <span>108-MANTRA CONSECRATION</span>
           </div>
 
-          <div className="flex items-center gap-3 text-xs font-mono tracking-wider text-stone-300">
+          <div className="flex items-center gap-3 text-xs font-mono tracking-wider text-stone-200">
             <Truck size={18} className="text-cyan-400" />
             <span>FREE EXPRESS BLUEDART SHIPPING</span>
           </div>
 
-          <div className="flex items-center gap-3 text-xs font-mono tracking-wider text-stone-300">
+          <div className="flex items-center gap-3 text-xs font-mono tracking-wider text-stone-200">
             <Zap size={18} className="text-pink-400" />
             <span>ZERO-PASSWORD INSTANT CHECKOUT</span>
           </div>
 
-          <div className="flex items-center gap-3 text-xs font-mono tracking-wider text-stone-300">
+          <div className="flex items-center gap-3 text-xs font-mono tracking-wider text-stone-200">
             <Feather size={18} className="text-emerald-400" />
             <span>NATURAL ORGANIC SILK & KAUDI</span>
           </div>
@@ -256,7 +252,7 @@ export default function Home() {
             <h2 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight">
               Astrologically Consecrated Rakhis
             </h2>
-            <p className="text-sm text-[#8b93a8] max-w-lg">
+            <p className="text-sm text-[#9ca6be] max-w-lg">
               Each piece is individually energized with Vedic mantras, crafted with pure natural gemstones, and delivered in a gift keepsake box.
             </p>
           </div>
@@ -284,14 +280,14 @@ export default function Home() {
                 className="chrome-card rounded-2xl p-5 flex flex-col justify-between space-y-5 group"
               >
                 {/* Image Container */}
-                <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-black/40 border border-white/10">
+                <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-black/40 border border-white/12">
                   <img
                     src={thumb}
                     alt={prod.title}
                     className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
                   />
                   {prod.badge && (
-                    <span className="absolute top-3 left-3 bg-black/80 backdrop-blur-md text-amber-300 text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-1 rounded-full border border-amber-400/30 shadow-lg">
+                    <span className="absolute top-3 left-3 bg-black/85 backdrop-blur-md text-amber-300 text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-1 rounded-full border border-amber-400/35 shadow-lg">
                       {prod.badge}
                     </span>
                   )}
@@ -304,7 +300,7 @@ export default function Home() {
                       {prod.title}
                     </h3>
                   </Link>
-                  <p className="text-[11px] text-[#8b93a8] line-clamp-1">
+                  <p className="text-[11px] text-[#9ca6be] line-clamp-1">
                     {prod.subtitle}
                   </p>
 
@@ -312,7 +308,7 @@ export default function Home() {
                     <span className="text-lg font-bold font-space text-white">
                       ₹{prod.price}
                     </span>
-                    <span className="text-xs text-[#8b93a8] line-through">
+                    <span className="text-xs text-stone-500 line-through">
                       ₹{prod.original_price}
                     </span>
                     <span className="text-[10px] text-emerald-400 font-medium ml-auto">
@@ -364,7 +360,7 @@ export default function Home() {
           <h2 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight">
             Crafted for Kinship & Sacred Protection
           </h2>
-          <p className="text-sm text-[#8b93a8] leading-relaxed">
+          <p className="text-sm text-[#9ca6be] leading-relaxed">
             Unlike mass-produced commercial threads, each YOUNOYA creation is an auspicious spiritual anchor.
           </p>
         </div>
@@ -381,7 +377,7 @@ export default function Home() {
                   {item.icon}
                 </div>
 
-                <span className="font-mono text-xs text-[#8b93a8] tracking-widest font-semibold">
+                <span className="font-mono text-xs text-[#9ca6be] tracking-widest font-semibold">
                   {item.num}
                 </span>
               </div>
@@ -390,7 +386,7 @@ export default function Home() {
                 <h3 className="text-lg font-bold font-space text-white tracking-tight">
                   {item.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-[#8b93a8] leading-relaxed font-normal">
+                <p className="text-xs sm:text-sm text-[#9ca6be] leading-relaxed font-normal">
                   {item.desc}
                 </p>
               </div>
