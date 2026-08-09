@@ -136,32 +136,32 @@ export default function Home() {
       {/* ========================================================
           HERO SECTION (Clinical Luxury 32px Container)
          ======================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
-        <div className="relative w-full rounded-[32px] sm:rounded-[40px] overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] p-8 sm:p-16 min-h-[75vh] flex flex-col justify-between shadow-sm">
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-6">
+        <div className="relative w-full rounded-[24px] sm:rounded-[40px] overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] p-5 sm:p-16 min-h-[65vh] sm:min-h-[75vh] flex flex-col justify-between shadow-sm">
           {/* Background Ambient Image Overlay - Bright Crisp Photography */}
-          <div className="absolute inset-0 z-0 opacity-45 bg-[url('/younoya_hero_v3.jpg')] bg-cover bg-center pointer-events-none" />
+          <div className="absolute inset-0 z-0 opacity-40 bg-[url('/younoya_hero_v3.jpg')] bg-cover bg-center pointer-events-none" />
           
-          <div className="relative z-10 max-w-2xl space-y-6">
+          <div className="relative z-10 max-w-2xl space-y-4 sm:space-y-6">
             {/* Urgency Indicator Tag */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-md bg-[#DC2626] text-white text-[10px] font-extrabold uppercase tracking-wider pulse-badge shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#DC2626] text-white text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider pulse-badge shadow-sm">
               <span>⚡ LIMITED CONSECRATION BATCH // 2026 EDITION</span>
             </div>
 
             {/* Typography: Heading mix of bold sans and italic serif */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold font-heading text-[#1C1C1C] leading-[1.05] tracking-tight">
+            <h1 className="text-3xl sm:text-6xl lg:text-7xl font-extrabold font-heading text-[#1C1C1C] leading-[1.1] sm:leading-[1.05] tracking-tight">
               Consecrated Grace <br />
               <span className="font-serif italic font-normal text-[#D4AF37]">& Astrological Harmony</span>
             </h1>
 
-            <p className="text-base sm:text-lg text-stone-600 leading-relaxed max-w-xl font-normal">
+            <p className="text-xs sm:text-lg text-stone-700 leading-relaxed max-w-xl font-normal">
               Authentic Vedic Rakhis, handcrafted with natural Gomti Chakras, Rudrakshas, and organic silk threads—energized with 108 Gayatri mantras for brotherly protection & wealth attraction.
             </p>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            {/* Action Buttons Stacked on Mobile */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
               <Link
                 href="/products"
-                className="px-8 py-4 rounded-full bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider inline-flex items-center gap-2 shadow-lg hover:bg-[#333333] transition-all transform hover:scale-105"
+                className="w-full sm:w-auto px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider inline-flex items-center justify-center gap-2 shadow-lg hover:bg-[#333333] transition-all transform hover:scale-105"
               >
                 <span>Shop Consecrated Collection</span>
                 <ArrowRight size={16} />
@@ -169,7 +169,7 @@ export default function Home() {
 
               <Link
                 href="/checkout"
-                className="px-7 py-4 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2 hover:bg-[#D4DFD7] transition-all"
+                className="w-full sm:w-auto px-6 py-3.5 sm:px-7 sm:py-4 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 hover:bg-[#D4DFD7] transition-all"
               >
                 <ShoppingBag size={15} className="text-[#D4AF37]" />
                 <span>Instant Express Checkout</span>
@@ -177,21 +177,21 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Glassmorphism Trust Badges Row at Bottom */}
-          <div className="relative z-10 pt-12">
-            <div className="inline-flex flex-wrap items-center gap-4 sm:gap-8 px-6 py-3.5 rounded-full bg-white/75 backdrop-blur-[12px] border border-white/60 shadow-sm text-xs font-medium text-[#1C1C1C]">
+          {/* Glassmorphism Trust Badges Row at Bottom - Responsive Stack */}
+          <div className="relative z-10 pt-8 sm:pt-12">
+            <div className="inline-flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-8 px-4 sm:px-6 py-3 rounded-2xl sm:rounded-full bg-white/85 backdrop-blur-[12px] border border-white/60 shadow-sm text-xs font-medium text-[#1C1C1C] w-full sm:w-auto">
               <div className="flex items-center gap-2">
-                <ShieldCheck size={16} className="text-[#D4AF37]" />
+                <ShieldCheck size={16} className="text-[#D4AF37] flex-shrink-0" />
                 <span>108 Gayatri Mantras</span>
               </div>
               <div className="hidden sm:block text-stone-300">•</div>
               <div className="flex items-center gap-2">
-                <Sparkles size={16} className="text-[#D4AF37]" />
+                <Sparkles size={16} className="text-[#D4AF37] flex-shrink-0" />
                 <span>Natural Gomti Chakra</span>
               </div>
               <div className="hidden sm:block text-stone-300">•</div>
               <div className="flex items-center gap-2">
-                <Truck size={16} className="text-[#D4AF37]" />
+                <Truck size={16} className="text-[#D4AF37] flex-shrink-0" />
                 <span>100% Free Air Delivery</span>
               </div>
             </div>
