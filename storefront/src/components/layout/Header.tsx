@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { Menu, X, ShoppingBag } from "lucide-react";
+import { useCart } from "@/lib/CartContext";
 
 export type PillNavItem = {
   label: string;
@@ -12,15 +13,10 @@ export type PillNavItem = {
   ariaLabel?: string;
 };
 
-export interface PillNavProps {
-  logo?: string;
-  items?: PillNavItem[];
-  activeHref?: string;
-}
-
 export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { totalItems } = useCart();
 
   // Hide on admin
   if (pathname?.startsWith("/admin")) {
@@ -29,9 +25,9 @@ export function Header() {
 
   const items: PillNavItem[] = [
     { label: "Vedic Rakhis", href: "/#products" },
+    { label: "All Products", href: "/products" },
     { label: "Consecration", href: "/#rituals" },
-    { label: "Reviews", href: "/#reviews" },
-    { label: "About", href: "/about" },
+    { label: "Our Story", href: "/about" },
     { label: "Contact", href: "/contact" }
   ];
 
@@ -39,7 +35,6 @@ export function Header() {
   const tlRefs = useRef<Array<gsap.core.Timeline | null>>([]);
   const activeTweenRefs = useRef<Array<gsap.core.Tween | null>>([]);
   const logoImgRef = useRef<HTMLImageElement | null>(null);
-  const logoTweenRef = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     const layout = () => {
@@ -154,36 +149,46 @@ export function Header() {
   const handleLogoEnter = () => {
     const img = logoImgRef.current;
     if (!img) return;
-    logoTweenRef.current?.kill();
-    logoTweenRef.current = gsap.to(img, {
-      rotate: 360,
-      duration: 0.8,
-      ease: "elastic.out(1, 0.5)",
-      overwrite: "auto",
-      onComplete: () => gsap.set(img, { rotate: 0 })
+    gsap.to(img, {
+      scale: 1.08,
+      duration: 0.4,
+      ease: "power2.out",
+      overwrite: "auto"
+    });
+  };
+
+  const handleLogoLeave = () => {
+    const img = logoImgRef.current;
+    if (!img) return;
+    gsap.to(img, {
+      scale: 1,
+      duration: 0.3,
+      ease: "power2.inOut",
+      overwrite: "auto"
     });
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full px-4 sm:px-8 py-3 bg-transparent backdrop-blur-md transition-all">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full px-4 sm:px-8 py-2 bg-transparent backdrop-blur-md transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Left: Prominent Gold Logo with Rotating Interaction */}
+        {/* Left: ENLARGED PROMINENT GOLD LOGO (h-20 to h-24 with negative margins to keep header slim) */}
         <Link
           href="/"
           onMouseEnter={handleLogoEnter}
-          className="flex items-center gap-3 flex-shrink-0 group"
+          onMouseLeave={handleLogoLeave}
+          className="flex items-center gap-3 flex-shrink-0 group py-0 -my-2.5"
         >
-          <div className="relative h-14 sm:h-16 w-44 sm:w-56 flex items-center">
+          <div className="relative h-20 sm:h-24 w-48 sm:w-60 flex items-center">
             <img
               ref={logoImgRef}
               src="/younoya_logo.png"
               alt="YOUNOYA"
-              className="object-contain h-full w-auto filter drop-shadow-[0_0_18px_rgba(255,190,60,0.6)] group-hover:scale-105 transition-transform duration-300 pointer-events-none"
+              className="object-contain h-full w-auto filter drop-shadow-[0_0_24px_rgba(255,190,60,0.75)] transition-transform duration-300 pointer-events-none"
             />
           </div>
         </Link>
 
-        {/* Center: GSAP Animated Pill Navigation */}
+        {/* Center: GSAP Pill Navigation (Without Reviews Link) */}
         <div className="hidden md:flex items-center rounded-full px-2 py-1 bg-white/[0.04] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl">
           <ul role="menubar" className="list-none flex items-center gap-1.5 m-0 p-0">
             {items.map((item, i) => (
@@ -219,7 +224,7 @@ export function Header() {
           </ul>
         </div>
 
-        {/* Right: Cart & Express Checkout Actions */}
+        {/* Right: Dynamic Cart & Express Checkout */}
         <div className="hidden md:flex items-center gap-3">
           <Link
             href="/cart"
@@ -227,9 +232,11 @@ export function Header() {
           >
             <ShoppingBag size={14} className="text-amber-400" />
             <span>Cart</span>
-            <span className="w-4 h-4 rounded-full bg-amber-400 text-black text-[10px] font-bold flex items-center justify-center">
-              1
-            </span>
+            {totalItems > 0 && (
+              <span className="w-4 h-4 rounded-full bg-amber-400 text-black text-[10px] font-bold flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
           </Link>
 
           <Link
@@ -270,7 +277,7 @@ export function Header() {
               className="flex-1 text-center aero-btn-secondary text-white text-xs font-medium py-2.5 rounded-full flex items-center justify-center gap-1.5"
             >
               <ShoppingBag size={13} />
-              <span>Cart (1)</span>
+              <span>Cart ({totalItems})</span>
             </Link>
             <Link
               href="/checkout"

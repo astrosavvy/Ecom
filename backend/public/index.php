@@ -1,5 +1,5 @@
 <?php
-// YOUNOYA Full Enterprise E-Commerce API Engine
+// YOUNOYA Full Enterprise E-Commerce API Engine with SMTP Order Notifications
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -40,6 +40,40 @@ function getRequestPayload() {
     return [];
 }
 
+// SMTP / Email Notification Dispatcher
+function dispatchOrderEmails($orderNumber, $customerEmail, $customerName, $amount, $items, $address) {
+    $headers = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $headers .= "From: YOUNOYA Concierge <orders@younoya.com>\r\n";
+
+    // 1. Customer Email
+    $customerSubject = "Order Confirmed: #{$orderNumber} — YOUNOYA Sacred Consecration";
+    $customerBody = "
+    <div style='font-family: Arial, sans-serif; background-color: #0c0d12; color: #edf1f8; padding: 30px; border-radius: 16px;'>
+        <h2 style='color: #f59e0b;'>Blessings, {$customerName}</h2>
+        <p>Your sacred order <strong>#{$orderNumber}</strong> has been received and scheduled for morning Vedic consecration.</p>
+        <div style='background: #141724; padding: 20px; border-radius: 12px; margin: 20px 0;'>
+            <p><strong>Total Amount Paid:</strong> ₹{$amount}</p>
+            <p><strong>Shipping Method:</strong> 100% Free Express Air Shipping</p>
+        </div>
+        <p style='color: #9ca6be; font-size: 12px;'>For questions, reach out to support@younoya.com</p>
+    </div>";
+
+    @mail($customerEmail, $customerSubject, $customerBody, $headers);
+
+    // 2. Admin Alert Email
+    $adminSubject = "🚨 New Order Received: #{$orderNumber} (₹{$amount})";
+    $adminBody = "
+    <div style='font-family: Arial, sans-serif; padding: 20px;'>
+        <h2>New Order: #{$orderNumber}</h2>
+        <p><strong>Customer:</strong> {$customerName} ({$customerEmail})</p>
+        <p><strong>Amount:</strong> ₹{$amount}</p>
+        <p>Manage order in Admin: <a href='https://younoya.com/admin'>https://younoya.com/admin</a></p>
+    </div>";
+
+    @mail("admin@younoya.com", $adminSubject, $adminBody, $headers);
+}
+
 // 1. Health Endpoint
 if ($uri === '/' || $uri === '/health') {
     $db = getDB();
@@ -52,9 +86,8 @@ if ($uri === '/' || $uri === '/health') {
         'database' => 'MariaDB 10.11+ (Enterprise Schema Active)',
         'products_in_db' => (int)$prodCount,
         'orders_in_db' => (int)$orderCount,
-        'features' => ['Products', 'Variants', 'Orders (OMS)', 'Discounts', 'Customers', 'Razorpay', 'Uploads'],
-        'shipping' => '100% Free Express Shipping across India',
-        'tax' => 'Inclusive of all taxes'
+        'features' => ['Products', 'Variants', 'Orders (OMS)', 'Discounts', 'Customers', 'Razorpay', 'Uploads', 'SMTP Emails'],
+        'shipping' => '100% Free Express Air Shipping across India'
     ]);
     exit;
 }
@@ -80,7 +113,6 @@ if ($uri === '/api/v1/products' || $uri === '/products') {
             'original_price' => (int)$p['original_price'],
             'badge' => $p['badge'],
             'free_shipping' => true,
-            'tax_inclusive' => true,
             'description' => $p['description'],
             'features' => json_decode($p['features'] ?: '[]', true),
             'images' => json_decode($p['images'] ?: '[]', true),
@@ -222,7 +254,6 @@ if (strpos($uri, '/api/v1/admin/orders') === 0) {
     $db = getDB();
     $method = $_SERVER['REQUEST_METHOD'];
 
-    // List All Orders
     if ($method === 'GET') {
         $stmt = $db->query("SELECT * FROM orders ORDER BY created_at DESC");
         $orders = $stmt->fetchAll();
@@ -247,7 +278,6 @@ if (strpos($uri, '/api/v1/admin/orders') === 0) {
         exit;
     }
 
-    // Update Order Status (Fulfillment / Tracking AWB)
     if ($method === 'PUT' && preg_match('#^/api/v1/admin/orders/([^/]+)$#', $uri, $matches)) {
         $orderId = $matches[1];
         $input = getRequestPayload();
@@ -273,12 +303,11 @@ if (strpos($uri, '/api/v1/admin/orders') === 0) {
     }
 }
 
-// 6. Discounts & Coupon Engine Endpoints
+// 6. Discounts & Coupon Engine
 if (strpos($uri, '/api/v1/discounts') === 0 || strpos($uri, '/api/v1/admin/discounts') === 0) {
     $db = getDB();
     $method = $_SERVER['REQUEST_METHOD'];
 
-    // Validate Coupon for Checkout
     if ($uri === '/api/v1/discounts/validate' && $method === 'POST') {
         $input = getRequestPayload();
         $code = strtoupper(trim($input['code'] ?? ''));
@@ -314,14 +343,12 @@ if (strpos($uri, '/api/v1/discounts') === 0 || strpos($uri, '/api/v1/admin/disco
         exit;
     }
 
-    // List All Discounts for Admin
     if ($uri === '/api/v1/admin/discounts' && $method === 'GET') {
         $stmt = $db->query("SELECT * FROM discounts ORDER BY created_at DESC");
         echo json_encode(['success' => true, 'data' => $stmt->fetchAll()]);
         exit;
     }
 
-    // Create New Discount for Admin
     if ($uri === '/api/v1/admin/discounts' && $method === 'POST') {
         $input = getRequestPayload();
         $id = 'disc_' . time();
@@ -362,14 +389,13 @@ if ($uri === '/api/v1/admin/upload' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// 8. Razorpay Payment Intent API & Order Creation
+// 8. Razorpay Payment Intent API & Order Creation with SMTP Dispatch
 if ($uri === '/api/v1/checkout/payment-intent') {
     $input = getRequestPayload();
     $amount = (int) (($input['amount'] ?? 1099) * 100);
     $orderId = 'ord_' . time() . '_' . random_int(1000, 9999);
     $orderNumber = 'YN-' . strtoupper(dechex(time()));
 
-    // Record Order in Database
     $db = getDB();
     $stmt = $db->prepare("INSERT INTO orders 
         (id, order_number, customer_name, customer_email, customer_phone, shipping_address, items, subtotal, discount_amount, total_amount, payment_status, fulfillment_status, payment_method, razorpay_order_id)
@@ -396,6 +422,16 @@ if ($uri === '/api/v1/checkout/payment-intent') {
         'Razorpay',
         'order_rzp_' . time()
     ]);
+
+    // Dispatch Confirmation Emails
+    dispatchOrderEmails(
+        $orderNumber,
+        $input['email'] ?? 'customer@example.com',
+        $input['fullName'] ?? 'Customer',
+        (int)($input['amount'] ?? 1099),
+        $input['items'] ?? [],
+        $input['address'] ?? ''
+    );
 
     echo json_encode([
         'success' => true,
