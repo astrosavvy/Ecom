@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { 
   Plus, Edit, Trash2, Image as ImageIcon, Save, ArrowLeft, 
-  CheckCircle, AlertCircle, Sparkles, RefreshCw, Eye, ExternalLink, Globe, Lock, LogOut
+  CheckCircle, AlertCircle, Sparkles, RefreshCw, Eye, ExternalLink, Globe, Lock, LogOut,
+  Upload, X, Link as LinkIcon
 } from "lucide-react";
 
 interface Product {
@@ -40,6 +41,11 @@ export default function AdminPage() {
   const [isNew, setIsNew] = useState(false);
   const [saving, setSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
+
+  // Media upload state
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [imageUrlInput, setImageUrlInput] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Check existing session token on mount
   useEffect(() => {
@@ -102,7 +108,8 @@ export default function AdminPage() {
   }, [isAuthenticated]);
 
   const handleEdit = (prod: Product) => {
-    setSelectedProduct({ ...prod });
+    const images = Array.isArray(prod.images) ? prod.images : (typeof prod.images === "string" ? JSON.parse(prod.images || "[]") : []);
+    setSelectedProduct({ ...prod, images });
     setIsNew(false);
     setIsEditing(true);
   };
@@ -127,6 +134,70 @@ export default function AdminPage() {
     setSelectedProduct(newProd);
     setIsNew(true);
     setIsEditing(true);
+  };
+
+  // Image Upload Handler
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !selectedProduct) return;
+
+    setUploadingImage(true);
+    setStatusMsg("");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const json = await res.json();
+
+      if (json.success && json.url) {
+        const currentImgs = Array.isArray(selectedProduct.images) 
+          ? [...selectedProduct.images] 
+          : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
+        
+        setSelectedProduct({
+          ...selectedProduct,
+          images: [...currentImgs, json.url]
+        });
+        setStatusMsg("✓ Image uploaded successfully!");
+      } else {
+        setStatusMsg("❌ Image upload failed: " + (json.error || "Server error"));
+      }
+    } catch (err: any) {
+      setStatusMsg("❌ Network error while uploading: " + err.message);
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleAddImageUrl = () => {
+    if (!imageUrlInput.trim() || !selectedProduct) return;
+    const currentImgs = Array.isArray(selectedProduct.images) 
+      ? [...selectedProduct.images] 
+      : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
+    
+    setSelectedProduct({
+      ...selectedProduct,
+      images: [...currentImgs, imageUrlInput.trim()]
+    });
+    setImageUrlInput("");
+  };
+
+  const handleRemoveImage = (indexToRemove: number) => {
+    if (!selectedProduct) return;
+    const currentImgs = Array.isArray(selectedProduct.images) 
+      ? [...selectedProduct.images] 
+      : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
+    
+    setSelectedProduct({
+      ...selectedProduct,
+      images: currentImgs.filter((_: string, idx: number) => idx !== indexToRemove)
+    });
   };
 
   const handleSave = async () => {
@@ -186,7 +257,7 @@ export default function AdminPage() {
               <Lock size={24} />
             </div>
             <h1 className="text-2xl font-bold tracking-tight">YOUNOYA Admin</h1>
-            <p className="text-xs text-white/60">Enter credentials to manage products and store settings.</p>
+            <p className="text-xs text-white/60">Enter credentials to manage products, photos, and store settings.</p>
           </div>
 
           {loginError && (
@@ -241,6 +312,10 @@ export default function AdminPage() {
   }
 
   // 2. Authenticated Admin Dashboard View
+  const currentImages: string[] = Array.isArray(selectedProduct?.images)
+    ? (selectedProduct?.images as string[])
+    : (typeof selectedProduct?.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
+
   return (
     <div className="min-h-screen bg-[#0d0f12] text-stone-200 font-inter">
       {/* Top Admin Header */}
@@ -299,7 +374,7 @@ export default function AdminPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-white tracking-tight">Products ({products.length})</h1>
-                <p className="text-xs text-stone-400 mt-1">Manage catalog, inventory, pricing, and SEO meta tags.</p>
+                <p className="text-xs text-stone-400 mt-1">Manage catalog, photos, inventory, pricing, and SEO meta tags.</p>
               </div>
 
               <button
@@ -332,48 +407,66 @@ export default function AdminPage() {
                       </td>
                     </tr>
                   ) : (
-                    products.map((prod) => (
-                      <tr key={prod.id} className="hover:bg-white/[0.02] transition-colors">
-                        <td className="py-4 px-6">
-                          <div className="font-semibold text-white text-sm">{prod.title}</div>
-                          <div className="text-xs text-amber-400/80 line-clamp-1 mt-0.5">{prod.subtitle}</div>
-                        </td>
-                        <td className="py-4 px-6 text-stone-400 font-mono text-[11px]">
-                          <div>{prod.sku || "N/A"}</div>
-                          <div className="text-[10px] text-stone-500">{prod.handle}</div>
-                        </td>
-                        <td className="py-4 px-6 font-semibold text-white">
-                          ₹{prod.price} <span className="text-stone-500 text-[10px] line-through">₹{prod.original_price}</span>
-                        </td>
-                        <td className="py-4 px-6">
-                          <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-emerald-950/60 text-emerald-400 border border-emerald-500/20">
-                            {prod.inventory_count || 100} in stock
-                          </span>
-                        </td>
-                        <td className="py-4 px-6">
-                          <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-amber-500/20 text-amber-300 border border-amber-500/20">
-                            {prod.badge || "Standard"}
-                          </span>
-                        </td>
-                        <td className="py-4 px-6 text-right space-x-2">
-                          <button
-                            onClick={() => handleEdit(prod)}
-                            className="p-1.5 hover:bg-white/10 rounded-lg text-stone-300 hover:text-white transition-colors inline-flex items-center gap-1 text-xs"
-                            title="Edit product"
-                          >
-                            <Edit size={14} />
-                            <span>Edit</span>
-                          </button>
-                          <button
-                            onClick={() => handleDelete(prod.id)}
-                            className="p-1.5 hover:bg-red-500/20 rounded-lg text-red-400 hover:text-red-300 transition-colors inline-flex items-center gap-1 text-xs"
-                            title="Delete product"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                    products.map((prod) => {
+                      const prodImgs: string[] = Array.isArray(prod.images) 
+                        ? prod.images 
+                        : (typeof prod.images === "string" ? JSON.parse(prod.images || "[]") : []);
+                      const thumb = prodImgs[0];
+
+                      return (
+                        <tr key={prod.id} className="hover:bg-white/[0.02] transition-colors">
+                          <td className="py-4 px-6">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                {thumb ? (
+                                  <img src={thumb} alt={prod.title} className="w-full h-full object-cover" />
+                                ) : (
+                                  <ImageIcon size={18} className="text-stone-500" />
+                                )}
+                              </div>
+                              <div>
+                                <div className="font-semibold text-white text-sm">{prod.title}</div>
+                                <div className="text-xs text-amber-400/80 line-clamp-1 mt-0.5">{prod.subtitle}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-6 text-stone-400 font-mono text-[11px]">
+                            <div>{prod.sku || "N/A"}</div>
+                            <div className="text-[10px] text-stone-500">{prod.handle}</div>
+                          </td>
+                          <td className="py-4 px-6 font-semibold text-white">
+                            ₹{prod.price} <span className="text-stone-500 text-[10px] line-through">₹{prod.original_price}</span>
+                          </td>
+                          <td className="py-4 px-6">
+                            <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-emerald-950/60 text-emerald-400 border border-emerald-500/20">
+                              {prod.inventory_count || 100} in stock
+                            </span>
+                          </td>
+                          <td className="py-4 px-6">
+                            <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-amber-500/20 text-amber-300 border border-amber-500/20">
+                              {prod.badge || "Standard"}
+                            </span>
+                          </td>
+                          <td className="py-4 px-6 text-right space-x-2">
+                            <button
+                              onClick={() => handleEdit(prod)}
+                              className="p-1.5 hover:bg-white/10 rounded-lg text-stone-300 hover:text-white transition-colors inline-flex items-center gap-1 text-xs"
+                              title="Edit product"
+                            >
+                              <Edit size={14} />
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              onClick={() => handleDelete(prod.id)}
+                              className="p-1.5 hover:bg-red-500/20 rounded-lg text-red-400 hover:text-red-300 transition-colors inline-flex items-center gap-1 text-xs"
+                              title="Delete product"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
                   )}
                 </tbody>
               </table>
@@ -412,7 +505,7 @@ export default function AdminPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Left 2 Columns: Title, Description, Media, SEO */}
+              {/* Left 2 Columns: Title, Description, Media Gallery, SEO */}
               <div className="lg:col-span-2 space-y-6">
                 {/* Title & Subtitle Card */}
                 <div className="border border-white/10 rounded-2xl bg-[#14171d] p-6 space-y-4 shadow-xl">
@@ -450,6 +543,84 @@ export default function AdminPage() {
                       placeholder="Detailed spiritual symbolism, sacred materials, and story..."
                     />
                   </div>
+                </div>
+
+                {/* Media & Photos Card (Shopify Media Manager) */}
+                <div className="border border-white/10 rounded-2xl bg-[#14171d] p-6 space-y-4 shadow-xl">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-sm font-semibold uppercase tracking-wider text-stone-400 flex items-center gap-2">
+                      <ImageIcon size={16} className="text-amber-400" />
+                      <span>Product Photos & Media ({currentImages.length})</span>
+                    </h2>
+                  </div>
+
+                  {/* Drag & Drop / File Input Box */}
+                  <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed border-white/15 hover:border-amber-500/50 rounded-2xl p-8 text-center cursor-pointer bg-[#0d0f12] transition-colors group"
+                  >
+                    <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      onChange={handleFileUpload} 
+                      accept="image/*" 
+                      className="hidden" 
+                    />
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                        <Upload size={20} />
+                      </div>
+                      <div className="text-sm font-medium text-white">
+                        {uploadingImage ? "Uploading photo to server..." : "Click to upload product image"}
+                      </div>
+                      <div className="text-xs text-stone-500">Supports JPG, PNG, WEBP up to 10MB</div>
+                    </div>
+                  </div>
+
+                  {/* Or Add Image via URL */}
+                  <div className="flex gap-2 pt-1">
+                    <div className="relative flex-1">
+                      <LinkIcon size={14} className="absolute left-3.5 top-3 text-stone-500" />
+                      <input
+                        type="url"
+                        value={imageUrlInput}
+                        onChange={(e) => setImageUrlInput(e.target.value)}
+                        placeholder="Or paste external image URL (https://...)"
+                        className="w-full bg-[#0d0f12] border border-white/10 rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAddImageUrl}
+                      className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-semibold transition-colors"
+                    >
+                      Add URL
+                    </button>
+                  </div>
+
+                  {/* Uploaded Images Grid */}
+                  {currentImages.length > 0 && (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3">
+                      {currentImages.map((imgUrl, index) => (
+                        <div key={index} className="relative group rounded-xl overflow-hidden border border-white/10 aspect-square bg-black/40">
+                          <img src={imgUrl} alt={`Product image ${index + 1}`} className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(index)}
+                            className="absolute top-1.5 right-1.5 p-1 bg-red-600/80 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                            title="Remove image"
+                          >
+                            <X size={13} />
+                          </button>
+                          {index === 0 && (
+                            <span className="absolute bottom-1.5 left-1.5 bg-black/80 text-amber-300 text-[9px] font-bold px-2 py-0.5 rounded border border-amber-400/30">
+                              Cover Photo
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* SEO Meta Tags (Shopify Search Engine Listing) */}
