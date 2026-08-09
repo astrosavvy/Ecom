@@ -243,6 +243,68 @@ export default function AdminPage() {
     }
   };
 
+  // Multi-File & Single File Image Upload Handler
+  const handleMultipleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || !selectedProduct) return;
+
+    setUploadingImage(true);
+    setStatusMsg("");
+
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append("files[]", files[i]);
+    }
+    // Fallback single file field
+    formData.append("file", files[0]);
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        const uploadedList: string[] = json.urls || (json.url ? [json.url] : []);
+        const currentImgs: string[] = Array.isArray(selectedProduct.images)
+          ? selectedProduct.images
+          : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
+
+        const updatedImgs = [...currentImgs, ...uploadedList];
+        setSelectedProduct({ ...selectedProduct, images: updatedImgs });
+        setStatusMsg(`✓ Uploaded ${uploadedList.length} image(s) successfully!`);
+      } else {
+        setStatusMsg("❌ Upload failed: " + (json.error || "Server rejected request"));
+      }
+    } catch (err: any) {
+      setStatusMsg("❌ Upload error: " + (err.message || "Network failure"));
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleAddImageUrl = () => {
+    if (!imageUrlInput.trim() || !selectedProduct) return;
+    const currentImgs: string[] = Array.isArray(selectedProduct.images)
+      ? selectedProduct.images
+      : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
+
+    setSelectedProduct({ ...selectedProduct, images: [...currentImgs, imageUrlInput.trim()] });
+    setImageUrlInput("");
+  };
+
+  const handleRemoveImage = (index: number) => {
+    if (!selectedProduct) return;
+    const currentImgs: string[] = Array.isArray(selectedProduct.images)
+      ? selectedProduct.images
+      : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
+
+    const updated = currentImgs.filter((_, i) => i !== index);
+    setSelectedProduct({ ...selectedProduct, images: updated });
+  };
+
   const handleUpdateOrderStatus = async (orderId: string, status: string, awb?: string) => {
     try {
       const res = await fetch(`${BACKEND_URL}/api/v1/admin/orders/${orderId}`, {
@@ -434,20 +496,22 @@ export default function AdminPage() {
         )}
 
         {/* Quick Analytics Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <div className="clinical-card p-6 shadow-sm">
-            <div className="text-xs text-stone-500 font-bold uppercase font-mono tracking-wider">Total Products</div>
-            <div className="text-3xl font-extrabold font-heading text-[#1C1C1C] mt-1">{products.length}</div>
+        {!isEditing && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div className="clinical-card p-6 shadow-sm">
+              <div className="text-xs text-stone-500 font-bold uppercase font-mono tracking-wider">Total Products</div>
+              <div className="text-3xl font-extrabold font-heading text-[#1C1C1C] mt-1">{products.length}</div>
+            </div>
+            <div className="clinical-card p-6 shadow-sm">
+              <div className="text-xs text-stone-500 font-bold uppercase font-mono tracking-wider">Total Orders (OMS)</div>
+              <div className="text-3xl font-extrabold font-heading text-[#1C1C1C] mt-1">{orders.length}</div>
+            </div>
+            <div className="clinical-card p-6 shadow-sm">
+              <div className="text-xs text-stone-500 font-bold uppercase font-mono tracking-wider">Active Coupons</div>
+              <div className="text-3xl font-extrabold font-heading text-[#D4AF37] mt-1">{discounts.length}</div>
+            </div>
           </div>
-          <div className="clinical-card p-6 shadow-sm">
-            <div className="text-xs text-stone-500 font-bold uppercase font-mono tracking-wider">Total Orders (OMS)</div>
-            <div className="text-3xl font-extrabold font-heading text-[#1C1C1C] mt-1">{orders.length}</div>
-          </div>
-          <div className="clinical-card p-6 shadow-sm">
-            <div className="text-xs text-stone-500 font-bold uppercase font-mono tracking-wider">Active Coupons</div>
-            <div className="text-3xl font-extrabold font-heading text-[#D4AF37] mt-1">{discounts.length}</div>
-          </div>
-        </div>
+        )}
 
         {/* Tab 1: Products */}
         {activeTab === "products" && !isEditing && (
@@ -472,12 +536,12 @@ export default function AdminPage() {
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr className="border-b border-[#E2E8E4] bg-[#F5F5F0] text-stone-600 uppercase font-mono text-[10px] tracking-wider font-bold">
-                    <th className="py-3.5 px-6">Product</th>
-                    <th className="py-3.5 px-6">SKU / Handle</th>
-                    <th className="py-3.5 px-6">Price</th>
-                    <th className="py-3.5 px-6">Inventory</th>
-                    <th className="py-3.5 px-6">Badge</th>
-                    <th className="py-3.5 px-6 text-right">Actions</th>
+                    <th className="py-4 px-6">Product</th>
+                    <th className="py-4 px-6">SKU / Handle</th>
+                    <th className="py-4 px-6">Price</th>
+                    <th className="py-4 px-6 min-w-[140px]">Inventory</th>
+                    <th className="py-4 px-6 min-w-[140px]">Badge</th>
+                    <th className="py-4 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E2E8E4]">
@@ -496,7 +560,7 @@ export default function AdminPage() {
 
                       return (
                         <tr key={prod.id} className="hover:bg-[#F5F5F0]/50 transition-colors">
-                          <td className="py-4 px-6">
+                          <td className="py-5 px-6">
                             <div className="flex items-center gap-3">
                               <div className="w-12 h-12 rounded-xl bg-[#E8E6E1] border border-[#E2E8E4] flex items-center justify-center overflow-hidden flex-shrink-0">
                                 {thumb ? (
@@ -511,27 +575,27 @@ export default function AdminPage() {
                               </div>
                             </div>
                           </td>
-                          <td className="py-4 px-6 text-stone-600 font-mono text-[11px]">
+                          <td className="py-5 px-6 text-stone-600 font-mono text-[11px]">
                             <div className="font-bold text-[#1C1C1C]">{prod.sku || "N/A"}</div>
                             <div className="text-[10px] text-stone-400">{prod.handle}</div>
                           </td>
-                          <td className="py-4 px-6 font-extrabold font-mono text-[#1C1C1C]">
+                          <td className="py-5 px-6 font-extrabold font-mono text-[#1C1C1C]">
                             ₹{prod.price} <span className="text-stone-400 text-[10px] line-through font-normal">₹{prod.original_price}</span>
                           </td>
-                          <td className="py-4 px-6">
-                            <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-[#E2E8E4] text-emerald-800 border border-[#C2D6C2]">
+                          <td className="py-5 px-6">
+                            <span className="inline-block px-3 py-1 rounded-full text-[11px] font-bold bg-[#E2E8E4] text-emerald-900 border border-[#C2D6C2] whitespace-nowrap">
                               {prod.inventory_count || 100} in stock
                             </span>
                           </td>
-                          <td className="py-4 px-6">
-                            <span className="px-2.5 py-0.5 rounded text-[10px] uppercase font-extrabold font-mono bg-[#1C1C1C] text-white">
+                          <td className="py-5 px-6">
+                            <span className="inline-block px-3 py-1 rounded-full text-[10px] uppercase font-extrabold font-mono bg-[#1C1C1C] text-white whitespace-nowrap">
                               {prod.badge || "Standard"}
                             </span>
                           </td>
-                          <td className="py-4 px-6 text-right space-x-2">
+                          <td className="py-5 px-6 text-right space-x-2">
                             <button
                               onClick={() => handleEdit(prod)}
-                              className="px-3 py-1.5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] hover:bg-[#D4DFD7] transition-colors inline-flex items-center gap-1 text-xs font-bold"
+                              className="px-3.5 py-1.5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] hover:bg-[#D4DFD7] transition-colors inline-flex items-center gap-1.5 text-xs font-bold"
                               title="Edit product"
                             >
                               <Edit size={13} />
@@ -539,7 +603,7 @@ export default function AdminPage() {
                             </button>
                             <button
                               onClick={() => handleDelete(prod.id)}
-                              className="p-1.5 hover:bg-red-100 rounded-full text-stone-400 hover:text-red-700 transition-colors"
+                              className="p-2 hover:bg-red-100 rounded-full text-stone-400 hover:text-red-700 transition-colors"
                               title="Delete product"
                             >
                               <Trash2 size={14} />
@@ -555,8 +619,186 @@ export default function AdminPage() {
           </div>
         )}
 
+        {/* Product Editor Modal / Full View */}
+        {isEditing && selectedProduct && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => setIsEditing(false)}
+                className="flex items-center gap-2 text-xs font-bold text-stone-600 hover:text-[#1C1C1C] transition-colors"
+              >
+                <ArrowLeft size={16} />
+                <span>Back to Products Catalog</span>
+              </button>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="px-4 py-2.5 rounded-full border border-[#E2E8E4] text-xs font-bold text-stone-600 hover:text-[#1C1C1C] transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider px-6 py-2.5 rounded-full hover:bg-[#333333] transition-all shadow-md flex items-center gap-2"
+                >
+                  <Save size={15} />
+                  <span>{saving ? "Publishing..." : "Save Product"}</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Left 2 Columns: Title, Description, Media Gallery, SEO */}
+              <div className="lg:col-span-2 space-y-6">
+                <div className="clinical-card p-6 space-y-4 shadow-sm">
+                  <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading">Title & Narrative</h2>
+                  
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Product Title*</label>
+                    <input
+                      type="text"
+                      value={selectedProduct.title}
+                      onChange={(e) => setSelectedProduct({ ...selectedProduct, title: e.target.value })}
+                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2.5 text-sm text-[#1C1C1C] font-bold focus:outline-none focus:border-[#1C1C1C]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Subtitle / Consecration Summary</label>
+                    <input
+                      type="text"
+                      value={selectedProduct.subtitle}
+                      onChange={(e) => setSelectedProduct({ ...selectedProduct, subtitle: e.target.value })}
+                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2.5 text-sm text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Product Description</label>
+                    <textarea
+                      rows={5}
+                      value={selectedProduct.description}
+                      onChange={(e) => setSelectedProduct({ ...selectedProduct, description: e.target.value })}
+                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-3 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                    />
+                  </div>
+                </div>
+
+                {/* Media Gallery Card (Multi-Upload Support) */}
+                <div className="clinical-card p-6 space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading">Product Images ({currentImages.length})</h2>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      multiple
+                      accept="image/*"
+                      onChange={handleMultipleImageUpload}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploadingImage}
+                      className="px-4 py-2 rounded-full bg-[#1C1C1C] text-white text-xs font-bold flex items-center gap-2 hover:bg-[#333333] transition-all"
+                    >
+                      <Upload size={14} />
+                      <span>{uploadingImage ? "Uploading..." : "Upload Multiple Images"}</span>
+                    </button>
+                  </div>
+
+                  {/* Multi-Image Grid Preview */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                    {currentImages.map((imgUrl, idx) => (
+                      <div key={idx} className="relative aspect-square rounded-xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] group">
+                        <img src={imgUrl} alt={`Product Image ${idx + 1}`} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(idx)}
+                          className="absolute top-1.5 right-1.5 p-1 rounded-full bg-red-600 text-white opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                          title="Remove image"
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Add Image URL directly */}
+                  <div className="pt-2 flex gap-2">
+                    <input
+                      type="url"
+                      value={imageUrlInput}
+                      onChange={(e) => setImageUrlInput(e.target.value)}
+                      placeholder="Paste image URL directly (e.g. https://...)"
+                      className="flex-1 bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddImageUrl}
+                      className="px-4 py-2 rounded-xl bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold hover:bg-[#D4DFD7]"
+                    >
+                      Add URL
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Pricing, Inventory, Badge & SKU */}
+              <div className="space-y-6">
+                <div className="clinical-card p-6 space-y-4 shadow-sm">
+                  <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading">Pricing & Stock</h2>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Selling Price (₹)*</label>
+                    <input
+                      type="number"
+                      value={selectedProduct.price}
+                      onChange={(e) => setSelectedProduct({ ...selectedProduct, price: parseInt(e.target.value) || 0 })}
+                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2.5 text-sm font-mono font-bold text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Original Price / MRP (₹)</label>
+                    <input
+                      type="number"
+                      value={selectedProduct.original_price}
+                      onChange={(e) => setSelectedProduct({ ...selectedProduct, original_price: parseInt(e.target.value) || 0 })}
+                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2.5 text-sm font-mono text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Inventory Count</label>
+                    <input
+                      type="number"
+                      value={selectedProduct.inventory_count}
+                      onChange={(e) => setSelectedProduct({ ...selectedProduct, inventory_count: parseInt(e.target.value) || 0 })}
+                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2.5 text-sm font-mono text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Highlight Badge</label>
+                    <input
+                      type="text"
+                      value={selectedProduct.badge}
+                      onChange={(e) => setSelectedProduct({ ...selectedProduct, badge: e.target.value })}
+                      placeholder="e.g. Signature Edition"
+                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2.5 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Tab 2: Orders (OMS) */}
-        {activeTab === "orders" && (
+        {activeTab === "orders" && !isEditing && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
@@ -630,7 +872,7 @@ export default function AdminPage() {
         )}
 
         {/* Tab 3: Discounts & Coupons */}
-        {activeTab === "discounts" && (
+        {activeTab === "discounts" && !isEditing && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>

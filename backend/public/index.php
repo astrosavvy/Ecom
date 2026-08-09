@@ -367,25 +367,52 @@ if (strpos($uri, '/api/v1/discounts') === 0 || strpos($uri, '/api/v1/admin/disco
     }
 }
 
-// 7. Image Upload Endpoint for Admin
+// 7. Image Upload Endpoint for Admin (Supports Single & Multi-File Uploads)
 if ($uri === '/api/v1/admin/upload' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_FILES['file'])) {
-        $uploadDir = __DIR__ . '/uploads/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-        $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $_FILES['file']['name']);
-        $target = $uploadDir . $fileName;
-        if (move_uploaded_file($_FILES['file']['tmp_name'], $target)) {
-            echo json_encode([
-                'success' => true,
-                'url' => 'https://api.younoya.com/uploads/' . $fileName
-            ]);
-            exit;
+    $uploadDir = __DIR__ . '/uploads/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $uploadedUrls = [];
+
+    // Check for multiple files field 'files[]'
+    if (!empty($_FILES['files']['name'][0])) {
+        $count = count($_FILES['files']['name']);
+        for ($i = 0; $i < $count; $i++) {
+            if ($_FILES['files']['error'][$i] === UPLOAD_ERR_OK) {
+                $rawName = $_FILES['files']['name'][$i];
+                $fileName = time() . '_' . $i . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $rawName);
+                $target = $uploadDir . $fileName;
+                if (move_uploaded_file($_FILES['files']['tmp_name'][$i], $target)) {
+                    $uploadedUrls[] = 'https://api.younoya.com/uploads/' . $fileName;
+                }
+            }
         }
     }
+
+    // Check for single file field 'file'
+    if (empty($uploadedUrls) && !empty($_FILES['file'])) {
+        if ($_FILES['file']['error'] === UPLOAD_ERR_OK) {
+            $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $_FILES['file']['name']);
+            $target = $uploadDir . $fileName;
+            if (move_uploaded_file($_FILES['file']['tmp_name'], $target)) {
+                $uploadedUrls[] = 'https://api.younoya.com/uploads/' . $fileName;
+            }
+        }
+    }
+
+    if (!empty($uploadedUrls)) {
+        echo json_encode([
+            'success' => true,
+            'url' => $uploadedUrls[0],
+            'urls' => $uploadedUrls
+        ]);
+        exit;
+    }
+
     http_response_code(400);
-    echo json_encode(['error' => 'Upload failed']);
+    echo json_encode(['error' => 'Upload failed or no valid files attached']);
     exit;
 }
 
