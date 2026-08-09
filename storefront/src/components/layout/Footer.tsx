@@ -15,13 +15,13 @@ export function Footer() {
   return (
     <footer className="w-full bg-[#07080d] text-[#8b93a8] border-t border-white/10 relative z-10">
       <div className="max-w-7xl mx-auto px-6 sm:px-12 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-10 text-left">
-        {/* Brand Column */}
-        <div className="md:col-span-5 space-y-4">
+        {/* Brand Column with Substantially Enlarged Gold Logo */}
+        <div className="md:col-span-5 space-y-5">
           <Link href="/" className="inline-block">
             <img
               src="/younoya_logo.png"
               alt="YOUNOYA"
-              className="h-10 w-auto filter drop-shadow-[0_0_12px_rgba(255,180,50,0.35)]"
+              className="h-16 sm:h-20 w-auto filter drop-shadow-[0_0_20px_rgba(255,190,60,0.6)]"
             />
           </Link>
           <p className="text-xs sm:text-sm text-[#8b93a8] leading-relaxed max-w-sm">
@@ -36,9 +36,9 @@ export function Footer() {
         <div className="md:col-span-2 space-y-3">
           <h4 className="text-xs font-mono uppercase tracking-widest font-semibold text-white">Collections</h4>
           <ul className="space-y-2 text-xs text-[#8b93a8] list-none p-0 m-0">
-            <li><Link href="/#products" className="hover:text-white transition-colors">Prosperity Rakhis</Link></li>
-            <li><Link href="/#products" className="hover:text-white transition-colors">Navagraha Protection</Link></li>
-            <li><Link href="/#products" className="hover:text-white transition-colors">Rudraksha Blessings</Link></li>
+            <li><Link href="/products" className="hover:text-white transition-colors">Prosperity Rakhis</Link></li>
+            <li><Link href="/products" className="hover:text-white transition-colors">Navagraha Protection</Link></li>
+            <li><Link href="/products" className="hover:text-white transition-colors">Rudraksha Blessings</Link></li>
             <li><Link href="/about" className="hover:text-white transition-colors">Brand Story</Link></li>
           </ul>
         </div>
@@ -77,7 +77,7 @@ export function Footer() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
           <div>© 2026 YOUNOYA. All Rights Reserved.</div>
           <div className="flex items-center gap-6">
-            <span className="text-stone-400">100% Free Express Shipping (India)</span>
+            <span className="text-stone-400">100% Free Express Air Shipping (India)</span>
             <span className="text-stone-400">Razorpay 256-Bit Encrypted</span>
           </div>
         </div>

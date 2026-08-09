@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Script from "next/script";
 import { AnimatedStepper, Step } from "@/components/ui/AnimatedStepper";
-import { ShieldCheck, Lock, CheckCircle2, ArrowRight, Loader2, Sparkles, MapPin, Package, Tag, Edit } from "lucide-react";
+import { ShieldCheck, Lock, CheckCircle2, ArrowRight, Loader2, Sparkles, MapPin, Package, Tag, Edit, AlertCircle } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
 
 declare global {
@@ -49,6 +49,40 @@ export default function CheckoutPage() {
   const calculatedSubtotal = items.length > 0 ? subtotal : 1099;
   const grandTotal = Math.max(0, calculatedSubtotal - discountAmount);
 
+  // Strict Mandatory Form Validation Guard
+  const handleValidateStep = (step: number) => {
+    if (step === 1) {
+      if (!formData.fullName.trim() || formData.fullName.trim().length < 2) {
+        setError("Full Name is required (minimum 2 characters).");
+        return false;
+      }
+      const cleanPhone = formData.telephone.replace(/\D/g, "");
+      if (cleanPhone.length < 10) {
+        setError("Valid 10-digit mobile number (+91) is required.");
+        return false;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email.trim())) {
+        setError("Valid email address is required for order tracking & invoice.");
+        return false;
+      }
+      if (!formData.address.trim() || formData.address.trim().length < 5) {
+        setError("House / Flat / Street Address is required (minimum 5 characters).");
+        return false;
+      }
+      if (formData.pincode.trim().length !== 6) {
+        setError("Valid 6-digit PIN code is required.");
+        return false;
+      }
+      if (!formData.city.trim() || !formData.state.trim()) {
+        setError("City and State are required. Please check your PIN code.");
+        return false;
+      }
+    }
+    setError("");
+    return true;
+  };
+
   // Free Silent India Post Pincode Auto-Detection
   const handlePincodeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const pin = e.target.value.replace(/\D/g, "").slice(0, 6);
@@ -67,6 +101,7 @@ export default function CheckoutPage() {
             city: postOffice.District || postOffice.Block || postOffice.Name,
             state: postOffice.State
           }));
+          setError("");
         }
       } catch (err) {
         console.error("PIN lookup error:", err);
@@ -83,8 +118,7 @@ export default function CheckoutPage() {
   };
 
   const handleTriggerRazorpay = async () => {
-    if (!formData.fullName || !formData.email || !formData.telephone || !formData.address || !formData.pincode) {
-      setError("Please complete all shipping details to proceed.");
+    if (!handleValidateStep(1)) {
       return;
     }
 
@@ -178,19 +212,21 @@ export default function CheckoutPage() {
           </div>
 
           {error && (
-            <div className="p-3.5 bg-red-950/60 border border-red-500/40 text-red-300 text-xs rounded-xl flex items-center gap-2 max-w-lg mx-auto">
+            <div className="p-4 bg-red-950/80 border border-red-500/50 text-red-200 text-xs rounded-2xl flex items-center gap-3 max-w-lg mx-auto shadow-2xl animate-bounce">
+              <AlertCircle size={18} className="text-red-400 flex-shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
-          {/* AnimatedStepper Integration */}
+          {/* AnimatedStepper Integration with Strict Mandatory Step Validation */}
           <AnimatedStepper
+            onBeforeStepChange={handleValidateStep}
             onFinalStepCompleted={handleTriggerRazorpay}
             nextButtonText="Continue"
             backButtonText="Back"
           >
             {/* Step 1: Contact & Delivery Address */}
-            <Step title="1. Delivery Destination">
+            <Step title="1. Delivery Destination (Required)">
               <div className="space-y-4 pt-1">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -199,7 +235,10 @@ export default function CheckoutPage() {
                       type="text"
                       required
                       value={formData.fullName}
-                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, fullName: e.target.value });
+                        if (error) setError("");
+                      }}
                       placeholder="e.g. Rahul Sharma"
                       className="w-full bg-[#080a10] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
                     />
@@ -210,10 +249,14 @@ export default function CheckoutPage() {
                     <input
                       type="tel"
                       required
+                      maxLength={10}
                       value={formData.telephone}
-                      onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, telephone: e.target.value.replace(/\D/g, "") });
+                        if (error) setError("");
+                      }}
                       placeholder="9876543210"
-                      className="w-full bg-[#080a10] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-[#080a10] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-mono"
                     />
                   </div>
                 </div>
@@ -224,7 +267,10 @@ export default function CheckoutPage() {
                     type="email"
                     required
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value });
+                      if (error) setError("");
+                    }}
                     placeholder="rahul@example.com"
                     className="w-full bg-[#080a10] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
                   />
@@ -236,7 +282,10 @@ export default function CheckoutPage() {
                     type="text"
                     required
                     value={formData.address}
-                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, address: e.target.value });
+                      if (error) setError("");
+                    }}
                     placeholder="Flat 402, Nilgiri Heights, MG Road"
                     className="w-full bg-[#080a10] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
                   />
@@ -364,10 +413,10 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="text-xs text-stone-300 space-y-1">
-                    <div className="font-bold text-white text-sm">{formData.fullName || "Customer Name"}</div>
-                    <div>{formData.telephone || "Phone Number"} • {formData.email || "Email"}</div>
-                    <div>{formData.address || "Street Address"}</div>
-                    <div>{formData.city || "City"}, {formData.state || "State"} - <span className="font-mono font-bold text-amber-300">{formData.pincode || "PIN"}</span></div>
+                    <div className="font-bold text-white text-sm">{formData.fullName}</div>
+                    <div>{formData.telephone} • {formData.email}</div>
+                    <div>{formData.address}</div>
+                    <div>{formData.city}, {formData.state} - <span className="font-mono font-bold text-amber-300">{formData.pincode}</span></div>
                   </div>
                 </div>
 
@@ -422,15 +471,12 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                {/* Razorpay Trigger Strip */}
+                {/* Razorpay Trigger Strip (REMOVED READY BADGE) */}
                 <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
                   <div className="space-y-0.5">
                     <div className="font-bold text-white text-xs">Razorpay Official Payment Gateway</div>
                     <div className="text-[11px] text-stone-400">Instant UPI (GPay/PhonePe), Cards, NetBanking</div>
                   </div>
-                  <span className="text-[10px] font-mono uppercase tracking-wider bg-black/60 px-3 py-1 rounded text-amber-300 border border-amber-400/25">
-                    Ready
-                  </span>
                 </div>
               </div>
             </Step>

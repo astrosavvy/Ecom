@@ -8,6 +8,7 @@ interface StepperProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   initialStep?: number;
   onStepChange?: (step: number) => void;
+  onBeforeStepChange?: (currentStep: number) => boolean;
   onFinalStepCompleted?: () => void;
   stepCircleContainerClassName?: string;
   stepContainerClassName?: string;
@@ -29,6 +30,7 @@ export function AnimatedStepper({
   children,
   initialStep = 1,
   onStepChange = () => {},
+  onBeforeStepChange = () => true,
   onFinalStepCompleted = () => {},
   stepCircleContainerClassName = "",
   stepContainerClassName = "",
@@ -66,6 +68,9 @@ export function AnimatedStepper({
   };
 
   const handleNext = () => {
+    if (onBeforeStepChange && !onBeforeStepChange(currentStep)) {
+      return;
+    }
     if (!isLastStep) {
       setDirection(1);
       updateStep(currentStep + 1);
@@ -73,6 +78,9 @@ export function AnimatedStepper({
   };
 
   const handleComplete = () => {
+    if (onBeforeStepChange && !onBeforeStepChange(currentStep)) {
+      return;
+    }
     setDirection(1);
     updateStep(totalSteps + 1);
   };
@@ -97,6 +105,9 @@ export function AnimatedStepper({
                     step: stepNumber,
                     currentStep,
                     onStepClick: (clicked) => {
+                      if (clicked > currentStep && onBeforeStepChange && !onBeforeStepChange(currentStep)) {
+                        return;
+                      }
                       setDirection(clicked > currentStep ? 1 : -1);
                       updateStep(clicked);
                     }
@@ -107,6 +118,9 @@ export function AnimatedStepper({
                     disableStepIndicators={disableStepIndicators}
                     currentStep={currentStep}
                     onClickStep={(clicked) => {
+                      if (clicked > currentStep && onBeforeStepChange && !onBeforeStepChange(currentStep)) {
+                        return;
+                      }
                       setDirection(clicked > currentStep ? 1 : -1);
                       updateStep(clicked);
                     }}

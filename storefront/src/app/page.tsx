@@ -166,10 +166,10 @@ export default function Home() {
             Sacred <strong className="text-white font-medium">astrology-consecrated Rakhis</strong> and Vedic ritual keepsakes, crafted with natural gemstones and energized for <strong className="text-white font-medium">planetary harmony & sibling prosperity</strong>.
           </p>
 
-          {/* Dual Aero CTAs */}
+          {/* Dual Aero CTAs (Primary Hero CTA Redirects to /products) */}
           <div className="flex flex-wrap items-center gap-4 pt-2">
             <Link
-              href="#products"
+              href="/products"
               className="aero-btn-primary text-white text-sm font-semibold px-7 py-3.5 rounded-full uppercase tracking-wider flex items-center gap-2"
             >
               <span>Explore Consecrated Rakhis</span>
@@ -200,28 +200,28 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Right Column: Pure CSS 3D Chrome Orb with Brand Inset */}
-        <div className="lg:col-span-5 flex flex-col items-center justify-center relative py-6">
+        {/* Right Column: 3D Rotating Planet Sphere on Axis + Floating YOUNOYA Monogram */}
+        <div className="lg:col-span-5 flex flex-col items-center justify-center relative py-6 [perspective:1000px]">
           {/* Sparkles */}
-          <div className="absolute top-[12%] right-[15%] text-white animate-bounce pointer-events-none">
+          <div className="absolute top-[12%] right-[15%] text-white animate-bounce pointer-events-none z-20">
             <Sparkles size={26} className="text-[#25e0ff] drop-shadow-[0_0_14px_#25e0ff]" />
           </div>
-          <div className="absolute bottom-[25%] left-[10%] text-white pointer-events-none animate-pulse">
+          <div className="absolute bottom-[25%] left-[10%] text-white pointer-events-none animate-pulse z-20">
             <Sparkles size={20} className="text-[#ff2e88] drop-shadow-[0_0_14px_#ff2e88]" />
           </div>
 
-          {/* The Chrome Sphere */}
-          <div className="chrome-orb-sphere group cursor-pointer hover:scale-105 transition-transform duration-700 flex items-center justify-center">
+          {/* Planet Sphere Rotating on Axis */}
+          <div className="chrome-orb-sphere group cursor-pointer flex items-center justify-center">
             <div className="chrome-orb-specular" />
             <div className="chrome-orb-horizon" />
             <div className="chrome-orb-rim" />
             
-            {/* Center Monogram Insignia Glow */}
-            <div className="relative z-10 w-28 h-28 opacity-90 group-hover:opacity-100 transition-opacity">
+            {/* Center Monogram Insignia Floating in 3D Levitation Effect */}
+            <div className="relative z-10 w-28 h-28 chrome-orb-emblem-3d">
               <img
                 src="/younoya_icon.png"
                 alt="YOUNOYA Monogram"
-                className="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(255,200,60,0.7)]"
+                className="w-full h-full object-contain filter drop-shadow-[0_0_24px_rgba(255,200,60,0.85)]"
               />
             </div>
           </div>
@@ -275,7 +275,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* REPLACED BUTTON: Now links directly to All Products */}
+          {/* Links directly to All Products catalog */}
           <Link
             href="/products"
             className="aero-btn-secondary text-stone-200 text-xs font-medium px-6 py-3 rounded-full inline-flex items-center gap-2 self-start md:self-auto hover:text-white"

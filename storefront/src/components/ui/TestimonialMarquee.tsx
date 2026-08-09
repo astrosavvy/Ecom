@@ -58,10 +58,10 @@ export function TestimonialMarquee() {
         </p>
       </div>
 
-      {/* Infinite Horizontal Marquee Container with 75s Gentle Glide and Alpha Fade Masks */}
+      {/* Infinite Horizontal Marquee Container with 90s Ultra-Slow Right-to-Left Drift and Alpha Fade Masks */}
       <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-        <div className="flex gap-6 w-max animate-[marquee_75s_linear_infinite] hover:[animation-play-state:paused]">
-          {[...TESTIMONIALS, ...TESTIMONIALS].map((item, idx) => (
+        <div className="flex gap-6 w-max animate-[marquee_90s_linear_infinite] hover:[animation-play-state:paused]">
+          {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((item, idx) => (
             <div
               key={idx}
               className="w-[320px] sm:w-[380px] p-6 rounded-2xl bg-[#121520]/80 border border-white/10 shadow-xl backdrop-blur-xl flex flex-col justify-between space-y-4 flex-shrink-0"
