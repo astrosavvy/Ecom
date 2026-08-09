@@ -1,5 +1,5 @@
 <?php
-// YOUNOYA Full Enterprise E-Commerce API Engine with SMTP Order Notifications
+// YOUNOYA Full Enterprise E-Commerce API Engine with Advanced OMS, Logistics & Media Store
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -19,6 +19,30 @@ function getDB() {
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
             ]);
+
+            // Ensure database tables and columns exist
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS media_assets (
+                    id VARCHAR(64) PRIMARY KEY,
+                    url VARCHAR(512) NOT NULL,
+                    filename VARCHAR(255) NOT NULL,
+                    file_size INT DEFAULT 0,
+                    mime_type VARCHAR(64) DEFAULT 'image/jpeg',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+
+                CREATE TABLE IF NOT EXISTS store_settings (
+                    setting_key VARCHAR(64) PRIMARY KEY,
+                    setting_value TEXT
+                );
+            ");
+
+            // Safe column additions for orders table
+            try { $pdo->exec("ALTER TABLE orders ADD COLUMN is_archived TINYINT(1) DEFAULT 0"); } catch (Exception $e) {}
+            try { $pdo->exec("ALTER TABLE orders ADD COLUMN courier_code VARCHAR(64) DEFAULT 'shiprocket'"); } catch (Exception $e) {}
+            try { $pdo->exec("ALTER TABLE orders ADD COLUMN tracking_url VARCHAR(512) DEFAULT NULL"); } catch (Exception $e) {}
+            try { $pdo->exec("ALTER TABLE orders ADD COLUMN order_notes TEXT DEFAULT NULL"); } catch (Exception $e) {}
+
         } catch (PDOException $e) {
             http_response_code(500);
             echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
@@ -40,13 +64,23 @@ function getRequestPayload() {
     return [];
 }
 
+// Generate Standard Date-Based Order Number: YN-YYYYMMDD-001
+function generateStandardOrderNumber($pdo) {
+    $datePrefix = date('Ymd');
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM orders WHERE order_number LIKE ?");
+    $stmt->execute(["YN-{$datePrefix}-%"]);
+    $todayCount = (int)$stmt->fetchColumn() + 1;
+    $sequence = str_pad($todayCount, 3, '0', STR_PAD_LEFT);
+    return "YN-{$datePrefix}-{$sequence}";
+}
+
 // SMTP / Email Notification Dispatcher
 function dispatchOrderEmails($orderNumber, $customerEmail, $customerName, $amount, $items, $address) {
     $headers = "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-    $headers .= "From: YOUNOYA Concierge <orders@younoya.com>\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8\r\n";
+    $headers .= "From: YOUNOYA Devotee Concierge <support@younoya.com>\r\n";
 
-    // 1. Customer Email
+    // 1. Customer Confirmation Email
     $customerSubject = "Order Confirmed: #{$orderNumber} — YOUNOYA Sacred Consecration";
     $customerBody = "
     <div style='font-family: Arial, sans-serif; background-color: #0c0d12; color: #edf1f8; padding: 30px; border-radius: 16px;'>
@@ -81,12 +115,12 @@ if ($uri === '/' || $uri === '/health') {
     $orderCount = $db->query("SELECT COUNT(*) FROM orders")->fetchColumn();
     echo json_encode([
         'status' => 'healthy',
-        'engine' => 'YOUNOYA Full Enterprise E-Commerce API',
+        'engine' => 'YOUNOYA Full Enterprise E-Commerce API Engine',
         'php_version' => PHP_VERSION,
         'database' => 'MariaDB 10.11+ (Enterprise Schema Active)',
         'products_in_db' => (int)$prodCount,
         'orders_in_db' => (int)$orderCount,
-        'features' => ['Products', 'Variants', 'Orders (OMS)', 'Discounts', 'Customers', 'Razorpay', 'Uploads', 'SMTP Emails'],
+        'features' => ['Products', 'Variants', 'Orders (OMS)', 'Discounts', 'Customers', 'Media Asset Library', 'A5 Shipping Label', 'Razorpay', 'SMTP Emails'],
         'shipping' => '100% Free Express Air Shipping across India'
     ]);
     exit;
@@ -148,7 +182,7 @@ if ($uri === '/api/v1/admin/login') {
     exit;
 }
 
-// 4. Admin Product CRUD Endpoints
+// 4. Admin Product CRUD Endpoints (Supports PUT /products and PUT /products/{id})
 if (strpos($uri, '/api/v1/admin/products') === 0) {
     $db = getDB();
     $method = $_SERVER['REQUEST_METHOD'];
@@ -211,9 +245,20 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
         exit;
     }
 
-    if ($method === 'PUT' && preg_match('#^/api/v1/admin/products/([^/]+)$#', $uri, $matches)) {
-        $id = $matches[1];
+    if ($method === 'PUT') {
         $input = getRequestPayload();
+        $id = null;
+        if (preg_match('#^/api/v1/admin/products/([^/]+)$#', $uri, $matches)) {
+            $id = $matches[1];
+        } else {
+            $id = $input['id'] ?? null;
+        }
+
+        if (!$id) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Product ID is required for updating']);
+            exit;
+        }
 
         $stmt = $db->prepare("UPDATE products SET 
             title = ?, subtitle = ?, price = ?, original_price = ?, badge = ?, 
@@ -222,16 +267,16 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
         
         $stmt->execute([
             $input['title'],
-            $input['subtitle'],
+            $input['subtitle'] ?? '',
             (int)$input['price'],
             (int)$input['original_price'],
-            $input['badge'],
-            $input['description'],
-            is_array($input['features']) ? json_encode($input['features']) : $input['features'],
-            is_array($input['images']) ? json_encode($input['images']) : $input['images'],
-            $input['meta_title'],
-            $input['meta_description'],
-            (int)$input['inventory_count'],
+            $input['badge'] ?? '',
+            $input['description'] ?? '',
+            is_array($input['features'] ?? null) ? json_encode($input['features']) : ($input['features'] ?? '[]'),
+            is_array($input['images'] ?? null) ? json_encode($input['images']) : ($input['images'] ?? '[]'),
+            $input['meta_title'] ?? '',
+            $input['meta_description'] ?? '',
+            (int)($input['inventory_count'] ?? 100),
             $id,
             $id
         ]);
@@ -249,7 +294,7 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
     }
 }
 
-// 5. Order Management System (OMS) Endpoints
+// 5. Order Management System (OMS) Endpoints with Archiving & Logistics Tracking
 if (strpos($uri, '/api/v1/admin/orders') === 0) {
     $db = getDB();
     $method = $_SERVER['REQUEST_METHOD'];
@@ -266,11 +311,17 @@ if (strpos($uri, '/api/v1/admin/orders') === 0) {
                 'customer_phone' => $o['customer_phone'],
                 'shipping_address' => json_decode($o['shipping_address'] ?: '{}', true),
                 'items' => json_decode($o['items'] ?: '[]', true),
+                'subtotal' => (int)($o['subtotal'] ?? 0),
+                'discount_amount' => (int)($o['discount_amount'] ?? 0),
                 'total_amount' => (int)$o['total_amount'],
                 'payment_status' => $o['payment_status'],
                 'fulfillment_status' => $o['fulfillment_status'],
                 'awb_number' => $o['awb_number'],
-                'courier_name' => $o['courier_name'],
+                'courier_name' => $o['courier_name'] ?? 'Shiprocket',
+                'courier_code' => $o['courier_code'] ?? 'shiprocket',
+                'tracking_url' => $o['tracking_url'] ?? '',
+                'order_notes' => $o['order_notes'] ?? '',
+                'is_archived' => (int)($o['is_archived'] ?? 0),
                 'created_at' => $o['created_at']
             ];
         }, $orders);
@@ -282,11 +333,26 @@ if (strpos($uri, '/api/v1/admin/orders') === 0) {
         $orderId = $matches[1];
         $input = getRequestPayload();
 
+        $trackingUrl = $input['tracking_url'] ?? null;
+        if (!$trackingUrl && !empty($input['awb_number'])) {
+            $awb = trim($input['awb_number']);
+            $code = strtolower($input['courier_code'] ?? 'shiprocket');
+            if ($code === 'bluedart') $trackingUrl = "https://www.bluedart.com/tracking?numbers={$awb}";
+            else if ($code === 'delhivery') $trackingUrl = "https://www.delhivery.com/track/package/{$awb}";
+            else if ($code === 'dtdc') $trackingUrl = "https://www.dtdc.in/tracking/tracking_results.asp?Ttype=awb_no&strAwbNo={$awb}";
+            else if ($code === 'indiapost') $trackingUrl = "https://www.indiapost.gov.in/_layouts/15/dop.portal.tracking/trackconsignment.aspx";
+            else $trackingUrl = "https://www.shiprocket.in/tracking/{$awb}";
+        }
+
         $stmt = $db->prepare("UPDATE orders SET 
             fulfillment_status = COALESCE(?, fulfillment_status),
             payment_status = COALESCE(?, payment_status),
             awb_number = COALESCE(?, awb_number),
-            courier_name = COALESCE(?, courier_name)
+            courier_name = COALESCE(?, courier_name),
+            courier_code = COALESCE(?, courier_code),
+            tracking_url = COALESCE(?, tracking_url),
+            is_archived = COALESCE(?, is_archived),
+            order_notes = COALESCE(?, order_notes)
             WHERE id = ? OR order_number = ?");
         
         $stmt->execute([
@@ -294,6 +360,10 @@ if (strpos($uri, '/api/v1/admin/orders') === 0) {
             $input['payment_status'] ?? null,
             $input['awb_number'] ?? null,
             $input['courier_name'] ?? null,
+            $input['courier_code'] ?? null,
+            $trackingUrl,
+            isset($input['is_archived']) ? (int)$input['is_archived'] : null,
+            $input['order_notes'] ?? null,
             $orderId,
             $orderId
         ]);
@@ -301,9 +371,17 @@ if (strpos($uri, '/api/v1/admin/orders') === 0) {
         echo json_encode(['success' => true, 'message' => 'Order status updated successfully']);
         exit;
     }
+
+    if ($method === 'DELETE' && preg_match('#^/api/v1/admin/orders/([^/]+)$#', $uri, $matches)) {
+        $orderId = $matches[1];
+        $stmt = $db->prepare("DELETE FROM orders WHERE id = ? OR order_number = ?");
+        $stmt->execute([$orderId, $orderId]);
+        echo json_encode(['success' => true, 'message' => 'Order deleted successfully']);
+        exit;
+    }
 }
 
-// 6. Discounts & Coupon Engine
+// 6. Discounts & Coupon Engine (with Deletion support)
 if (strpos($uri, '/api/v1/discounts') === 0 || strpos($uri, '/api/v1/admin/discounts') === 0) {
     $db = getDB();
     $method = $_SERVER['REQUEST_METHOD'];
@@ -360,14 +438,42 @@ if (strpos($uri, '/api/v1/discounts') === 0 || strpos($uri, '/api/v1/admin/disco
             (int)$input['value'],
             (int)($input['min_order_value'] ?? 0),
             (int)($input['usage_limit'] ?? 500),
-            isset($input['is_active']) ? (int)$input['is_active'] : 1
+            1
         ]);
         echo json_encode(['success' => true, 'message' => 'Discount created successfully', 'id' => $id]);
         exit;
     }
+
+    if ($method === 'DELETE' && preg_match('#^/api/v1/admin/discounts/([^/]+)$#', $uri, $matches)) {
+        $id = $matches[1];
+        $stmt = $db->prepare("DELETE FROM discounts WHERE id = ? OR code = ?");
+        $stmt->execute([$id, $id]);
+        echo json_encode(['success' => true, 'message' => 'Coupon deleted successfully']);
+        exit;
+    }
 }
 
-// 7. Image Upload Endpoint for Admin (Supports Single & Multi-File Uploads with Explicit CORS)
+// 7. Centralized Media Asset Library ("Image Store")
+if (strpos($uri, '/api/v1/admin/media') === 0) {
+    $db = getDB();
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    if ($method === 'GET') {
+        $stmt = $db->query("SELECT * FROM media_assets ORDER BY created_at DESC");
+        echo json_encode(['success' => true, 'data' => $stmt->fetchAll()]);
+        exit;
+    }
+
+    if ($method === 'DELETE' && preg_match('#^/api/v1/admin/media/([^/]+)$#', $uri, $matches)) {
+        $id = $matches[1];
+        $stmt = $db->prepare("DELETE FROM media_assets WHERE id = ?");
+        $stmt->execute([$id]);
+        echo json_encode(['success' => true, 'message' => 'Media asset deleted successfully']);
+        exit;
+    }
+}
+
+// 8. Image Upload Endpoint (Multi-File + Media Store Cataloging)
 if ($uri === '/api/v1/admin/upload') {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -384,9 +490,10 @@ if ($uri === '/api/v1/admin/upload') {
             mkdir($uploadDir, 0755, true);
         }
 
+        $db = getDB();
         $uploadedUrls = [];
 
-        // Check for multiple files field 'files[]'
+        // Process multiple files 'files[]'
         if (!empty($_FILES['files']['name'][0])) {
             $count = count($_FILES['files']['name']);
             for ($i = 0; $i < $count; $i++) {
@@ -395,19 +502,30 @@ if ($uri === '/api/v1/admin/upload') {
                     $fileName = time() . '_' . $i . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $rawName);
                     $target = $uploadDir . $fileName;
                     if (move_uploaded_file($_FILES['files']['tmp_name'][$i], $target)) {
-                        $uploadedUrls[] = 'https://api.younoya.com/uploads/' . $fileName;
+                        $url = 'https://api.younoya.com/uploads/' . $fileName;
+                        $uploadedUrls[] = $url;
+                        $fileSize = filesize($target) ?: 0;
+
+                        $stmt = $db->prepare("INSERT INTO media_assets (id, url, filename, file_size) VALUES (?, ?, ?, ?)");
+                        $stmt->execute(['img_' . time() . '_' . $i, $url, $rawName, $fileSize]);
                     }
                 }
             }
         }
 
-        // Check for single file field 'file'
+        // Process single file 'file'
         if (empty($uploadedUrls) && !empty($_FILES['file'])) {
             if ($_FILES['file']['error'] === UPLOAD_ERR_OK) {
-                $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $_FILES['file']['name']);
+                $rawName = $_FILES['file']['name'];
+                $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '', $rawName);
                 $target = $uploadDir . $fileName;
                 if (move_uploaded_file($_FILES['file']['tmp_name'], $target)) {
-                    $uploadedUrls[] = 'https://api.younoya.com/uploads/' . $fileName;
+                    $url = 'https://api.younoya.com/uploads/' . $fileName;
+                    $uploadedUrls[] = $url;
+                    $fileSize = filesize($target) ?: 0;
+
+                    $stmt = $db->prepare("INSERT INTO media_assets (id, url, filename, file_size) VALUES (?, ?, ?, ?)");
+                    $stmt->execute(['img_' . time(), $url, $rawName, $fileSize]);
                 }
             }
         }
@@ -427,17 +545,44 @@ if ($uri === '/api/v1/admin/upload') {
     }
 }
 
-// 8. Razorpay Payment Intent API & Order Creation with SMTP Dispatch
+// 9. Store Shipper Settings for A5 Shipping Label
+if (strpos($uri, '/api/v1/admin/settings') === 0) {
+    $db = getDB();
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    if ($method === 'GET') {
+        $stmt = $db->query("SELECT * FROM store_settings");
+        $settings = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $settings[$row['setting_key']] = $row['setting_value'];
+        }
+        echo json_encode(['success' => true, 'data' => $settings]);
+        exit;
+    }
+
+    if ($method === 'POST') {
+        $input = getRequestPayload();
+        $stmt = $db->prepare("INSERT INTO store_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
+        foreach ($input as $key => $val) {
+            $stmt->execute([$key, is_string($val) ? $val : json_encode($val)]);
+        }
+        echo json_encode(['success' => true, 'message' => 'Settings saved successfully']);
+        exit;
+    }
+}
+
+// 10. Checkout Payment Intent & Order Placement with YN-YYYYMMDD-001 Numbering
 if ($uri === '/api/v1/checkout/payment-intent') {
     $input = getRequestPayload();
     $amount = (int) (($input['amount'] ?? 1099) * 100);
     $orderId = 'ord_' . time() . '_' . random_int(1000, 9999);
-    $orderNumber = 'YN-' . strtoupper(dechex(time()));
-
+    
     $db = getDB();
+    $orderNumber = generateStandardOrderNumber($db);
+
     $stmt = $db->prepare("INSERT INTO orders 
-        (id, order_number, customer_name, customer_email, customer_phone, shipping_address, items, subtotal, discount_amount, total_amount, payment_status, fulfillment_status, payment_method, razorpay_order_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        (id, order_number, customer_name, customer_email, customer_phone, shipping_address, items, subtotal, discount_amount, total_amount, payment_status, fulfillment_status, payment_method, razorpay_order_id, courier_name, courier_code, is_archived)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
     $stmt->execute([
         $orderId,
@@ -456,9 +601,12 @@ if ($uri === '/api/v1/checkout/payment-intent') {
         (int)($input['discountAmount'] ?? 0),
         (int)($input['amount'] ?? 1099),
         'paid',
-        'processing',
+        'Ordered',
         'Razorpay',
-        'order_rzp_' . time()
+        'order_rzp_' . time(),
+        'Shiprocket',
+        'shiprocket',
+        0
     ]);
 
     // Dispatch Confirmation Emails

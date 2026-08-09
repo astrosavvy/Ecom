@@ -5,7 +5,9 @@ import Link from "next/link";
 import { 
   Plus, Edit, Trash2, Image as ImageIcon, Save, ArrowLeft, 
   CheckCircle, AlertCircle, Sparkles, RefreshCw, Eye, ExternalLink, Globe, Lock, LogOut,
-  Upload, X, Link as LinkIcon, ShoppingBag, Tag, Users, BarChart3, Package, Truck
+  Upload, X, Link as LinkIcon, ShoppingBag, Tag, Users, BarChart3, Package, Truck,
+  Star, ChevronLeft, ChevronRight, Printer, Archive, RotateCcw, Copy, Settings,
+  Check, Filter, Search, ShieldCheck, FileText, Send
 } from "lucide-react";
 
 interface Product {
@@ -20,8 +22,8 @@ interface Product {
   description: string;
   features: string[] | string;
   images: string[] | string;
-  meta_title: string;
-  meta_description: string;
+  meta_title?: string;
+  meta_description?: string;
   inventory_count: number;
 }
 
@@ -33,11 +35,17 @@ interface Order {
   customer_phone: string;
   shipping_address: any;
   items: any[];
+  subtotal: number;
+  discount_amount: number;
   total_amount: number;
   payment_status: string;
   fulfillment_status: string;
-  awb_number: string;
-  courier_name: string;
+  awb_number?: string;
+  courier_name?: string;
+  courier_code?: string;
+  tracking_url?: string;
+  order_notes?: string;
+  is_archived?: number;
   created_at: string;
 }
 
@@ -52,7 +60,24 @@ interface Discount {
   is_active: boolean | number;
 }
 
+interface MediaAsset {
+  id: string;
+  url: string;
+  filename: string;
+  file_size: number;
+  created_at: string;
+}
+
 const BACKEND_URL = "https://api.younoya.com";
+
+const COURIER_OPTIONS = [
+  { code: "shiprocket", name: "Shiprocket Priority" },
+  { code: "bluedart", name: "Bluedart Express Air" },
+  { code: "delhivery", name: "Delhivery Surface & Express" },
+  { code: "dtdc", name: "DTDC Prime Air" },
+  { code: "indiapost", name: "India Post Speed Post" },
+  { code: "custom", name: "Custom / Hyperlocal Courier" }
+];
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -61,13 +86,14 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
 
-  // Active Admin Tab: 'products' | 'orders' | 'discounts'
-  const [activeTab, setActiveTab] = useState<"products" | "orders" | "discounts">("products");
+  // Active Admin Tab: 'products' | 'orders' | 'media' | 'discounts'
+  const [activeTab, setActiveTab] = useState<"products" | "orders" | "media" | "discounts">("products");
 
   // Data states
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [discounts, setDiscounts] = useState<Discount[]>([]);
+  const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Product Editing state
@@ -76,6 +102,32 @@ export default function AdminPage() {
   const [isNew, setIsNew] = useState(false);
   const [saving, setSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
+
+  // Media Library Picker Modal in Product Editor
+  const [showMediaStoreModal, setShowMediaStoreModal] = useState(false);
+
+  // Orders Filter & Management
+  const [orderStageFilter, setOrderStageFilter] = useState<string>("all");
+  const [orderSearch, setOrderSearch] = useState<string>("");
+  const [selectedOrderForShipping, setSelectedOrderForShipping] = useState<Order | null>(null);
+  const [selectedOrderForLabel, setSelectedOrderForLabel] = useState<Order | null>(null);
+  const [shippingModalData, setShippingModalData] = useState({
+    courier_code: "shiprocket",
+    courier_name: "Shiprocket Priority",
+    awb_number: "",
+    fulfillment_status: "Shipped"
+  });
+
+  // Shipper Template Settings for A5 Label
+  const [showShipperSettingsModal, setShowShipperSettingsModal] = useState(false);
+  const [shipperSettings, setShipperSettings] = useState({
+    brand_name: "YOUNOYA — Sacred Vedic Blessings",
+    dispatch_address: "Plot 42, Vedic Consecration Hub, Phase 2, Industrial Estate",
+    city_state_pin: "Jaipur, Rajasthan — 302013",
+    contact_phone: "+91 98765 43210",
+    support_email: "support@younoya.com",
+    gstin: "08AAECY1234F1Z5"
+  });
 
   // New Discount Form state
   const [showNewDiscountModal, setShowNewDiscountModal] = useState(false);
@@ -89,7 +141,6 @@ export default function AdminPage() {
 
   // Media upload state
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [imageUrlInput, setImageUrlInput] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Check existing session token on mount
@@ -134,19 +185,27 @@ export default function AdminPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [resProd, resOrders, resDisc] = await Promise.all([
+      const [resProd, resOrders, resDisc, resMedia, resSettings] = await Promise.all([
         fetch(`${BACKEND_URL}/api/v1/admin/products`),
         fetch(`${BACKEND_URL}/api/v1/admin/orders`),
-        fetch(`${BACKEND_URL}/api/v1/admin/discounts`)
+        fetch(`${BACKEND_URL}/api/v1/admin/discounts`),
+        fetch(`${BACKEND_URL}/api/v1/admin/media`),
+        fetch(`${BACKEND_URL}/api/v1/admin/settings`)
       ]);
 
       const dataProd = await resProd.json();
       const dataOrders = await resOrders.json();
       const dataDisc = await resDisc.json();
+      const dataMedia = await resMedia.json();
+      const dataSettings = await resSettings.json();
 
       if (dataProd.success) setProducts(dataProd.data || []);
       if (dataOrders.success) setOrders(dataOrders.data || []);
       if (dataDisc.success) setDiscounts(dataDisc.data || []);
+      if (dataMedia.success) setMediaAssets(dataMedia.data || []);
+      if (dataSettings.success && dataSettings.data?.brand_name) {
+        setShipperSettings({ ...shipperSettings, ...dataSettings.data });
+      }
     } catch (err) {
       console.error("Error fetching admin data:", err);
     } finally {
@@ -160,6 +219,7 @@ export default function AdminPage() {
     }
   }, [isAuthenticated]);
 
+  // Product CRUD
   const handleEdit = (prod: Product) => {
     setSelectedProduct(JSON.parse(JSON.stringify(prod)));
     setIsEditing(true);
@@ -184,8 +244,6 @@ export default function AdminPage() {
         "Includes Roli, Chawal & Dry Fruits"
       ],
       images: ["https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"],
-      meta_title: "Consecrated Vedic Rakhi | YOUNOYA",
-      meta_description: "Handcrafted Vedic Rakhi energized with 108 Gayatri mantras.",
       inventory_count: 100
     };
     setSelectedProduct(newProd);
@@ -228,7 +286,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDeleteProduct = async (id: string) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
     try {
       const res = await fetch(`${BACKEND_URL}/api/v1/admin/products/${id}`, {
@@ -237,62 +295,38 @@ export default function AdminPage() {
       const json = await res.json();
       if (json.success) {
         fetchData();
+        setStatusMsg("✓ Product deleted successfully.");
       }
     } catch (e) {
       console.error(e);
     }
   };
 
-  // Multi-File & Single File Image Upload Handler
-  const handleMultipleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0 || !selectedProduct) return;
-
-    setUploadingImage(true);
-    setStatusMsg("");
-
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append("files[]", files[i]);
-    }
-    // Fallback single file field
-    formData.append("file", files[0]);
-
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/v1/admin/upload`, {
-        method: "POST",
-        body: formData
-      });
-      const json = await res.json();
-
-      if (json.success) {
-        const uploadedList: string[] = json.urls || (json.url ? [json.url] : []);
-        const currentImgs: string[] = Array.isArray(selectedProduct.images)
-          ? selectedProduct.images
-          : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
-
-        const updatedImgs = [...currentImgs, ...uploadedList];
-        setSelectedProduct({ ...selectedProduct, images: updatedImgs });
-        setStatusMsg(`✓ Uploaded ${uploadedList.length} image(s) successfully!`);
-      } else {
-        setStatusMsg("❌ Upload failed: " + (json.error || "Server rejected request"));
-      }
-    } catch (err: any) {
-      setStatusMsg("❌ Upload error: " + (err.message || "Network failure"));
-    } finally {
-      setUploadingImage(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    }
-  };
-
-  const handleAddImageUrl = () => {
-    if (!imageUrlInput.trim() || !selectedProduct) return;
+  // Gallery Ordering & Primary Toggle
+  const handleSetPrimaryImage = (index: number) => {
+    if (!selectedProduct) return;
     const currentImgs: string[] = Array.isArray(selectedProduct.images)
-      ? selectedProduct.images
+      ? [...selectedProduct.images]
       : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
 
-    setSelectedProduct({ ...selectedProduct, images: [...currentImgs, imageUrlInput.trim()] });
-    setImageUrlInput("");
+    const target = currentImgs.splice(index, 1)[0];
+    currentImgs.unshift(target);
+    setSelectedProduct({ ...selectedProduct, images: currentImgs });
+  };
+
+  const handleMoveImage = (index: number, direction: "left" | "right") => {
+    if (!selectedProduct) return;
+    const currentImgs: string[] = Array.isArray(selectedProduct.images)
+      ? [...selectedProduct.images]
+      : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
+
+    const newIndex = direction === "left" ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= currentImgs.length) return;
+
+    const temp = currentImgs[index];
+    currentImgs[index] = currentImgs[newIndex];
+    currentImgs[newIndex] = temp;
+    setSelectedProduct({ ...selectedProduct, images: currentImgs });
   };
 
   const handleRemoveImage = (index: number) => {
@@ -305,16 +339,87 @@ export default function AdminPage() {
     setSelectedProduct({ ...selectedProduct, images: updated });
   };
 
-  const handleUpdateOrderStatus = async (orderId: string, status: string, awb?: string) => {
+  // Upload Images with Multi-File support & Auto-compression fallback
+  const handleMultipleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploadingImage(true);
+    setStatusMsg("");
+
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append("files[]", files[i]);
+    }
+    formData.append("file", files[0]);
+
     try {
-      const res = await fetch(`${BACKEND_URL}/api/v1/admin/orders/${orderId}`, {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        const uploadedList: string[] = json.urls || (json.url ? [json.url] : []);
+        if (selectedProduct) {
+          const currentImgs: string[] = Array.isArray(selectedProduct.images)
+            ? selectedProduct.images
+            : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
+
+          setSelectedProduct({ ...selectedProduct, images: [...currentImgs, ...uploadedList] });
+        }
+        fetchData();
+        setStatusMsg(`✓ Uploaded ${uploadedList.length} image(s) to Image Store!`);
+      } else {
+        setStatusMsg("❌ Upload failed: " + (json.error || "Server rejected request"));
+      }
+    } catch (err: any) {
+      setStatusMsg("❌ Upload error: " + (err.message || "Network failure"));
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  // Media Library Deletion
+  const handleDeleteMediaAsset = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this asset from Image Store?")) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/media/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (json.success) {
+        fetchData();
+        setStatusMsg("✓ Media asset deleted.");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Order Management Actions
+  const handleOpenDispatchModal = (order: Order) => {
+    setSelectedOrderForShipping(order);
+    setShippingModalData({
+      courier_code: order.courier_code || "shiprocket",
+      courier_name: order.courier_name || "Shiprocket Priority",
+      awb_number: order.awb_number || "AWB" + Math.floor(10000000 + Math.random() * 90000000),
+      fulfillment_status: "Shipped"
+    });
+  };
+
+  const handleConfirmDispatch = async () => {
+    if (!selectedOrderForShipping) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/orders/${selectedOrderForShipping.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fulfillment_status: status, awb_number: awb })
+        body: JSON.stringify(shippingModalData)
       });
       const json = await res.json();
       if (json.success) {
-        setStatusMsg("✓ Order status updated successfully!");
+        setStatusMsg(`✓ Order #${selectedOrderForShipping.order_number} marked as Shipped via ${shippingModalData.courier_name}!`);
+        setSelectedOrderForShipping(null);
         fetchData();
       }
     } catch (e) {
@@ -322,6 +427,38 @@ export default function AdminPage() {
     }
   };
 
+  const handleUpdateOrderStatus = async (orderId: string, updates: Partial<Order>) => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/orders/${orderId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates)
+      });
+      const json = await res.json();
+      if (json.success) {
+        setStatusMsg("✓ Order updated successfully.");
+        fetchData();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDeleteOrder = async (id: string) => {
+    if (!confirm("Are you sure you want to permanently delete this test order?")) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/orders/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (json.success) {
+        fetchData();
+        setStatusMsg("✓ Test order deleted.");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Discount Actions
   const handleCreateDiscount = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -332,7 +469,7 @@ export default function AdminPage() {
       });
       const json = await res.json();
       if (json.success) {
-        setStatusMsg("✓ Coupon code created successfully!");
+        setStatusMsg("✓ Coupon created successfully!");
         setShowNewDiscountModal(false);
         setNewDiscount({ code: "", type: "percentage", value: 10, min_order_value: 0, usage_limit: 500 });
         fetchData();
@@ -342,7 +479,62 @@ export default function AdminPage() {
     }
   };
 
-  // 1. Password Protected Login Screen
+  const handleDeleteDiscount = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this coupon code?")) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/discounts/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (json.success) {
+        fetchData();
+        setStatusMsg("✓ Coupon deleted.");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSaveShipperSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/settings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(shipperSettings)
+      });
+      const json = await res.json();
+      if (json.success) {
+        setStatusMsg("✓ Shipper template settings saved successfully!");
+        setShowShipperSettingsModal(false);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Filtered Orders Calculation
+  const filteredOrders = orders.filter((o) => {
+    const isArchived = o.is_archived === 1;
+    if (orderStageFilter === "archived") return isArchived;
+    if (isArchived && orderStageFilter !== "archived") return false;
+
+    if (orderStageFilter === "pending") return o.payment_status !== "paid";
+    if (orderStageFilter === "consecration") return o.fulfillment_status === "Ordered" || o.fulfillment_status === "Consecration";
+    if (orderStageFilter === "shipped") return o.fulfillment_status === "shipped" || o.fulfillment_status === "Shipped";
+    if (orderStageFilter === "delivered") return o.fulfillment_status === "delivered" || o.fulfillment_status === "Delivered";
+
+    if (orderSearch.trim()) {
+      const query = orderSearch.toLowerCase();
+      return (
+        o.order_number?.toLowerCase().includes(query) ||
+        o.customer_name?.toLowerCase().includes(query) ||
+        o.customer_phone?.includes(query) ||
+        o.awb_number?.toLowerCase().includes(query)
+      );
+    }
+    return true;
+  });
+
+  // Login Screen
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#FDFCF8] text-[#1C1C1C] flex items-center justify-center px-4 font-sans">
@@ -352,7 +544,7 @@ export default function AdminPage() {
               <Lock size={24} />
             </div>
             <h1 className="text-2xl font-extrabold font-heading tracking-tight text-[#1C1C1C]">YOUNOYA Store Admin</h1>
-            <p className="text-xs text-stone-500">Enter credentials to manage products, orders, discounts, and store settings.</p>
+            <p className="text-xs text-stone-500">Enterprise Merchant Console & OMS</p>
           </div>
 
           {loginError && (
@@ -371,7 +563,7 @@ export default function AdminPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="admin"
-                className="w-full px-4 py-2.5 rounded-xl bg-[#F5F5F0] border border-[#E2E8E4] text-[#1C1C1C] text-sm focus:outline-none focus:border-[#1C1C1C] transition-colors"
+                className="w-full px-4 py-2.5 rounded-xl bg-[#F5F5F0] border border-[#E2E8E4] text-[#1C1C1C] text-sm focus:outline-none focus:border-[#1C1C1C]"
               />
             </div>
 
@@ -383,7 +575,7 @@ export default function AdminPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full px-4 py-2.5 rounded-xl bg-[#F5F5F0] border border-[#E2E8E4] text-[#1C1C1C] text-sm focus:outline-none focus:border-[#1C1C1C] transition-colors"
+                className="w-full px-4 py-2.5 rounded-xl bg-[#F5F5F0] border border-[#E2E8E4] text-[#1C1C1C] text-sm focus:outline-none focus:border-[#1C1C1C]"
               />
             </div>
 
@@ -406,22 +598,21 @@ export default function AdminPage() {
     );
   }
 
-  // 2. Authenticated Admin Dashboard View (Clinical Luxury White Theme)
-  const currentImages: string[] = Array.isArray(selectedProduct?.images)
+  const currentEditorImages: string[] = Array.isArray(selectedProduct?.images)
     ? (selectedProduct?.images as string[])
     : (typeof selectedProduct?.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] text-[#1C1C1C] font-sans selection:bg-[#1C1C1C] selection:text-white">
+    <div className="min-h-screen bg-[#FDFCF8] text-[#1C1C1C] font-sans selection:bg-[#1C1C1C] selection:text-white pb-20">
       {/* Top Admin Header */}
-      <header className="border-b border-[#E2E8E4] bg-white px-6 py-4 flex items-center justify-between sticky top-0 z-40 shadow-sm">
+      <header className="border-b border-[#E2E8E4] bg-white px-6 py-3.5 flex items-center justify-between sticky top-0 z-40 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-[#1C1C1C] text-[#D4AF37] flex items-center justify-center font-bold text-sm">
             Y
           </div>
           <div>
             <div className="font-extrabold font-heading text-[#1C1C1C] tracking-wider flex items-center gap-2">
-              YOUNOYA <span className="text-[10px] font-mono uppercase bg-[#E2E8E4] text-[#1C1C1C] font-bold px-2 py-0.5 rounded-full">Store Admin</span>
+              YOUNOYA <span className="text-[10px] font-mono uppercase bg-[#E2E8E4] text-[#1C1C1C] font-bold px-2 py-0.5 rounded-full">Merchant Hub</span>
             </div>
           </div>
         </div>
@@ -444,8 +635,18 @@ export default function AdminPage() {
               activeTab === "orders" ? "bg-[#1C1C1C] text-white shadow-sm" : "text-stone-600 hover:text-[#1C1C1C]"
             }`}
           >
-            <ShoppingBag size={14} />
-            <span>Orders ({orders.length})</span>
+            <Truck size={14} />
+            <span>Orders & Fulfillment ({orders.filter(o => o.is_archived !== 1).length})</span>
+          </button>
+
+          <button
+            onClick={() => { setIsEditing(false); setActiveTab("media"); }}
+            className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+              activeTab === "media" ? "bg-[#1C1C1C] text-white shadow-sm" : "text-stone-600 hover:text-[#1C1C1C]"
+            }`}
+          >
+            <ImageIcon size={14} />
+            <span>Image Store ({mediaAssets.length})</span>
           </button>
 
           <button
@@ -455,17 +656,26 @@ export default function AdminPage() {
             }`}
           >
             <Tag size={14} />
-            <span>Discounts ({discounts.length})</span>
+            <span>Coupons ({discounts.length})</span>
           </button>
         </div>
 
         <div className="flex items-center gap-4 text-xs">
+          <button
+            onClick={() => setShowShipperSettingsModal(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#E2E8E4] text-stone-700 hover:text-[#1C1C1C] font-bold transition-colors"
+            title="Shipper template settings for A5 labels"
+          >
+            <Settings size={13} />
+            <span className="hidden sm:inline">Label Shipper Info</span>
+          </button>
+
           <Link 
             href="/" 
             target="_blank"
-            className="flex items-center gap-1.5 text-stone-600 hover:text-[#1C1C1C] font-semibold transition-colors"
+            className="flex items-center gap-1.5 text-stone-600 hover:text-[#1C1C1C] font-bold transition-colors"
           >
-            <span>View Live Store</span>
+            <span>Live Store</span>
             <ExternalLink size={13} />
           </Link>
           <button 
@@ -495,31 +705,37 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Quick Analytics Bar */}
+        {/* Quick Analytics Bar (Shopify Summary Style) */}
         {!isEditing && (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div className="clinical-card p-6 shadow-sm">
-              <div className="text-xs text-stone-500 font-bold uppercase font-mono tracking-wider">Total Products</div>
-              <div className="text-3xl font-extrabold font-heading text-[#1C1C1C] mt-1">{products.length}</div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+            <div className="clinical-card p-5 shadow-sm">
+              <div className="text-xs text-stone-500 font-bold uppercase font-mono">Catalog Items</div>
+              <div className="text-2xl font-extrabold font-heading text-[#1C1C1C] mt-1">{products.length} Products</div>
             </div>
-            <div className="clinical-card p-6 shadow-sm">
-              <div className="text-xs text-stone-500 font-bold uppercase font-mono tracking-wider">Total Orders (OMS)</div>
-              <div className="text-3xl font-extrabold font-heading text-[#1C1C1C] mt-1">{orders.length}</div>
+            <div className="clinical-card p-5 shadow-sm">
+              <div className="text-xs text-stone-500 font-bold uppercase font-mono">Active Orders</div>
+              <div className="text-2xl font-extrabold font-heading text-[#1C1C1C] mt-1">{orders.filter(o => o.is_archived !== 1).length} Orders</div>
             </div>
-            <div className="clinical-card p-6 shadow-sm">
-              <div className="text-xs text-stone-500 font-bold uppercase font-mono tracking-wider">Active Coupons</div>
-              <div className="text-3xl font-extrabold font-heading text-[#D4AF37] mt-1">{discounts.length}</div>
+            <div className="clinical-card p-5 shadow-sm">
+              <div className="text-xs text-stone-500 font-bold uppercase font-mono">Media Assets</div>
+              <div className="text-2xl font-extrabold font-heading text-[#1C1C1C] mt-1">{mediaAssets.length} Photos</div>
+            </div>
+            <div className="clinical-card p-5 shadow-sm">
+              <div className="text-xs text-stone-500 font-bold uppercase font-mono">Promo Coupons</div>
+              <div className="text-2xl font-extrabold font-heading text-[#D4AF37] mt-1">{discounts.length} Active</div>
             </div>
           </div>
         )}
 
-        {/* Tab 1: Products */}
+        {/* ========================================================
+            TAB 1: PRODUCTS CATALOG & SHOPIFY-GRADE EDITOR
+           ======================================================== */}
         {activeTab === "products" && !isEditing && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#1C1C1C] tracking-tight">Products ({products.length})</h1>
-                <p className="text-xs text-stone-600 mt-1">Manage catalog, photos, inventory, pricing, and SEO meta tags.</p>
+                <p className="text-xs text-stone-600 mt-1">Manage catalog, inventory, primary featured images, and pricing.</p>
               </div>
 
               <button
@@ -548,7 +764,7 @@ export default function AdminPage() {
                   {products.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="py-12 text-center text-stone-500">
-                        {loading ? "Loading products from MariaDB..." : "No products found. Click 'Add Product' above to create one."}
+                        {loading ? "Loading products from MariaDB..." : "No products found. Click 'Add Product' to create one."}
                       </td>
                     </tr>
                   ) : (
@@ -560,7 +776,7 @@ export default function AdminPage() {
 
                       return (
                         <tr key={prod.id} className="hover:bg-[#F5F5F0]/50 transition-colors">
-                          <td className="py-5 px-6">
+                          <td className="py-4 px-6">
                             <div className="flex items-center gap-3">
                               <div className="w-12 h-12 rounded-xl bg-[#E8E6E1] border border-[#E2E8E4] flex items-center justify-center overflow-hidden flex-shrink-0">
                                 {thumb ? (
@@ -575,24 +791,24 @@ export default function AdminPage() {
                               </div>
                             </div>
                           </td>
-                          <td className="py-5 px-6 text-stone-600 font-mono text-[11px]">
+                          <td className="py-4 px-6 text-stone-600 font-mono text-[11px]">
                             <div className="font-bold text-[#1C1C1C]">{prod.sku || "N/A"}</div>
                             <div className="text-[10px] text-stone-400">{prod.handle}</div>
                           </td>
-                          <td className="py-5 px-6 font-extrabold font-mono text-[#1C1C1C]">
+                          <td className="py-4 px-6 font-extrabold font-mono text-[#1C1C1C]">
                             ₹{prod.price} <span className="text-stone-400 text-[10px] line-through font-normal">₹{prod.original_price}</span>
                           </td>
-                          <td className="py-5 px-6">
+                          <td className="py-4 px-6">
                             <span className="inline-block px-3 py-1 rounded-full text-[11px] font-bold bg-[#E2E8E4] text-emerald-900 border border-[#C2D6C2] whitespace-nowrap">
                               {prod.inventory_count || 100} in stock
                             </span>
                           </td>
-                          <td className="py-5 px-6">
+                          <td className="py-4 px-6">
                             <span className="inline-block px-3 py-1 rounded-full text-[10px] uppercase font-extrabold font-mono bg-[#1C1C1C] text-white whitespace-nowrap">
                               {prod.badge || "Standard"}
                             </span>
                           </td>
-                          <td className="py-5 px-6 text-right space-x-2">
+                          <td className="py-4 px-6 text-right space-x-2">
                             <button
                               onClick={() => handleEdit(prod)}
                               className="px-3.5 py-1.5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] hover:bg-[#D4DFD7] transition-colors inline-flex items-center gap-1.5 text-xs font-bold"
@@ -602,7 +818,7 @@ export default function AdminPage() {
                               <span>Edit</span>
                             </button>
                             <button
-                              onClick={() => handleDelete(prod.id)}
+                              onClick={() => handleDeleteProduct(prod.id)}
                               className="p-2 hover:bg-red-100 rounded-full text-stone-400 hover:text-red-700 transition-colors"
                               title="Delete product"
                             >
@@ -619,7 +835,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Product Editor Modal / Full View */}
+        {/* 2-Column Shopify Product Editor */}
         {isEditing && selectedProduct && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -634,14 +850,14 @@ export default function AdminPage() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="px-4 py-2.5 rounded-full border border-[#E2E8E4] text-xs font-bold text-stone-600 hover:text-[#1C1C1C] transition-colors"
+                  className="px-5 py-2.5 rounded-full border border-[#E2E8E4] text-xs font-bold text-stone-600 hover:text-[#1C1C1C] transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider px-6 py-2.5 rounded-full hover:bg-[#333333] transition-all shadow-md flex items-center gap-2"
+                  className="bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider px-7 py-2.5 rounded-full hover:bg-[#333333] transition-all shadow-md flex items-center gap-2"
                 >
                   <Save size={15} />
                   <span>{saving ? "Publishing..." : "Save Product"}</span>
@@ -649,11 +865,11 @@ export default function AdminPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Left 2 Columns: Title, Description, Media Gallery, SEO */}
-              <div className="lg:col-span-2 space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Left 8 Cols: Title, Media Gallery, Description */}
+              <div className="lg:col-span-8 space-y-6">
                 <div className="clinical-card p-6 space-y-4 shadow-sm">
-                  <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading">Title & Narrative</h2>
+                  <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading">Product Details</h2>
                   
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1.5">Product Title*</label>
@@ -676,9 +892,9 @@ export default function AdminPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Product Description</label>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Description</label>
                     <textarea
-                      rows={5}
+                      rows={6}
                       value={selectedProduct.description}
                       onChange={(e) => setSelectedProduct({ ...selectedProduct, description: e.target.value })}
                       className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-3 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
@@ -686,68 +902,106 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Media Gallery Card (Multi-Upload Support) */}
+                {/* Media Gallery with Reordering & Make Primary */}
                 <div className="clinical-card p-6 space-y-4 shadow-sm">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading">Product Images ({currentImages.length})</h2>
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      multiple
-                      accept="image/*"
-                      onChange={handleMultipleImageUpload}
-                      className="hidden"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={uploadingImage}
-                      className="px-4 py-2 rounded-full bg-[#1C1C1C] text-white text-xs font-bold flex items-center gap-2 hover:bg-[#333333] transition-all"
-                    >
-                      <Upload size={14} />
-                      <span>{uploadingImage ? "Uploading..." : "Upload Multiple Images"}</span>
-                    </button>
+                    <div>
+                      <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading">Product Media Gallery ({currentEditorImages.length})</h2>
+                      <p className="text-[11px] text-stone-500 mt-0.5">First image is the <strong>★ Primary Featured</strong> photo shown across all listings.</p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowMediaStoreModal(true)}
+                        className="px-3.5 py-2 rounded-full border border-[#E2E8E4] bg-[#F5F5F0] text-[#1C1C1C] text-xs font-bold flex items-center gap-1.5 hover:bg-[#E2E8E4]"
+                      >
+                        <ImageIcon size={13} />
+                        <span>Image Store</span>
+                      </button>
+
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        multiple
+                        accept="image/*"
+                        onChange={handleMultipleImageUpload}
+                        className="hidden"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingImage}
+                        className="px-4 py-2 rounded-full bg-[#1C1C1C] text-white text-xs font-bold flex items-center gap-1.5 hover:bg-[#333333]"
+                      >
+                        <Upload size={13} />
+                        <span>{uploadingImage ? "Uploading..." : "Upload New"}</span>
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Multi-Image Grid Preview */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-                    {currentImages.map((imgUrl, idx) => (
-                      <div key={idx} className="relative aspect-square rounded-xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] group">
-                        <img src={imgUrl} alt={`Product Image ${idx + 1}`} className="w-full h-full object-cover" />
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveImage(idx)}
-                          className="absolute top-1.5 right-1.5 p-1 rounded-full bg-red-600 text-white opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
-                          title="Remove image"
-                        >
-                          <X size={12} />
-                        </button>
+                  {/* Visual Reorderable Thumbnail Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 pt-2">
+                    {currentEditorImages.map((imgUrl, idx) => (
+                      <div key={idx} className={`relative aspect-square rounded-2xl overflow-hidden border ${idx === 0 ? "border-[#D4AF37] ring-2 ring-[#D4AF37]/30" : "border-[#E2E8E4]"} bg-[#E8E6E1] group shadow-sm flex flex-col justify-between p-2`}>
+                        <img src={imgUrl} alt={`Product ${idx + 1}`} className="absolute inset-0 w-full h-full object-cover z-0" />
+                        
+                        {/* Top Overlay Badge & Delete */}
+                        <div className="relative z-10 flex items-center justify-between w-full">
+                          {idx === 0 ? (
+                            <span className="px-2 py-0.5 rounded-md bg-[#1C1C1C] text-[#D4AF37] text-[9px] font-extrabold uppercase font-mono shadow-md">
+                              ★ Primary Hero
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => handleSetPrimaryImage(idx)}
+                              className="px-2 py-0.5 rounded-md bg-white/90 text-stone-800 text-[9px] font-bold hover:bg-[#1C1C1C] hover:text-[#D4AF37] transition-colors shadow-md"
+                            >
+                              Make Primary
+                            </button>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(idx)}
+                            className="p-1 rounded-full bg-red-600 text-white shadow-md hover:bg-red-700 transition-colors"
+                            title="Remove image"
+                          >
+                            <X size={11} />
+                          </button>
+                        </div>
+
+                        {/* Bottom Reordering Arrow Controls */}
+                        <div className="relative z-10 flex items-center justify-between w-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-sm rounded-xl p-1">
+                          <button
+                            type="button"
+                            disabled={idx === 0}
+                            onClick={() => handleMoveImage(idx, "left")}
+                            className="p-1 rounded bg-white/80 text-black hover:bg-white disabled:opacity-30"
+                            title="Move Left"
+                          >
+                            <ChevronLeft size={14} />
+                          </button>
+                          <span className="text-[10px] text-white font-mono font-bold">#{idx + 1}</span>
+                          <button
+                            type="button"
+                            disabled={idx === currentEditorImages.length - 1}
+                            onClick={() => handleMoveImage(idx, "right")}
+                            className="p-1 rounded bg-white/80 text-black hover:bg-white disabled:opacity-30"
+                            title="Move Right"
+                          >
+                            <ChevronRight size={14} />
+                          </button>
+                        </div>
                       </div>
                     ))}
-                  </div>
-
-                  {/* Add Image URL directly */}
-                  <div className="pt-2 flex gap-2">
-                    <input
-                      type="url"
-                      value={imageUrlInput}
-                      onChange={(e) => setImageUrlInput(e.target.value)}
-                      placeholder="Paste image URL directly (e.g. https://...)"
-                      className="flex-1 bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleAddImageUrl}
-                      className="px-4 py-2 rounded-xl bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold hover:bg-[#D4DFD7]"
-                    >
-                      Add URL
-                    </button>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Pricing, Inventory, Badge & SKU */}
-              <div className="space-y-6">
+              {/* Right 4 Cols: Pricing, Inventory, Badge & Preview */}
+              <div className="lg:col-span-4 space-y-6">
                 <div className="clinical-card p-6 space-y-4 shadow-sm">
                   <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading">Pricing & Stock</h2>
 
@@ -772,7 +1026,7 @@ export default function AdminPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Inventory Count</label>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Stock Quantity</label>
                     <input
                       type="number"
                       value={selectedProduct.inventory_count}
@@ -791,75 +1045,177 @@ export default function AdminPage() {
                       className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2.5 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
                     />
                   </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">SKU</label>
+                    <input
+                      type="text"
+                      value={selectedProduct.sku}
+                      onChange={(e) => setSelectedProduct({ ...selectedProduct, sku: e.target.value })}
+                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-xs font-mono text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                    />
+                  </div>
                 </div>
+
+                {/* Primary Hero Preview Card */}
+                {currentEditorImages[0] && (
+                  <div className="clinical-card p-6 space-y-3 shadow-sm">
+                    <h3 className="text-xs font-mono uppercase font-bold text-stone-500">Live Featured Showcase</h3>
+                    <div className="aspect-square rounded-2xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4]">
+                      <img src={currentEditorImages[0]} alt="Primary featured" className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         )}
 
-        {/* Tab 2: Orders (OMS) */}
+        {/* ========================================================
+            TAB 2: ORDER MANAGEMENT SYSTEM (OMS) & LOGISTICS
+           ======================================================== */}
         {activeTab === "orders" && !isEditing && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#1C1C1C] tracking-tight">Orders & Fulfillment ({orders.length})</h1>
-                <p className="text-xs text-stone-600 mt-1">Manage customer orders, track payments, and update Bluedart AWB shipping numbers.</p>
+                <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#1C1C1C] tracking-tight">Orders & Fulfillment</h1>
+                <p className="text-xs text-stone-600 mt-1">Multi-carrier logistics, A5 printable shipping labels, stage lifecycle, and test order archiving.</p>
+              </div>
+
+              {/* Order Stage Filter Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto bg-[#F5F5F0] p-1.5 rounded-2xl border border-[#E2E8E4]">
+                {[
+                  { id: "all", label: "All Active" },
+                  { id: "pending", label: "Payment Pending" },
+                  { id: "consecration", label: "Consecration" },
+                  { id: "shipped", label: "Shipped / Transit" },
+                  { id: "delivered", label: "Delivered" },
+                  { id: "archived", label: "Archived / Test" }
+                ].map((stg) => (
+                  <button
+                    key={stg.id}
+                    onClick={() => setOrderStageFilter(stg.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${
+                      orderStageFilter === stg.id ? "bg-[#1C1C1C] text-white" : "text-stone-600 hover:text-[#1C1C1C]"
+                    }`}
+                  >
+                    {stg.label}
+                  </button>
+                ))}
               </div>
             </div>
 
+            {/* Orders Table Card */}
             <div className="border border-[#E2E8E4] rounded-[24px] bg-white overflow-hidden shadow-sm">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr className="border-b border-[#E2E8E4] bg-[#F5F5F0] text-stone-600 uppercase font-mono text-[10px] tracking-wider font-bold">
-                    <th className="py-3.5 px-6">Order</th>
-                    <th className="py-3.5 px-6">Customer</th>
-                    <th className="py-3.5 px-6">Total</th>
-                    <th className="py-3.5 px-6">Payment</th>
-                    <th className="py-3.5 px-6">Fulfillment</th>
-                    <th className="py-3.5 px-6 text-right">Actions</th>
+                    <th className="py-4 px-6">Order ID & Date</th>
+                    <th className="py-4 px-6">Customer & Mobile</th>
+                    <th className="py-4 px-6">Amount</th>
+                    <th className="py-4 px-6">Payment</th>
+                    <th className="py-4 px-6">Stage</th>
+                    <th className="py-4 px-6">Logistics & AWB</th>
+                    <th className="py-4 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E2E8E4]">
-                  {orders.length === 0 ? (
+                  {filteredOrders.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-12 text-center text-stone-500">
-                        No orders recorded yet. New customer checkout orders will appear here automatically.
+                      <td colSpan={7} className="py-12 text-center text-stone-500">
+                        No orders matching filter criteria.
                       </td>
                     </tr>
                   ) : (
-                    orders.map((o) => (
-                      <tr key={o.id} className="hover:bg-[#F5F5F0]/50 transition-colors">
+                    filteredOrders.map((o) => (
+                      <tr key={o.id} className={`hover:bg-[#F5F5F0]/50 transition-colors ${o.is_archived === 1 ? "opacity-60 bg-stone-50" : ""}`}>
                         <td className="py-4 px-6 font-mono font-bold text-[#1C1C1C]">
-                          <div>{o.order_number}</div>
+                          <div className="text-sm">{o.order_number}</div>
                           <div className="text-[10px] text-stone-400 font-normal">{new Date(o.created_at).toLocaleDateString()}</div>
                         </td>
                         <td className="py-4 px-6">
                           <div className="font-bold text-[#1C1C1C]">{o.customer_name}</div>
                           <div className="text-stone-600 text-[11px] font-mono">{o.customer_phone}</div>
-                          <div className="text-stone-400 text-[10px]">{o.customer_email}</div>
+                          <div className="text-stone-400 text-[10px] truncate max-w-[140px]">{o.customer_email}</div>
                         </td>
                         <td className="py-4 px-6 font-extrabold font-mono text-[#1C1C1C]">
                           ₹{o.total_amount}
                         </td>
                         <td className="py-4 px-6">
-                          <span className="px-3 py-1 rounded-full text-[10px] uppercase font-bold bg-[#E2E8E4] text-emerald-800 border border-[#C2D6C2]">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] uppercase font-bold border ${
+                            o.payment_status === "paid" 
+                              ? "bg-[#E2E8E4] text-emerald-800 border-[#C2D6C2]" 
+                              : "bg-red-50 text-red-700 border-red-200"
+                          }`}>
                             {o.payment_status}
                           </span>
                         </td>
                         <td className="py-4 px-6">
-                          <span className="px-3 py-1 rounded-full text-[10px] uppercase font-bold bg-[#E2E8E4] text-[#1C1C1C] border border-[#C2D6C2]">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] uppercase font-bold border ${
+                            o.fulfillment_status === "Delivered"
+                              ? "bg-[#E2E8E4] text-emerald-800 border-[#C2D6C2]"
+                              : o.fulfillment_status === "Shipped" || o.fulfillment_status === "shipped"
+                              ? "bg-blue-50 text-blue-800 border-blue-200"
+                              : "bg-amber-50 text-amber-800 border-amber-200"
+                          }`}>
                             {o.fulfillment_status}
                           </span>
                         </td>
-                        <td className="py-4 px-6 text-right">
+                        <td className="py-4 px-6">
+                          {o.awb_number ? (
+                            <div className="space-y-0.5">
+                              <div className="text-[11px] font-bold text-[#1C1C1C]">{o.courier_name}</div>
+                              <div className="font-mono text-[10px] text-stone-500">{o.awb_number}</div>
+                              {o.tracking_url && (
+                                <a 
+                                  href={o.tracking_url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-[10px] text-blue-600 hover:underline inline-flex items-center gap-0.5"
+                                >
+                                  <span>Track Parcel</span>
+                                  <ExternalLink size={9} />
+                                </a>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-[11px] text-stone-400 italic">Not Assigned</span>
+                          )}
+                        </td>
+                        <td className="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
+                          {/* Print A5 Label */}
                           <button
-                            onClick={() => {
-                              const awb = prompt("Enter Bluedart AWB Tracking Number:", o.awb_number || "BLUEDART" + Date.now());
-                              if (awb) handleUpdateOrderStatus(o.id, "shipped", awb);
-                            }}
-                            className="px-4 py-1.5 bg-[#1C1C1C] text-white rounded-full text-xs font-bold hover:bg-[#333333] transition-colors"
+                            onClick={() => setSelectedOrderForLabel(o)}
+                            className="p-1.5 rounded-full bg-[#E2E8E4] hover:bg-[#D4DFD7] text-[#1C1C1C] transition-colors"
+                            title="Print A5 Shipping Label"
                           >
-                            Dispatch AWB
+                            <Printer size={14} />
+                          </button>
+
+                          {/* Dispatch & Assign Carrier */}
+                          <button
+                            onClick={() => handleOpenDispatchModal(o)}
+                            className="px-3 py-1.5 rounded-full bg-[#1C1C1C] text-white text-xs font-bold hover:bg-[#333333] transition-colors"
+                          >
+                            Dispatch
+                          </button>
+
+                          {/* Archive/Unarchive Toggle */}
+                          <button
+                            onClick={() => handleUpdateOrderStatus(o.id, { is_archived: o.is_archived === 1 ? 0 : 1 })}
+                            className="p-1.5 rounded-full hover:bg-stone-200 text-stone-500 hover:text-stone-900 transition-colors"
+                            title={o.is_archived === 1 ? "Restore order" : "Archive order"}
+                          >
+                            {o.is_archived === 1 ? <RotateCcw size={14} /> : <Archive size={14} />}
+                          </button>
+
+                          {/* Delete Order (for test cleanup) */}
+                          <button
+                            onClick={() => handleDeleteOrder(o.id)}
+                            className="p-1.5 rounded-full hover:bg-red-100 text-stone-400 hover:text-red-700 transition-colors"
+                            title="Delete test order"
+                          >
+                            <Trash2 size={14} />
                           </button>
                         </td>
                       </tr>
@@ -871,13 +1227,82 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Tab 3: Discounts & Coupons */}
+        {/* ========================================================
+            TAB 3: CENTRALIZED MEDIA ASSET LIBRARY ("IMAGE STORE")
+           ======================================================== */}
+        {activeTab === "media" && !isEditing && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#1C1C1C] tracking-tight">Image Store ({mediaAssets.length})</h1>
+                <p className="text-xs text-stone-600 mt-1">Reusable brand photography library across products without duplicating server disk space.</p>
+              </div>
+
+              <div>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  multiple
+                  accept="image/*"
+                  onChange={handleMultipleImageUpload}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingImage}
+                  className="bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider px-5 py-3 rounded-full hover:bg-[#333333] transition-all flex items-center gap-2 shadow-md"
+                >
+                  <Upload size={16} />
+                  <span>{uploadingImage ? "Uploading Photos..." : "Upload Photos"}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Asset Library Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {mediaAssets.map((asset) => (
+                <div key={asset.id} className="clinical-card overflow-hidden group shadow-sm flex flex-col justify-between">
+                  <div className="relative aspect-square bg-[#E8E6E1] overflow-hidden">
+                    <img src={asset.url} alt={asset.filename} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                  </div>
+                  <div className="p-3 bg-white space-y-1.5 border-t border-[#E2E8E4]">
+                    <div className="text-[11px] font-bold text-[#1C1C1C] truncate">{asset.filename}</div>
+                    <div className="flex items-center justify-between pt-1">
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(asset.url);
+                          setStatusMsg("✓ Image URL copied to clipboard!");
+                        }}
+                        className="p-1 rounded hover:bg-stone-100 text-stone-600"
+                        title="Copy direct URL"
+                      >
+                        <Copy size={12} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteMediaAsset(asset.id)}
+                        className="p-1 rounded hover:bg-red-100 text-stone-400 hover:text-red-700"
+                        title="Delete asset"
+                      >
+                        <Trash2 size={12} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================
+            TAB 4: COUPONS & DISCOUNTS
+           ======================================================== */}
         {activeTab === "discounts" && !isEditing && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#1C1C1C] tracking-tight">Discounts & Promo Codes ({discounts.length})</h1>
-                <p className="text-xs text-stone-600 mt-1">Create promotional coupons for checkout discounts.</p>
+                <p className="text-xs text-stone-600 mt-1">Create and manage promotional discount coupons for checkout.</p>
               </div>
 
               <button
@@ -897,7 +1322,7 @@ export default function AdminPage() {
                     <th className="py-3.5 px-6">Discount</th>
                     <th className="py-3.5 px-6">Min Order Value</th>
                     <th className="py-3.5 px-6">Usage Limit</th>
-                    <th className="py-3.5 px-6 text-right">Status</th>
+                    <th className="py-3.5 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E2E8E4]">
@@ -916,95 +1341,405 @@ export default function AdminPage() {
                         {d.used_count || 0} / {d.usage_limit || 500}
                       </td>
                       <td className="py-4 px-6 text-right">
-                        <span className="px-3 py-1 rounded-full text-[10px] uppercase font-bold bg-[#E2E8E4] text-emerald-800 border border-[#C2D6C2]">
-                          Active
-                        </span>
+                        <button
+                          onClick={() => handleDeleteDiscount(d.id)}
+                          className="p-1.5 hover:bg-red-100 rounded-full text-stone-400 hover:text-red-700 transition-colors"
+                          title="Delete coupon"
+                        >
+                          <Trash2 size={14} />
+                        </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-
-            {/* Create Discount Modal */}
-            {showNewDiscountModal && (
-              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                <div className="w-full max-w-md bg-white border border-[#E2E8E4] rounded-[32px] p-8 space-y-4 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-extrabold text-[#1C1C1C] text-base font-heading">Create New Coupon</h3>
-                    <button onClick={() => setShowNewDiscountModal(false)}><X size={18} /></button>
-                  </div>
-
-                  <form onSubmit={handleCreateDiscount} className="space-y-4 text-xs">
-                    <div>
-                      <label className="block text-stone-700 font-bold mb-1">Coupon Code*</label>
-                      <input
-                        type="text"
-                        required
-                        value={newDiscount.code}
-                        onChange={(e) => setNewDiscount({ ...newDiscount, code: e.target.value.toUpperCase() })}
-                        placeholder="e.g. SPECIAL20"
-                        className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2.5 text-[#1C1C1C] font-mono uppercase focus:outline-none focus:border-[#1C1C1C]"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-stone-700 font-bold mb-1">Discount Type</label>
-                        <select
-                          value={newDiscount.type}
-                          onChange={(e) => setNewDiscount({ ...newDiscount, type: e.target.value })}
-                          className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2.5 text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
-                        >
-                          <option value="percentage">Percentage (%)</option>
-                          <option value="fixed_amount">Flat (₹)</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-stone-700 font-bold mb-1">Value*</label>
-                        <input
-                          type="number"
-                          required
-                          value={newDiscount.value}
-                          onChange={(e) => setNewDiscount({ ...newDiscount, value: parseInt(e.target.value) || 0 })}
-                          className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2.5 text-[#1C1C1C] font-bold focus:outline-none focus:border-[#1C1C1C]"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-stone-700 font-bold mb-1">Minimum Order Value (₹)</label>
-                      <input
-                        type="number"
-                        value={newDiscount.min_order_value}
-                        onChange={(e) => setNewDiscount({ ...newDiscount, min_order_value: parseInt(e.target.value) || 0 })}
-                        className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2.5 text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
-                      />
-                    </div>
-
-                    <div className="pt-2 flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setShowNewDiscountModal(false)}
-                        className="flex-1 py-3 rounded-full border border-[#E2E8E4] text-stone-600 hover:text-[#1C1C1C] font-bold"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="flex-1 py-3 rounded-full bg-[#1C1C1C] text-white font-extrabold uppercase tracking-wider hover:bg-[#333333]"
-                      >
-                        Create Coupon
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            )}
           </div>
         )}
       </div>
+
+      {/* ========================================================
+          MODAL 1: A5 PRINTABLE SHIPPING LABEL GENERATOR
+         ======================================================== */}
+      {selectedOrderForLabel && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="w-full max-w-2xl bg-white rounded-3xl p-8 space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b pb-4">
+              <div>
+                <h3 className="font-extrabold text-lg text-[#1C1C1C] font-heading">A5 Shipping Label Preview</h3>
+                <p className="text-xs text-stone-500">Standard 148mm × 210mm Thermal / Laser Print Ready</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => window.print()}
+                  className="px-5 py-2.5 rounded-full bg-[#1C1C1C] text-white text-xs font-bold flex items-center gap-2 shadow-md hover:bg-[#333333]"
+                >
+                  <Printer size={14} />
+                  <span>Print A5 Label</span>
+                </button>
+                <button onClick={() => setSelectedOrderForLabel(null)} className="p-2 text-stone-400 hover:text-black">
+                  <X size={18} />
+                </button>
+              </div>
+            </div>
+
+            {/* A5 Printable Area Container */}
+            <div id="printable-a5-label" className="p-6 border-2 border-dashed border-stone-800 rounded-2xl bg-white space-y-6 text-xs text-black font-sans">
+              {/* Header: Carrier & Order Code */}
+              <div className="flex items-center justify-between border-b-2 border-black pb-4">
+                <div>
+                  <div className="text-2xl font-black font-heading tracking-wider">{shipperSettings.brand_name.split("—")[0].trim()}</div>
+                  <div className="text-[10px] text-stone-600 uppercase tracking-widest font-mono">PRIORITY SACRED CONSECRATION PARCEL</div>
+                </div>
+                <div className="text-right">
+                  <div className="inline-block border-2 border-black px-3 py-1 font-black text-sm uppercase">
+                    {selectedOrderForLabel.payment_status === "paid" ? "PREPAID AIR" : "COD PARCEL"}
+                  </div>
+                  <div className="text-xs font-mono font-bold mt-1">{selectedOrderForLabel.courier_name || "Shiprocket Express"}</div>
+                </div>
+              </div>
+
+              {/* Grid: Deliver To & Dispatch From */}
+              <div className="grid grid-cols-2 gap-6 border-b-2 border-black pb-6">
+                <div className="space-y-1">
+                  <div className="text-[10px] font-mono uppercase font-bold text-stone-500">1. DELIVER TO (CONSIGNEE):</div>
+                  <div className="font-extrabold text-sm">{selectedOrderForLabel.customer_name}</div>
+                  <div className="text-xs">{selectedOrderForLabel.shipping_address?.address}</div>
+                  <div className="text-xs font-bold">{selectedOrderForLabel.shipping_address?.city}, {selectedOrderForLabel.shipping_address?.state}</div>
+                  <div className="text-base font-black font-mono">PIN: {selectedOrderForLabel.shipping_address?.pincode}</div>
+                  <div className="text-xs font-bold font-mono">Tel: {selectedOrderForLabel.customer_phone}</div>
+                </div>
+
+                <div className="space-y-1 border-l-2 border-stone-300 pl-6">
+                  <div className="text-[10px] font-mono uppercase font-bold text-stone-500">2. DISPATCHED FROM (SHIPPER):</div>
+                  <div className="font-bold">{shipperSettings.brand_name}</div>
+                  <div className="text-xs">{shipperSettings.dispatch_address}</div>
+                  <div className="text-xs">{shipperSettings.city_state_pin}</div>
+                  <div className="text-[11px] font-mono">GSTIN: {shipperSettings.gstin}</div>
+                  <div className="text-[11px] font-mono">Helpline: {shipperSettings.contact_phone}</div>
+                </div>
+              </div>
+
+              {/* Order Items & Barcode Box */}
+              <div className="space-y-2">
+                <div className="text-[10px] font-mono uppercase font-bold text-stone-500">3. PARCEL CONTENTS:</div>
+                <table className="w-full text-left text-xs border border-black">
+                  <thead className="bg-stone-100 border-b border-black font-bold">
+                    <tr>
+                      <th className="p-2">Item Title</th>
+                      <th className="p-2 text-center">Qty</th>
+                      <th className="p-2 text-right">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-black">
+                    {(selectedOrderForLabel.items || []).map((it, i) => (
+                      <tr key={i}>
+                        <td className="p-2 font-medium">{it.title}</td>
+                        <td className="p-2 text-center font-mono font-bold">{it.quantity || 1}</td>
+                        <td className="p-2 text-right font-mono font-bold">₹{it.price * (it.quantity || 1)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* AWB & Routing Footer */}
+              <div className="border-t-2 border-black pt-4 flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] font-mono text-stone-500">ORDER NO:</div>
+                  <div className="text-sm font-black font-mono">{selectedOrderForLabel.order_number}</div>
+                </div>
+                <div className="text-center font-mono">
+                  <div className="text-xs font-bold">||||| | |||| |||||| |||| |||</div>
+                  <div className="text-xs font-bold">{selectedOrderForLabel.awb_number || "AWB-PENDING"}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10px] font-mono text-stone-500">ROUTING HUB:</div>
+                  <div className="text-sm font-black uppercase font-mono">DEL-AIR-01</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL 2: DISPATCH & ASSIGN CARRIER MODAL
+         ======================================================== */}
+      {selectedOrderForShipping && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="w-full max-w-md bg-white rounded-3xl p-6 space-y-4 shadow-xl border border-[#E2E8E4]">
+            <div className="flex items-center justify-between">
+              <h3 className="font-extrabold text-[#1C1C1C] text-base font-heading">Dispatch & Assign Courier</h3>
+              <button onClick={() => setSelectedOrderForShipping(null)}><X size={18} /></button>
+            </div>
+
+            <div className="space-y-4 text-xs">
+              <div>
+                <label className="block font-bold text-stone-700 mb-1">Select Courier Partner</label>
+                <select
+                  value={shippingModalData.courier_code}
+                  onChange={(e) => {
+                    const sel = COURIER_OPTIONS.find(c => c.code === e.target.value);
+                    setShippingModalData({
+                      ...shippingModalData,
+                      courier_code: e.target.value,
+                      courier_name: sel ? sel.name : "Shiprocket Priority"
+                    });
+                  }}
+                  className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2.5 text-[#1C1C1C] font-bold"
+                >
+                  {COURIER_OPTIONS.map(c => (
+                    <option key={c.code} value={c.code}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-bold text-stone-700 mb-1">AWB Tracking Number / Consignment ID*</label>
+                <input
+                  type="text"
+                  required
+                  value={shippingModalData.awb_number}
+                  onChange={(e) => setShippingModalData({ ...shippingModalData, awb_number: e.target.value.trim() })}
+                  placeholder="e.g. 18274619284"
+                  className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2.5 text-sm font-mono font-bold text-[#1C1C1C]"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-stone-700 mb-1">Update Fulfillment Stage</label>
+                <select
+                  value={shippingModalData.fulfillment_status}
+                  onChange={(e) => setShippingModalData({ ...shippingModalData, fulfillment_status: e.target.value })}
+                  className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2.5 text-[#1C1C1C] font-bold"
+                >
+                  <option value="Packed">Packed / Ready for Pickup</option>
+                  <option value="Shipped">Shipped / In Transit</option>
+                  <option value="Out for Delivery">Out for Delivery</option>
+                  <option value="Delivered">Delivered</option>
+                </select>
+              </div>
+
+              <div className="pt-2 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedOrderForShipping(null)}
+                  className="flex-1 py-3 rounded-full border border-[#E2E8E4] text-stone-600 font-bold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmDispatch}
+                  className="flex-1 py-3 rounded-full bg-[#1C1C1C] text-white font-extrabold uppercase tracking-wider hover:bg-[#333333]"
+                >
+                  Confirm Dispatch
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL 3: REUSABLE IMAGE STORE SELECTOR MODAL
+         ======================================================== */}
+      {showMediaStoreModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="w-full max-w-3xl bg-white rounded-3xl p-6 space-y-4 shadow-xl border border-[#E2E8E4] max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between">
+              <h3 className="font-extrabold text-[#1C1C1C] text-base font-heading">Select from Image Store</h3>
+              <button onClick={() => setShowMediaStoreModal(false)}><X size={18} /></button>
+            </div>
+
+            <div className="overflow-y-auto flex-1 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 p-1">
+              {mediaAssets.map((asset) => (
+                <div
+                  key={asset.id}
+                  onClick={() => {
+                    if (selectedProduct) {
+                      const current = Array.isArray(selectedProduct.images)
+                        ? [...selectedProduct.images]
+                        : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
+                      setSelectedProduct({ ...selectedProduct, images: [...current, asset.url] });
+                      setShowMediaStoreModal(false);
+                    }
+                  }}
+                  className="aspect-square rounded-xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] cursor-pointer hover:ring-2 hover:ring-[#1C1C1C] transition-all"
+                >
+                  <img src={asset.url} alt={asset.filename} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL 4: SHIPPER TEMPLATE SETTINGS FOR A5 LABELS
+         ======================================================== */}
+      {showShipperSettingsModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="w-full max-w-md bg-white rounded-3xl p-6 space-y-4 shadow-xl border border-[#E2E8E4]">
+            <div className="flex items-center justify-between">
+              <h3 className="font-extrabold text-[#1C1C1C] text-base font-heading">Shipper Label Settings</h3>
+              <button onClick={() => setShowShipperSettingsModal(false)}><X size={18} /></button>
+            </div>
+
+            <form onSubmit={handleSaveShipperSettings} className="space-y-3 text-xs">
+              <div>
+                <label className="block font-bold text-stone-700 mb-1">Brand / Sender Name*</label>
+                <input
+                  type="text"
+                  required
+                  value={shipperSettings.brand_name}
+                  onChange={(e) => setShipperSettings({ ...shipperSettings, brand_name: e.target.value })}
+                  className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-[#1C1C1C]"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-stone-700 mb-1">Dispatch Street Address*</label>
+                <input
+                  type="text"
+                  required
+                  value={shipperSettings.dispatch_address}
+                  onChange={(e) => setShipperSettings({ ...shipperSettings, dispatch_address: e.target.value })}
+                  className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-[#1C1C1C]"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-stone-700 mb-1">City, State & PIN Code*</label>
+                <input
+                  type="text"
+                  required
+                  value={shipperSettings.city_state_pin}
+                  onChange={(e) => setShipperSettings({ ...shipperSettings, city_state_pin: e.target.value })}
+                  className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-[#1C1C1C]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">GSTIN</label>
+                  <input
+                    type="text"
+                    value={shipperSettings.gstin}
+                    onChange={(e) => setShipperSettings({ ...shipperSettings, gstin: e.target.value })}
+                    className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2 text-[#1C1C1C] font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">Helpline Phone</label>
+                  <input
+                    type="text"
+                    value={shipperSettings.contact_phone}
+                    onChange={(e) => setShipperSettings({ ...shipperSettings, contact_phone: e.target.value })}
+                    className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2 text-[#1C1C1C]"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-2 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowShipperSettingsModal(false)}
+                  className="flex-1 py-2.5 rounded-full border border-[#E2E8E4] text-stone-600 font-bold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-full bg-[#1C1C1C] text-white font-extrabold uppercase tracking-wider"
+                >
+                  Save Settings
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL 5: CREATE NEW COUPON MODAL
+         ======================================================== */}
+      {showNewDiscountModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="w-full max-w-md bg-white border border-[#E2E8E4] rounded-[32px] p-8 space-y-4 shadow-xl">
+            <div className="flex items-center justify-between">
+              <h3 className="font-extrabold text-[#1C1C1C] text-base font-heading">Create New Coupon</h3>
+              <button onClick={() => setShowNewDiscountModal(false)}><X size={18} /></button>
+            </div>
+
+            <form onSubmit={handleCreateDiscount} className="space-y-4 text-xs">
+              <div>
+                <label className="block text-stone-700 font-bold mb-1">Coupon Code*</label>
+                <input
+                  type="text"
+                  required
+                  value={newDiscount.code}
+                  onChange={(e) => setNewDiscount({ ...newDiscount, code: e.target.value.toUpperCase() })}
+                  placeholder="e.g. SPECIAL20"
+                  className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2.5 text-[#1C1C1C] font-mono uppercase focus:outline-none focus:border-[#1C1C1C]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-stone-700 font-bold mb-1">Discount Type</label>
+                  <select
+                    value={newDiscount.type}
+                    onChange={(e) => setNewDiscount({ ...newDiscount, type: e.target.value })}
+                    className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2.5 text-[#1C1C1C] font-bold"
+                  >
+                    <option value="percentage">Percentage (%)</option>
+                    <option value="fixed_amount">Flat (₹)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-stone-700 font-bold mb-1">Value*</label>
+                  <input
+                    type="number"
+                    required
+                    value={newDiscount.value}
+                    onChange={(e) => setNewDiscount({ ...newDiscount, value: parseInt(e.target.value) || 0 })}
+                    className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2.5 text-[#1C1C1C] font-bold focus:outline-none focus:border-[#1C1C1C]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-stone-700 font-bold mb-1">Minimum Order Value (₹)</label>
+                <input
+                  type="number"
+                  value={newDiscount.min_order_value}
+                  onChange={(e) => setNewDiscount({ ...newDiscount, min_order_value: parseInt(e.target.value) || 0 })}
+                  className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2.5 text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                />
+              </div>
+
+              <div className="pt-2 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowNewDiscountModal(false)}
+                  className="flex-1 py-3 rounded-full border border-[#E2E8E4] text-stone-600 hover:text-[#1C1C1C] font-bold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-3 rounded-full bg-[#1C1C1C] text-white font-extrabold uppercase tracking-wider hover:bg-[#333333]"
+                >
+                  Create Coupon
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
