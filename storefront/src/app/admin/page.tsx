@@ -107,6 +107,11 @@ export default function AdminPage() {
   const [showMediaStoreModal, setShowMediaStoreModal] = useState(false);
   const [selectedMediaInModal, setSelectedMediaInModal] = useState<string[]>([]);
 
+  // Image Store Sorting & Details Inspector
+  const [mediaSortBy, setMediaSortBy] = useState<"date_desc" | "date_asc" | "name_asc" | "size_desc">("date_desc");
+  const [mediaSearchQuery, setMediaSearchQuery] = useState<string>("");
+  const [selectedMediaForDetails, setSelectedMediaForDetails] = useState<MediaAsset | null>(null);
+
   // Orders Filter & Management
   const [orderStageFilter, setOrderStageFilter] = useState<string>("all");
   const [orderSearch, setOrderSearch] = useState<string>("");
@@ -1236,13 +1241,13 @@ export default function AdminPage() {
            ======================================================== */}
         {activeTab === "media" && !isEditing && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#1C1C1C] tracking-tight">Image Store ({mediaAssets.length})</h1>
-                <p className="text-xs text-stone-600 mt-1">Reusable brand photography library across products without duplicating server disk space.</p>
+                <p className="text-xs text-stone-600 mt-1">Reusable brand photography library across products with size inspection, sort filters, and product usage tracking.</p>
               </div>
 
-              <div>
+              <div className="flex items-center gap-3">
                 <input
                   type="file"
                   ref={mediaStoreFileInputRef}
@@ -1255,7 +1260,7 @@ export default function AdminPage() {
                   type="button"
                   onClick={() => mediaStoreFileInputRef.current?.click()}
                   disabled={uploadingImage}
-                  className="bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider px-5 py-3 rounded-full hover:bg-[#333333] transition-all flex items-center gap-2 shadow-md"
+                  className="bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider px-5 py-3 rounded-full hover:bg-[#333333] transition-all flex items-center gap-2 shadow-md whitespace-nowrap"
                 >
                   <Upload size={16} />
                   <span>{uploadingImage ? "Uploading Photos..." : "Upload Photos"}</span>
@@ -1263,38 +1268,136 @@ export default function AdminPage() {
               </div>
             </div>
 
-            {/* Asset Library Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {mediaAssets.map((asset) => (
-                <div key={asset.id} className="clinical-card overflow-hidden group shadow-sm flex flex-col justify-between">
-                  <div className="relative aspect-square bg-[#E8E6E1] overflow-hidden">
-                    <img src={asset.url} alt={asset.filename} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                  </div>
-                  <div className="p-3 bg-white space-y-1.5 border-t border-[#E2E8E4]">
-                    <div className="text-[11px] font-bold text-[#1C1C1C] truncate">{asset.filename}</div>
-                    <div className="flex items-center justify-between pt-1">
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(asset.url);
-                          setStatusMsg("✓ Image URL copied to clipboard!");
-                        }}
-                        className="p-1 rounded hover:bg-stone-100 text-stone-600"
-                        title="Copy direct URL"
-                      >
-                        <Copy size={12} />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteMediaAsset(asset.id)}
-                        className="p-1 rounded hover:bg-red-100 text-stone-400 hover:text-red-700"
-                        title="Delete asset"
-                      >
-                        <Trash2 size={12} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {/* Filter & Sort Toolbar */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-[#E2E8E4] shadow-sm">
+              {/* Search by filename */}
+              <div className="relative w-full sm:w-72">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                <input
+                  type="text"
+                  value={mediaSearchQuery}
+                  onChange={(e) => setMediaSearchQuery(e.target.value)}
+                  placeholder="Search photos by filename..."
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-[#F5F5F0] border border-[#E2E8E4] text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                />
+              </div>
+
+              {/* Sort By Dropdown */}
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <span className="text-xs font-bold text-stone-500 whitespace-nowrap flex items-center gap-1">
+                  <Filter size={13} />
+                  <span>Sort by:</span>
+                </span>
+                <select
+                  value={mediaSortBy}
+                  onChange={(e: any) => setMediaSortBy(e.target.value)}
+                  className="bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2 text-xs font-bold text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                >
+                  <option value="date_desc">Recently Uploaded (Newest first)</option>
+                  <option value="date_asc">Oldest Uploaded first</option>
+                  <option value="name_asc">File Name (A - Z)</option>
+                  <option value="size_desc">File Size (Largest first)</option>
+                </select>
+              </div>
             </div>
+
+            {/* Asset Library Grid with Quick Inspector */}
+            {(() => {
+              const filtered = mediaAssets
+                .filter((a) => a.filename?.toLowerCase().includes(mediaSearchQuery.toLowerCase()))
+                .sort((a, b) => {
+                  if (mediaSortBy === "date_desc") return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
+                  if (mediaSortBy === "date_asc") return new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
+                  if (mediaSortBy === "name_asc") return (a.filename || "").localeCompare(b.filename || "");
+                  if (mediaSortBy === "size_desc") return (b.file_size || 0) - (a.file_size || 0);
+                  return 0;
+                });
+
+              if (filtered.length === 0) {
+                return (
+                  <div className="p-12 bg-white rounded-3xl border border-[#E2E8E4] text-center text-stone-500 text-xs shadow-sm">
+                    No images match your search criteria.
+                  </div>
+                );
+              }
+
+              return (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                  {filtered.map((asset) => {
+                    const sizeInKB = asset.file_size ? (asset.file_size / 1024).toFixed(1) + " KB" : "Unknown";
+                    
+                    // Check which products use this image
+                    const usingProds = products.filter((p) => {
+                      const imgs = Array.isArray(p.images) ? p.images : (typeof p.images === "string" ? JSON.parse(p.images || "[]") : []);
+                      return imgs.includes(asset.url);
+                    });
+
+                    return (
+                      <div key={asset.id} className="clinical-card overflow-hidden group shadow-sm flex flex-col justify-between">
+                        {/* Clickable Image Thumbnail to open details inspector */}
+                        <div 
+                          onClick={() => setSelectedMediaForDetails(asset)}
+                          className="relative aspect-square bg-[#E8E6E1] overflow-hidden cursor-pointer"
+                          title="Click to view full image & details"
+                        >
+                          <img src={asset.url} alt={asset.filename} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1">
+                            <Eye size={14} />
+                            <span>Inspect</span>
+                          </div>
+                        </div>
+
+                        <div className="p-3 bg-white space-y-1 border-t border-[#E2E8E4]">
+                          <div className="text-[11px] font-bold text-[#1C1C1C] truncate" title={asset.filename}>
+                            {asset.filename}
+                          </div>
+                          
+                          <div className="flex items-center justify-between text-[10px] text-stone-500 font-mono">
+                            <span>{sizeInKB}</span>
+                            {usingProds.length > 0 && (
+                              <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold">
+                                {usingProds.length} prod
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between pt-1 border-t border-stone-100">
+                            <button
+                              onClick={() => setSelectedMediaForDetails(asset)}
+                              className="p-1 rounded hover:bg-stone-100 text-stone-600 text-[10px] font-bold flex items-center gap-1"
+                              title="Inspect details"
+                            >
+                              <Eye size={12} />
+                              <span>Details</span>
+                            </button>
+
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText(asset.url);
+                                  setStatusMsg("✓ Image URL copied to clipboard!");
+                                }}
+                                className="p-1 rounded hover:bg-stone-100 text-stone-600"
+                                title="Copy direct URL"
+                              >
+                                <Copy size={12} />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteMediaAsset(asset.id)}
+                                className="p-1 rounded hover:bg-red-100 text-stone-400 hover:text-red-700"
+                                title="Delete asset"
+                              >
+                                <Trash2 size={12} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
           </div>
         )}
 
@@ -1808,6 +1911,153 @@ export default function AdminPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* ========================================================
+          MODAL 6: IMAGE DETAILS & PRODUCT USAGE INSPECTOR MODAL
+         ======================================================== */}
+      {selectedMediaForDetails && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl border border-[#E2E8E4]">
+            <div className="flex items-center justify-between border-b pb-4">
+              <div>
+                <h3 className="font-extrabold text-base sm:text-lg text-[#1C1C1C] font-heading">Image Asset Details</h3>
+                <p className="text-xs text-stone-500 font-mono">{selectedMediaForDetails.filename}</p>
+              </div>
+              <button 
+                onClick={() => setSelectedMediaForDetails(null)} 
+                className="p-2 rounded-full hover:bg-stone-100 text-stone-400 hover:text-black"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-start">
+              {/* Left Column: Image Preview */}
+              <div className="sm:col-span-5 aspect-square rounded-2xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] flex items-center justify-center p-2 shadow-inner">
+                <img 
+                  src={selectedMediaForDetails.url} 
+                  alt={selectedMediaForDetails.filename} 
+                  className="w-full h-full object-contain rounded-xl"
+                />
+              </div>
+
+              {/* Right Column: File Metadata & Product Usage */}
+              <div className="sm:col-span-7 space-y-4 text-xs">
+                {/* Metadata Grid */}
+                <div className="bg-[#F5F5F0] p-4 rounded-2xl border border-[#E2E8E4] space-y-2.5">
+                  <div className="flex justify-between border-b border-[#E2E8E4] pb-1.5">
+                    <span className="text-stone-500 font-bold">File Size:</span>
+                    <span className="font-mono font-bold text-[#1C1C1C]">
+                      {selectedMediaForDetails.file_size ? (selectedMediaForDetails.file_size / 1024).toFixed(2) + " KB" : "Unknown"}
+                      {selectedMediaForDetails.file_size ? ` (${selectedMediaForDetails.file_size.toLocaleString()} bytes)` : ""}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between border-b border-[#E2E8E4] pb-1.5">
+                    <span className="text-stone-500 font-bold">Uploaded Date:</span>
+                    <span className="font-mono text-[#1C1C1C]">
+                      {selectedMediaForDetails.created_at ? new Date(selectedMediaForDetails.created_at).toLocaleString() : "Recently"}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1">
+                    <span className="text-stone-500 font-bold">Direct URL:</span>
+                    <div className="flex items-center gap-1.5 pt-0.5">
+                      <input 
+                        type="text" 
+                        readOnly 
+                        value={selectedMediaForDetails.url} 
+                        className="w-full bg-white border border-[#E2E8E4] rounded-lg px-2 py-1 text-[11px] font-mono text-stone-700 truncate"
+                      />
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(selectedMediaForDetails.url);
+                          setStatusMsg("✓ Direct URL copied to clipboard!");
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-[#1C1C1C] text-white text-[10px] font-bold flex items-center gap-1 hover:bg-[#333333]"
+                        title="Copy direct URL"
+                      >
+                        <Copy size={11} />
+                        <span>Copy</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Associated Products Usage List */}
+                <div className="space-y-2">
+                  <h4 className="font-bold text-stone-700 uppercase font-mono text-[10px] tracking-wider">
+                    Associated Products ({
+                      products.filter((p) => {
+                        const imgs = Array.isArray(p.images) ? p.images : (typeof p.images === "string" ? JSON.parse(p.images || "[]") : []);
+                        return imgs.includes(selectedMediaForDetails.url);
+                      }).length
+                    })
+                  </h4>
+
+                  {(() => {
+                    const using = products.filter((p) => {
+                      const imgs = Array.isArray(p.images) ? p.images : (typeof p.images === "string" ? JSON.parse(p.images || "[]") : []);
+                      return imgs.includes(selectedMediaForDetails.url);
+                    });
+
+                    if (using.length === 0) {
+                      return (
+                        <div className="p-3 rounded-xl bg-stone-50 border border-dashed border-stone-300 text-stone-400 text-center text-[11px]">
+                          This photo is not currently assigned to any product.
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                        {using.map((prod) => (
+                          <div key={prod.id} className="p-2 rounded-xl bg-white border border-[#E2E8E4] flex items-center justify-between">
+                            <div className="truncate pr-2">
+                              <div className="font-bold text-[#1C1C1C] text-xs truncate">{prod.title}</div>
+                              <div className="text-[10px] text-stone-400 font-mono">SKU: {prod.sku}</div>
+                            </div>
+                            <button
+                              onClick={() => {
+                                setSelectedMediaForDetails(null);
+                                handleEdit(prod);
+                              }}
+                              className="px-2.5 py-1 rounded-full bg-[#E2E8E4] hover:bg-[#D4DFD7] text-[#1C1C1C] text-[10px] font-bold whitespace-nowrap"
+                            >
+                              Edit Product
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                <div className="pt-2 flex justify-end gap-2 border-t">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const targetId = selectedMediaForDetails.id;
+                      setSelectedMediaForDetails(null);
+                      handleDeleteMediaAsset(targetId);
+                    }}
+                    className="px-4 py-2 rounded-full bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold transition-colors flex items-center gap-1.5"
+                  >
+                    <Trash2 size={13} />
+                    <span>Delete Image</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedMediaForDetails(null)}
+                    className="px-6 py-2 rounded-full bg-[#1C1C1C] text-white text-xs font-bold hover:bg-[#333333]"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
