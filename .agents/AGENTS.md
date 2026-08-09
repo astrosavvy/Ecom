@@ -125,10 +125,15 @@ younoya/
 
 ---
 
-## 8. Agent Behavior
+## 9. VPS Backend Deployment Rules (Strict Direct File Transfer)
 
-1. **Plan before code:** For any feature or edit, research first, write `implementation_plan.md`, and **stop for user approval** before coding.
-2. **2-step error limit:** If stuck after 2 debug attempts, stop, report root cause, and propose a fix plan.
-3. **Incremental changes:** Work in small, testable commits. Don't refactor unrelated code.
-4. **Verify Medusa APIs** before writing code — check docs, types, and existing modules.
-5. **Update `workflow.md`** after every material architecture or config decision.
+1. **No Git Pull on VPS**: The VPS backend does not use git pull for deployments.
+2. **Transfer via SCP as `ubuntu` User**:
+   - Transfer updated backend files using SCP with SSH key `id_ed25519_clean` to the `ubuntu` user home or `/tmp/` directory on IP `140.245.7.165`.
+   - Command: `scp -i "C:\Users\Palak\.ssh\id_ed25519_clean" <local_file> ubuntu@140.245.7.165:/tmp/<file_name>`
+3. **Move & Restart Services**:
+   - Copy file into Nginx web root `/var/www/younoya/backend/public/`.
+   - Fix ownership to `www-data:www-data`.
+   - Restart PHP-FPM and Nginx: `sudo systemctl restart php8.4-fpm nginx`.
+   - Command: `ssh -i "C:\Users\Palak\.ssh\id_ed25519_clean" ubuntu@140.245.7.165 "sudo cp /tmp/<file_name> /var/www/younoya/backend/public/<file_name> && sudo chown www-data:www-data /var/www/younoya/backend/public/<file_name> && sudo systemctl restart php8.4-fpm nginx"`
+
