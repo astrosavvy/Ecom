@@ -138,8 +138,8 @@ export default function Home() {
          ======================================================== */}
       <section className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
         <div className="relative w-full rounded-[32px] sm:rounded-[40px] overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] p-8 sm:p-16 min-h-[75vh] flex flex-col justify-between shadow-sm">
-          {/* Background Ambient Image Overlay */}
-          <div className="absolute inset-0 z-0 opacity-35 bg-[url('/younoya_hero_banner.jpg')] bg-cover bg-center pointer-events-none" />
+          {/* Background Ambient Image Overlay - Bright Crisp Photography */}
+          <div className="absolute inset-0 z-0 opacity-45 bg-[url('/younoya_hero_v3.jpg')] bg-cover bg-center pointer-events-none" />
           
           <div className="relative z-10 max-w-2xl space-y-6">
             {/* Urgency Indicator Tag */}
@@ -199,49 +199,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ========================================================
-          TRUST SIGNAL BAR (Sephora, Vogue Style Opacity Grid)
-         ======================================================== */}
-      <section className="w-full bg-white border-y border-[#E2E8E4] py-10 my-8">
-        <div className="max-w-7xl mx-auto px-6 text-center space-y-6">
-          <div className="text-[11px] font-bold font-mono tracking-[0.2em] uppercase text-stone-400">
-            TRUSTED BY 14,000+ DEVOTEE FAMILIES ACROSS INDIA
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-16 opacity-60 font-serif italic text-lg sm:text-xl text-[#1C1C1C]">
-            <span>VEDIC ASTROLOGY MONTHLY</span>
-            <span>SHIKSHA PUBLICATIONS</span>
-            <span>SPIRITUAL KINSHIP HERALD</span>
-            <span>CULTURAL HERITAGE TIMES</span>
-          </div>
-        </div>
-      </section>
 
-      {/* ========================================================
-          VALUE STATS BAR (Dark Mode Strip #1C1C1C with Gold Metrics)
-         ======================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
-        <div className="w-full rounded-[32px] bg-[#1C1C1C] text-white p-8 sm:p-12 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10 text-center">
-          <div className="space-y-1">
-            <div className="text-3xl sm:text-5xl font-extrabold font-heading text-[#D4AF37]">14,000+</div>
-            <div className="text-[11px] font-mono tracking-widest uppercase text-stone-400">BLESSED RAKHIS SHIPPED</div>
-          </div>
-
-          <div className="space-y-1 pl-4 sm:pl-8">
-            <div className="text-3xl sm:text-5xl font-extrabold font-heading text-[#D4AF37]">108</div>
-            <div className="text-[11px] font-mono tracking-widest uppercase text-stone-400">GAYATRI MANTRAS RECITES</div>
-          </div>
-
-          <div className="space-y-1 pl-4 sm:pl-8">
-            <div className="text-3xl sm:text-5xl font-extrabold font-heading text-[#D4AF37]">4.95 ★</div>
-            <div className="text-[11px] font-mono tracking-widest uppercase text-stone-400">VERIFIED DEVOTEE RATING</div>
-          </div>
-
-          <div className="space-y-1 pl-4 sm:pl-8">
-            <div className="text-3xl sm:text-5xl font-extrabold font-heading text-[#D4AF37]">100%</div>
-            <div className="text-[11px] font-mono tracking-widest uppercase text-stone-400">FREE EXPRESS AIR SHIPPING</div>
-          </div>
-        </div>
-      </section>
 
       {/* ========================================================
           PRODUCT SPOTLIGHT (Split 50/50 Layout)

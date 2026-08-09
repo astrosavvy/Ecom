@@ -37,12 +37,12 @@ export function Header() {
       {/* Main Navigation Bar (80px, Sticky Backdrop Blur 12px) */}
       <div className="h-20 w-full bg-[#FDFCF8]/90 backdrop-blur-[12px] border-b border-[#F3F4F6] px-4 sm:px-8 flex items-center justify-between transition-all">
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-          {/* Logo on Left */}
-          <Link href="/" className="flex items-center gap-3 flex-shrink-0 group py-0 -my-2">
+          {/* Logo on Left - Highly Highlighted & Scaled */}
+          <Link href="/" className="flex items-center gap-3 flex-shrink-0 group py-0 -my-3">
             <img
               src="/younoya_logo.png"
               alt="YOUNOYA"
-              className="h-16 sm:h-20 w-auto object-contain filter drop-shadow-[0_0_18px_rgba(212,175,55,0.7)] group-hover:scale-105 transition-transform"
+              className="h-20 sm:h-24 w-auto object-contain filter drop-shadow-[0_0_24px_rgba(212,175,55,0.9)] brightness-115 contrast-110 group-hover:scale-105 transition-all"
             />
           </Link>
 

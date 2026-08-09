@@ -226,148 +226,98 @@ export default function DynamicMonochromeProductPage() {
         </nav>
 
         {/* ========================================================
-            PRODUCT MAIN SECTION (2-Column Grid: 7:5 Ratio)
+            PRODUCT MAIN SECTION (Clinical Luxury 2-Column Spotlight Layout)
            ======================================================== */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Left Column (60% / 7 cols): Vertical Image Stack */}
-          <div className="lg:col-span-7 space-y-4">
-            {/* Primary 4:5 Image with 500ms Smooth Zoom */}
-            <div className="relative aspect-[4/5] w-full rounded-[4px] bg-[#F3F4F6] border border-[#E5E7EB] overflow-hidden group">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Left Column: Product Spotlight Image Box (#E8E6E1 bg, 40px rounded) */}
+          <div className="lg:col-span-6 flex flex-col-reverse sm:flex-row gap-4">
+            <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-visible">
+              {images.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveImageIndex(idx)}
+                  className={`w-16 h-16 rounded-2xl overflow-hidden border flex-shrink-0 transition-all ${
+                    activeImageIndex === idx
+                      ? "border-[#1C1C1C] ring-2 ring-[#1C1C1C]/20"
+                      : "border-[#E2E8E4] opacity-70 hover:opacity-100"
+                  }`}
+                >
+                  <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+
+            <div className="flex-1 relative aspect-square rounded-[40px] overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] p-6 shadow-sm group">
               <img
                 src={images[activeImageIndex] || images[0]}
                 alt={product.title}
-                className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500"
               />
               {product.badge && (
-                <span className="absolute top-4 left-4 bg-[#111827] text-white text-[12px] font-medium uppercase tracking-wider px-3 py-1 rounded-[4px]">
+                <span className="absolute top-6 left-6 bg-[#1C1C1C] text-white text-[10px] font-mono uppercase tracking-wider font-bold px-3 py-1 rounded-md shadow-sm">
                   {product.badge}
                 </span>
               )}
             </div>
-
-            {/* Supporting 2x2 Grid of 4:5 Aspect Ratio Thumbnails */}
-            <div className="grid grid-cols-2 gap-4">
-              {images.slice(0, 4).map((img, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setActiveImageIndex(idx)}
-                  className={`relative aspect-[4/5] w-full rounded-[4px] bg-[#F3F4F6] border overflow-hidden cursor-pointer group transition-all ${
-                    activeImageIndex === idx ? "border-[#111827] ring-1 ring-[#111827]" : "border-[#E5E7EB] opacity-80 hover:opacity-100"
-                  }`}
-                >
-                  <img
-                    src={img}
-                    alt={`Detail ${idx + 1}`}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-              ))}
-            </div>
           </div>
 
-          {/* Right Column (40% / 5 cols): Sticky Container (top: 32px) */}
-          <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-8">
-            <div className="space-y-2 border-b border-[#E5E7EB] pb-6">
-              <div className="text-xs font-mono uppercase tracking-widest text-[#6B7280]">
-                SKU: {product.sku}
+          {/* Right Column: Detailed Product Specs with PIN Lookup & Quantity Selector */}
+          <div className="lg:col-span-6 space-y-6">
+            <div className="space-y-2">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] font-bold">
+                VEDIC CONSECRATION // SKU: {product.sku}
               </div>
-              <h1 className="text-3xl sm:text-[36px] sm:leading-[40px] font-medium text-[#111827] tracking-tight">
+              <h1 className="text-2xl sm:text-4xl font-extrabold font-heading text-[#1C1C1C] leading-snug">
                 {product.title}
               </h1>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                {product.subtitle}
+              </p>
+            </div>
 
-              {/* Star Rating Row */}
-              <div className="flex items-center gap-3 pt-2">
-                <div className="flex text-[#111827]">
-                  <Star size={16} className="fill-current" />
-                  <Star size={16} className="fill-current" />
-                  <Star size={16} className="fill-current" />
-                  <Star size={16} className="fill-current" />
-                  <Star size={16} className="fill-current" />
-                </div>
-                <a href="#reviews" className="text-xs font-medium text-[#111827] underline underline-offset-4 hover:text-[#6B7280]">
-                  4.9 / 5 (10,000+ Reviews)
-                </a>
-              </div>
-
-              {/* Pricing ($120.00 equivalent in 24px) */}
-              <div className="flex items-baseline gap-3 pt-4">
-                <span className="text-2xl font-medium text-[#111827] font-mono">₹{product.price}</span>
-                {product.original_price > product.price && (
-                  <span className="text-base text-[#6B7280] line-through font-mono">₹{product.original_price}</span>
-                )}
-                <span className="text-xs font-medium text-[#111827] bg-[#F9FAFB] border border-[#E5E7EB] px-2.5 py-1 rounded-[4px] ml-auto">
-                  100% Free Air Shipping
+            {/* Price Box */}
+            <div className="p-6 rounded-[24px] bg-white border border-[#E2E8E4] space-y-2 shadow-sm">
+              <div className="flex items-baseline gap-3">
+                <span className="text-3xl font-extrabold font-mono text-[#1C1C1C]">
+                  ₹{product.price}
+                </span>
+                <span className="text-sm text-stone-400 line-through">
+                  ₹{product.original_price}
+                </span>
+                <span className="text-xs font-bold text-emerald-700 bg-[#E2E8E4] px-2.5 py-0.5 rounded-full">
+                  Save ₹{product.original_price - product.price}
                 </span>
               </div>
-            </div>
-
-            {/* Variant Section 1: Color Swatches (40x40px circles with 2px ring on active) */}
-            <div className="space-y-3">
-              <label className="text-xs font-medium text-[#111827] uppercase tracking-wider">
-                Select Thread Element: <span className="text-[#6B7280]">{selectedColor}</span>
-              </label>
-              <div className="flex items-center gap-3">
-                {[
-                  { name: "Sacred Red", color: "bg-red-800" },
-                  { name: "Saffron Gold", color: "bg-amber-600" },
-                  { name: "Vedic Mauli", color: "bg-[#111827]" }
-                ].map((swatch) => (
-                  <button
-                    key={swatch.name}
-                    onClick={() => setSelectedColor(swatch.name)}
-                    className={`w-10 h-10 rounded-full ${swatch.color} transition-all ${
-                      selectedColor === swatch.name
-                        ? "ring-2 ring-offset-2 ring-[#111827]"
-                        : "opacity-80 hover:opacity-100"
-                    }`}
-                    title={swatch.name}
-                  />
-                ))}
+              <div className="text-xs text-stone-500 flex items-center gap-1.5 pt-1">
+                <Truck size={14} className="text-[#D4AF37]" />
+                <span>100% Free Express Air Shipping across India • Taxes included</span>
               </div>
             </div>
 
-            {/* Variant Section 2: Size/Package Grid (4-column buttons, 48px height) */}
-            <div className="space-y-3">
-              <label className="text-xs font-medium text-[#111827] uppercase tracking-wider">
-                Select Package Configuration
-              </label>
-              <div className="grid grid-cols-4 gap-2">
-                {["Single Set", "Set of 2", "Set of 5", "Puja Deluxe"].map((variant) => (
-                  <button
-                    key={variant}
-                    onClick={() => setSelectedVariant(variant)}
-                    className={`h-12 rounded-[6px] border text-xs font-medium transition-all ${
-                      selectedVariant === variant
-                        ? "bg-[#111827] text-white border-[#111827]"
-                        : "bg-white text-[#111827] border-[#E5E7EB] hover:bg-[#F9FAFB]"
-                    }`}
-                  >
-                    {variant}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Description Text (16px, leading 1.6) */}
-            <div className="text-base leading-[1.6] text-[#6B7280] space-y-3 pt-2 font-sans">
-              <p className="whitespace-pre-line">{product.description}</p>
-            </div>
-
-            {/* 56px Height Primary CTA Button */}
-            <div className="pt-4 space-y-3">
+            {/* Action CTAs */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <button
                 id="primary-add-to-cart-btn"
                 onClick={handleAddToCart}
-                className="w-full h-[56px] rounded-[6px] bg-[#111827] text-white text-base font-medium hover:bg-[#1F2937] transition-all flex items-center justify-between px-8 shadow-sm active:scale-95"
+                className="py-4 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#D4DFD7] transition-all"
               >
-                <span>{added ? "✓ Added to Sacred Cart" : "Add to Cart"}</span>
-                <span className="font-mono text-sm">₹{product.price}</span>
+                {added ? (
+                  <>
+                    <Check size={15} className="text-emerald-700" />
+                    <span className="text-emerald-700">Added to Cart</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag size={15} />
+                    <span>Add to Cart</span>
+                  </>
+                )}
               </button>
 
               <Link
                 href="/checkout"
                 onClick={handleAddToCart}
-                className="w-full h-[56px] rounded-[6px] bg-[#F9FAFB] border border-[#E5E7EB] text-[#111827] text-base font-medium hover:bg-[#F3F4F6] transition-all flex items-center justify-center gap-2"
+                className="py-4 rounded-full bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl hover:bg-[#333333] transition-all transform hover:scale-105"
               >
                 <span>Express Buy Now</span>
               </Link>
