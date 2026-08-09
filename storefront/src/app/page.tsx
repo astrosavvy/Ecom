@@ -24,63 +24,8 @@ interface Product {
   features: string[] | string;
 }
 
-const FALLBACK_PRODUCTS: Product[] = [
-  {
-    id: "prod_1",
-    handle: "vedic-prosperity-rakhi",
-    sku: "HOFK0009275279",
-    title: "Vedic Prosperity Rakhi Set with Dry Fruits & Consecrated Thread",
-    subtitle: "Sacred consecration for sibling grace and planetary harmony",
-    price: 1099,
-    original_price: 1299,
-    badge: "Signature Edition",
-    description: "An authentic consecrated Vedic Rakhi energized with sacred mantras, hand-threaded with Resham, accompanied by premium California almonds and sacred Akshat-Roli.",
-    images: ["https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"],
-    features: ["Prana Pratishtha Consecration", "Sacred Resham & Gold Wire", "Includes Roli, Chawal & Dry Fruits"]
-  },
-  {
-    id: "prod_2",
-    handle: "vedic-prosperity-wealth-attraction-rakhi",
-    sku: "HOFK0009275280",
-    title: "Vedic Prosperity & Wealth Attraction Rakhi",
-    subtitle: "Astrologically selected crystal, oyster shells & sacred mauli",
-    price: 989,
-    original_price: 1199,
-    badge: "Prosperity",
-    description: "Handcrafted with natural Gomti Chakra and energized yellow Kaudi, dedicated to invoking Goddess Lakshmi's perpetual blessings for brothers.",
-    images: ["https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800"],
-    features: ["Natural Gomti Chakra", "Yellow Kaudi Shell", "Energized by Vedic Pandits"]
-  },
-  {
-    id: "prod_3",
-    handle: "vedic-abundance-blessing-rakhi",
-    sku: "HOFK0009275281",
-    title: "Vedic Abundance & Blessing Rakhi",
-    subtitle: "A keepsake designed to be treasured long after the festive hour",
-    price: 999,
-    original_price: 1199,
-    badge: "Abundance",
-    description: "Created using pure silver-plated motifs and blessed Rudraksha beads for health, vitality, and shielding negative energies.",
-    images: ["https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800"],
-    features: ["5 Mukhi Rudraksha Bead", "Silver-Plated Centerpiece", "100% Organic Silk Threads"]
-  },
-  {
-    id: "prod_4",
-    handle: "navagraha-om-protection-kaudi-rakhi",
-    sku: "HOFK0009275282",
-    title: "Navagraha Om Protection Kaudi Rakhi",
-    subtitle: "Sacred kaudi, Om motif & Navagraha-inspired planetary harmony",
-    price: 1099,
-    original_price: 1299,
-    badge: "Sacred Shield",
-    description: "Harmonizes the 9 astrological planets with 9 colored sacred silk threads and a central energized brass Om talisman.",
-    images: ["https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&q=80&w=800"],
-    features: ["9 Astrological Silk Strands", "Pure Brass Om Talisman", "Planetary Shielding Blessing"]
-  }
-];
-
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
+  const [products, setProducts] = useState<Product[]>([]);
   const [addedId, setAddedId] = useState<string | null>(null);
   const { addItem } = useCart();
 
@@ -91,11 +36,11 @@ export default function Home() {
     fetch("https://api.younoya.com/api/v1/products")
       .then((res) => res.json())
       .then((data) => {
-        if (data?.success && Array.isArray(data.data) && data.data.length > 0) {
+        if (data?.success && Array.isArray(data.data)) {
           setProducts(data.data);
         }
       })
-      .catch((e) => console.log("Using fallback products:", e));
+      .catch((e) => console.error("Error fetching live products from database API:", e));
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
@@ -129,7 +74,7 @@ export default function Home() {
     setTimeout(() => setAddedId(null), 2000);
   };
 
-  const spotlightProd = products[0] || FALLBACK_PRODUCTS[0];
+  const spotlightProd = products[0];
 
   return (
     <div className="relative w-full min-h-screen bg-[#FDFCF8] text-[#1C1C1C] pt-32 pb-24">
@@ -199,83 +144,93 @@ export default function Home() {
         </div>
       </section>
 
-
-
       {/* ========================================================
           PRODUCT SPOTLIGHT (Split 50/50 Layout)
          ======================================================== */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-16">
-        <div className="rounded-[40px] bg-white border border-[#E2E8E4] p-8 sm:p-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center shadow-sm">
-          {/* Left: Square Product Container (#E8E6E1 bg, 40px rounded) */}
-          <div className="lg:col-span-6 relative aspect-square rounded-[32px] bg-[#E8E6E1] border border-[#E2E8E4] overflow-hidden flex items-center justify-center p-8">
-            <img
-              src="https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"
-              alt={spotlightProd.title}
-              className="w-full h-full object-cover rounded-2xl shadow-xl hover:scale-105 transition-transform duration-500"
-            />
-            <span className="absolute top-6 left-6 bg-[#DC2626] text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-md pulse-badge">
-              BESTSELLER
-            </span>
+      {spotlightProd && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-8 py-16">
+          <div className="rounded-[40px] bg-white border border-[#E2E8E4] p-8 sm:p-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center shadow-sm">
+            {/* Left: Square Product Container (#E8E6E1 bg, 40px rounded) */}
+            <div className="lg:col-span-6 relative aspect-square rounded-[32px] bg-[#E8E6E1] border border-[#E2E8E4] overflow-hidden flex items-center justify-center p-8">
+              <img
+                src={
+                  Array.isArray(spotlightProd.images)
+                    ? spotlightProd.images[0]
+                    : typeof spotlightProd.images === "string" && spotlightProd.images
+                    ? JSON.parse(spotlightProd.images)[0] || "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"
+                    : "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"
+                }
+                alt={spotlightProd.title}
+                className="w-full h-full object-cover rounded-2xl shadow-xl hover:scale-105 transition-transform duration-500"
+              />
+              <span className="absolute top-6 left-6 bg-[#DC2626] text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-md pulse-badge">
+                {spotlightProd.badge || "BESTSELLER"}
+              </span>
+            </div>
+
+            {/* Right: Detailed Copy & Differentiators */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="space-y-2">
+                <div className="text-xs font-mono tracking-widest uppercase text-[#D4AF37] font-bold">
+                  FEATURED SPOTLIGHT
+                </div>
+                <h2 className="text-2xl sm:text-4xl font-extrabold font-heading text-[#1C1C1C] leading-tight">
+                  {spotlightProd.title}
+                </h2>
+                <div className="flex items-baseline gap-3 pt-1">
+                  <span className="text-3xl font-extrabold font-mono text-[#1C1C1C]">₹{spotlightProd.price}</span>
+                  {spotlightProd.original_price > spotlightProd.price && (
+                    <>
+                      <span className="text-sm text-stone-400 line-through">₹{spotlightProd.original_price}</span>
+                      <span className="text-xs font-bold text-emerald-700 bg-[#E2E8E4] px-2.5 py-0.5 rounded-full">
+                        Save ₹{spotlightProd.original_price - spotlightProd.price}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <p className="text-base text-stone-600 leading-relaxed font-normal">
+                {spotlightProd.description || "An authentic consecrated Vedic Rakhi set energized with 108 Gayatri mantras."}
+              </p>
+
+              {/* Differentiators Checkmark List */}
+              <div className="space-y-3 pt-2 border-t border-[#E2E8E4]">
+                <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-[#1C1C1C]">
+                  <div className="w-5 h-5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center flex-shrink-0">
+                    <Check size={13} className="stroke-[3]" />
+                  </div>
+                  <span>Prana Pratishtha Consecration by Vedic Pandits</span>
+                </div>
+
+                <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-[#1C1C1C]">
+                  <div className="w-5 h-5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center flex-shrink-0">
+                    <Check size={13} className="stroke-[3]" />
+                  </div>
+                  <span>Natural Astrological Elements (Gomti Chakra, Kaudi, Rudraksha)</span>
+                </div>
+
+                <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-[#1C1C1C]">
+                  <div className="w-5 h-5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center flex-shrink-0">
+                    <Check size={13} className="stroke-[3]" />
+                  </div>
+                  <span>Complete Keepsake Box with Almonds, Cashews & Roli-Chawal</span>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  href={`/products/${spotlightProd.handle}`}
+                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider inline-flex items-center justify-center gap-2 hover:bg-[#333333] transition-all transform hover:scale-105 shadow-md"
+                >
+                  <span>Claim Bestseller Rakhi</span>
+                  <ArrowRight size={16} />
+                </Link>
+              </div>
+            </div>
           </div>
-
-          {/* Right: Detailed Copy & Differentiators */}
-          <div className="lg:col-span-6 space-y-6">
-            <div className="space-y-2">
-              <div className="text-xs font-mono tracking-widest uppercase text-[#D4AF37] font-bold">
-                FEATURED SPOTLIGHT
-              </div>
-              <h2 className="text-2xl sm:text-4xl font-extrabold font-heading text-[#1C1C1C] leading-tight">
-                {spotlightProd.title}
-              </h2>
-              <div className="flex items-baseline gap-3 pt-1">
-                <span className="text-3xl font-extrabold font-mono text-[#1C1C1C]">₹{spotlightProd.price}</span>
-                <span className="text-sm text-stone-400 line-through">₹{spotlightProd.original_price}</span>
-                <span className="text-xs font-bold text-emerald-700 bg-[#E2E8E4] px-2.5 py-0.5 rounded-full">
-                  Save ₹{spotlightProd.original_price - spotlightProd.price}
-                </span>
-              </div>
-            </div>
-
-            <p className="text-base text-stone-600 leading-relaxed font-normal">
-              An authentic consecrated Vedic Rakhi set energized with 108 Gayatri mantras. Crafted with pure natural Gomti Chakras, organic silk strands, and packaged with premium California almonds & sacred Akshat.
-            </p>
-
-            {/* Differentiators Checkmark List */}
-            <div className="space-y-3 pt-2 border-t border-[#E2E8E4]">
-              <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-[#1C1C1C]">
-                <div className="w-5 h-5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center flex-shrink-0">
-                  <Check size={13} className="stroke-[3]" />
-                </div>
-                <span>Prana Pratishtha Consecration by Vedic Pandits</span>
-              </div>
-
-              <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-[#1C1C1C]">
-                <div className="w-5 h-5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center flex-shrink-0">
-                  <Check size={13} className="stroke-[3]" />
-                </div>
-                <span>Natural Astrological Elements (Gomti Chakra, Kaudi, Rudraksha)</span>
-              </div>
-
-              <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-[#1C1C1C]">
-                <div className="w-5 h-5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center flex-shrink-0">
-                  <Check size={13} className="stroke-[3]" />
-                </div>
-                <span>Complete Keepsake Box with Almonds, Cashews & Roli-Chawal</span>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <Link
-                href={`/products/${spotlightProd.handle}`}
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider inline-flex items-center justify-center gap-2 hover:bg-[#333333] transition-all transform hover:scale-105 shadow-md"
-              >
-                <span>Claim Bestseller Rakhi</span>
-                <ArrowRight size={16} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ========================================================
           PRODUCTS CATALOG GRID (32px Clinical Cards)
