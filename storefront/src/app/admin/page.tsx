@@ -1650,61 +1650,106 @@ export default function AdminPage() {
       )}
 
       {/* ========================================================
-          MODAL 3: REUSABLE IMAGE STORE SELECTOR MODAL (MULTI-SELECT SUPPORT)
+          MODAL 3: REUSABLE IMAGE STORE SELECTOR MODAL (CARD TILES WITH FILENAME & DATE)
          ======================================================== */}
       {showMediaStoreModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="w-full max-w-4xl bg-white rounded-3xl p-6 space-y-4 shadow-2xl border border-[#E2E8E4] max-h-[85vh] flex flex-col">
-            <div className="flex items-center justify-between border-b pb-3">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="w-full max-w-5xl bg-white rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl border border-[#E2E8E4] max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between border-b pb-4">
               <div>
-                <h3 className="font-extrabold text-[#1C1C1C] text-base font-heading">Select Photos from Image Store</h3>
-                <p className="text-xs text-stone-500">Click photos to select multiple images, then click 'Add to Product'.</p>
+                <h3 className="font-extrabold text-[#1C1C1C] text-lg font-heading">Select Photos from Image Store</h3>
+                <p className="text-xs text-stone-500 mt-0.5">Click photo tiles to select multiple images. Sorted chronologically with recently uploaded at the bottom.</p>
               </div>
               <button 
                 onClick={() => {
                   setSelectedMediaInModal([]);
                   setShowMediaStoreModal(false);
                 }}
-                className="p-1 rounded-full hover:bg-stone-100 text-stone-400 hover:text-black"
+                className="p-2 rounded-full hover:bg-stone-100 text-stone-400 hover:text-black transition-colors"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
-            <div className="overflow-y-auto flex-1 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 p-1">
-              {mediaAssets.map((asset) => {
-                const isSelected = selectedMediaInModal.includes(asset.url);
-                return (
-                  <div
-                    key={asset.id}
-                    onClick={() => {
-                      if (isSelected) {
-                        setSelectedMediaInModal(selectedMediaInModal.filter((u) => u !== asset.url));
-                      } else {
-                        setSelectedMediaInModal([...selectedMediaInModal, asset.url]);
-                      }
-                    }}
-                    className={`relative aspect-square rounded-2xl overflow-hidden bg-[#E8E6E1] border-2 cursor-pointer transition-all ${
-                      isSelected ? "border-[#1C1C1C] ring-4 ring-[#1C1C1C]/20 scale-95" : "border-[#E2E8E4] hover:border-stone-400"
-                    }`}
-                  >
-                    <img src={asset.url} alt={asset.filename} className="w-full h-full object-cover" />
-                    
-                    {/* Selection Indicator Checkmark Badge */}
-                    <div className={`absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center transition-all ${
-                      isSelected ? "bg-[#1C1C1C] text-[#D4AF37] shadow-md" : "bg-black/30 text-white/70"
-                    }`}>
-                      <Check size={13} className="stroke-[3]" />
+            {/* Scrollable Clean Tile Grid (Sorted with recently uploaded last: date_asc) */}
+            <div className="overflow-y-auto flex-1 p-2">
+              {(() => {
+                const modalSortedAssets = [...mediaAssets].sort((a, b) => {
+                  return new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
+                });
+
+                if (modalSortedAssets.length === 0) {
+                  return (
+                    <div className="p-12 text-center text-stone-400 text-xs">
+                      No photos uploaded in Image Store yet.
                     </div>
+                  );
+                }
+
+                return (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    {modalSortedAssets.map((asset) => {
+                      const isSelected = selectedMediaInModal.includes(asset.url);
+                      const uploadDate = asset.created_at ? new Date(asset.created_at).toLocaleDateString("en-IN", { month: "short", day: "numeric" }) : "Recent";
+                      const sizeKB = asset.file_size ? (asset.file_size / 1024).toFixed(0) + " KB" : "";
+
+                      return (
+                        <div
+                          key={asset.id}
+                          onClick={() => {
+                            if (isSelected) {
+                              setSelectedMediaInModal(selectedMediaInModal.filter((u) => u !== asset.url));
+                            } else {
+                              setSelectedMediaInModal([...selectedMediaInModal, asset.url]);
+                            }
+                          }}
+                          className={`group rounded-2xl border-2 bg-white overflow-hidden shadow-sm flex flex-col justify-between cursor-pointer transition-all duration-200 ${
+                            isSelected 
+                              ? "border-[#1C1C1C] ring-4 ring-[#1C1C1C]/15 shadow-md transform -translate-y-1" 
+                              : "border-[#E2E8E4] hover:border-stone-400 hover:shadow-md"
+                          }`}
+                        >
+                          {/* Top: Square Thumbnail with Checkmark Overlay */}
+                          <div className="relative aspect-square bg-[#E8E6E1] overflow-hidden">
+                            <img 
+                              src={asset.url} 
+                              alt={asset.filename} 
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                            />
+                            
+                            {/* Checkmark Selection Pill */}
+                            <div className={`absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+                              isSelected ? "bg-[#1C1C1C] text-[#D4AF37] shadow-lg scale-110" : "bg-black/35 text-white/80 group-hover:bg-black/50"
+                            }`}>
+                              <Check size={13} className="stroke-[3]" />
+                            </div>
+                          </div>
+
+                          {/* Bottom: Clear Filename & Upload Date Card Footer */}
+                          <div className={`p-2.5 space-y-1 border-t transition-colors ${isSelected ? "bg-[#F5F5F0] border-[#1C1C1C]/30" : "bg-white border-[#E2E8E4]"}`}>
+                            <div className="text-[11px] font-bold text-[#1C1C1C] truncate" title={asset.filename}>
+                              {asset.filename}
+                            </div>
+                            <div className="flex items-center justify-between text-[10px] text-stone-500 font-mono">
+                              <span>{uploadDate}</span>
+                              {sizeKB && <span>{sizeKB}</span>}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
-              })}
+              })()}
             </div>
 
             {/* Bottom Action Footer for Multi-Select */}
-            <div className="border-t pt-3 flex items-center justify-between">
-              <div className="text-xs font-bold text-stone-600">
-                {selectedMediaInModal.length} photo(s) selected
+            <div className="border-t pt-4 flex items-center justify-between">
+              <div className="text-xs font-bold text-stone-700">
+                <span className="inline-block px-2.5 py-1 rounded-full bg-[#E2E8E4] text-[#1C1C1C] mr-2">
+                  {selectedMediaInModal.length}
+                </span>
+                photo(s) selected
               </div>
 
               <div className="flex items-center gap-3">
@@ -1714,7 +1759,7 @@ export default function AdminPage() {
                     setSelectedMediaInModal([]);
                     setShowMediaStoreModal(false);
                   }}
-                  className="px-5 py-2.5 rounded-full border border-[#E2E8E4] text-xs font-bold text-stone-600 hover:text-black"
+                  className="px-5 py-2.5 rounded-full border border-[#E2E8E4] text-xs font-bold text-stone-600 hover:text-black transition-colors"
                 >
                   Cancel
                 </button>
@@ -1740,9 +1785,10 @@ export default function AdminPage() {
                       setStatusMsg(`✓ Added ${selectedMediaInModal.length} photo(s) to product gallery!`);
                     }
                   }}
-                  className="px-6 py-2.5 rounded-full bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider disabled:opacity-40 hover:bg-[#333333] transition-all shadow-md"
+                  className="px-7 py-2.5 rounded-full bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider disabled:opacity-30 hover:bg-[#333333] transition-all shadow-md flex items-center gap-2"
                 >
-                  Add {selectedMediaInModal.length > 0 ? `(${selectedMediaInModal.length}) ` : ""}to Product
+                  <Plus size={14} />
+                  <span>Add {selectedMediaInModal.length > 0 ? `(${selectedMediaInModal.length}) ` : ""}to Product</span>
                 </button>
               </div>
             </div>
