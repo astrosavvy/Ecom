@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
   Plus, Edit, Trash2, Image as ImageIcon, Save, ArrowLeft, 
-  CheckCircle, AlertCircle, Sparkles, RefreshCw, Eye, ExternalLink, Globe
+  CheckCircle, AlertCircle, Sparkles, RefreshCw, Eye, ExternalLink, Globe, Lock, LogOut
 } from "lucide-react";
 
 interface Product {
@@ -27,20 +27,65 @@ interface Product {
 const BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "https://api.younoya.com";
 
 export default function AdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [saving, setSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
 
+  // Check existing session token on mount
+  useEffect(() => {
+    const token = localStorage.getItem("yn_admin_token");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginLoading(true);
+    setLoginError("");
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+      const json = await res.json();
+
+      if (json.success && json.token) {
+        localStorage.setItem("yn_admin_token", json.token);
+        setIsAuthenticated(true);
+      } else {
+        setLoginError(json.error || "Invalid username or password");
+      }
+    } catch (err: any) {
+      setLoginError("Could not connect to backend server: " + err.message);
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("yn_admin_token");
+    setIsAuthenticated(false);
+  };
+
   const fetchProducts = async () => {
     setLoading(true);
     try {
       const res = await fetch(`${BACKEND_URL}/api/v1/admin/products`);
       const json = await res.json();
-      if (json.success) {
+      if (json.success && Array.isArray(json.data)) {
         setProducts(json.data);
       }
     } catch (e) {
@@ -51,8 +96,10 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    if (isAuthenticated) {
+      fetchProducts();
+    }
+  }, [isAuthenticated]);
 
   const handleEdit = (prod: Product) => {
     setSelectedProduct({ ...prod });
@@ -129,6 +176,71 @@ export default function AdminPage() {
     }
   };
 
+  // 1. Password Protected Login Screen
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0c] text-white flex items-center justify-center px-4 font-inter">
+        <div className="w-full max-w-md p-8 rounded-2xl liquid-glass border border-white/10 shadow-2xl space-y-6">
+          <div className="text-center space-y-2">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-black flex items-center justify-center font-bold text-xl mx-auto shadow-lg">
+              <Lock size={24} />
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight">YOUNOYA Admin</h1>
+            <p className="text-xs text-white/60">Enter credentials to manage products and store settings.</p>
+          </div>
+
+          {loginError && (
+            <div className="p-3 bg-red-950/50 border border-red-500/30 text-red-300 text-xs rounded-xl flex items-center gap-2">
+              <AlertCircle size={15} />
+              <span>{loginError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-white/70 mb-1.5">Username</label>
+              <input
+                type="text"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="admin"
+                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-white/70 mb-1.5">Password</label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••••"
+                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loginLoading}
+              className="w-full py-3 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-bold text-xs uppercase tracking-wider transition-all shadow-lg mt-2"
+            >
+              {loginLoading ? "Authenticating..." : "Sign In to Admin"}
+            </button>
+          </form>
+
+          <div className="text-center pt-2">
+            <Link href="/" className="text-xs text-white/40 hover:text-white transition-colors">
+              ← Return to Storefront
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 2. Authenticated Admin Dashboard View
   return (
     <div className="min-h-screen bg-[#0d0f12] text-stone-200 font-inter">
       {/* Top Admin Header */}
@@ -160,6 +272,14 @@ export default function AdminPage() {
           >
             <RefreshCw size={15} className={loading ? "animate-spin" : ""} />
           </button>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-red-500/20 hover:text-red-300 rounded-lg text-stone-400 transition-colors"
+            title="Sign out"
+          >
+            <LogOut size={13} />
+            <span>Sign Out</span>
+          </button>
         </div>
       </header>
 
@@ -178,7 +298,7 @@ export default function AdminPage() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-white tracking-tight">Products</h1>
+                <h1 className="text-2xl font-bold text-white tracking-tight">Products ({products.length})</h1>
                 <p className="text-xs text-stone-400 mt-1">Manage catalog, inventory, pricing, and SEO meta tags.</p>
               </div>
 
@@ -205,48 +325,56 @@ export default function AdminPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
-                  {products.map((prod) => (
-                    <tr key={prod.id} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="py-4 px-6">
-                        <div className="font-semibold text-white text-sm">{prod.title}</div>
-                        <div className="text-xs text-amber-400/80 line-clamp-1 mt-0.5">{prod.subtitle}</div>
-                      </td>
-                      <td className="py-4 px-6 text-stone-400 font-mono text-[11px]">
-                        <div>{prod.sku || "N/A"}</div>
-                        <div className="text-[10px] text-stone-500">{prod.handle}</div>
-                      </td>
-                      <td className="py-4 px-6 font-semibold text-white">
-                        ₹{prod.price} <span className="text-stone-500 text-[10px] line-through">₹{prod.original_price}</span>
-                      </td>
-                      <td className="py-4 px-6">
-                        <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-emerald-950/60 text-emerald-400 border border-emerald-500/20">
-                          {prod.inventory_count || 100} in stock
-                        </span>
-                      </td>
-                      <td className="py-4 px-6">
-                        <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-amber-500/20 text-amber-300 border border-amber-500/20">
-                          {prod.badge || "Standard"}
-                        </span>
-                      </td>
-                      <td className="py-4 px-6 text-right space-x-2">
-                        <button
-                          onClick={() => handleEdit(prod)}
-                          className="p-1.5 hover:bg-white/10 rounded-lg text-stone-300 hover:text-white transition-colors inline-flex items-center gap-1 text-xs"
-                          title="Edit product"
-                        >
-                          <Edit size={14} />
-                          <span>Edit</span>
-                        </button>
-                        <button
-                          onClick={() => handleDelete(prod.id)}
-                          className="p-1.5 hover:bg-red-500/20 rounded-lg text-red-400 hover:text-red-300 transition-colors inline-flex items-center gap-1 text-xs"
-                          title="Delete product"
-                        >
-                          <Trash2 size={14} />
-                        </button>
+                  {products.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-12 text-center text-stone-400">
+                        {loading ? "Loading products from MariaDB..." : "No products found. Click 'Add Product' above to create one."}
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    products.map((prod) => (
+                      <tr key={prod.id} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="py-4 px-6">
+                          <div className="font-semibold text-white text-sm">{prod.title}</div>
+                          <div className="text-xs text-amber-400/80 line-clamp-1 mt-0.5">{prod.subtitle}</div>
+                        </td>
+                        <td className="py-4 px-6 text-stone-400 font-mono text-[11px]">
+                          <div>{prod.sku || "N/A"}</div>
+                          <div className="text-[10px] text-stone-500">{prod.handle}</div>
+                        </td>
+                        <td className="py-4 px-6 font-semibold text-white">
+                          ₹{prod.price} <span className="text-stone-500 text-[10px] line-through">₹{prod.original_price}</span>
+                        </td>
+                        <td className="py-4 px-6">
+                          <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-emerald-950/60 text-emerald-400 border border-emerald-500/20">
+                            {prod.inventory_count || 100} in stock
+                          </span>
+                        </td>
+                        <td className="py-4 px-6">
+                          <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-amber-500/20 text-amber-300 border border-amber-500/20">
+                            {prod.badge || "Standard"}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6 text-right space-x-2">
+                          <button
+                            onClick={() => handleEdit(prod)}
+                            className="p-1.5 hover:bg-white/10 rounded-lg text-stone-300 hover:text-white transition-colors inline-flex items-center gap-1 text-xs"
+                            title="Edit product"
+                          >
+                            <Edit size={14} />
+                            <span>Edit</span>
+                          </button>
+                          <button
+                            onClick={() => handleDelete(prod.id)}
+                            className="p-1.5 hover:bg-red-500/20 rounded-lg text-red-400 hover:text-red-300 transition-colors inline-flex items-center gap-1 text-xs"
+                            title="Delete product"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

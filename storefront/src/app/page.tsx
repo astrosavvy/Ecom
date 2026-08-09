@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import PriceDisplay from "@/components/ui/PriceDisplay";
 import { Sparkles, ShieldCheck, Truck, Clock } from "lucide-react";
@@ -8,50 +8,69 @@ import { Sparkles, ShieldCheck, Truck, Clock } from "lucide-react";
 const BG_VIDEO =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260511_230229_7c9bc431-46cf-489a-948d-e8144d8eb5d4.mp4";
 
-const RAKHI_PRODUCTS = [
+const FALLBACK_PRODUCTS = [
   {
+    id: "prod_001",
     handle: "vedic-prosperity-rakhi",
     title: "Vedic Prosperity Rakhi Set with Dry Fruits & Consecrated Thread",
     subtitle: "Sacred consecration for sibling grace and planetary harmony",
     price: 1099,
-    originalPrice: 1299,
+    original_price: 1299,
     badge: "Signature Edition",
     description:
       "Handcrafted with authentic Vedic symbolism, sacred crystals, and dry fruit accompaniments to honour lifelong bonds.",
   },
   {
+    id: "prod_002",
     handle: "vedic-prosperity-wealth-attraction-rakhi",
     title: "Vedic Prosperity & Wealth Attraction Rakhi",
     subtitle: "Astrologically selected crystal, oyster shells & sacred mauli",
     price: 999,
-    originalPrice: 1199,
+    original_price: 1199,
     badge: "Prosperity",
     description:
       "Infused with astrological crystal resonance and sacred oceanic shells for abundance, vitality, and protective light.",
   },
   {
+    id: "prod_003",
     handle: "vedic-abundance-blessing-rakhi",
     title: "Vedic Abundance & Blessing Rakhi",
     subtitle: "A keepsake designed to be treasured long after the festive hour",
     price: 999,
-    originalPrice: 1199,
+    original_price: 1199,
     badge: "Abundance",
     description:
       "Every knot woven with intention, invoking divine grace and cherished memories for brother and sister.",
   },
   {
+    id: "prod_004",
     handle: "navagraha-om-protection-kaudi-rakhi",
     title: "Navagraha Om Protection Kaudi Rakhi",
     subtitle: "Sacred kaudis, Om motif & Navagraha-inspired planetary harmony",
     price: 1099,
-    originalPrice: 1299,
+    original_price: 1299,
     badge: "Sacred Shield",
     description:
       "Featuring nine-planet resonance, pure mauli weave, and Goddess Lakshmi's blessing symbols for supreme auspiciousness.",
   },
 ];
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "https://api.younoya.com";
+
 export default function Home() {
+  const [products, setProducts] = useState(FALLBACK_PRODUCTS);
+
+  useEffect(() => {
+    fetch(`${BACKEND_URL}/api/v1/products`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+          setProducts(json.data);
+        }
+      })
+      .catch((err) => console.error("Using cached fallback products:", err));
+  }, []);
+
   return (
     <div className="w-full flex flex-col items-center">
       {/* ========================================================
@@ -106,7 +125,7 @@ export default function Home() {
       </section>
 
       {/* ========================================================
-          CONSECRATED VEDIC COLLECTION (Structured Product Showcase)
+          CONSECRATED VEDIC COLLECTION (Connected to MariaDB)
          ======================================================== */}
       <section
         id="sacred-collection"
@@ -128,9 +147,9 @@ export default function Home() {
 
         {/* Structured 4-Column Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {RAKHI_PRODUCTS.map((prod) => (
+          {products.map((prod) => (
             <div
-              key={prod.handle}
+              key={prod.id || prod.handle}
               className="liquid-glass rounded-2xl p-6 flex flex-col justify-between hover:bg-white/[0.03] transition-all group border border-white/10"
             >
               <div className="space-y-4">
@@ -165,7 +184,7 @@ export default function Home() {
                 {/* Price Display */}
                 <div className="flex items-baseline gap-2 pt-1">
                   <PriceDisplay amount={prod.price} className="text-xl font-bold text-amber-400" />
-                  <span className="text-xs text-white/40 line-through">₹{prod.originalPrice}</span>
+                  <span className="text-xs text-white/40 line-through">₹{prod.original_price}</span>
                   <span className="text-[10px] text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/20 font-medium">
                     Free Express
                   </span>
