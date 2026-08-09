@@ -30,6 +30,19 @@ function getDB() {
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+// Helper function to read input payload safely
+function getRequestPayload() {
+    $raw = file_get_contents('php://input');
+    if (!empty($raw)) {
+        $json = json_decode($raw, true);
+        if (is_array($json)) return $json;
+    }
+    if (!empty($_POST)) {
+        return $_POST;
+    }
+    return [];
+}
+
 // 1. Health Endpoint
 if ($uri === '/' || $uri === '/health') {
     $db = getDB();
@@ -80,16 +93,11 @@ if ($uri === '/api/v1/products' || $uri === '/products') {
 
 // 3. Admin Authentication Endpoint
 if ($uri === '/api/v1/admin/login') {
-    $raw = file_get_contents('php://input');
-    $input = json_decode($raw, true);
-    if (!is_array($input)) {
-        $input = $_POST;
-    }
-
+    $input = getRequestPayload();
     $username = trim($input['username'] ?? '');
     $password = trim($input['password'] ?? '');
 
-    // Normalize and verify credentials
+    // Allow admin credentials
     if (strtolower($username) === 'admin' && ($password === 'YounoyaAdmin2026!' || $password === 'admin123' || $password === 'admin')) {
         $token = 'yn_sec_' . bin2hex(random_bytes(24));
         echo json_encode([
@@ -103,7 +111,7 @@ if ($uri === '/api/v1/admin/login') {
     http_response_code(401);
     echo json_encode([
         'success' => false, 
-        'error' => 'Invalid username or password. Received: ' . htmlspecialchars($username)
+        'error' => 'Invalid username or password'
     ]);
     exit;
 }
@@ -141,7 +149,7 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
 
     // Create New Product
     if ($method === 'POST' && $uri === '/api/v1/admin/products') {
-        $input = json_decode(file_get_contents('php://input'), true) ?? [];
+        $input = getRequestPayload();
         $id = $input['id'] ?? ('prod_' . time());
         $handle = $input['handle'] ?? preg_replace('/[^a-z0-9]+/', '-', strtolower($input['title'] ?? 'product-' . time()));
         
@@ -173,7 +181,7 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
     // Update Product
     if ($method === 'PUT' && preg_match('#^/api/v1/admin/products/([^/]+)$#', $uri, $matches)) {
         $id = $matches[1];
-        $input = json_decode(file_get_contents('php://input'), true) ?? [];
+        $input = getRequestPayload();
 
         $stmt = $db->prepare("UPDATE products SET 
             title = ?, subtitle = ?, price = ?, original_price = ?, badge = ?, 
@@ -234,7 +242,7 @@ if ($uri === '/api/v1/admin/upload' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // 6. Razorpay Payment Intent API
 if ($uri === '/api/v1/checkout/payment-intent') {
-    $input = json_decode(file_get_contents('php://input'), true) ?? [];
+    $input = getRequestPayload();
     $amount = (int) (($input['amount'] ?? 1099) * 100);
     $orderId = 'ord_' . time() . '_' . random_int(1000, 9999);
 
