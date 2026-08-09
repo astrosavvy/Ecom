@@ -16,7 +16,7 @@ export function Footer() {
               <img
                 src="/younoya_logo.png"
                 alt="YOUNOYA"
-                className="h-16 sm:h-20 w-auto object-contain filter drop-shadow-[0_0_20px_rgba(212,175,55,0.8)] brightness-115 group-hover:scale-105 transition-all"
+                className="h-14 sm:h-18 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </Link>
             <p className="text-xs sm:text-sm text-stone-400 leading-relaxed max-w-md font-normal">

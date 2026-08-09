@@ -36,41 +36,47 @@ export function Header() {
         </span>
       </div>
 
-      {/* Main Navigation Bar (80px, Sticky Backdrop Blur 12px) */}
-      <div className="h-16 sm:h-20 w-full bg-[#FDFCF8]/95 backdrop-blur-[12px] border-b border-[#F3F4F6] px-3 sm:px-8 flex items-center justify-between transition-all">
-        <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-          {/* Logo on Left - Responsive Scale */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0 group py-0 -my-2">
-            <img
-              src="/younoya_logo.png"
-              alt="YOUNOYA"
-              className="h-14 sm:h-22 w-auto object-contain filter drop-shadow-[0_0_20px_rgba(212,175,55,0.8)] brightness-115 group-hover:scale-105 transition-all"
-            />
+      {/* Main Navigation Bar (Fluid Glassmorphic Header with Organic Bubbles) */}
+      <div className="relative h-18 sm:h-22 w-full bg-[#FDFCF8]/90 backdrop-blur-xl border-b border-[#E2E8E4]/60 px-4 sm:px-8 flex items-center justify-between transition-all overflow-hidden">
+        {/* Ambient Fluid Background Bubbles */}
+        <div className="absolute -top-10 left-1/4 w-72 h-32 bg-gradient-to-r from-[#D4AF37]/10 via-[#E2E8E4]/30 to-transparent rounded-full blur-2xl pointer-events-none fluid-bubble-1" />
+        <div className="absolute -top-12 right-1/3 w-64 h-36 bg-gradient-to-l from-emerald-100/30 via-[#D4AF37]/10 to-transparent rounded-full blur-2xl pointer-events-none fluid-bubble-2" />
+
+        <div className="max-w-7xl mx-auto w-full flex items-center justify-between relative z-10">
+          {/* Logo on Left - High-definition crisp gold presentation */}
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0 group py-1">
+            <div className="relative flex items-center">
+              <img
+                src="/younoya_logo.png"
+                alt="YOUNOYA"
+                className="h-12 sm:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
           </Link>
 
-          {/* Center-Aligned Nav Links (14px Medium Weight) */}
-          <nav className="hidden md:flex items-center gap-7">
+          {/* Center-Aligned Nav Links (Fluid Organic Glass Pill) */}
+          <nav className="hidden md:flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/80 border border-[#E2E8E4] shadow-sm backdrop-blur-md">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm font-medium text-[#1C1C1C] hover:text-[#D4AF37] transition-colors"
+                className="text-xs font-semibold px-3.5 py-1.5 rounded-full text-[#1C1C1C] hover:text-[#1C1C1C] hover:bg-[#E2E8E4]/60 transition-all"
               >
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          {/* Right Action Cluster */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Right Action Cluster (Fluid Cart Pill + Shop Now) */}
+          <div className="hidden md:flex items-center gap-3">
             <Link
               href="/cart"
-              className="relative p-2.5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] hover:bg-[#D4DFD7] transition-colors flex items-center justify-center"
+              className="relative p-2.5 rounded-full bg-white border border-[#E2E8E4] text-[#1C1C1C] hover:bg-[#E2E8E4] transition-all flex items-center justify-center shadow-sm hover:scale-105"
               aria-label="View Cart"
             >
               <ShoppingBag size={18} />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#1C1C1C] text-white text-[10px] font-bold flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#1C1C1C] text-[#D4AF37] text-[10px] font-extrabold flex items-center justify-center shadow-md">
                   {totalItems}
                 </span>
               )}
@@ -78,9 +84,9 @@ export function Header() {
 
             <Link
               href="/products"
-              className="px-6 py-3 rounded-full bg-[#1C1C1C] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#333333] transition-all transform hover:scale-105 active:scale-95 shadow-md"
+              className="px-6 py-2.5 rounded-full bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider hover:bg-[#333333] transition-all transform hover:scale-105 active:scale-95 shadow-md flex items-center gap-2"
             >
-              Shop Now
+              <span>Shop Now</span>
             </Link>
           </div>
 
@@ -88,12 +94,12 @@ export function Header() {
           <div className="flex md:hidden items-center gap-2">
             <Link
               href="/cart"
-              className="relative p-2 rounded-full bg-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center"
+              className="relative p-2 rounded-full bg-white border border-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center"
               aria-label="View Cart"
             >
               <ShoppingBag size={18} />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#1C1C1C] text-white text-[9px] font-bold flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#1C1C1C] text-[#D4AF37] text-[9px] font-bold flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
