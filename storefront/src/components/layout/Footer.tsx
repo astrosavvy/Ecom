@@ -2,83 +2,121 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ShieldCheck, Truck, Lock, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ShieldCheck, Mail, Phone, Lock, Heart, Sparkles } from "lucide-react";
 
 export function Footer() {
-  const pathname = usePathname();
-
-  if (pathname?.startsWith("/admin")) {
-    return null;
-  }
-
   return (
-    <footer className="w-full bg-[#07080d] text-[#8b93a8] border-t border-white/10 relative z-10">
-      <div className="max-w-7xl mx-auto px-6 sm:px-12 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-10 text-left">
-        {/* Brand Column with Substantially Enlarged Gold Logo */}
-        <div className="md:col-span-5 space-y-5">
-          <Link href="/" className="inline-block">
-            <img
-              src="/younoya_logo.png"
-              alt="YOUNOYA"
-              className="h-16 sm:h-20 w-auto filter drop-shadow-[0_0_20px_rgba(255,190,60,0.6)]"
-            />
-          </Link>
-          <p className="text-xs sm:text-sm text-[#8b93a8] leading-relaxed max-w-sm">
-            Consecrated Vedic Rakhis, authentic astrological gemstones, and sacred puja keepsakes crafted with devotion and delivered across India with zero-password checkout.
-          </p>
-          <div className="text-[11px] font-mono text-amber-400/90 uppercase tracking-widest">
-            Vedic Consecration & Spiritual Kinship
+    <footer className="w-full bg-[#1C1C1C] text-white pt-16 pb-12 border-t border-white/10 relative z-10 font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
+        {/* Top Grid (4 Columns) */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 border-b border-white/10 pb-12">
+          {/* Column 1: Brand & Philosophy (5 cols) */}
+          <div className="md:col-span-5 space-y-5">
+            <Link href="/" className="inline-block group">
+              <img
+                src="/younoya_logo.png"
+                alt="YOUNOYA"
+                className="h-16 sm:h-20 w-auto object-contain filter drop-shadow-[0_0_20px_rgba(212,175,55,0.8)] brightness-115 group-hover:scale-105 transition-all"
+              />
+            </Link>
+            <p className="text-xs sm:text-sm text-stone-400 leading-relaxed max-w-md font-normal">
+              Consecrated Vedic Rakhis, authentic astrological gemstones, and sacred puja keepsakes crafted with devotion and delivered across India with zero-password checkout.
+            </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono tracking-widest text-[#D4AF37] uppercase">
+              <Sparkles size={12} />
+              <span>VEDIC CONSECRATION & SPIRITUAL KINSHIP</span>
+            </div>
           </div>
-        </div>
 
-        {/* Collections */}
-        <div className="md:col-span-2 space-y-3">
-          <h4 className="text-xs font-mono uppercase tracking-widest font-semibold text-white">Collections</h4>
-          <ul className="space-y-2 text-xs text-[#8b93a8] list-none p-0 m-0">
-            <li><Link href="/products" className="hover:text-white transition-colors">Prosperity Rakhis</Link></li>
-            <li><Link href="/products" className="hover:text-white transition-colors">Navagraha Protection</Link></li>
-            <li><Link href="/products" className="hover:text-white transition-colors">Rudraksha Blessings</Link></li>
-            <li><Link href="/about" className="hover:text-white transition-colors">Brand Story</Link></li>
-          </ul>
-        </div>
+          {/* Column 2: Collections (2 cols) */}
+          <div className="md:col-span-2 space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] font-bold">
+              Collections
+            </h4>
+            <ul className="space-y-2.5 text-xs text-stone-300">
+              <li>
+                <Link href="/products" className="hover:text-white transition-colors">
+                  Prosperity Rakhis
+                </Link>
+              </li>
+              <li>
+                <Link href="/products" className="hover:text-white transition-colors">
+                  Navagraha Protection
+                </Link>
+              </li>
+              <li>
+                <Link href="/products" className="hover:text-white transition-colors">
+                  Rudraksha Blessings
+                </Link>
+              </li>
+              <li>
+                <Link href="/products" className="hover:text-white transition-colors">
+                  All Products Catalog
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* Support & Policies */}
-        <div className="md:col-span-2 space-y-3">
-          <h4 className="text-xs font-mono uppercase tracking-widest font-semibold text-white">Policies</h4>
-          <ul className="space-y-2 text-xs text-[#8b93a8] list-none p-0 m-0">
-            <li><Link href="/shipping" className="hover:text-white transition-colors">Express Shipping</Link></li>
-            <li><Link href="/refund" className="hover:text-white transition-colors">Refund & Unboxing Policy</Link></li>
-            <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
-            <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-          </ul>
-        </div>
+          {/* Column 3: Customer Policies (2 cols) */}
+          <div className="md:col-span-2 space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] font-bold">
+              Policies
+            </h4>
+            <ul className="space-y-2.5 text-xs text-stone-300">
+              <li>
+                <Link href="/shipping" className="hover:text-white transition-colors">
+                  Express Air Shipping
+                </Link>
+              </li>
+              <li>
+                <Link href="/refund" className="hover:text-white transition-colors">
+                  Refund & Unboxing Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-white transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="hover:text-white transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* Concierge Contact */}
-        <div className="md:col-span-3 space-y-3">
-          <h4 className="text-xs font-mono uppercase tracking-widest font-semibold text-white">Concierge</h4>
-          <div className="space-y-2 text-xs text-[#8b93a8]">
-            <p>Direct Inquiries & Order Assistance</p>
-            <div className="text-white font-medium text-xs font-mono">support@younoya.com</div>
+          {/* Column 4: Devotee Concierge (3 cols) */}
+          <div className="md:col-span-3 space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] font-bold">
+              Concierge
+            </h4>
+            <p className="text-xs text-stone-400">
+              Direct Inquiries & Order Assistance:
+            </p>
+            <div className="text-xs font-mono text-white font-bold">
+              support@younoya.com
+            </div>
             <div className="pt-2">
               <Link
                 href="/checkout"
-                className="inline-flex items-center gap-1.5 aero-btn-secondary text-amber-300 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider"
+                className="px-5 py-2.5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2 hover:bg-white transition-colors"
               >
                 <span>Express Checkout</span>
-                <ArrowUpRight size={13} />
+                <ArrowRight size={13} />
               </Link>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-white/5 py-6 px-6 sm:px-12 bg-black/50">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
-          <div>© 2026 YOUNOYA. All Rights Reserved.</div>
-          <div className="flex items-center gap-6">
-            <span className="text-stone-400">100% Free Express Air Shipping (India)</span>
-            <span className="text-stone-400">Razorpay 256-Bit Encrypted</span>
+        {/* Bottom Copyright & Trust Line */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-400">
+          <div>
+            © {new Date().getFullYear()} YOUNOYA. All Rights Reserved. Crafted for Devotee Kinship.
+          </div>
+          <div className="flex items-center gap-6 text-[11px] font-mono">
+            <span>100% Free Express Air Shipping (India)</span>
+            <span>Razorpay 256-Bit Encrypted</span>
           </div>
         </div>
       </div>
