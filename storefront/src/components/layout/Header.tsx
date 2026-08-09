@@ -3,121 +3,104 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Do not render storefront header on admin dashboard
+  // Hide on admin routes
   if (pathname?.startsWith("/admin")) {
     return null;
   }
 
   const navLinks = [
-    { label: "Home", href: "/", active: true },
-    { label: "Vedic Rakhis", href: "/search", dropdown: true },
-    { label: "Consecration Rituals", href: "/blog" },
-    { label: "About Brand", href: "/about" },
+    { label: "Product", href: "#features" },
+    { label: "Features", href: "#features" },
+    { label: "Pricing", href: "#features" },
+    { label: "Docs", href: "#features" },
   ];
 
   return (
-    <>
-      <header className="fixed top-0 left-0 right-0 z-50 w-full px-6 sm:px-12 py-5 flex items-center justify-between bg-gradient-to-b from-black/85 via-black/40 to-transparent">
-        {/* Left: YOUNOYA Logo */}
-        <Link href="/" className="flex items-center gap-2.5 text-white hover:opacity-90 transition-opacity">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 text-black flex items-center justify-center font-bold text-sm shadow-md">
-            Y
-          </div>
-          <span className="tracking-wider font-semibold text-lg uppercase text-white">YOUNOYA</span>
+    <header className="fixed top-0 left-0 right-0 z-50 w-full px-6 sm:px-12 py-5 flex items-center justify-between border-b border-white/5 bg-[#07080d]/60 backdrop-blur-xl">
+      <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+        {/* Left: CHROMA. Wordmark */}
+        <Link href="/" className="flex items-baseline text-2xl font-bold tracking-tight">
+          <span className="chrome-text">CHROMA</span>
+          <span className="text-[#ff2e88] font-black text-2xl ml-0.5">.</span>
         </Link>
 
-        {/* Center: Desktop Navigation */}
-        <nav className="hidden md:flex liquid-glass items-center gap-1 rounded-xl px-2 py-1.5 shadow-xl">
+        {/* Center: Nav Links */}
+        <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
               key={link.label}
               href={link.href}
-              className={`flex items-center gap-1 px-3.5 py-1.5 rounded-lg text-xs tracking-wide uppercase transition-colors ${
-                link.active
-                  ? "bg-white/15 text-white font-medium"
-                  : "text-white/70 hover:text-white"
-              }`}
+              className="text-xs text-[#8b93a8] hover:text-[#eef1f8] font-medium transition-colors tracking-wide"
             >
-              <span>{link.label}</span>
-              {link.dropdown && <ChevronDown size={13} className="opacity-70 mt-0.5" />}
+              {link.label}
             </Link>
           ))}
         </nav>
 
-        {/* Right: Cart, Profile & Quick Checkout */}
-        <div className="hidden md:flex items-center gap-4">
+        {/* Right: Sign in + Aero Get Started Pill */}
+        <div className="hidden md:flex items-center gap-6">
           <Link
-            href="/cart"
-            className="liquid-glass text-white text-xs font-medium px-4 py-2 rounded-full hover:bg-white/10 transition-colors flex items-center gap-2"
+            href="/admin"
+            className="text-xs text-[#8b93a8] hover:text-white font-medium transition-colors"
           >
-            <span>🛒 Cart</span>
-            <span className="w-4 h-4 bg-amber-500 text-black text-[10px] rounded-full flex items-center justify-center font-bold">
-              1
-            </span>
+            Sign in
           </Link>
-          <Link
-            href="/account"
-            className="liquid-glass text-white text-xs font-medium px-4 py-2 rounded-full hover:bg-white/10 transition-colors"
-          >
-            Profile
-          </Link>
+
           <Link
             href="/checkout"
-            className="bg-white text-black text-xs font-semibold uppercase tracking-wider px-5 py-2 rounded-full hover:bg-white/90 transition-colors shadow-md"
+            className="aero-btn-primary text-white text-xs font-semibold px-5 py-2.5 rounded-full uppercase tracking-wider"
           >
-            Express Checkout
+            Get started
           </Link>
         </div>
 
         {/* Mobile Menu Toggle */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden liquid-glass text-white p-2.5 rounded-xl focus:outline-none"
-          aria-label="Toggle Navigation"
+          className="md:hidden text-white/80 p-2 hover:text-white"
+          aria-label="Toggle navigation"
         >
           {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
-      </header>
+      </div>
 
       {/* Mobile Menu Dropdown */}
       {menuOpen && (
-        <div className="fixed top-[72px] left-4 right-4 z-50 md:hidden liquid-glass rounded-2xl p-4 flex flex-col gap-1 shadow-2xl bg-[#0a0a0c]/95">
+        <div className="fixed top-[69px] left-4 right-4 z-50 md:hidden chrome-card rounded-2xl p-5 flex flex-col gap-3 shadow-2xl">
           {navLinks.map((link) => (
             <Link
               key={link.label}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="flex items-center justify-between w-full px-4 py-3 rounded-lg text-sm text-white/80 hover:text-white"
+              className="text-sm text-stone-300 hover:text-white py-2"
             >
-              <span>{link.label}</span>
-              {link.dropdown && <ChevronDown size={14} />}
+              {link.label}
             </Link>
           ))}
-
-          <div className="flex gap-2 mt-2 pt-3 border-t border-white/10">
+          <div className="flex gap-2 pt-3 border-t border-white/10">
             <Link
-              href="/account"
+              href="/admin"
               onClick={() => setMenuOpen(false)}
-              className="flex-1 text-center liquid-glass text-white text-sm font-medium px-4 py-2.5 rounded-full hover:bg-white/5 transition-colors"
+              className="flex-1 text-center aero-btn-secondary text-white text-xs font-medium py-2.5 rounded-full"
             >
-              Profile
+              Sign in
             </Link>
             <Link
               href="/checkout"
               onClick={() => setMenuOpen(false)}
-              className="flex-1 text-center bg-white text-black text-sm font-medium px-4 py-2.5 rounded-full hover:bg-white/90 transition-colors"
+              className="flex-1 text-center aero-btn-primary text-white text-xs font-semibold uppercase tracking-wider py-2.5 rounded-full"
             >
-              Express Checkout
+              Get started
             </Link>
           </div>
         </div>
       )}
-    </>
+    </header>
   );
 }

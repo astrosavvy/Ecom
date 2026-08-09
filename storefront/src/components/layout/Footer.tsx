@@ -7,113 +7,69 @@ import { usePathname } from "next/navigation";
 export function Footer() {
   const pathname = usePathname();
 
-  // Do not render storefront footer on admin dashboard
   if (pathname?.startsWith("/admin")) {
     return null;
   }
 
   return (
-    <footer className="w-full bg-[#0a0a0c] text-white/70 border-t border-white/10 relative z-20">
+    <footer className="w-full bg-[#07080d] text-[#8b93a8] border-t border-white/10 relative z-10">
       <div className="max-w-7xl mx-auto px-6 sm:px-12 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-10 text-left">
-        {/* Brand & Purpose */}
+        {/* Brand */}
         <div className="md:col-span-5 space-y-4">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-white font-bold text-xl hover:opacity-90 transition-opacity tracking-wider uppercase"
-          >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 text-black flex items-center justify-center font-bold text-xs shadow-md">
-              Y
-            </div>
-            <span>YOUNOYA</span>
+          <Link href="/" className="flex items-baseline text-2xl font-bold tracking-tight">
+            <span className="chrome-text">CHROMA</span>
+            <span className="text-[#ff2e88] font-black text-2xl ml-0.5">.</span>
           </Link>
-          <p className="text-white/50 text-xs sm:text-sm leading-relaxed max-w-md font-light">
-            Consecrated Vedic Rakhis, authentic astrological gemstones, and sacred ritual kits crafted with devotion and
-            delivered across India with zero-password instant checkout.
+          <p className="text-xs sm:text-sm text-[#8b93a8] leading-relaxed max-w-sm">
+            The next-generation generative creative suite engineered for fluid 3D vectors, tactile shaders, and modern design systems.
           </p>
-          <div className="text-[11px] text-amber-400 font-mono uppercase tracking-wider">
-            Vedic Consecration & Spiritual Kinship
+          <div className="text-[11px] font-mono text-stone-500 uppercase tracking-widest">
+            v2.0 // Liquid Engine Core
           </div>
         </div>
 
-        {/* Navigation Categories */}
+        {/* Product Links */}
         <div className="md:col-span-2 space-y-3">
-          <h4 className="text-xs uppercase tracking-widest font-semibold text-white/90">Collections</h4>
-          <ul className="space-y-2 text-xs text-white/60 list-none p-0 m-0">
-            <li>
-              <Link href="/search" className="hover:text-white transition-colors">
-                Prosperity Rakhis
-              </Link>
-            </li>
-            <li>
-              <Link href="/search" className="hover:text-white transition-colors">
-                Navagraha Protection
-              </Link>
-            </li>
-            <li>
-              <Link href="/blog" className="hover:text-white transition-colors">
-                Vedic Journal
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" className="hover:text-white transition-colors">
-                Our Story
-              </Link>
-            </li>
+          <h4 className="text-xs font-mono uppercase tracking-widest font-semibold text-white">Product</h4>
+          <ul className="space-y-2 text-xs text-[#8b93a8] list-none p-0 m-0">
+            <li><Link href="#features" className="hover:text-white transition-colors">Generative 3D</Link></li>
+            <li><Link href="#features" className="hover:text-white transition-colors">Shader Studio</Link></li>
+            <li><Link href="#features" className="hover:text-white transition-colors">Clean Code Export</Link></li>
+            <li><Link href="#features" className="hover:text-white transition-colors">Changelog</Link></li>
           </ul>
         </div>
 
-        {/* Client Care */}
+        {/* Resources */}
         <div className="md:col-span-2 space-y-3">
-          <h4 className="text-xs uppercase tracking-widest font-semibold text-white/90">Support</h4>
-          <ul className="space-y-2 text-xs text-white/60 list-none p-0 m-0">
-            <li>
-              <Link href="/shipping" className="hover:text-white transition-colors">
-                Express Shipping
-              </Link>
-            </li>
-            <li>
-              <Link href="/refund" className="hover:text-white transition-colors">
-                Cancellation & Video Return
-              </Link>
-            </li>
-            <li>
-              <Link href="/terms" className="hover:text-white transition-colors">
-                Terms of Service
-              </Link>
-            </li>
-            <li>
-              <Link href="/privacy" className="hover:text-white transition-colors">
-                Privacy Policy
-              </Link>
-            </li>
+          <h4 className="text-xs font-mono uppercase tracking-widest font-semibold text-white">Resources</h4>
+          <ul className="space-y-2 text-xs text-[#8b93a8] list-none p-0 m-0">
+            <li><Link href="/blog" className="hover:text-white transition-colors">Documentation</Link></li>
+            <li><Link href="/blog" className="hover:text-white transition-colors">API Reference</Link></li>
+            <li><Link href="/blog" className="hover:text-white transition-colors">Community</Link></li>
+            <li><Link href="/blog" className="hover:text-white transition-colors">Showcase</Link></li>
           </ul>
         </div>
 
-        {/* Concierge */}
+        {/* Legal & Status */}
         <div className="md:col-span-3 space-y-3">
-          <h4 className="text-xs uppercase tracking-widest font-semibold text-white/90">Customer Desk</h4>
-          <div className="space-y-2.5 text-xs text-white/60">
-            <p>Direct Inquiries & Order Tracking</p>
-            <div className="text-white font-medium text-xs">support@younoya.com</div>
-            <div className="pt-2">
-              <Link
-                href="/checkout"
-                className="inline-block liquid-glass text-amber-300 px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider hover:bg-white/10 transition-colors"
-              >
-                Checkout Now →
-              </Link>
+          <h4 className="text-xs font-mono uppercase tracking-widest font-semibold text-white">Status</h4>
+          <div className="space-y-2 text-xs text-[#8b93a8]">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#c6ff3d] shadow-[0_0_8px_#c6ff3d]" />
+              <span className="text-white font-medium text-xs">All Systems Operational</span>
             </div>
+            <p className="text-[11px] pt-1 text-stone-500">Latency: 14ms across global edge POPs</p>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-white/5 py-6 px-6 sm:px-12 bg-black/60">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/40">
-          <div>© 2026 YOUNOYA. All Rights Reserved.</div>
+      <div className="border-t border-white/5 py-6 px-6 sm:px-12 bg-black/40">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
+          <div>© 2026 CHROMA Labs Inc. All rights reserved.</div>
           <div className="flex items-center gap-6">
-            <span>Free Express Across India</span>
-            <span>Razorpay Secure</span>
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="/contact" className="hover:text-white transition-colors">Security</Link>
           </div>
         </div>
       </div>
