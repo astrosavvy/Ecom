@@ -367,12 +367,22 @@ if (strpos($uri, '/api/v1/discounts') === 0 || strpos($uri, '/api/v1/admin/disco
     }
 }
 
-// 7. Image Upload Endpoint for Admin (Supports Single & Multi-File Uploads)
-if ($uri === '/api/v1/admin/upload' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    $uploadDir = __DIR__ . '/uploads/';
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
+// 7. Image Upload Endpoint for Admin (Supports Single & Multi-File Uploads with Explicit CORS)
+if ($uri === '/api/v1/admin/upload') {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: POST, OPTIONS');
+    header('Access-Control-Allow-Headers: *');
+
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(200);
+        exit;
     }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $uploadDir = __DIR__ . '/uploads/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
 
     $uploadedUrls = [];
 
