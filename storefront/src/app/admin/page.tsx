@@ -24,7 +24,7 @@ interface Product {
   inventory_count: number;
 }
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "https://api.younoya.com";
+const BACKEND_URL = "https://api.younoya.com";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);

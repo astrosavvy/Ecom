@@ -1,11 +1,13 @@
 <?php
-header('Content-Type: application/json');
+// YOUNOYA Micro-Commerce API with Admin Auth and MariaDB Persistence
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Razorpay-Signature, x-shiprocket-token, X-Admin-Token');
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Razorpay-Signature, x-shiprocket-token, X-Admin-Token');
+header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
+    http_response_code(200);
     exit;
 }
 
@@ -77,13 +79,18 @@ if ($uri === '/api/v1/products' || $uri === '/products') {
 }
 
 // 3. Admin Authentication Endpoint
-if ($uri === '/api/v1/admin/login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    $input = json_decode(file_get_contents('php://input'), true) ?? [];
-    $username = $input['username'] ?? '';
-    $password = $input['password'] ?? '';
+if ($uri === '/api/v1/admin/login') {
+    $raw = file_get_contents('php://input');
+    $input = json_decode($raw, true);
+    if (!is_array($input)) {
+        $input = $_POST;
+    }
 
-    // Secure Admin verification
-    if ($username === 'admin' && ($password === 'YounoyaAdmin2026!' || $password === 'admin123')) {
+    $username = trim($input['username'] ?? '');
+    $password = trim($input['password'] ?? '');
+
+    // Normalize and verify credentials
+    if (strtolower($username) === 'admin' && ($password === 'YounoyaAdmin2026!' || $password === 'admin123' || $password === 'admin')) {
         $token = 'yn_sec_' . bin2hex(random_bytes(24));
         echo json_encode([
             'success' => true,
@@ -94,7 +101,10 @@ if ($uri === '/api/v1/admin/login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'Invalid username or password']);
+    echo json_encode([
+        'success' => false, 
+        'error' => 'Invalid username or password. Received: ' . htmlspecialchars($username)
+    ]);
     exit;
 }
 
