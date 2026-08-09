@@ -103,8 +103,9 @@ export default function AdminPage() {
   const [saving, setSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
 
-  // Media Library Picker Modal in Product Editor
+  // Media Library Picker Modal in Product Editor (Supports Multi-Select)
   const [showMediaStoreModal, setShowMediaStoreModal] = useState(false);
+  const [selectedMediaInModal, setSelectedMediaInModal] = useState<string[]>([]);
 
   // Orders Filter & Management
   const [orderStageFilter, setOrderStageFilter] = useState<string>("all");
@@ -139,9 +140,10 @@ export default function AdminPage() {
     usage_limit: 500
   });
 
-  // Media upload state
+  // Media upload state with dedicated refs
   const [uploadingImage, setUploadingImage] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const productFileInputRef = useRef<HTMLInputElement>(null);
+  const mediaStoreFileInputRef = useRef<HTMLInputElement>(null);
 
   // Check existing session token on mount
   useEffect(() => {
@@ -369,16 +371,18 @@ export default function AdminPage() {
 
           setSelectedProduct({ ...selectedProduct, images: [...currentImgs, ...uploadedList] });
         }
-        fetchData();
+        await fetchData();
         setStatusMsg(`✓ Uploaded ${uploadedList.length} image(s) to Image Store!`);
       } else {
         setStatusMsg("❌ Upload failed: " + (json.error || "Server rejected request"));
       }
     } catch (err: any) {
+      console.error("Upload error:", err);
       setStatusMsg("❌ Upload error: " + (err.message || "Network failure"));
     } finally {
       setUploadingImage(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+      if (productFileInputRef.current) productFileInputRef.current.value = "";
+      if (mediaStoreFileInputRef.current) mediaStoreFileInputRef.current.value = "";
     }
   };
 
@@ -922,7 +926,7 @@ export default function AdminPage() {
 
                       <input
                         type="file"
-                        ref={fileInputRef}
+                        ref={productFileInputRef}
                         multiple
                         accept="image/*"
                         onChange={handleMultipleImageUpload}
@@ -930,7 +934,7 @@ export default function AdminPage() {
                       />
                       <button
                         type="button"
-                        onClick={() => fileInputRef.current?.click()}
+                        onClick={() => productFileInputRef.current?.click()}
                         disabled={uploadingImage}
                         className="px-4 py-2 rounded-full bg-[#1C1C1C] text-white text-xs font-bold flex items-center gap-1.5 hover:bg-[#333333]"
                       >
@@ -1241,7 +1245,7 @@ export default function AdminPage() {
               <div>
                 <input
                   type="file"
-                  ref={fileInputRef}
+                  ref={mediaStoreFileInputRef}
                   multiple
                   accept="image/*"
                   onChange={handleMultipleImageUpload}
@@ -1249,7 +1253,7 @@ export default function AdminPage() {
                 />
                 <button
                   type="button"
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => mediaStoreFileInputRef.current?.click()}
                   disabled={uploadingImage}
                   className="bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider px-5 py-3 rounded-full hover:bg-[#333333] transition-all flex items-center gap-2 shadow-md"
                 >
@@ -1543,34 +1547,101 @@ export default function AdminPage() {
       )}
 
       {/* ========================================================
-          MODAL 3: REUSABLE IMAGE STORE SELECTOR MODAL
+          MODAL 3: REUSABLE IMAGE STORE SELECTOR MODAL (MULTI-SELECT SUPPORT)
          ======================================================== */}
       {showMediaStoreModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="w-full max-w-3xl bg-white rounded-3xl p-6 space-y-4 shadow-xl border border-[#E2E8E4] max-h-[85vh] flex flex-col">
-            <div className="flex items-center justify-between">
-              <h3 className="font-extrabold text-[#1C1C1C] text-base font-heading">Select from Image Store</h3>
-              <button onClick={() => setShowMediaStoreModal(false)}><X size={18} /></button>
+          <div className="w-full max-w-4xl bg-white rounded-3xl p-6 space-y-4 shadow-2xl border border-[#E2E8E4] max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between border-b pb-3">
+              <div>
+                <h3 className="font-extrabold text-[#1C1C1C] text-base font-heading">Select Photos from Image Store</h3>
+                <p className="text-xs text-stone-500">Click photos to select multiple images, then click 'Add to Product'.</p>
+              </div>
+              <button 
+                onClick={() => {
+                  setSelectedMediaInModal([]);
+                  setShowMediaStoreModal(false);
+                }}
+                className="p-1 rounded-full hover:bg-stone-100 text-stone-400 hover:text-black"
+              >
+                <X size={18} />
+              </button>
             </div>
 
-            <div className="overflow-y-auto flex-1 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 p-1">
-              {mediaAssets.map((asset) => (
-                <div
-                  key={asset.id}
+            <div className="overflow-y-auto flex-1 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 p-1">
+              {mediaAssets.map((asset) => {
+                const isSelected = selectedMediaInModal.includes(asset.url);
+                return (
+                  <div
+                    key={asset.id}
+                    onClick={() => {
+                      if (isSelected) {
+                        setSelectedMediaInModal(selectedMediaInModal.filter((u) => u !== asset.url));
+                      } else {
+                        setSelectedMediaInModal([...selectedMediaInModal, asset.url]);
+                      }
+                    }}
+                    className={`relative aspect-square rounded-2xl overflow-hidden bg-[#E8E6E1] border-2 cursor-pointer transition-all ${
+                      isSelected ? "border-[#1C1C1C] ring-4 ring-[#1C1C1C]/20 scale-95" : "border-[#E2E8E4] hover:border-stone-400"
+                    }`}
+                  >
+                    <img src={asset.url} alt={asset.filename} className="w-full h-full object-cover" />
+                    
+                    {/* Selection Indicator Checkmark Badge */}
+                    <div className={`absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+                      isSelected ? "bg-[#1C1C1C] text-[#D4AF37] shadow-md" : "bg-black/30 text-white/70"
+                    }`}>
+                      <Check size={13} className="stroke-[3]" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Bottom Action Footer for Multi-Select */}
+            <div className="border-t pt-3 flex items-center justify-between">
+              <div className="text-xs font-bold text-stone-600">
+                {selectedMediaInModal.length} photo(s) selected
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
                   onClick={() => {
-                    if (selectedProduct) {
+                    setSelectedMediaInModal([]);
+                    setShowMediaStoreModal(false);
+                  }}
+                  className="px-5 py-2.5 rounded-full border border-[#E2E8E4] text-xs font-bold text-stone-600 hover:text-black"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  disabled={selectedMediaInModal.length === 0}
+                  onClick={() => {
+                    if (selectedProduct && selectedMediaInModal.length > 0) {
                       const current = Array.isArray(selectedProduct.images)
                         ? [...selectedProduct.images]
                         : (typeof selectedProduct.images === "string" ? JSON.parse(selectedProduct.images || "[]") : []);
-                      setSelectedProduct({ ...selectedProduct, images: [...current, asset.url] });
+                      
+                      // Append selected images without duplicates
+                      const combined = [...current];
+                      selectedMediaInModal.forEach((u) => {
+                        if (!combined.includes(u)) combined.push(u);
+                      });
+
+                      setSelectedProduct({ ...selectedProduct, images: combined });
+                      setSelectedMediaInModal([]);
                       setShowMediaStoreModal(false);
+                      setStatusMsg(`✓ Added ${selectedMediaInModal.length} photo(s) to product gallery!`);
                     }
                   }}
-                  className="aspect-square rounded-xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] cursor-pointer hover:ring-2 hover:ring-[#1C1C1C] transition-all"
+                  className="px-6 py-2.5 rounded-full bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider disabled:opacity-40 hover:bg-[#333333] transition-all shadow-md"
                 >
-                  <img src={asset.url} alt={asset.filename} className="w-full h-full object-cover" />
-                </div>
-              ))}
+                  Add {selectedMediaInModal.length > 0 ? `(${selectedMediaInModal.length}) ` : ""}to Product
+                </button>
+              </div>
             </div>
           </div>
         </div>
