@@ -157,7 +157,7 @@ export function AnimatedStepper({
                 <button
                   type="button"
                   onClick={handleBack}
-                  className={`text-xs font-semibold uppercase tracking-wider text-stone-400 hover:text-white transition-colors duration-200 ${
+                  className={`text-xs font-bold uppercase tracking-wider text-stone-600 hover:text-[#1C1C1C] transition-colors duration-200 ${
                     currentStep === 1 ? "pointer-events-none opacity-0" : "opacity-100"
                   }`}
                   {...backButtonProps}
@@ -168,10 +168,10 @@ export function AnimatedStepper({
               <button
                 type="button"
                 onClick={isLastStep ? handleComplete : handleNext}
-                className="inline-flex h-12 items-center justify-center rounded-full aero-btn-primary px-8 text-xs font-bold uppercase tracking-wider text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-xl"
+                className="inline-flex h-12 items-center justify-center rounded-full bg-[#1C1C1C] px-8 text-xs font-extrabold uppercase tracking-wider text-white hover:bg-[#333333] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg"
                 {...nextButtonProps}
               >
-                {isLastStep ? "Complete Order" : nextButtonText}
+                {isLastStep ? "Complete Order & Pay" : nextButtonText}
               </button>
             </div>
           </div>

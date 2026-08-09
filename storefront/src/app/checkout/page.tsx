@@ -145,14 +145,14 @@ export default function CheckoutPage() {
       }
 
       if (typeof window.Razorpay !== "undefined") {
-        const options = {
-          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || orderData.key_id || "rzp_test_TNGgxOeUADZzEF",
+        const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || orderData.key_id;
+        const options: any = {
+          key: razorpayKey,
           amount: orderData.amount,
           currency: orderData.currency || "INR",
           name: "YOUNOYA",
           description: "Consecrated Vedic Rakhi Order",
           image: "https://younoya.com/younoya_icon.png",
-          order_id: orderData.razorpay_order_id,
           prefill: {
             name: formData.fullName,
             email: formData.email,
@@ -163,7 +163,7 @@ export default function CheckoutPage() {
           },
           handler: function (response: any) {
             clearCart();
-            window.location.href = `/order/confirmed/${orderData.order_id}?payment_id=${response.razorpay_payment_id}`;
+            window.location.href = `/order/confirmed/${orderData.order_id}?payment_id=${response.razorpay_payment_id || 'pay_demo'}`;
           },
           modal: {
             ondismiss: function () {
@@ -172,9 +172,14 @@ export default function CheckoutPage() {
           }
         };
 
+        // Attach order_id if real Razorpay order was generated
+        if (orderData.razorpay_order_id && !orderData.razorpay_order_id.startsWith("order_rzp_")) {
+          options.order_id = orderData.razorpay_order_id;
+        }
+
         const rzp = new window.Razorpay(options);
         rzp.on("payment.failed", function (failResponse: any) {
-          setError(`Payment Failed: ${failResponse.error.description}`);
+          setError(`Payment Failed: ${failResponse?.error?.description || 'Transaction declined'}`);
           setLoading(false);
         });
         rzp.open();
@@ -333,10 +338,14 @@ export default function CheckoutPage() {
 
             {/* Step 2: Package Customization & Offers */}
             <Step title="2. Package Customization & Offers">
-              <div className="space-y-5 pt-1">
+              <div className="space-y-6 pt-1">
+                {/* Cart Items List */}
                 <div className="space-y-3">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-stone-500 font-bold">
+                    Items Selected in Package ({activeItems.length})
+                  </label>
                   {activeItems.map((item) => (
-                    <div key={item.id} className="p-4 rounded-2xl bg-[#F5F5F0] border border-[#E2E8E4] flex items-center gap-4">
+                    <div key={item.id} className="p-4 rounded-2xl bg-white border border-[#E2E8E4] flex items-center gap-4 shadow-sm">
                       <div className="w-16 h-16 rounded-xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] flex-shrink-0">
                         <img
                           src={item.image}
@@ -344,50 +353,54 @@ export default function CheckoutPage() {
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="space-y-1 flex-1">
-                        <div className="text-xs font-bold font-heading text-[#1C1C1C]">
+                      <div className="space-y-1 flex-1 min-w-0">
+                        <div className="text-xs font-bold font-heading text-[#1C1C1C] truncate">
                           {item.title}
                         </div>
-                        <div className="text-[11px] text-stone-500">
+                        <div className="text-[11px] text-stone-500 truncate">
                           {item.subtitle || "Signature Consecration Keepsake Box"} (Qty: {item.quantity})
                         </div>
-                        <div className="text-xs font-bold font-mono text-[#1C1C1C]">₹{item.price * item.quantity}</div>
+                        <div className="text-xs font-extrabold font-mono text-[#1C1C1C]">₹{item.price * item.quantity}</div>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">Personal Sibling Blessing Note (Printed on Sacred Card)</label>
+                {/* Sibling Blessing Note */}
+                <div className="p-5 rounded-2xl bg-white border border-[#E2E8E4] space-y-2 shadow-sm">
+                  <label className="block text-xs font-bold text-[#1C1C1C] mb-1">
+                    Personal Sibling Blessing Note (Printed on Sacred Card)
+                  </label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     value={formData.giftMessage}
                     onChange={(e) => setFormData({ ...formData, giftMessage: e.target.value })}
-                    placeholder="Write a heartfelt message to be included in the keepsake box..."
-                    className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                    placeholder="Write a heartfelt message to be printed inside the keepsake box..."
+                    className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-3 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
                   />
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#F5F5F0] border border-[#E2E8E4] space-y-2">
-                  <label className="block text-xs font-bold text-stone-700">Have a Promo Coupon?</label>
+                {/* Coupon Code Section */}
+                <div className="p-5 rounded-2xl bg-white border border-[#E2E8E4] space-y-3 shadow-sm">
+                  <label className="block text-xs font-bold text-[#1C1C1C]">Apply Promo Coupon</label>
                   <div className="flex gap-2">
                     <input
                       type="text"
                       value={couponInput}
                       onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                       placeholder="e.g. VEDIC10"
-                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-xs text-[#1C1C1C] font-mono uppercase focus:outline-none focus:border-[#1C1C1C]"
+                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-3 text-xs text-[#1C1C1C] font-mono uppercase focus:outline-none focus:border-[#1C1C1C]"
                     />
                     <button
                       type="button"
                       onClick={handleApplyCoupon}
-                      className="px-5 py-2 rounded-xl bg-[#1C1C1C] text-white text-xs font-bold uppercase tracking-wider"
+                      className="px-6 py-3 rounded-xl bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider hover:bg-[#333333] transition-all"
                     >
                       Apply
                     </button>
                   </div>
                   {couponMsg && (
-                    <div className="text-xs text-emerald-700 font-medium">{couponMsg}</div>
+                    <div className="text-xs text-emerald-700 font-medium pt-1">{couponMsg}</div>
                   )}
                 </div>
               </div>
