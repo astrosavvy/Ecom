@@ -1,21 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @import "tailwindcss";
 
 :root {
-  --font-inter: 'Inter', sans-serif;
-  --font-space: 'Space Grotesk', sans-serif;
+  --color-bg-stone: #FDFCF8;
+  --color-charcoal: #1C1C1C;
+  --color-sage: #E2E8E4;
+  --color-sage-light: #F0F4F1;
+  --color-promo-bg: #D8E6D8;
+  --color-gold: #D4AF37;
+  --color-urgency-red: #DC2626;
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-serif: 'Playfair Display', serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
 * {
   box-sizing: border-box;
-  font-family: var(--font-inter);
 }
 
 html, body {
-  background-color: #0c0d12;
-  color: #edf1f8;
+  background-color: var(--color-bg-stone);
+  color: var(--color-charcoal);
   margin: 0;
   padding: 0;
   min-height: 100%;
@@ -23,174 +29,52 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Liquid Chrome Gradient Text */
-.chrome-text {
-  font-family: var(--font-space);
-  background: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    #eaeefb 22%,
-    #cbd4e8 42%,
-    #717e9e 54%,
-    #cbd4e8 68%,
-    #f0f4fc 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4), 0 3px 8px rgba(0, 0, 0, 0.8);
+/* Pulsing Scarcity / Urgency Badge Animation */
+@keyframes pulse-urgency {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
-.hero-headline {
-  font-family: var(--font-space);
-  font-size: clamp(48px, 6.5vw, 88px) !important;
-  line-height: 0.92 !important;
-  letter-spacing: -0.035em !important;
+.pulse-badge {
+  animation: pulse-urgency 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Aero Glossy Primary CTA */
-.aero-btn-primary {
-  background: linear-gradient(135deg, #ff2e88 0%, #2e63ff 100%);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 0 28px rgba(255, 46, 136, 0.45), 0 0 40px rgba(46, 99, 255, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.75);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.aero-btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 42%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0) 100%);
-  border-radius: 9999px 9999px 0 0;
-  pointer-events: none;
-}
-
-.aero-btn-primary:hover {
-  transform: translateY(-1.5px);
-  box-shadow: 0 0 36px rgba(255, 46, 136, 0.65), 0 0 54px rgba(46, 99, 255, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.95);
-}
-
-/* Chrome Glass Secondary CTA */
-.aero-btn-secondary {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.aero-btn-secondary:hover {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%);
-  border-color: rgba(255, 255, 255, 0.4);
-  transform: translateY(-1.5px);
-}
-
-/* Chrome-Bezel Luxury Obsidian Glass Card */
-.chrome-card {
-  background: linear-gradient(180deg, rgba(19, 23, 34, 0.85) 0%, rgba(13, 16, 24, 0.92) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  position: relative;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 16px 40px rgba(0, 0, 0, 0.6);
+/* Clinical Luxury Component Cards */
+.clinical-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-sage);
+  border-radius: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.chrome-card:hover {
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-3px);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 24px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(46, 99, 255, 0.18);
+.clinical-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.07);
 }
 
-/* Pure CSS 3D Chrome Sphere Orb */
-@keyframes emblem-levitate {
-  0%, 100% {
-    transform: translateY(0px) scale(1);
-  }
-  50% {
-    transform: translateY(-8px) scale(1.04);
-  }
+/* Benefit Icon Card Hover State */
+.benefit-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-sage);
+  border-radius: 24px;
+  padding: 24px;
+  transition: all 0.3s ease;
 }
 
-.chrome-orb-sphere {
-  width: 360px;
-  height: 360px;
-  border-radius: 50%;
-  position: relative;
-  background: radial-gradient(
-    circle at 34% 27%,
-    #ffffff 0%,
-    #e8edfa 12%,
-    #8b97b8 32%,
-    #4a5472 52%,
-    #1b2133 74%,
-    #0c0f18 100%
-  );
-  box-shadow: 
-    inset -18px -18px 36px rgba(0, 0, 0, 0.9),
-    inset 12px 12px 24px rgba(255, 255, 255, 0.7),
-    inset 0 0 14px rgba(37, 224, 255, 0.5),
-    0 24px 60px rgba(0, 0, 0, 0.8),
-    0 0 80px rgba(46, 99, 255, 0.28),
-    0 0 100px rgba(255, 46, 136, 0.2);
+.benefit-card:hover {
+  background-color: #F5F5F0;
+  transform: translateY(-2px);
 }
 
-.chrome-orb-emblem-3d {
-  animation: emblem-levitate 4s ease-in-out infinite;
+.benefit-card:hover .icon-box {
+  transform: scale(1.1);
 }
 
-.chrome-orb-specular {
-  position: absolute;
-  top: 18%;
-  left: 24%;
-  width: 50px;
-  height: 34px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 70%);
-  transform: rotate(-30deg);
-  filter: blur(1.5px);
-  pointer-events: none;
-}
-
-.chrome-orb-horizon {
-  position: absolute;
-  top: 48%;
-  left: 8%;
-  right: 8%;
-  height: 1.5px;
-  background: linear-gradient(90deg, transparent 0%, rgba(37, 224, 255, 0.6) 30%, rgba(255, 46, 136, 0.6) 70%, transparent 100%);
-  filter: blur(1px);
-  opacity: 0.75;
-  pointer-events: none;
-}
-
-.chrome-orb-rim {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 180deg at 50% 50%,
-    rgba(37, 224, 255, 0.45) 0deg,
-    rgba(255, 46, 136, 0.45) 120deg,
-    rgba(46, 99, 255, 0.45) 240deg,
-    rgba(37, 224, 255, 0.45) 360deg
-  );
-  mix-blend-mode: screen;
-  opacity: 0.7;
-  pointer-events: none;
-  mask: radial-gradient(circle, transparent 64%, black 72%);
-  -webkit-mask: radial-gradient(circle, transparent 64%, black 72%);
-}
-
-.chrome-orb-shadow {
-  width: 320px;
-  height: 48px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 70%);
-  filter: blur(12px);
-  margin-top: -24px;
+.icon-box {
+  transition: transform 0.3s ease;
 }

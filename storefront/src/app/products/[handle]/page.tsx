@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
 import { TestimonialMarquee } from "@/components/ui/TestimonialMarquee";
+import { MobileStickyCart } from "@/components/ui/MobileStickyCart";
 
 interface Product {
   id: string;
@@ -209,35 +210,30 @@ export default function DynamicProductPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0c0d12] text-[#edf1f8] pt-32 pb-24 px-4 sm:px-8">
-      {/* Background Atmosphere */}
-      <div className="absolute top-[5%] right-[10%] w-[600px] h-[600px] rounded-full bg-[#2e63ff]/15 blur-[150px] pointer-events-none" />
-      <div className="absolute top-[45%] left-[5%] w-[550px] h-[550px] rounded-full bg-[#ff2e88]/12 blur-[160px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+    <div className="relative min-h-screen bg-[#FDFCF8] text-[#1C1C1C] pt-36 pb-24 px-4 sm:px-8">
+      <div className="max-w-7xl mx-auto space-y-12 relative z-10">
         {/* Breadcrumbs */}
         <nav className="text-xs font-mono uppercase tracking-wider text-stone-400 flex items-center gap-2">
-          <Link href="/" className="hover:text-white">Home</Link>
+          <Link href="/" className="hover:text-[#1C1C1C]">Home</Link>
           <span>/</span>
-          <Link href="/products" className="hover:text-white">Vedic Rakhis</Link>
+          <Link href="/products" className="hover:text-[#1C1C1C]">Vedic Rakhis</Link>
           <span>/</span>
-          <span className="text-amber-400 line-clamp-1">{product.title}</span>
+          <span className="text-[#D4AF37] font-bold line-clamp-1">{product.title}</span>
         </nav>
 
         {/* Main Product Layout (2 Columns) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Left Column: Image Showcase */}
+          {/* Left Column: Product Spotlight Image Box (#E8E6E1 bg, 40px rounded) */}
           <div className="lg:col-span-6 flex flex-col-reverse sm:flex-row gap-4">
-            {/* Thumbnail list */}
             <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-visible">
               {images.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImgIndex(idx)}
-                  className={`w-16 h-16 rounded-xl overflow-hidden border flex-shrink-0 transition-all ${
+                  className={`w-16 h-16 rounded-2xl overflow-hidden border flex-shrink-0 transition-all ${
                     selectedImgIndex === idx
-                      ? "border-amber-400 ring-2 ring-amber-400/30"
-                      : "border-white/10 opacity-70 hover:opacity-100"
+                      ? "border-[#1C1C1C] ring-2 ring-[#1C1C1C]/20"
+                      : "border-[#E2E8E4] opacity-70 hover:opacity-100"
                   }`}
                 >
                   <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
@@ -245,68 +241,67 @@ export default function DynamicProductPage() {
               ))}
             </div>
 
-            {/* Main Featured Photo */}
-            <div className="flex-1 relative aspect-square rounded-3xl overflow-hidden bg-black/40 border border-white/10 shadow-2xl group">
+            <div className="flex-1 relative aspect-square rounded-[40px] overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] p-6 shadow-sm group">
               <img
                 src={images[selectedImgIndex] || images[0]}
                 alt={product.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500"
               />
               {product.badge && (
-                <span className="absolute top-4 left-4 bg-black/80 backdrop-blur-md text-amber-300 text-xs font-mono uppercase tracking-wider font-bold px-3.5 py-1.5 rounded-full border border-amber-400/30 shadow-lg">
+                <span className="absolute top-6 left-6 bg-[#1C1C1C] text-white text-[10px] font-mono uppercase tracking-wider font-bold px-3 py-1 rounded-md shadow-sm">
                   {product.badge}
                 </span>
               )}
             </div>
           </div>
 
-          {/* Right Column: Product Info & Purchase Panel */}
+          {/* Right Column: Detailed Product Specs */}
           <div className="lg:col-span-6 space-y-6">
             <div className="space-y-2">
-              <div className="text-xs font-mono uppercase tracking-widest text-amber-400">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] font-bold">
                 VEDIC CONSECRATION // SKU: {product.sku}
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold font-space text-white tracking-tight leading-snug">
+              <h1 className="text-2xl sm:text-4xl font-extrabold font-heading text-[#1C1C1C] leading-snug">
                 {product.title}
               </h1>
-              <p className="text-xs sm:text-sm text-[#9ca6be] leading-relaxed">
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
                 {product.subtitle}
               </p>
             </div>
 
             {/* Price Box */}
-            <div className="p-5 rounded-2xl bg-[#121520]/80 border border-white/10 space-y-3">
+            <div className="p-6 rounded-[24px] bg-white border border-[#E2E8E4] space-y-2 shadow-sm">
               <div className="flex items-baseline gap-3">
-                <span className="text-3xl font-bold font-space text-amber-400">
+                <span className="text-3xl font-extrabold font-mono text-[#1C1C1C]">
                   ₹{product.price}
                 </span>
-                <span className="text-sm text-stone-500 line-through">
+                <span className="text-sm text-stone-400 line-through">
                   ₹{product.original_price}
                 </span>
-                <span className="text-xs font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                <span className="text-xs font-bold text-emerald-700 bg-[#E2E8E4] px-2.5 py-0.5 rounded-full">
                   Save ₹{product.original_price - product.price}
                 </span>
               </div>
-              <div className="text-[11px] text-[#9ca6be] flex items-center gap-1.5">
-                <Truck size={13} className="text-cyan-400" />
+              <div className="text-xs text-stone-500 flex items-center gap-1.5 pt-1">
+                <Truck size={14} className="text-[#D4AF37]" />
                 <span>100% Free Express Air Shipping across India • Taxes included</span>
               </div>
             </div>
 
             {/* Quantity Selector */}
             <div className="space-y-1.5">
-              <label className="text-xs font-mono uppercase tracking-wider text-stone-300">Quantity</label>
-              <div className="inline-flex items-center border border-white/10 rounded-xl bg-black/40 p-1">
+              <label className="text-xs font-mono uppercase tracking-wider text-stone-600 font-bold">Quantity</label>
+              <div className="inline-flex items-center border border-[#E2E8E4] rounded-full bg-white p-1">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="p-2 text-stone-400 hover:text-white"
+                  className="p-2 text-stone-600 hover:text-[#1C1C1C]"
                 >
                   <Minus size={14} />
                 </button>
-                <span className="px-4 text-xs font-mono font-bold text-white">{quantity}</span>
+                <span className="px-4 text-xs font-mono font-bold text-[#1C1C1C]">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="p-2 text-stone-400 hover:text-white"
+                  className="p-2 text-stone-600 hover:text-[#1C1C1C]"
                 >
                   <Plus size={14} />
                 </button>
@@ -314,9 +309,9 @@ export default function DynamicProductPage() {
             </div>
 
             {/* PIN Code Delivery Checker */}
-            <div className="p-4 rounded-2xl bg-black/30 border border-white/10 space-y-2.5">
-              <label className="text-xs font-mono uppercase tracking-wider text-stone-300 flex items-center gap-1.5">
-                <MapPin size={13} className="text-amber-400" />
+            <div className="p-5 rounded-[24px] bg-white border border-[#E2E8E4] space-y-2.5 shadow-sm">
+              <label className="text-xs font-mono uppercase tracking-wider text-stone-700 font-bold flex items-center gap-1.5">
+                <MapPin size={14} className="text-[#D4AF37]" />
                 <span>Check Delivery Pincode</span>
               </label>
               <div className="flex gap-2">
@@ -326,35 +321,35 @@ export default function DynamicProductPage() {
                   value={pincode}
                   onChange={(e) => setPincode(e.target.value.replace(/\D/g, ""))}
                   placeholder="Enter 6-digit PIN"
-                  className="flex-1 bg-[#080a10] border border-white/10 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                  className="flex-1 bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
                 />
                 <button
                   onClick={handleCheckPincode}
                   disabled={pincodeLoading}
-                  className="aero-btn-secondary text-white text-xs font-semibold px-4 py-2 rounded-xl flex items-center gap-1.5"
+                  className="px-5 py-2 rounded-xl bg-[#1C1C1C] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 hover:bg-[#333333]"
                 >
                   {pincodeLoading ? <Loader2 size={12} className="animate-spin" /> : "Check"}
                 </button>
               </div>
               {pincodeResult && (
-                <div className="text-xs text-emerald-400 pt-0.5">{pincodeResult}</div>
+                <div className="text-xs text-emerald-700 font-medium pt-0.5">{pincodeResult}</div>
               )}
             </div>
 
-            {/* Action Buttons */}
+            {/* Action CTAs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <button
                 onClick={handleAddToCart}
-                className="py-3.5 rounded-full aero-btn-secondary text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 hover:border-amber-400/40"
+                className="py-4 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#D4DFD7] transition-all"
               >
                 {added ? (
                   <>
-                    <Check size={15} className="text-emerald-400" />
-                    <span className="text-emerald-400">Added to Cart</span>
+                    <Check size={15} className="text-emerald-700" />
+                    <span className="text-emerald-700">Added to Cart</span>
                   </>
                 ) : (
                   <>
-                    <ShoppingBag size={15} className="text-amber-400" />
+                    <ShoppingBag size={15} />
                     <span>Add to Cart</span>
                   </>
                 )}
@@ -362,7 +357,7 @@ export default function DynamicProductPage() {
 
               <button
                 onClick={handleBuyNow}
-                className="py-3.5 rounded-full aero-btn-primary text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl"
+                className="py-4 rounded-full bg-[#1C1C1C] text-white text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl hover:bg-[#333333] transition-all transform hover:scale-105"
               >
                 <span>Express Buy Now</span>
                 <ArrowRight size={15} />
@@ -372,14 +367,14 @@ export default function DynamicProductPage() {
         </div>
 
         {/* Detailed Information Tabs */}
-        <div className="chrome-card rounded-3xl p-8 space-y-6">
-          <div className="flex border-b border-white/10 gap-8">
+        <div className="rounded-[32px] bg-white border border-[#E2E8E4] p-8 space-y-6 shadow-sm">
+          <div className="flex border-b border-[#E2E8E4] gap-8">
             <button
               onClick={() => setActiveTab("details")}
               className={`pb-3 text-xs font-mono uppercase tracking-wider font-bold transition-colors ${
                 activeTab === "details"
-                  ? "text-amber-400 border-b-2 border-amber-400"
-                  : "text-stone-400 hover:text-white"
+                  ? "text-[#1C1C1C] border-b-2 border-[#1C1C1C]"
+                  : "text-stone-400 hover:text-[#1C1C1C]"
               }`}
             >
               Consecration Details & Box Contents
@@ -388,8 +383,8 @@ export default function DynamicProductPage() {
               onClick={() => setActiveTab("shipping")}
               className={`pb-3 text-xs font-mono uppercase tracking-wider font-bold transition-colors ${
                 activeTab === "shipping"
-                  ? "text-amber-400 border-b-2 border-amber-400"
-                  : "text-stone-400 hover:text-white"
+                  ? "text-[#1C1C1C] border-b-2 border-[#1C1C1C]"
+                  : "text-stone-400 hover:text-[#1C1C1C]"
               }`}
             >
               Express Shipping & Vedic Care
@@ -397,20 +392,20 @@ export default function DynamicProductPage() {
           </div>
 
           {activeTab === "details" ? (
-            <div className="space-y-4 text-xs sm:text-sm text-[#9ca6be] leading-relaxed max-w-4xl">
-              <p className="whitespace-pre-line text-stone-200 font-normal">
+            <div className="space-y-4 text-xs sm:text-sm text-stone-600 leading-relaxed max-w-4xl">
+              <p className="whitespace-pre-line text-[#1C1C1C] font-normal">
                 {product.description}
               </p>
 
               {rawFeatures.length > 0 && (
                 <div className="pt-4 space-y-2">
-                  <div className="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold">
+                  <div className="text-xs font-mono uppercase tracking-wider text-[#D4AF37] font-bold">
                     Included in the Signature Keepsake Box:
                   </div>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-stone-300">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-stone-700">
                     {rawFeatures.map((feat, idx) => (
                       <li key={idx} className="flex items-center gap-2">
-                        <Check size={14} className="text-amber-400 flex-shrink-0" />
+                        <Check size={14} className="text-emerald-700 flex-shrink-0" />
                         <span>{feat}</span>
                       </li>
                     ))}
@@ -419,7 +414,7 @@ export default function DynamicProductPage() {
               )}
             </div>
           ) : (
-            <div className="space-y-3 text-xs sm:text-sm text-[#9ca6be] leading-relaxed max-w-3xl">
+            <div className="space-y-3 text-xs sm:text-sm text-stone-600 leading-relaxed max-w-3xl">
               <p>
                 • <strong>100% Free Express Air Shipping</strong> across all PIN codes in India.
               </p>
@@ -436,6 +431,8 @@ export default function DynamicProductPage() {
         {/* Testimonials Marquee */}
         <TestimonialMarquee />
       </div>
+
+      <MobileStickyCart />
     </div>
   );
 }

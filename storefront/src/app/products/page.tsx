@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, ShoppingBag, Check, ArrowRight, ShieldCheck, Filter } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
+import { MobileStickyCart } from "@/components/ui/MobileStickyCart";
 
 interface Product {
   id: string;
@@ -125,27 +126,23 @@ export default function ProductsCatalogPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0c0d12] text-[#edf1f8] pt-32 pb-24 px-6 sm:px-12">
-      {/* Background Atmosphere */}
-      <div className="absolute top-[8%] right-[10%] w-[600px] h-[600px] rounded-full bg-[#2e63ff]/15 blur-[140px] pointer-events-none" />
-      <div className="absolute top-[40%] left-[5%] w-[550px] h-[550px] rounded-full bg-[#ff2e88]/12 blur-[150px] pointer-events-none" />
-
+    <div className="relative min-h-screen bg-[#FDFCF8] text-[#1C1C1C] pt-36 pb-24 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto space-y-12 relative z-10">
         {/* Header Title */}
         <div className="text-center space-y-3 max-w-2xl mx-auto">
-          <div className="text-xs font-mono tracking-[0.18em] uppercase text-[#25e0ff]">
+          <div className="text-xs font-mono tracking-[0.18em] uppercase text-[#D4AF37] font-bold">
             COMPLETE CONSECRATED COLLECTION
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold font-space text-white tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold font-heading text-[#1C1C1C] tracking-tight">
             Explore All Consecrated Rakhis
           </h1>
-          <p className="text-xs sm:text-sm text-[#9ca6be] leading-relaxed">
+          <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
             Discover the full catalog of astrological keepsakes, handcrafted Gomti Chakras, Rudrakshas, and pure silk threads.
           </p>
         </div>
 
         {/* Search & Filter Bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-[#121520]/80 border border-white/10 backdrop-blur-xl">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-[#E2E8E4] shadow-sm">
           {/* Search Box */}
           <div className="relative w-full md:w-96">
             <Search size={15} className="absolute left-4 top-3.5 text-stone-400" />
@@ -154,7 +151,7 @@ export default function ProductsCatalogPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by spiritual element or blessing..."
-              className="w-full bg-[#080a10] border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
+              className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl pl-10 pr-4 py-2.5 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
             />
           </div>
 
@@ -164,10 +161,10 @@ export default function ProductsCatalogPage() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                   selectedCategory === cat
-                    ? "bg-amber-400 text-black font-bold shadow-[0_0_12px_rgba(251,191,36,0.4)]"
-                    : "bg-white/5 text-stone-400 hover:text-white border border-white/5"
+                    ? "bg-[#1C1C1C] text-white shadow-sm"
+                    : "bg-[#E2E8E4] text-[#1C1C1C] hover:bg-[#D4DFD7]"
                 }`}
               >
                 {cat}
@@ -187,61 +184,51 @@ export default function ProductsCatalogPage() {
             return (
               <div
                 key={prod.id}
-                className="chrome-card rounded-2xl p-5 flex flex-col justify-between space-y-5 group"
+                className="clinical-card p-6 flex flex-col justify-between space-y-5"
               >
-                {/* Image Container */}
-                <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-black/40 border border-white/12">
+                <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4]">
                   <img
                     src={thumb}
                     alt={prod.title}
-                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   />
                   {prod.badge && (
-                    <span className="absolute top-3 left-3 bg-black/85 backdrop-blur-md text-amber-300 text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-1 rounded-full border border-amber-400/35 shadow-lg">
+                    <span className="absolute top-3 left-3 bg-[#1C1C1C] text-white text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-1 rounded-md shadow-sm">
                       {prod.badge}
                     </span>
                   )}
                 </div>
 
-                {/* Info */}
                 <div className="space-y-2">
-                  <Link href={`/products/${prod.handle}`} className="block">
-                    <h3 className="text-sm font-bold font-space text-white group-hover:text-amber-300 transition-colors line-clamp-2 leading-snug">
+                  <Link href={`/products/${prod.handle}`}>
+                    <h3 className="text-sm font-bold font-heading text-[#1C1C1C] hover:text-[#D4AF37] transition-colors line-clamp-2 leading-snug">
                       {prod.title}
                     </h3>
                   </Link>
-                  <p className="text-[11px] text-[#9ca6be] line-clamp-1">
+                  <p className="text-[11px] text-stone-500 line-clamp-1">
                     {prod.subtitle}
                   </p>
 
                   <div className="flex items-baseline gap-2 pt-1">
-                    <span className="text-lg font-bold font-space text-white">
-                      ₹{prod.price}
-                    </span>
-                    <span className="text-xs text-stone-500 line-through">
-                      ₹{prod.original_price}
-                    </span>
-                    <span className="text-[10px] text-emerald-400 font-medium ml-auto">
-                      Save ₹{prod.original_price - prod.price}
-                    </span>
+                    <span className="text-lg font-extrabold font-mono text-[#1C1C1C]">₹{prod.price}</span>
+                    <span className="text-xs text-stone-400 line-through">₹{prod.original_price}</span>
                   </div>
                 </div>
 
-                {/* Actions */}
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <button
                     onClick={() => handleAddToCart(prod)}
-                    className="py-2.5 rounded-xl aero-btn-secondary text-stone-200 text-xs font-semibold hover:text-white flex items-center justify-center gap-1.5"
+                    className="py-2.5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold hover:bg-[#D4DFD7] transition-colors flex items-center justify-center gap-1"
                   >
                     {addedItem === prod.id ? (
                       <>
-                        <Check size={13} className="text-emerald-400" />
-                        <span className="text-emerald-400">Added</span>
+                        <Check size={13} className="text-emerald-700" />
+                        <span className="text-emerald-700">Added</span>
                       </>
                     ) : (
                       <>
                         <ShoppingBag size={13} />
-                        <span>Add to Cart</span>
+                        <span>Add</span>
                       </>
                     )}
                   </button>
@@ -249,7 +236,7 @@ export default function ProductsCatalogPage() {
                   <Link
                     href="/checkout"
                     onClick={() => handleAddToCart(prod)}
-                    className="py-2.5 rounded-xl aero-btn-primary text-white text-xs font-bold uppercase tracking-wider text-center flex items-center justify-center"
+                    className="py-2.5 rounded-full bg-[#1C1C1C] text-white text-xs font-bold uppercase tracking-wider text-center flex items-center justify-center hover:bg-[#333333] transition-colors"
                   >
                     Buy Now
                   </Link>
@@ -259,6 +246,8 @@ export default function ProductsCatalogPage() {
           })}
         </div>
       </div>
+
+      <MobileStickyCart />
     </div>
   );
 }

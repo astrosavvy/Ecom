@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, CheckCircle2 } from "lucide-react";
 
 interface Testimonial {
   name: string;
@@ -45,52 +45,55 @@ const TESTIMONIALS: Testimonial[] = [
 
 export function TestimonialMarquee() {
   return (
-    <section id="reviews" className="w-full py-24 overflow-hidden relative z-10">
+    <section id="reviews" className="w-full py-20 overflow-hidden relative z-10">
       <div className="max-w-7xl mx-auto px-6 text-center space-y-3 mb-12">
-        <div className="text-xs font-mono tracking-[0.18em] uppercase text-amber-400">
+        <div className="text-xs font-mono tracking-[0.18em] uppercase text-[#D4AF37] font-bold">
           DEVOTEE EXPERIENCES
         </div>
-        <h2 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight">
+        <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[#1C1C1C] tracking-tight">
           Blessed by Families Across India
         </h2>
-        <p className="text-xs sm:text-sm text-[#9ca6be] max-w-md mx-auto">
+        <p className="text-xs sm:text-sm text-stone-500 max-w-md mx-auto">
           Real feedback from devotees who chose consecrated Vedic rakhis for their siblings.
         </p>
       </div>
 
-      {/* Infinite Horizontal Marquee Container with 90s Ultra-Slow Right-to-Left Drift and Alpha Fade Masks */}
-      <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+      {/* 3-Column Social Proof Grid Cards with 90s Slow Right-to-Left Drift */}
+      <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
         <div className="flex gap-6 w-max animate-[marquee_90s_linear_infinite] hover:[animation-play-state:paused]">
           {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((item, idx) => (
             <div
               key={idx}
-              className="w-[320px] sm:w-[380px] p-6 rounded-2xl bg-[#121520]/80 border border-white/10 shadow-xl backdrop-blur-xl flex flex-col justify-between space-y-4 flex-shrink-0"
+              className="w-[320px] sm:w-[380px] p-6 rounded-[24px] bg-white border border-[#E2E8E4] shadow-sm flex flex-col justify-between space-y-4 flex-shrink-0 hover:shadow-md transition-shadow"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="flex gap-1 text-amber-400">
+                  <div className="flex gap-1 text-[#D4AF37]">
                     <Star size={14} className="fill-current" />
                     <Star size={14} className="fill-current" />
                     <Star size={14} className="fill-current" />
                     <Star size={14} className="fill-current" />
                     <Star size={14} className="fill-current" />
                   </div>
-                  <Quote size={20} className="text-white/15" />
+                  <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-[#E2E8E4] px-2 py-0.5 rounded-full">
+                    <CheckCircle2 size={11} />
+                    <span>Verified Buyer</span>
+                  </div>
                 </div>
-                <p className="text-xs sm:text-sm text-stone-300 leading-relaxed font-normal">
+                <p className="text-xs sm:text-sm text-stone-700 leading-relaxed font-normal">
                   "{item.review}"
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 pt-2 border-t border-white/5">
+              <div className="flex items-center gap-3 pt-3 border-t border-[#E2E8E4]/60">
                 <img
                   src={item.avatar}
                   alt={item.name}
-                  className="w-9 h-9 rounded-full object-cover border border-amber-400/40"
+                  className="w-10 h-10 rounded-full object-cover border border-[#D4AF37]/50"
                 />
                 <div>
-                  <div className="text-xs font-bold text-white font-space">{item.name}</div>
-                  <div className="text-[10px] text-[#9ca6be]">{item.location}</div>
+                  <div className="text-xs font-bold text-[#1C1C1C] font-heading">{item.name}</div>
+                  <div className="text-[10px] text-stone-400 font-mono">{item.location}</div>
                 </div>
               </div>
             </div>
