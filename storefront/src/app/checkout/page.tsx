@@ -41,7 +41,7 @@ export default function CheckoutPage() {
       subtitle: "Signature Consecration Keepsake Box",
       price: 1099,
       original_price: 1299,
-      image: "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800",
+      image: "/younoya_logo.png",
       quantity: 1
     }
   ];

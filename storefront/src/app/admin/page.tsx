@@ -251,7 +251,7 @@ export default function AdminPage() {
         "Natural Gomti Chakra / Rudraksha",
         "Includes Roli, Chawal & Dry Fruits"
       ],
-      images: ["https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"],
+      images: ["/younoya_logo.png"],
       inventory_count: 100
     };
     setSelectedProduct(newProd);

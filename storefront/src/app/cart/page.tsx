@@ -90,11 +90,11 @@ export default function CartPage() {
                   key={item.id}
                   className="clinical-card p-5 flex gap-4 items-center justify-between"
                 >
-                  <div className="w-20 h-20 rounded-2xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] flex-shrink-0">
+                  <div className="w-20 h-20 rounded-2xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] flex-shrink-0 flex items-center justify-center p-2">
                     <img
-                      src={item.image || "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"}
+                      src={item.image || "/younoya_logo.png"}
                       alt={item.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   </div>
 

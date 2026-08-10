@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
 import { StickyConversionBar } from "@/components/ui/StickyConversionBar";
+import { ProductCard } from "@/components/ui/ProductCard";
 
 interface Product {
   id: string;
@@ -24,146 +25,15 @@ interface Product {
   features: string[] | string;
 }
 
-const FALLBACK_PRODUCT_MAP: Record<string, Product> = {
-  "vedic-prosperity-rakhi": {
-    id: "prod_1",
-    handle: "vedic-prosperity-rakhi",
-    sku: "HOFK0009275279",
-    title: "Vedic Prosperity Rakhi Set with Dry Fruits & Consecrated Thread",
-    subtitle: "Sacred consecration for sibling grace and planetary harmony",
-    price: 1099,
-    original_price: 1299,
-    badge: "Signature",
-    description: "In cherished traditions, this designer handcrafted Vedic Rakhi set in vibrant colors tells a story of elegance and affection. Each intricately crafted rakhi celebrates the unique bond between siblings. The artful beadwork and rich colors make this an exquisite and memorable Raksha Bandhan gift.\n\nEnergized with 108 Gayatri mantra recitations to invite celestial prosperity, abundance, and planetary harmony.",
-    images: [
-      "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=800"
-    ],
-    features: [
-      "Prana Pratishtha Consecration Ritual",
-      "Organic Sacred Resham & Gold Wire Threading",
-      "Signature Reusable Keepsake Box",
-      "100 Gm California Jumbo Almonds",
-      "100 Gm W240 Premium Cashews",
-      "Complimentary Consecrated Akshat & Roli Packets"
-    ]
-  },
-  "vedic-prosperity-wealth-attraction-rakhi": {
-    id: "prod_2",
-    handle: "vedic-prosperity-wealth-attraction-rakhi",
-    sku: "HOFK0009275280",
-    title: "Vedic Prosperity & Wealth Attraction Rakhi",
-    subtitle: "Astrologically selected crystal, oyster shells & sacred mauli",
-    price: 989,
-    original_price: 1199,
-    badge: "Prosperity",
-    description: "Handcrafted with natural Gomti Chakra and energized yellow Kaudi shells, dedicated to invoking Goddess Lakshmi's perpetual blessings for brothers. Formatted in timeless sacred red-yellow Mauli threads to protect against malefic energies.",
-    images: [
-      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&q=80&w=800"
-    ],
-    features: [
-      "Natural Consecrated Gomti Chakra: 1 N",
-      "Yellow Energized Kaudi Shell",
-      "Sacred Red-Yellow Mauli Thread",
-      "Complimentary Roli & Chawal Packets"
-    ]
-  },
-  "vedic-abundance-blessing-rakhi": {
-    id: "prod_3",
-    handle: "vedic-abundance-blessing-rakhi",
-    sku: "HOFK0009275281",
-    title: "Vedic Abundance & Blessing Rakhi",
-    subtitle: "A keepsake designed to be treasured long after the festive hour",
-    price: 999,
-    original_price: 1199,
-    badge: "Abundance",
-    description: "Created using pure silver-plated motifs and blessed Rudraksha beads for health, vitality, and shielding negative energies.",
-    images: [
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800"
-    ],
-    features: [
-      "5 Mukhi Blessed Rudraksha Bead",
-      "Silver-Plated Centerpiece Talisman",
-      "100% Organic Silk Threads",
-      "Complimentary Roli & Chawal Packets"
-    ]
-  },
-  "navagraha-om-protection-kaudi-rakhi": {
-    id: "prod_4",
-    handle: "navagraha-om-protection-kaudi-rakhi",
-    sku: "HOFK0009275282",
-    title: "Navagraha Om Protection Kaudi Rakhi",
-    subtitle: "Sacred kaudi, Om motif & Navagraha-inspired planetary harmony",
-    price: 1099,
-    original_price: 1299,
-    badge: "Sacred Shield",
-    description: "Harmonizes the 9 astrological planets with 9 colored sacred silk threads and a central energized brass Om talisman. Shields against planetary afflictions.",
-    images: [
-      "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800"
-    ],
-    features: [
-      "9 Astrological Planetary Silk Strands",
-      "Pure Brass Energized Om Talisman",
-      "Natural Sacred Kaudi Shell Detailing",
-      "Complimentary Roli & Chawal Packets"
-    ]
-  }
-};
-
-const RELATED_PRODUCTS = [
-  {
-    handle: "vedic-prosperity-rakhi",
-    title: "Vedic Prosperity Rakhi Set",
-    category: "Signature Keepsake",
-    price: 1099,
-    image: "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800",
-    badge: "Signature"
-  },
-  {
-    handle: "vedic-prosperity-wealth-attraction-rakhi",
-    title: "Wealth Attraction Kaudi Rakhi",
-    category: "Gomti Chakra",
-    price: 989,
-    image: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=800",
-    badge: "Prosperity"
-  },
-  {
-    handle: "vedic-abundance-blessing-rakhi",
-    title: "Abundance Rudraksha Rakhi",
-    category: "Silver Plated",
-    price: 999,
-    image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=800",
-    badge: "Abundance"
-  },
-  {
-    handle: "navagraha-om-protection-kaudi-rakhi",
-    title: "Navagraha Om Protection Rakhi",
-    category: "Planetary Thread",
-    price: 1099,
-    image: "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&q=80&w=800",
-    badge: "Shield"
-  }
-];
-
 export default function DynamicMonochromeProductPage() {
   const params = useParams();
   const router = useRouter();
   const handle = (params?.handle as string) || "vedic-prosperity-rakhi";
   const { addItem } = useCart();
 
-  const [product, setProduct] = useState<Product>(
-    FALLBACK_PRODUCT_MAP[handle] || FALLBACK_PRODUCT_MAP["vedic-prosperity-rakhi"]
-  );
+  const [product, setProduct] = useState<Product | null>(null);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState("Single Set");
   const [selectedColor, setSelectedColor] = useState("Sacred Red");
@@ -179,13 +49,15 @@ export default function DynamicMonochromeProductPage() {
       .then((res) => res.json())
       .then((data) => {
         if (data?.success && Array.isArray(data.data)) {
+          setAllProducts(data.data);
           const found = data.data.find((p: Product) => p.handle === handle);
           if (found) {
             setProduct(found);
           }
         }
       })
-      .catch((e) => console.log("Using cached product:", e));
+      .catch((e) => console.log("Error loading product:", e))
+      .finally(() => setLoading(false));
   }, [handle]);
 
   const handleCheckPincode = async () => {
@@ -210,17 +82,49 @@ export default function DynamicMonochromeProductPage() {
     }
   };
 
-  const rawImages: string[] = Array.isArray(product?.images)
-    ? product.images
-    : (typeof product?.images === "string" ? JSON.parse(product.images || "[]") : []);
+  if (loading || !product) {
+    return (
+      <div className="bg-[#FDFCF8] text-[#111827] min-h-screen pt-36 pb-24 font-sans">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-12">
+          {/* Skeleton Breadcrumb */}
+          <div className="h-4 bg-stone-200 rounded w-64 animate-pulse" />
 
-  const rawFeatures: string[] = Array.isArray(product?.features)
+          {/* Skeleton Product Spotlight */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-6 flex flex-col-reverse sm:flex-row gap-4">
+              <div className="flex sm:flex-col gap-3">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="w-16 h-16 rounded-2xl bg-stone-200 animate-pulse" />
+                ))}
+              </div>
+              <div className="flex-1 aspect-square rounded-[40px] bg-stone-200 animate-pulse" />
+            </div>
+            <div className="lg:col-span-6 space-y-6">
+              <div className="h-4 bg-stone-200 rounded w-40 animate-pulse" />
+              <div className="h-8 bg-stone-200 rounded w-3/4 animate-pulse" />
+              <div className="h-4 bg-stone-100 rounded w-full animate-pulse" />
+              <div className="h-24 bg-stone-200 rounded-3xl animate-pulse" />
+              <div className="h-12 bg-stone-200 rounded-full animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const rawImages: string[] = Array.isArray(product.images)
+    ? product.images
+    : (typeof product.images === "string" ? JSON.parse(product.images || "[]") : []);
+
+  const rawFeatures: string[] = Array.isArray(product.features)
     ? product.features
-    : (typeof product?.features === "string" ? JSON.parse(product.features || "[]") : []);
+    : (typeof product.features === "string" ? JSON.parse(product.features || "[]") : []);
 
   const images = rawImages.length > 0 
     ? rawImages 
     : ["/younoya_logo.png"];
+
+  const relatedProducts = allProducts.filter((p) => p.id !== product.id).slice(0, 4);
 
   const handleAddToCart = () => {
     addItem({
@@ -522,37 +426,17 @@ export default function DynamicMonochromeProductPage() {
         {/* ========================================================
             RELATED PRODUCTS CAROUSEL (4-Column Grid, 3:4 Ratio)
            ======================================================== */}
-        <section className="space-y-8 py-8">
-          <h2 className="text-2xl font-medium text-[#111827] tracking-tight">You May Also Honor</h2>
+        {relatedProducts.length > 0 && (
+          <section className="space-y-8 py-8">
+            <h2 className="text-2xl font-bold font-heading text-[#1C1C1C] tracking-tight">You May Also Honor</h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {RELATED_PRODUCTS.map((prod) => (
-              <div key={prod.handle} className="group space-y-3 cursor-pointer">
-                {/* 3:4 Aspect Ratio Container with 500ms zoom */}
-                <div className="relative aspect-[3/4] w-full rounded-[4px] bg-[#F3F4F6] border border-[#E5E7EB] overflow-hidden">
-                  <img
-                    src={prod.image}
-                    alt={prod.title}
-                    className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                  />
-                  <span className="absolute top-3 left-3 bg-[#111827] text-white text-[12px] font-medium uppercase tracking-wider px-2.5 py-0.5 rounded-[4px]">
-                    {prod.badge}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-start pt-1">
-                  <div>
-                    <Link href={`/products/${prod.handle}`} className="text-sm font-medium text-[#111827] hover:underline">
-                      {prod.title}
-                    </Link>
-                    <div className="text-xs text-[#6B7280]">{prod.category}</div>
-                  </div>
-                  <div className="text-sm font-bold text-[#111827] font-mono">₹{prod.price}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts.map((prod) => (
+                <ProductCard key={prod.id} product={prod} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Sticky Conversion Bar (Appears after scrolling past primary CTA button) */}

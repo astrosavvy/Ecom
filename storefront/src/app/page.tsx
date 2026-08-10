@@ -60,7 +60,7 @@ export default function Home() {
     const prodImgs: string[] = Array.isArray(prod.images)
       ? prod.images
       : (typeof prod.images === "string" ? JSON.parse(prod.images || "[]") : []);
-    const img = prodImgs[0] || "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800";
+    const img = prodImgs[0] || "/younoya_logo.png";
 
     addItem({
       id: prod.id,
@@ -160,8 +160,8 @@ export default function Home() {
                   Array.isArray(spotlightProd.images)
                     ? spotlightProd.images[0]
                     : typeof spotlightProd.images === "string" && spotlightProd.images
-                    ? JSON.parse(spotlightProd.images)[0] || "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"
-                    : "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800"
+                    ? JSON.parse(spotlightProd.images)[0] || "/younoya_logo.png"
+                    : "/younoya_logo.png"
                 }
                 alt={spotlightProd.title}
                 className="w-full h-full object-cover rounded-2xl shadow-xl hover:scale-105 transition-transform duration-500"
