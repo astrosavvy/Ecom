@@ -5,11 +5,26 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  async rewrites() {
+  // API requests go directly to https://api.younoya.com without taxing Worker CPU
+  async headers() {
     return [
       {
-        source: "/api/v1/:path*",
-        destination: "https://api.younoya.com/api/v1/:path*",
+        source: "/:all*(svg|jpg|jpeg|png|webp|ico|woff|woff2)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
       },
     ];
   },
