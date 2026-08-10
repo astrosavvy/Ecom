@@ -9,6 +9,7 @@ import {
 import { useCart } from "@/lib/CartContext";
 import { TestimonialMarquee } from "@/components/ui/TestimonialMarquee";
 import { MobileStickyCart } from "@/components/ui/MobileStickyCart";
+import { ProductCard } from "@/components/ui/ProductCard";
 
 interface Product {
   id: string;
@@ -22,6 +23,7 @@ interface Product {
   description: string;
   images: string[] | string;
   features: string[] | string;
+  is_hidden?: number;
 }
 
 export default function Home() {
@@ -82,9 +84,10 @@ export default function Home() {
           HERO SECTION (Clinical Luxury 32px Container)
          ======================================================== */}
       <section className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-6">
-        <div className="relative w-full rounded-[24px] sm:rounded-[40px] overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] p-5 sm:p-16 min-h-[65vh] sm:min-h-[75vh] flex flex-col justify-between shadow-sm">
-          {/* Background Ambient Image Overlay - Bright Crisp Photography */}
-          <div className="absolute inset-0 z-0 opacity-40 bg-[url('/younoya_hero_v3.jpg')] bg-cover bg-center pointer-events-none" />
+        <div className="relative w-full rounded-[24px] sm:rounded-[40px] overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4] p-5 sm:p-16 min-h-[65vh] sm:min-h-[75vh] flex flex-col justify-between shadow-md">
+          {/* Background Ambient Image Overlay - Bright Crisp High-Clarity Photography */}
+          <div className="absolute inset-0 z-0 opacity-85 bg-[url('/younoya_hero_v3.jpg')] bg-cover bg-center pointer-events-none" />
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#FDFCF8]/90 via-[#FDFCF8]/60 to-transparent pointer-events-none" />
           
           <div className="relative z-10 max-w-2xl space-y-4 sm:space-y-6">
             {/* Urgency Indicator Tag */}
@@ -92,13 +95,13 @@ export default function Home() {
               <span>⚡ LIMITED CONSECRATION BATCH // 2026 EDITION</span>
             </div>
 
-            {/* Typography: Heading mix of bold sans and italic serif */}
+            {/* Typography: Heading mix of bold sans and italic serif with rich vibrant gold */}
             <h1 className="text-3xl sm:text-6xl lg:text-7xl font-extrabold font-heading text-[#1C1C1C] leading-[1.1] sm:leading-[1.05] tracking-tight">
               Consecrated Grace <br />
-              <span className="font-serif italic font-normal text-[#D4AF37]">& Astrological Harmony</span>
+              <span className="font-serif italic font-bold text-[#B8860B] drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">& Astrological Harmony</span>
             </h1>
 
-            <p className="text-xs sm:text-lg text-stone-700 leading-relaxed max-w-xl font-normal">
+            <p className="text-xs sm:text-lg text-stone-800 leading-relaxed max-w-xl font-medium">
               Authentic Vedic Rakhis, handcrafted with natural Gomti Chakras, Rudrakshas, and organic silk threads—energized with 108 Gayatri mantras for brotherly protection & wealth attraction.
             </p>
 
@@ -114,9 +117,9 @@ export default function Home() {
 
               <Link
                 href="/checkout"
-                className="w-full sm:w-auto px-6 py-3.5 sm:px-7 sm:py-4 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 hover:bg-[#D4DFD7] transition-all"
+                className="w-full sm:w-auto px-6 py-3.5 sm:px-7 sm:py-4 rounded-full bg-white/90 backdrop-blur-md text-[#1C1C1C] text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 hover:bg-white transition-all shadow-sm"
               >
-                <ShoppingBag size={15} className="text-[#D4AF37]" />
+                <ShoppingBag size={15} className="text-[#B8860B]" />
                 <span>Instant Express Checkout</span>
               </Link>
             </div>
@@ -124,19 +127,19 @@ export default function Home() {
 
           {/* Glassmorphism Trust Badges Row at Bottom - Responsive Stack */}
           <div className="relative z-10 pt-8 sm:pt-12">
-            <div className="inline-flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-8 px-4 sm:px-6 py-3 rounded-2xl sm:rounded-full bg-white/85 backdrop-blur-[12px] border border-white/60 shadow-sm text-xs font-medium text-[#1C1C1C] w-full sm:w-auto">
+            <div className="inline-flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-8 px-4 sm:px-6 py-3 rounded-2xl sm:rounded-full bg-white/90 backdrop-blur-[12px] border border-white/60 shadow-sm text-xs font-semibold text-[#1C1C1C] w-full sm:w-auto">
               <div className="flex items-center gap-2">
-                <ShieldCheck size={16} className="text-[#D4AF37] flex-shrink-0" />
+                <ShieldCheck size={16} className="text-[#B8860B] flex-shrink-0" />
                 <span>108 Gayatri Mantras</span>
               </div>
               <div className="hidden sm:block text-stone-300">•</div>
               <div className="flex items-center gap-2">
-                <Sparkles size={16} className="text-[#D4AF37] flex-shrink-0" />
+                <Sparkles size={16} className="text-[#B8860B] flex-shrink-0" />
                 <span>Natural Gomti Chakra</span>
               </div>
               <div className="hidden sm:block text-stone-300">•</div>
               <div className="flex items-center gap-2">
-                <Truck size={16} className="text-[#D4AF37] flex-shrink-0" />
+                <Truck size={16} className="text-[#B8860B] flex-shrink-0" />
                 <span>100% Free Air Delivery</span>
               </div>
             </div>
@@ -259,75 +262,9 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products.map((prod) => {
-            const prodImgs: string[] = Array.isArray(prod.images)
-              ? prod.images
-              : (typeof prod.images === "string" ? JSON.parse(prod.images || "[]") : []);
-            const thumb = prodImgs[0] || "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800";
-
-            return (
-              <div
-                key={prod.id}
-                className="clinical-card p-6 flex flex-col justify-between space-y-5"
-              >
-                <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4]">
-                  <img
-                    src={thumb}
-                    alt={prod.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
-                  {prod.badge && (
-                    <span className="absolute top-3 left-3 bg-[#1C1C1C] text-white text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-1 rounded-md shadow-sm">
-                      {prod.badge}
-                    </span>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Link href={`/products/${prod.handle}`}>
-                    <h3 className="text-sm font-bold font-heading text-[#1C1C1C] hover:text-[#D4AF37] transition-colors line-clamp-2 leading-snug">
-                      {prod.title}
-                    </h3>
-                  </Link>
-                  <p className="text-[11px] text-stone-500 line-clamp-1">
-                    {prod.subtitle}
-                  </p>
-
-                  <div className="flex items-baseline gap-2 pt-1">
-                    <span className="text-lg font-extrabold font-mono text-[#1C1C1C]">₹{prod.price}</span>
-                    <span className="text-xs text-stone-400 line-through">₹{prod.original_price}</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 pt-1">
-                  <button
-                    onClick={() => handleAddToCart(prod)}
-                    className="py-2.5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold hover:bg-[#D4DFD7] transition-colors flex items-center justify-center gap-1"
-                  >
-                    {addedId === prod.id ? (
-                      <>
-                        <Check size={13} className="text-emerald-700" />
-                        <span className="text-emerald-700">Added</span>
-                      </>
-                    ) : (
-                      <>
-                        <ShoppingBag size={13} />
-                        <span>Add</span>
-                      </>
-                    )}
-                  </button>
-
-                  <Link
-                    href="/checkout"
-                    onClick={() => handleAddToCart(prod)}
-                    className="py-2.5 rounded-full bg-[#1C1C1C] text-white text-xs font-bold uppercase tracking-wider text-center flex items-center justify-center hover:bg-[#333333] transition-colors"
-                  >
-                    Buy Now
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
+          {products.slice(0, 4).map((prod) => (
+            <ProductCard key={prod.id} product={prod} />
+          ))}
         </div>
       </section>
 

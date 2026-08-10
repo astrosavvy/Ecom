@@ -5,28 +5,13 @@ import Link from "next/link";
 import { Search, ShoppingBag, Check, ArrowRight, ShieldCheck, Filter } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
 import { MobileStickyCart } from "@/components/ui/MobileStickyCart";
-
-interface Product {
-  id: string;
-  handle: string;
-  sku: string;
-  title: string;
-  subtitle: string;
-  price: number;
-  original_price: number;
-  badge: string;
-  description: string;
-  images: string[] | string;
-  features: string[] | string;
-}
+import { ProductCard, Product } from "@/components/ui/ProductCard";
 
 export default function ProductsCatalogPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [addedItem, setAddedItem] = useState<string | null>(null);
-  const { addItem } = useCart();
 
   useEffect(() => {
     fetch("https://api.younoya.com/api/v1/products")
@@ -51,26 +36,6 @@ export default function ProductsCatalogPage() {
       (p.badge && p.badge.toLowerCase().includes(selectedCategory.toLowerCase()));
     return matchesSearch && matchesCategory;
   });
-
-  const handleAddToCart = (prod: Product) => {
-    const prodImgs: string[] = Array.isArray(prod.images)
-      ? prod.images
-      : (typeof prod.images === "string" ? JSON.parse(prod.images || "[]") : []);
-    const img = prodImgs[0] || "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?auto=format&fit=crop&q=80&w=800";
-
-    addItem({
-      id: prod.id,
-      handle: prod.handle,
-      title: prod.title,
-      subtitle: prod.subtitle,
-      price: prod.price,
-      original_price: prod.original_price,
-      image: img
-    });
-
-    setAddedItem(prod.id);
-    setTimeout(() => setAddedItem(null), 2000);
-  };
 
   return (
     <div className="relative min-h-screen bg-[#FDFCF8] text-[#1C1C1C] pt-36 pb-24 px-4 sm:px-8">
@@ -140,75 +105,9 @@ export default function ProductsCatalogPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((prod) => {
-              const prodImgs: string[] = Array.isArray(prod.images)
-                ? prod.images
-                : (typeof prod.images === "string" ? JSON.parse(prod.images || "[]") : []);
-              const thumb = prodImgs[0] || "/younoya_logo.png";
-
-              return (
-                <div
-                  key={prod.id}
-                  className="clinical-card p-6 flex flex-col justify-between space-y-5"
-                >
-                  <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#E8E6E1] border border-[#E2E8E4]">
-                    <img
-                      src={thumb}
-                      alt={prod.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                    {prod.badge && (
-                      <span className="absolute top-3 left-3 bg-[#1C1C1C] text-white text-[10px] font-mono uppercase tracking-wider font-bold px-2.5 py-1 rounded-md shadow-sm">
-                        {prod.badge}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Link href={`/products/${prod.handle}`}>
-                      <h3 className="text-sm font-bold font-heading text-[#1C1C1C] hover:text-[#D4AF37] transition-colors line-clamp-2 leading-snug">
-                        {prod.title}
-                      </h3>
-                    </Link>
-                    <p className="text-[11px] text-stone-500 line-clamp-1">
-                      {prod.subtitle}
-                    </p>
-
-                    <div className="flex items-baseline gap-2 pt-1">
-                      <span className="text-lg font-extrabold font-mono text-[#1C1C1C]">₹{prod.price}</span>
-                      <span className="text-xs text-stone-400 line-through">₹{prod.original_price}</span>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 pt-1">
-                    <button
-                      onClick={() => handleAddToCart(prod)}
-                      className="py-2.5 rounded-full bg-[#E2E8E4] text-[#1C1C1C] text-xs font-bold hover:bg-[#D4DFD7] transition-colors flex items-center justify-center gap-1"
-                    >
-                      {addedItem === prod.id ? (
-                        <>
-                          <Check size={13} className="text-emerald-700" />
-                          <span className="text-emerald-700">Added</span>
-                        </>
-                      ) : (
-                        <>
-                          <ShoppingBag size={13} />
-                          <span>Add</span>
-                        </>
-                      )}
-                    </button>
-
-                    <Link
-                      href="/checkout"
-                      onClick={() => handleAddToCart(prod)}
-                      className="py-2.5 rounded-full bg-[#1C1C1C] text-white text-xs font-bold uppercase tracking-wider text-center flex items-center justify-center hover:bg-[#333333] transition-colors"
-                    >
-                      Buy Now
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+            {filteredProducts.map((prod) => (
+              <ProductCard key={prod.id} product={prod} />
+            ))}
           </div>
         )}
       </div>

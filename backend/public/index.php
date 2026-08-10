@@ -37,11 +37,12 @@ function getDB() {
                 );
             ");
 
-            // Safe column additions for orders table
+            // Safe column additions for orders & products tables
             try { $pdo->exec("ALTER TABLE orders ADD COLUMN is_archived TINYINT(1) DEFAULT 0"); } catch (Exception $e) {}
             try { $pdo->exec("ALTER TABLE orders ADD COLUMN courier_code VARCHAR(64) DEFAULT 'shiprocket'"); } catch (Exception $e) {}
             try { $pdo->exec("ALTER TABLE orders ADD COLUMN tracking_url VARCHAR(512) DEFAULT NULL"); } catch (Exception $e) {}
             try { $pdo->exec("ALTER TABLE orders ADD COLUMN order_notes TEXT DEFAULT NULL"); } catch (Exception $e) {}
+            try { $pdo->exec("ALTER TABLE products ADD COLUMN is_hidden TINYINT(1) DEFAULT 0"); } catch (Exception $e) {}
 
         } catch (PDOException $e) {
             http_response_code(500);
@@ -58,7 +59,9 @@ function getRequestPayload() {
     $raw = file_get_contents('php://input');
     if (!empty($raw)) {
         $json = json_decode($raw, true);
-        if (is_array($json)) return $json;
+        if (json_last_error() === JSON_ERROR_NONE && is_array($json)) {
+            return $json;
+        }
     }
     if (!empty($_POST)) return $_POST;
     return [];
@@ -126,10 +129,10 @@ if ($uri === '/' || $uri === '/health') {
     exit;
 }
 
-// 2. Public Storefront Products API
+// 2. Public Storefront Products API (Filters Out Hidden Products)
 if ($uri === '/api/v1/products' || $uri === '/products') {
     $db = getDB();
-    $stmt = $db->query("SELECT * FROM products ORDER BY created_at ASC");
+    $stmt = $db->query("SELECT * FROM products WHERE is_hidden = 0 ORDER BY created_at ASC");
     $products = $stmt->fetchAll();
 
     $formatted = array_map(function($p) use ($db) {
@@ -153,7 +156,8 @@ if ($uri === '/api/v1/products' || $uri === '/products') {
             'variants' => $variants,
             'meta_title' => $p['meta_title'],
             'meta_description' => $p['meta_description'],
-            'inventory_count' => (int)$p['inventory_count']
+            'inventory_count' => (int)$p['inventory_count'],
+            'is_hidden' => (int)($p['is_hidden'] ?? 0)
         ];
     }, $products);
 
@@ -182,10 +186,27 @@ if ($uri === '/api/v1/admin/login') {
     exit;
 }
 
-// 4. Admin Product CRUD Endpoints (Supports PUT /products and PUT /products/{id})
+// 4. Admin Product CRUD Endpoints (Supports Visibility Toggle, PUT /products and PUT /products/{id})
 if (strpos($uri, '/api/v1/admin/products') === 0) {
     $db = getDB();
     $method = $_SERVER['REQUEST_METHOD'];
+
+    // 1-Click Visibility Toggle endpoint: PATCH /api/v1/admin/products/{id}/visibility
+    if ($method === 'PATCH' && preg_match('#^/api/v1/admin/products/([^/]+)/visibility$#', $uri, $matches)) {
+        $id = $matches[1];
+        $input = getRequestPayload();
+        $isHidden = isset($input['is_hidden']) ? (int)$input['is_hidden'] : 0;
+
+        $stmt = $db->prepare("UPDATE products SET is_hidden = ? WHERE id = ? OR handle = ?");
+        $stmt->execute([$isHidden, $id, $id]);
+
+        echo json_encode([
+            'success' => true, 
+            'message' => $isHidden ? 'Product is now hidden from live store' : 'Product is now live on store',
+            'is_hidden' => $isHidden
+        ]);
+        exit;
+    }
 
     if ($method === 'GET' && $uri === '/api/v1/admin/products') {
         $stmt = $db->query("SELECT * FROM products ORDER BY created_at DESC");
@@ -208,7 +229,8 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
                 'variants' => $vStmt->fetchAll(),
                 'meta_title' => $p['meta_title'],
                 'meta_description' => $p['meta_description'],
-                'inventory_count' => (int)$p['inventory_count']
+                'inventory_count' => (int)$p['inventory_count'],
+                'is_hidden' => (int)($p['is_hidden'] ?? 0)
             ];
         }, $prods);
         echo json_encode(['success' => true, 'data' => $formatted]);
@@ -221,8 +243,8 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
         $handle = $input['handle'] ?? preg_replace('/[^a-z0-9]+/', '-', strtolower($input['title'] ?? 'product-' . time()));
         
         $stmt = $db->prepare("INSERT INTO products 
-            (id, handle, sku, title, subtitle, price, original_price, badge, description, features, images, meta_title, meta_description, inventory_count)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (id, handle, sku, title, subtitle, price, original_price, badge, description, features, images, meta_title, meta_description, inventory_count, is_hidden)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         
         $stmt->execute([
             $id,
@@ -238,7 +260,8 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
             is_array($input['images'] ?? null) ? json_encode($input['images']) : ($input['images'] ?? '[]'),
             $input['meta_title'] ?? ($input['title'] . ' | YOUNOYA'),
             $input['meta_description'] ?? ($input['subtitle'] ?? ''),
-            (int)($input['inventory_count'] ?? 100)
+            (int)($input['inventory_count'] ?? 100),
+            (int)($input['is_hidden'] ?? 0)
         ]);
 
         echo json_encode(['success' => true, 'message' => 'Product published successfully', 'id' => $id]);
@@ -262,7 +285,7 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
 
         $stmt = $db->prepare("UPDATE products SET 
             title = ?, subtitle = ?, price = ?, original_price = ?, badge = ?, 
-            description = ?, features = ?, images = ?, meta_title = ?, meta_description = ?, inventory_count = ?
+            description = ?, features = ?, images = ?, meta_title = ?, meta_description = ?, inventory_count = ?, is_hidden = ?
             WHERE id = ? OR handle = ?");
         
         $stmt->execute([
@@ -277,6 +300,7 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
             $input['meta_title'] ?? '',
             $input['meta_description'] ?? '',
             (int)($input['inventory_count'] ?? 100),
+            (int)($input['is_hidden'] ?? 0),
             $id,
             $id
         ]);

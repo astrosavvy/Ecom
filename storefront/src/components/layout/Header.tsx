@@ -41,11 +41,11 @@ export function Header() {
         {/* Desktop: Unified Floating Glass Pill (Logo + Links + Cart + CTA in ONE Pill) */}
         <div className="pointer-events-auto hidden md:flex items-center justify-between gap-6 px-6 py-2.5 rounded-full bg-[#FDFCF8]/90 backdrop-blur-2xl border border-[#E2E8E4] shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_35px_rgb(0,0,0,0.1)] transition-all duration-300">
           {/* Logo inside Pill */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0 group pr-2">
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0 group pr-1">
             <img
               src="/younoya_logo.png"
               alt="YOUNOYA"
-              className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              className="h-9 sm:h-11 w-auto max-w-[150px] object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
             />
           </Link>
 
@@ -97,7 +97,7 @@ export function Header() {
             <img
               src="/younoya_logo.png"
               alt="YOUNOYA"
-              className="h-8 w-auto object-contain"
+              className="h-8 w-auto max-w-[120px] object-contain drop-shadow-sm"
             />
           </Link>
 

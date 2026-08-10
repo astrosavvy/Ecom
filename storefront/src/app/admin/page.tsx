@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { 
   Plus, Edit, Trash2, Image as ImageIcon, Save, ArrowLeft, 
-  CheckCircle, AlertCircle, Sparkles, RefreshCw, Eye, ExternalLink, Globe, Lock, LogOut,
+  CheckCircle, AlertCircle, Sparkles, RefreshCw, Eye, EyeOff, ExternalLink, Globe, Lock, LogOut,
   Upload, X, Link as LinkIcon, ShoppingBag, Tag, Users, BarChart3, Package, Truck,
   Star, ChevronLeft, ChevronRight, Printer, Archive, RotateCcw, Copy, Settings,
   Check, Filter, Search, ShieldCheck, FileText, Send
@@ -25,6 +25,7 @@ interface Product {
   meta_title?: string;
   meta_description?: string;
   inventory_count: number;
+  is_hidden?: number;
 }
 
 interface Order {
@@ -306,6 +307,27 @@ export default function AdminPage() {
       }
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  // 1-Click Visibility Toggle (Live / Hidden)
+  const handleToggleVisibility = async (prod: Product) => {
+    const nextHidden = prod.is_hidden ? 0 : 1;
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin/products/${prod.id}/visibility`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_hidden: nextHidden })
+      });
+      const json = await res.json();
+      if (json.success) {
+        fetchData();
+        setStatusMsg(`✓ "${prod.title}" is now ${nextHidden ? "HIDDEN from live store" : "LIVE on store"}!`);
+      } else {
+        setStatusMsg("❌ Failed to update visibility: " + (json.error || "Server error"));
+      }
+    } catch (e: any) {
+      setStatusMsg("❌ Error: " + e.message);
     }
   };
 
@@ -765,14 +787,15 @@ export default function AdminPage() {
                     <th className="py-4 px-6">SKU / Handle</th>
                     <th className="py-4 px-6">Price</th>
                     <th className="py-4 px-6 min-w-[140px]">Inventory</th>
-                    <th className="py-4 px-6 min-w-[140px]">Badge</th>
+                    <th className="py-4 px-6 min-w-[130px]">Badge</th>
+                    <th className="py-4 px-6 min-w-[140px]">Live Store Status</th>
                     <th className="py-4 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E2E8E4]">
                   {products.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-12 text-center text-stone-500">
+                      <td colSpan={7} className="py-12 text-center text-stone-500">
                         {loading ? "Loading products from MariaDB..." : "No products found. Click 'Add Product' to create one."}
                       </td>
                     </tr>
@@ -782,9 +805,10 @@ export default function AdminPage() {
                         ? prod.images 
                         : (typeof prod.images === "string" ? JSON.parse(prod.images || "[]") : []);
                       const thumb = prodImgs[0];
+                      const isHidden = Boolean(prod.is_hidden);
 
                       return (
-                        <tr key={prod.id} className="hover:bg-[#F5F5F0]/50 transition-colors">
+                        <tr key={prod.id} className={`transition-colors ${isHidden ? "bg-stone-50/70 opacity-75 hover:opacity-100" : "hover:bg-[#F5F5F0]/50"}`}>
                           <td className="py-4 px-6">
                             <div className="flex items-center gap-3">
                               <div className="w-12 h-12 rounded-xl bg-[#E8E6E1] border border-[#E2E8E4] flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -816,6 +840,20 @@ export default function AdminPage() {
                             <span className="inline-block px-3 py-1 rounded-full text-[10px] uppercase font-extrabold font-mono bg-[#1C1C1C] text-white whitespace-nowrap">
                               {prod.badge || "Standard"}
                             </span>
+                          </td>
+                          <td className="py-4 px-6">
+                            <button
+                              onClick={() => handleToggleVisibility(prod)}
+                              className={`px-3 py-1.5 rounded-full text-[11px] font-bold inline-flex items-center gap-1.5 transition-all shadow-sm ${
+                                isHidden
+                                  ? "bg-amber-100/80 text-amber-900 border border-amber-300 hover:bg-amber-200"
+                                  : "bg-emerald-100 text-emerald-900 border border-emerald-300 hover:bg-emerald-200"
+                              }`}
+                              title={isHidden ? "Click to UNHIDE and publish on live store" : "Click to HIDE from live store"}
+                            >
+                              {isHidden ? <EyeOff size={13} className="text-amber-700" /> : <Eye size={13} className="text-emerald-700" />}
+                              <span>{isHidden ? "Hidden (Draft)" : "Live on Store"}</span>
+                            </button>
                           </td>
                           <td className="py-4 px-6 text-right space-x-2">
                             <button
@@ -1063,6 +1101,18 @@ export default function AdminPage() {
                       onChange={(e) => setSelectedProduct({ ...selectedProduct, sku: e.target.value })}
                       className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-4 py-2 text-xs font-mono text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Live Store Visibility</label>
+                    <select
+                      value={selectedProduct.is_hidden ? "hidden" : "live"}
+                      onChange={(e) => setSelectedProduct({ ...selectedProduct, is_hidden: e.target.value === "hidden" ? 1 : 0 })}
+                      className="w-full bg-[#F5F5F0] border border-[#E2E8E4] rounded-xl px-3 py-2.5 text-xs font-bold text-[#1C1C1C]"
+                    >
+                      <option value="live">● Published (Live on Storefront)</option>
+                      <option value="hidden">○ Hidden (Draft / Unlisted)</option>
+                    </select>
                   </div>
                 </div>
 
