@@ -5,11 +5,20 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { 
   ChevronRight, Star, Truck, ShieldCheck, Check, ShoppingBag, 
-  RefreshCw, MapPin, Loader2, Award, Heart, Plus, Minus 
+  RefreshCw, MapPin, Loader2, Award, Heart, Plus, Minus, Sparkles 
 } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
 import { StickyConversionBar } from "@/components/ui/StickyConversionBar";
 import { ProductCard } from "@/components/ui/ProductCard";
+
+interface ProductVariant {
+  id: string;
+  title: string;
+  price: number;
+  original_price: number;
+  badge?: string;
+  description?: string;
+}
 
 interface Product {
   id: string;
@@ -23,6 +32,7 @@ interface Product {
   description: string;
   images: string[] | string;
   features: string[] | string;
+  variants?: ProductVariant[];
 }
 
 export function ProductDetailClient({ initialHandle }: { initialHandle?: string }) {
@@ -35,8 +45,7 @@ export function ProductDetailClient({ initialHandle }: { initialHandle?: string 
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [selectedVariant, setSelectedVariant] = useState("Single Set");
-  const [selectedColor, setSelectedColor] = useState("Sacred Red");
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
   const [added, setAdded] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState("");
@@ -126,16 +135,26 @@ export function ProductDetailClient({ initialHandle }: { initialHandle?: string 
 
   const relatedProducts = allProducts.filter((p) => p.id !== product.id).slice(0, 4);
 
+  // Variant Options Calculation
+  const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
+  const activeVariant: ProductVariant | null = hasVariants ? (product.variants![selectedOptionIndex] || product.variants![0]) : null;
+
+  const currentPrice = activeVariant ? activeVariant.price : product.price;
+  const currentOriginalPrice = activeVariant ? activeVariant.original_price : product.original_price;
+  const currentVariantTitle = activeVariant ? activeVariant.title : "Standard Consecration Set";
+  const currentDescription = (activeVariant && activeVariant.description) ? activeVariant.description : product.description;
+
   const handleAddToCart = () => {
     addItem({
-      id: product.id,
+      id: activeVariant ? `${product.id}-${activeVariant.id || selectedOptionIndex}` : product.id,
       handle: product.handle,
       title: product.title,
-      subtitle: product.subtitle,
-      price: product.price,
-      original_price: product.original_price,
-      image: images[0]
-    });
+      subtitle: currentVariantTitle,
+      price: currentPrice,
+      original_price: currentOriginalPrice,
+      image: images[0],
+      variant: currentVariantTitle
+    }, quantity);
 
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -205,17 +224,84 @@ export function ProductDetailClient({ initialHandle }: { initialHandle?: string 
               </p>
             </div>
 
+            {/* Interactive Package / Edition Option Cards (When 2 options are configured) */}
+            {hasVariants && product.variants && product.variants.length > 0 && (
+              <div className="space-y-3">
+                <label className="block text-xs font-mono uppercase tracking-wider text-stone-700 font-bold flex items-center justify-between">
+                  <span>Select Edition / Package:</span>
+                  <span className="text-[11px] text-[#B8860B] font-sans font-medium">100% Consecrated Guaranteed</span>
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {product.variants.map((v, idx) => {
+                    const isSelected = selectedOptionIndex === idx;
+                    const diff = v.original_price - v.price;
+                    return (
+                      <div
+                        key={v.id || idx}
+                        onClick={() => setSelectedOptionIndex(idx)}
+                        className={`cursor-pointer rounded-2xl p-4 transition-all relative border-2 flex flex-col justify-between ${
+                          isSelected
+                            ? "bg-white border-[#1C1C1C] shadow-md ring-1 ring-[#1C1C1C]/10"
+                            : "bg-[#F9F8F5] border-[#E2E8E4] opacity-80 hover:opacity-100 hover:border-stone-400"
+                        }`}
+                      >
+                        {/* Selected Radio Indicator / Badge */}
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0 ${
+                              isSelected ? "border-[#1C1C1C] bg-[#1C1C1C]" : "border-stone-400 bg-white"
+                            }`}>
+                              {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                            </div>
+                            <span className="text-xs font-bold text-[#1C1C1C] font-heading leading-tight line-clamp-1">
+                              {v.title}
+                            </span>
+                          </div>
+                          {v.badge && (
+                            <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1C1C1C] text-white flex-shrink-0">
+                              {v.badge}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Short Description */}
+                        {v.description && (
+                          <p className="text-[11px] text-stone-600 line-clamp-2 mb-3 leading-relaxed">
+                            {v.description}
+                          </p>
+                        )}
+
+                        {/* Price & Savings Tag */}
+                        <div className="flex items-baseline gap-2 pt-2 border-t border-stone-200/60">
+                          <span className="text-base font-extrabold font-mono text-[#1C1C1C]">₹{v.price}</span>
+                          {v.original_price > v.price && (
+                            <span className="text-xs text-stone-400 line-through font-mono">₹{v.original_price}</span>
+                          )}
+                          {diff > 0 && (
+                            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full ml-auto">
+                              Save ₹{diff}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Price Box */}
             <div className="p-6 rounded-[24px] bg-white border border-[#E2E8E4] space-y-2 shadow-sm">
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl font-extrabold font-mono text-[#1C1C1C]">
-                  ₹{product.price}
+                  ₹{currentPrice}
                 </span>
                 <span className="text-sm text-stone-400 line-through">
-                  ₹{product.original_price}
+                  ₹{currentOriginalPrice}
                 </span>
                 <span className="text-xs font-bold text-emerald-700 bg-[#E2E8E4] px-2.5 py-0.5 rounded-full">
-                  Save ₹{product.original_price - product.price}
+                  Save ₹{currentOriginalPrice - currentPrice}
                 </span>
               </div>
               <div className="text-xs text-stone-500 flex items-center gap-1.5 pt-1">
@@ -289,7 +375,7 @@ export function ProductDetailClient({ initialHandle }: { initialHandle?: string 
                 ) : (
                   <>
                     <ShoppingBag size={16} />
-                    <span>Add to Sacred Bag</span>
+                    <span>Add to Sacred Bag — ₹{currentPrice * quantity}</span>
                   </>
                 )}
               </button>
@@ -350,13 +436,18 @@ export function ProductDetailClient({ initialHandle }: { initialHandle?: string 
                 </div>
               </div>
 
-              {product.description && (
+              {currentDescription && (
                 <div className="space-y-2 pt-2 border-t border-[#E2E8E4]">
-                  <h3 className="text-sm font-mono uppercase tracking-wider text-stone-600 font-bold">
-                    Devotional Summary
+                  <h3 className="text-sm font-mono uppercase tracking-wider text-stone-600 font-bold flex items-center gap-2">
+                    <span>Devotional Summary</span>
+                    {hasVariants && (
+                      <span className="text-[10px] font-sans font-bold bg-[#E2E8E4] text-[#1C1C1C] px-2 py-0.5 rounded-full">
+                        {currentVariantTitle}
+                      </span>
+                    )}
                   </h3>
                   <p className="text-xs text-stone-600 leading-relaxed whitespace-pre-line">
-                    {product.description}
+                    {currentDescription}
                   </p>
                 </div>
               )}
@@ -425,10 +516,10 @@ export function ProductDetailClient({ initialHandle }: { initialHandle?: string 
         productId={product.id}
         handle={product.handle}
         title={product.title}
-        price={product.price}
-        originalPrice={product.original_price}
+        price={currentPrice}
+        originalPrice={currentOriginalPrice}
         image={images[0]}
-        variantName={selectedVariant}
+        variantName={currentVariantTitle}
         triggerElementId="primary-add-to-cart-btn"
       />
     </div>

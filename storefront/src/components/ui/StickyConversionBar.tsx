@@ -57,12 +57,14 @@ export function StickyConversionBar({
 
   const handleAddToCart = () => {
     addItem({
-      id: productId,
+      id: `${productId}-${variantName}`,
       handle,
       title,
+      subtitle: variantName,
       price,
       original_price: originalPrice,
-      image
+      image,
+      variant: variantName
     });
 
     setAdded(true);

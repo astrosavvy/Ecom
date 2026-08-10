@@ -43,6 +43,7 @@ function getDB() {
             try { $pdo->exec("ALTER TABLE orders ADD COLUMN tracking_url VARCHAR(512) DEFAULT NULL"); } catch (Exception $e) {}
             try { $pdo->exec("ALTER TABLE orders ADD COLUMN order_notes TEXT DEFAULT NULL"); } catch (Exception $e) {}
             try { $pdo->exec("ALTER TABLE products ADD COLUMN is_hidden TINYINT(1) DEFAULT 0"); } catch (Exception $e) {}
+            try { $pdo->exec("ALTER TABLE products ADD COLUMN variants LONGTEXT DEFAULT NULL"); } catch (Exception $e) {}
 
         } catch (PDOException $e) {
             http_response_code(500);
@@ -67,44 +68,59 @@ function getRequestPayload() {
     return [];
 }
 
-// Generate Standard Date-Based Order Number: YN-YYYYMMDD-001
-function generateStandardOrderNumber($pdo) {
-    $datePrefix = date('Ymd');
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM orders WHERE order_number LIKE ?");
-    $stmt->execute(["YN-{$datePrefix}-%"]);
-    $todayCount = (int)$stmt->fetchColumn() + 1;
-    $sequence = str_pad($todayCount, 3, '0', STR_PAD_LEFT);
-    return "YN-{$datePrefix}-{$sequence}";
-}
-
-// SMTP / Email Notification Dispatcher
-function dispatchOrderEmails($orderNumber, $customerEmail, $customerName, $amount, $items, $address) {
+// Helper for sending customer order confirmation email via PHP mail()
+function sendOrderConfirmationEmail($toEmail, $orderNumber, $customerName, $totalAmount, $items = []) {
+    $subject = "Order Confirmed: #{$orderNumber} — YOUNOYA Consecrated Rakhis";
     $headers = "MIME-Version: 1.0\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8\r\n";
-    $headers .= "From: YOUNOYA Devotee Concierge <support@younoya.com>\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $headers .= "From: YOUNOYA <orders@younoya.com>\r\n";
+    $headers .= "Reply-To: support@younoya.com\r\n";
 
-    // 1. Customer Confirmation Email
-    $customerSubject = "Order Confirmed: #{$orderNumber} — YOUNOYA Sacred Consecration";
-    $customerBody = "
-    <div style='font-family: Arial, sans-serif; background-color: #0c0d12; color: #edf1f8; padding: 30px; border-radius: 16px;'>
-        <h2 style='color: #f59e0b;'>Blessings, {$customerName}</h2>
-        <p>Your sacred order <strong>#{$orderNumber}</strong> has been received and scheduled for morning Vedic consecration.</p>
-        <div style='background: #141724; padding: 20px; border-radius: 12px; margin: 20px 0;'>
-            <p><strong>Total Amount Paid:</strong> ₹{$amount}</p>
-            <p><strong>Shipping Method:</strong> 100% Free Express Air Shipping</p>
+    $itemListHtml = '';
+    foreach ($items as $it) {
+        $name = htmlspecialchars($it['title'] ?? 'Consecrated Keepsake');
+        $varName = !empty($it['variant']) ? " (" . htmlspecialchars($it['variant']) . ")" : "";
+        $qty = (int)($it['quantity'] ?? 1);
+        $price = (int)($it['price'] ?? 0);
+        $itemListHtml .= "<tr><td style='padding: 8px; border-bottom: 1px solid #eee;'>{$name}{$varName} x {$qty}</td><td style='padding: 8px; border-bottom: 1px solid #eee; text-align: right;'>₹" . ($price * $qty) . "</td></tr>";
+    }
+
+    $body = "
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset='UTF-8'></head>
+    <body style='font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; background-color: #FDFCF8; color: #1C1C1C; margin: 0; padding: 20px;'>
+        <div style='max-width: 540px; margin: 0 auto; background: #ffffff; border: 1px solid #E2E8E4; border-radius: 24px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);'>
+            <div style='text-align: center; margin-bottom: 24px;'>
+                <h1 style='font-size: 24px; margin: 0; font-weight: 800; letter-spacing: -0.5px;'>YOUNOYA</h1>
+                <p style='font-size: 11px; color: #B8860B; margin: 4px 0 0 0; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;'>Sacred Vedic Consecration Hub</p>
+            </div>
+            <div style='background: #D8E6D8; padding: 16px; border-radius: 16px; margin-bottom: 24px; text-align: center;'>
+                <p style='margin: 0; font-size: 14px; font-weight: bold; color: #154522;'>✓ Order Successfully Placed & Queued for Blessing</p>
+                <p style='margin: 4px 0 0 0; font-size: 12px; color: #2D6339;'>Order ID: #{$orderNumber}</p>
+            </div>
+            <p style='font-size: 13px; line-height: 1.6; color: #4A4A4A;'>Namaste <strong>{$customerName}</strong>,<br>Your sacred rakhis have been reserved and entered the 108 Gayatri Mantra energization queue. Our temple priests in Jaipur are hand-consecrating your order with pure Akshat and Roli.</p>
+            <table style='width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 12px;'>
+                <thead><tr style='background: #F5F5F0;'><th style='padding: 8px; text-align: left;'>Sacred Item</th><th style='padding: 8px; text-align: right;'>Amount</th></tr></thead>
+                <tbody>{$itemListHtml}</tbody>
+                <tfoot><tr><td style='padding: 12px 8px; font-weight: bold; font-size: 14px;'>Total Paid:</td><td style='padding: 12px 8px; font-weight: bold; font-size: 14px; text-align: right; color: #1C1C1C;'>₹{$totalAmount}</td></tr></tfoot>
+            </table>
+            <div style='border-top: 1px solid #E2E8E4; padding-top: 20px; font-size: 11px; color: #777; line-height: 1.5; text-align: center;'>
+                <p style='margin: 0;'>Express Air Dispatch with real-time SMS tracking updates.<br>Questions? Reach our sacred concierge at <a href='mailto:support@younoya.com' style='color: #1C1C1C; font-weight: bold;'>support@younoya.com</a></p>
+            </div>
         </div>
-        <p style='color: #9ca6be; font-size: 12px;'>For questions, reach out to support@younoya.com</p>
-    </div>";
+    </body>
+    </html>";
 
-    @mail($customerEmail, $customerSubject, $customerBody, $headers);
+    @mail($toEmail, $subject, $body, $headers);
 
-    // 2. Admin Alert Email
-    $adminSubject = "🚨 New Order Received: #{$orderNumber} (₹{$amount})";
+    // Also send admin notification
+    $adminSubject = "⚡ New Paid Order: #{$orderNumber} (₹{$totalAmount})";
     $adminBody = "
     <div style='font-family: Arial, sans-serif; padding: 20px;'>
         <h2>New Order: #{$orderNumber}</h2>
-        <p><strong>Customer:</strong> {$customerName} ({$customerEmail})</p>
-        <p><strong>Amount:</strong> ₹{$amount}</p>
+        <p><strong>Customer:</strong> {$customerName} ({$toEmail})</p>
+        <p><strong>Amount:</strong> ₹{$totalAmount}</p>
         <p>Manage order in Admin: <a href='https://younoya.com/admin'>https://younoya.com/admin</a></p>
     </div>";
 
@@ -123,7 +139,7 @@ if ($uri === '/' || $uri === '/health') {
         'database' => 'MariaDB 10.11+ (Enterprise Schema Active)',
         'products_in_db' => (int)$prodCount,
         'orders_in_db' => (int)$orderCount,
-        'features' => ['Products', 'Variants', 'Orders (OMS)', 'Discounts', 'Customers', 'Media Asset Library', 'A5 Shipping Label', 'Razorpay', 'SMTP Emails'],
+        'features' => ['Products', 'Multi-Tier Variants', 'Orders (OMS)', 'Discounts', 'Customers', 'Media Asset Library', 'A5 Shipping Label', 'Razorpay', 'SMTP Emails'],
         'shipping' => '100% Free Express Air Shipping across India'
     ]);
     exit;
@@ -136,9 +152,12 @@ if ($uri === '/api/v1/products' || $uri === '/products') {
     $products = $stmt->fetchAll();
 
     $formatted = array_map(function($p) use ($db) {
-        $vStmt = $db->prepare("SELECT * FROM product_variants WHERE product_id = ?");
-        $vStmt->execute([$p['id']]);
-        $variants = $vStmt->fetchAll();
+        $rawVariants = json_decode($p['variants'] ?: '[]', true);
+        if (empty($rawVariants)) {
+            $vStmt = $db->prepare("SELECT * FROM product_variants WHERE product_id = ?");
+            $vStmt->execute([$p['id']]);
+            $rawVariants = $vStmt->fetchAll();
+        }
 
         return [
             'id' => $p['id'],
@@ -153,7 +172,7 @@ if ($uri === '/api/v1/products' || $uri === '/products') {
             'description' => $p['description'],
             'features' => json_decode($p['features'] ?: '[]', true),
             'images' => json_decode($p['images'] ?: '[]', true),
-            'variants' => $variants,
+            'variants' => $rawVariants,
             'meta_title' => $p['meta_title'],
             'meta_description' => $p['meta_description'],
             'inventory_count' => (int)$p['inventory_count'],
@@ -186,7 +205,7 @@ if ($uri === '/api/v1/admin/login') {
     exit;
 }
 
-// 4. Admin Product CRUD Endpoints (Supports Visibility Toggle, PUT /products and PUT /products/{id})
+// 4. Admin Product CRUD Endpoints (Supports Visibility Toggle, Variants, PUT /products and PUT /products/{id})
 if (strpos($uri, '/api/v1/admin/products') === 0) {
     $db = getDB();
     $method = $_SERVER['REQUEST_METHOD'];
@@ -212,8 +231,12 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
         $stmt = $db->query("SELECT * FROM products ORDER BY created_at DESC");
         $prods = $stmt->fetchAll();
         $formatted = array_map(function($p) use ($db) {
-            $vStmt = $db->prepare("SELECT * FROM product_variants WHERE product_id = ?");
-            $vStmt->execute([$p['id']]);
+            $rawVariants = json_decode($p['variants'] ?: '[]', true);
+            if (empty($rawVariants)) {
+                $vStmt = $db->prepare("SELECT * FROM product_variants WHERE product_id = ?");
+                $vStmt->execute([$p['id']]);
+                $rawVariants = $vStmt->fetchAll();
+            }
             return [
                 'id' => $p['id'],
                 'handle' => $p['handle'],
@@ -226,7 +249,7 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
                 'description' => $p['description'],
                 'features' => json_decode($p['features'] ?: '[]', true),
                 'images' => json_decode($p['images'] ?: '[]', true),
-                'variants' => $vStmt->fetchAll(),
+                'variants' => $rawVariants,
                 'meta_title' => $p['meta_title'],
                 'meta_description' => $p['meta_description'],
                 'inventory_count' => (int)$p['inventory_count'],
@@ -243,8 +266,8 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
         $handle = $input['handle'] ?? preg_replace('/[^a-z0-9]+/', '-', strtolower($input['title'] ?? 'product-' . time()));
         
         $stmt = $db->prepare("INSERT INTO products 
-            (id, handle, sku, title, subtitle, price, original_price, badge, description, features, images, meta_title, meta_description, inventory_count, is_hidden)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (id, handle, sku, title, subtitle, price, original_price, badge, description, features, images, meta_title, meta_description, inventory_count, is_hidden, variants)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         
         $stmt->execute([
             $id,
@@ -261,7 +284,8 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
             $input['meta_title'] ?? ($input['title'] . ' | YOUNOYA'),
             $input['meta_description'] ?? ($input['subtitle'] ?? ''),
             (int)($input['inventory_count'] ?? 100),
-            (int)($input['is_hidden'] ?? 0)
+            (int)($input['is_hidden'] ?? 0),
+            is_array($input['variants'] ?? null) ? json_encode($input['variants']) : ($input['variants'] ?? '[]')
         ]);
 
         echo json_encode(['success' => true, 'message' => 'Product published successfully', 'id' => $id]);
@@ -285,7 +309,7 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
 
         $stmt = $db->prepare("UPDATE products SET 
             title = ?, subtitle = ?, price = ?, original_price = ?, badge = ?, 
-            description = ?, features = ?, images = ?, meta_title = ?, meta_description = ?, inventory_count = ?, is_hidden = ?
+            description = ?, features = ?, images = ?, meta_title = ?, meta_description = ?, inventory_count = ?, is_hidden = ?, variants = ?
             WHERE id = ? OR handle = ?");
         
         $stmt->execute([
@@ -301,6 +325,7 @@ if (strpos($uri, '/api/v1/admin/products') === 0) {
             $input['meta_description'] ?? '',
             (int)($input['inventory_count'] ?? 100),
             (int)($input['is_hidden'] ?? 0),
+            is_array($input['variants'] ?? null) ? json_encode($input['variants']) : ($input['variants'] ?? '[]'),
             $id,
             $id
         ]);

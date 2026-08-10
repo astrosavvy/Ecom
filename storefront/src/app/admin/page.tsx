@@ -10,6 +10,15 @@ import {
   Check, Filter, Search, ShieldCheck, FileText, Send
 } from "lucide-react";
 
+interface ProductVariant {
+  id: string;
+  title: string;
+  price: number;
+  original_price: number;
+  badge?: string;
+  description?: string;
+}
+
 interface Product {
   id: string;
   handle: string;
@@ -26,6 +35,7 @@ interface Product {
   meta_description?: string;
   inventory_count: number;
   is_hidden?: number;
+  variants?: ProductVariant[];
 }
 
 interface Order {
@@ -1047,13 +1057,180 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Right 4 Cols: Pricing, Inventory, Badge & Preview */}
+              {/* Right 4 Cols: Pricing, Multi-Option Editions, Inventory, Badge & Preview */}
               <div className="lg:col-span-4 space-y-6">
+                {/* 2-Option / Edition Variants Manager */}
+                <div className="clinical-card p-6 space-y-4 shadow-sm border-2 border-[#1C1C1C]/10">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading flex items-center gap-1.5">
+                        <Tag size={15} className="text-[#B8860B]" />
+                        <span>Product Editions (2 Options)</span>
+                      </h2>
+                      <p className="text-[11px] text-stone-500 mt-0.5">Offer 2 package tiers (e.g. Rakhi Only vs Gift Keepsake Box)</p>
+                    </div>
+                  </div>
+
+                  {/* Multi-Option Configuration */}
+                  {Array.isArray(selectedProduct.variants) && selectedProduct.variants.length > 0 ? (
+                    <div className="space-y-4">
+                      {selectedProduct.variants.map((v, vIdx) => (
+                        <div key={v.id || vIdx} className="p-3.5 rounded-2xl bg-[#F5F5F0] border border-[#E2E8E4] space-y-2.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-[#1C1C1C] font-mono">
+                              Option #{vIdx + 1}: {vIdx === 0 ? "Standard Tier" : "Deluxe / Gift Box Tier"}
+                            </span>
+                            {selectedProduct.variants && selectedProduct.variants.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updatedVars = (selectedProduct.variants || []).filter((_, i) => i !== vIdx);
+                                  setSelectedProduct({ ...selectedProduct, variants: updatedVars });
+                                }}
+                                className="text-red-600 hover:text-red-800 text-[10px] font-bold"
+                              >
+                                Remove Option
+                              </button>
+                            )}
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold text-stone-600 mb-1">Option Name / Title*</label>
+                            <input
+                              type="text"
+                              value={v.title}
+                              onChange={(e) => {
+                                const updatedVars = [...(selectedProduct.variants || [])];
+                                updatedVars[vIdx] = { ...updatedVars[vIdx], title: e.target.value };
+                                setSelectedProduct({ ...selectedProduct, variants: updatedVars });
+                              }}
+                              placeholder={vIdx === 0 ? "e.g. Sacred Rakhi Only (Standard Edition)" : "e.g. Complete Keepsake Box with Dry Fruits & Puja Kit"}
+                              className="w-full bg-white border border-[#E2E8E4] rounded-xl px-3 py-2 text-xs font-semibold text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="block text-[10px] font-bold text-stone-600 mb-1">Price (₹)*</label>
+                              <input
+                                type="number"
+                                value={v.price}
+                                onChange={(e) => {
+                                  const updatedVars = [...(selectedProduct.variants || [])];
+                                  updatedVars[vIdx] = { ...updatedVars[vIdx], price: parseInt(e.target.value) || 0 };
+                                  // Keep base price synced with tier 1
+                                  if (vIdx === 0) {
+                                    setSelectedProduct({ ...selectedProduct, price: parseInt(e.target.value) || 0, variants: updatedVars });
+                                  } else {
+                                    setSelectedProduct({ ...selectedProduct, variants: updatedVars });
+                                  }
+                                }}
+                                className="w-full bg-white border border-[#E2E8E4] rounded-xl px-3 py-2 text-xs font-mono font-bold text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[10px] font-bold text-stone-600 mb-1">Original MRP (₹)</label>
+                              <input
+                                type="number"
+                                value={v.original_price}
+                                onChange={(e) => {
+                                  const updatedVars = [...(selectedProduct.variants || [])];
+                                  updatedVars[vIdx] = { ...updatedVars[vIdx], original_price: parseInt(e.target.value) || 0 };
+                                  if (vIdx === 0) {
+                                    setSelectedProduct({ ...selectedProduct, original_price: parseInt(e.target.value) || 0, variants: updatedVars });
+                                  } else {
+                                    setSelectedProduct({ ...selectedProduct, variants: updatedVars });
+                                  }
+                                }}
+                                className="w-full bg-white border border-[#E2E8E4] rounded-xl px-3 py-2 text-xs font-mono text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold text-stone-600 mb-1">Option Inclusions & Description</label>
+                            <textarea
+                              rows={2}
+                              value={v.description || ""}
+                              onChange={(e) => {
+                                const updatedVars = [...(selectedProduct.variants || [])];
+                                updatedVars[vIdx] = { ...updatedVars[vIdx], description: e.target.value };
+                                setSelectedProduct({ ...selectedProduct, variants: updatedVars });
+                              }}
+                              placeholder={vIdx === 0 ? "Includes 1x Handcrafted Consecrated Rakhi, Roli, Chawal & Sacred Thread." : "Includes Signature Wooden Keepsake Box, 100g Almonds, 100g Cashews, Consecrated Rakhi & Pooja Kit."}
+                              className="w-full bg-white border border-[#E2E8E4] rounded-xl p-2.5 text-xs text-[#1C1C1C] focus:outline-none focus:border-[#1C1C1C]"
+                            />
+                          </div>
+                        </div>
+                      ))}
+
+                      {selectedProduct.variants.length < 2 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newVar: ProductVariant = {
+                              id: "var_2_" + Date.now(),
+                              title: "Complete Keepsake Box with Dry Fruits & Puja Kit",
+                              price: (selectedProduct.price || 999) + 300,
+                              original_price: (selectedProduct.original_price || 1299) + 300,
+                              badge: "Recommended",
+                              description: "Includes Handcrafted Sacred Rakhi, Signature Wooden Gift Box, 100g Premium California Almonds, 100g Cashews, Consecrated Roli & Akshat."
+                            };
+                            setSelectedProduct({
+                              ...selectedProduct,
+                              variants: [...(selectedProduct.variants || []), newVar]
+                            });
+                          }}
+                          className="w-full py-2.5 rounded-xl border-2 border-dashed border-[#1C1C1C]/30 text-xs font-bold text-[#1C1C1C] hover:bg-[#F5F5F0] transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          <Plus size={14} />
+                          <span>+ Add Deluxe 2nd Option (e.g. Keepsake Gift Box Tier)</span>
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <p className="text-xs text-stone-600 leading-relaxed">
+                        Currently this product uses a single standard price (₹{selectedProduct.price}). Click below to enable 2 selectable options with distinct pricing and descriptions.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const option1: ProductVariant = {
+                            id: "var_1_" + Date.now(),
+                            title: "Sacred Rakhi Only (Standard Edition)",
+                            price: selectedProduct.price || 999,
+                            original_price: selectedProduct.original_price || 1299,
+                            badge: "Standard",
+                            description: "Includes 1x Handcrafted Consecrated Rakhi, Pure Akshat, Roli & Consecration Card."
+                          };
+                          const option2: ProductVariant = {
+                            id: "var_2_" + (Date.now() + 1),
+                            title: "Complete Keepsake Box with Dry Fruits & Puja Kit",
+                            price: (selectedProduct.price || 999) + 300,
+                            original_price: (selectedProduct.original_price || 1299) + 300,
+                            badge: "Best Value",
+                            description: "Includes Consecrated Rakhi, Luxury Keepsake Box, 100g California Almonds, 100g Cashews, Pure Roli & Akshat."
+                          };
+                          setSelectedProduct({
+                            ...selectedProduct,
+                            variants: [option1, option2]
+                          });
+                        }}
+                        className="w-full py-3 rounded-xl bg-[#1C1C1C] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#333333] transition-all flex items-center justify-center gap-2 shadow-sm"
+                      >
+                        <Sparkles size={14} className="text-[#D4AF37]" />
+                        <span>Enable 2-Option Pricing & Descriptions</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 <div className="clinical-card p-6 space-y-4 shadow-sm">
-                  <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading">Pricing & Stock</h2>
+                  <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1C1C] font-heading">Base Pricing & Stock</h2>
 
                   <div>
-                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Selling Price (₹)*</label>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">Default Selling Price (₹)*</label>
                     <input
                       type="number"
                       value={selectedProduct.price}
