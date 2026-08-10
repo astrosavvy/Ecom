@@ -36,24 +36,24 @@ export function Header() {
         </span>
       </div>
 
-      {/* Floating Header Wrapper */}
-      <div className="pt-2 sm:pt-4 px-3 sm:px-6 max-w-7xl mx-auto flex items-center justify-center">
-        {/* Desktop: Unified Floating Glass Pill (Logo + Links + Cart + CTA in ONE Pill) */}
-        <div className="pointer-events-auto hidden md:flex items-center justify-between gap-6 px-6 py-2.5 rounded-full bg-[#FDFCF8]/90 backdrop-blur-2xl border border-[#E2E8E4] shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_35px_rgb(0,0,0,0.1)] transition-all duration-300">
-          {/* Logo inside Pill */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0 group pr-1">
-            <div className="h-10 sm:h-12 w-auto overflow-hidden rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shadow-xs">
+      {/* Floating Header Bar (Detached Left Logo + Centered/Right Navigation Pills) */}
+      <div className="pt-2 sm:pt-4 px-3 sm:px-8 max-w-7xl mx-auto flex items-center justify-between gap-4">
+        {/* Detached Prominent Logo on the Left */}
+        <Link href="/" className="pointer-events-auto flex items-center group flex-shrink-0">
+          <div className="relative rounded-2xl p-0.5 bg-gradient-to-br from-[#D4AF37]/50 via-[#1C1C1C] to-[#B8860B]/40 shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-all duration-300 group-hover:shadow-[0_6px_25px_rgba(212,175,55,0.25)] group-hover:scale-105">
+            <div className="h-11 sm:h-14 w-auto rounded-[14px] overflow-hidden bg-[#0A0B10] flex items-center justify-center p-1 sm:p-1.5 border border-white/10">
               <img
-                src="/younoya_cosmic_logo.jpg"
-                alt="YOUNOYA"
-                className="h-full w-auto max-w-[170px] object-contain drop-shadow-sm"
+                src="/younoya_cosmic_logo_cropped.png"
+                alt="YOUNOYA — for every chapter"
+                className="h-full w-auto max-w-[160px] sm:max-w-[210px] object-contain drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]"
               />
             </div>
-          </Link>
+          </div>
+        </Link>
 
-          <div className="h-6 w-px bg-[#E2E8E4]" />
-
-          {/* Navigation Links inside Pill */}
+        {/* Desktop: Navigation Links & Actions Pill */}
+        <div className="pointer-events-auto hidden md:flex items-center gap-6 px-6 py-2.5 rounded-full bg-[#FDFCF8]/95 backdrop-blur-2xl border border-[#E2E8E4] shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_35px_rgb(0,0,0,0.1)] transition-all duration-300">
+          {/* Navigation Links */}
           <nav className="flex items-center gap-1">
             {navItems.map((item) => (
               <Link
@@ -68,7 +68,7 @@ export function Header() {
 
           <div className="h-6 w-px bg-[#E2E8E4]" />
 
-          {/* Cart & Shop Now inside Pill */}
+          {/* Cart & Shop Now */}
           <div className="flex items-center gap-3">
             <Link
               href="/cart"
@@ -92,42 +92,28 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile: Ultra-Clean Floating Pill (Logo Left, Cart + Menu Right) */}
-        <div className="pointer-events-auto w-full md:hidden flex items-center justify-between px-4 py-2 rounded-full bg-[#FDFCF8]/95 backdrop-blur-2xl border border-[#E2E8E4] shadow-md">
-          {/* Logo on Left */}
-          <Link href="/" className="flex items-center">
-            <div className="h-8 w-auto overflow-hidden rounded-lg flex items-center justify-center">
-              <img
-                src="/younoya_cosmic_logo.jpg"
-                alt="YOUNOYA"
-                className="h-full w-auto max-w-[130px] object-contain drop-shadow-sm"
-              />
-            </div>
+        {/* Mobile: Quick Action Bar (Cart + Mobile Drawer Toggle) */}
+        <div className="pointer-events-auto md:hidden flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FDFCF8]/95 backdrop-blur-2xl border border-[#E2E8E4] shadow-md">
+          <Link
+            href="/cart"
+            className="relative p-2 rounded-full bg-white border border-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center shadow-sm"
+            aria-label="View Cart"
+          >
+            <ShoppingBag size={16} />
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#1C1C1C] text-[#D4AF37] text-[9px] font-bold flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
           </Link>
 
-          {/* Cart + Hamburger Menu on Right */}
-          <div className="flex items-center gap-2">
-            <Link
-              href="/cart"
-              className="relative p-2 rounded-full bg-white border border-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center shadow-sm"
-              aria-label="View Cart"
-            >
-              <ShoppingBag size={16} />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#1C1C1C] text-[#D4AF37] text-[9px] font-bold flex items-center justify-center">
-                  {totalItems}
-                </span>
-              )}
-            </Link>
-
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-full bg-white border border-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center shadow-sm"
-              aria-label="Toggle Menu"
-            >
-              {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
-          </div>
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 rounded-full bg-white border border-[#E2E8E4] text-[#1C1C1C] flex items-center justify-center shadow-sm"
+            aria-label="Toggle Menu"
+          >
+            {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
       </div>
 
