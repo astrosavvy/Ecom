@@ -42,11 +42,13 @@ export function Header() {
         <div className="pointer-events-auto hidden md:flex items-center justify-between gap-6 px-6 py-2.5 rounded-full bg-[#FDFCF8]/90 backdrop-blur-2xl border border-[#E2E8E4] shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_35px_rgb(0,0,0,0.1)] transition-all duration-300">
           {/* Logo inside Pill */}
           <Link href="/" className="flex items-center gap-2 flex-shrink-0 group pr-1">
-            <img
-              src="/younoya_logo.png"
-              alt="YOUNOYA"
-              className="h-9 sm:h-11 w-auto max-w-[150px] object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
-            />
+            <div className="h-10 sm:h-12 w-auto overflow-hidden rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shadow-xs">
+              <img
+                src="/younoya_cosmic_logo.jpg"
+                alt="YOUNOYA"
+                className="h-full w-auto max-w-[170px] object-contain drop-shadow-sm"
+              />
+            </div>
           </Link>
 
           <div className="h-6 w-px bg-[#E2E8E4]" />
@@ -94,11 +96,13 @@ export function Header() {
         <div className="pointer-events-auto w-full md:hidden flex items-center justify-between px-4 py-2 rounded-full bg-[#FDFCF8]/95 backdrop-blur-2xl border border-[#E2E8E4] shadow-md">
           {/* Logo on Left */}
           <Link href="/" className="flex items-center">
-            <img
-              src="/younoya_logo.png"
-              alt="YOUNOYA"
-              className="h-8 w-auto max-w-[120px] object-contain drop-shadow-sm"
-            />
+            <div className="h-8 w-auto overflow-hidden rounded-lg flex items-center justify-center">
+              <img
+                src="/younoya_cosmic_logo.jpg"
+                alt="YOUNOYA"
+                className="h-full w-auto max-w-[130px] object-contain drop-shadow-sm"
+              />
+            </div>
           </Link>
 
           {/* Cart + Hamburger Menu on Right */}
