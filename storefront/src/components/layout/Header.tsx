@@ -41,11 +41,14 @@ export function Header() {
         {/* 1. Large, Seamless Gold Logo on the Far Left (No Box / No Border) */}
         <Link href="/" className="pointer-events-auto flex items-center group flex-shrink-0">
           <div className="transition-transform duration-300 group-hover:scale-105">
-            <img
-              src="/younoya_gold_clean.png"
-              alt="YOUNOYA — Consecrated Grace"
-              className="h-12 sm:h-16 w-auto max-w-[170px] sm:max-w-[240px] object-contain drop-shadow-[0_2px_12px_rgba(212,175,55,0.45)]"
-            />
+            <picture>
+              <source srcSet="/younoya_logo_nobg.webp" type="image/webp" />
+              <img
+                src="/younoya_logo_nobg.png"
+                alt="YOUNOYA — for every chapter"
+                className="h-12 sm:h-16 w-auto max-w-[170px] sm:max-w-[240px] object-contain drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]"
+              />
+            </picture>
           </div>
         </Link>
 
