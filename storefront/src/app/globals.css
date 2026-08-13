@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @import "tailwindcss";
 
 :root {
-  --color-bg-stone: #FDFCF8;
+  --color-bg-stone: #FFFFFF;
   --color-charcoal: #1C1C1C;
   --color-sage: #E2E8E4;
   --color-sage-light: #F0F4F1;
@@ -11,7 +11,8 @@
   --color-gold: #D4AF37;
   --color-urgency-red: #DC2626;
   --font-heading: 'Plus Jakarta Sans', sans-serif;
-  --font-serif: 'Playfair Display', serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
@@ -20,13 +21,52 @@
 }
 
 html, body {
-  background-color: var(--color-bg-stone);
-  color: var(--color-charcoal);
+  background-color: #FFFFFF;
+  color: #000000;
   margin: 0;
   padding: 0;
   min-height: 100%;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+.font-serif,
+.font-instrument {
+  font-family: 'Instrument Serif', Georgia, serif;
+}
+
+.font-sans,
+.font-inter {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Animations */
+@keyframes fadeRise {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-rise {
+  animation: fadeRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
+.animate-fade-rise-delay {
+  opacity: 0;
+  animation: fadeRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  will-change: opacity, transform;
+}
+
+.animate-fade-rise-delay-2 {
+  opacity: 0;
+  animation: fadeRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+  will-change: opacity, transform;
 }
 
 /* Pulsing Scarcity / Urgency Badge Animation */
@@ -78,52 +118,3 @@ html, body {
 .icon-box {
   transition: transform 0.3s ease;
 }
-
-/* Fluid Bubble Morphing Effects */
-@keyframes fluid-blob-1 {
-  0%, 100% {
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-    transform: translate(0, 0) rotate(0deg) scale(1);
-  }
-  33% {
-    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
-    transform: translate(12px, -8px) rotate(60deg) scale(1.08);
-  }
-  66% {
-    border-radius: 70% 30% 50% 50% / 30% 40% 60% 70%;
-    transform: translate(-10px, 10px) rotate(120deg) scale(0.95);
-  }
-}
-
-@keyframes fluid-blob-2 {
-  0%, 100% {
-    border-radius: 40% 60% 60% 40% / 40% 50% 50% 60%;
-    transform: translate(0, 0) rotate(0deg) scale(1);
-  }
-  50% {
-    border-radius: 60% 40% 30% 70% / 70% 30% 60% 40%;
-    transform: translate(-15px, -10px) rotate(180deg) scale(1.1);
-  }
-}
-
-@keyframes float-subtle {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-
-.fluid-bubble-1 {
-  animation: fluid-blob-1 12s ease-in-out infinite;
-}
-
-.fluid-bubble-2 {
-  animation: fluid-blob-2 15s ease-in-out infinite;
-}
-
-.float-subtle {
-  animation: float-subtle 4s ease-in-out infinite;
-}
-
