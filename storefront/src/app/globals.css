@@ -1,33 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 @import "tailwindcss";
 
 :root {
-  --color-bg-stone: #FFFFFF;
-  --color-charcoal: #1C1C1C;
-  --color-sage: #E2E8E4;
-  --color-sage-light: #F0F4F1;
-  --color-promo-bg: #D8E6D8;
-  --color-gold: #D4AF37;
-  --color-urgency-red: #DC2626;
-  --font-heading: 'Plus Jakarta Sans', sans-serif;
   --font-serif: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
 }
 
 * {
   box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 html, body {
-  background-color: #FFFFFF;
-  color: #000000;
+  background-color: #0a0a0a;
+  color: #ffffff;
   margin: 0;
   padding: 0;
-  min-height: 100%;
-  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .font-serif,
@@ -38,6 +32,39 @@ html, body {
 .font-sans,
 .font-inter {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Liquid Glass CSS Effect */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%,
+    rgba(255, 255, 255, 0.45) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 /* Animations */
@@ -67,54 +94,4 @@ html, body {
   opacity: 0;
   animation: fadeRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
   will-change: opacity, transform;
-}
-
-/* Pulsing Scarcity / Urgency Badge Animation */
-@keyframes pulse-urgency {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.pulse-badge {
-  animation: pulse-urgency 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Clinical Luxury Component Cards */
-.clinical-card {
-  background-color: #FFFFFF;
-  border: 1px solid var(--color-sage);
-  border-radius: 32px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.clinical-card:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.07);
-}
-
-/* Benefit Icon Card Hover State */
-.benefit-card {
-  background-color: #FFFFFF;
-  border: 1px solid var(--color-sage);
-  border-radius: 24px;
-  padding: 24px;
-  transition: all 0.3s ease;
-}
-
-.benefit-card:hover {
-  background-color: #F5F5F0;
-  transform: translateY(-2px);
-}
-
-.benefit-card:hover .icon-box {
-  transform: scale(1.1);
-}
-
-.icon-box {
-  transition: transform 0.3s ease;
 }
