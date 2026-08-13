@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 
 const BG_VIDEO =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260714_113715_c7e0daa0-8bdd-4486-a2da-040901f8f0ea.mp4";
@@ -20,12 +21,12 @@ export default function Home() {
 
       {/* Hero Content (z-10) */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center mt-8 md:mt-16 max-w-4xl mx-auto px-4">
-        {/* Badge: Y Combinator */}
+        {/* Badge: YOUNOYA Signature */}
         <div className="mb-6 inline-flex items-center gap-2.5 rounded-xl border border-[#1B133C]/10 bg-white/70 backdrop-blur-sm px-4 py-2 text-sm font-medium text-[#1B133C] shadow-xs animate-fade-rise">
-          <div className="bg-orange-500 rounded w-5 h-5 flex items-center justify-center text-white font-bold text-xs shadow-xs">
-            Y
+          <div className="bg-[#B8860B] rounded w-5 h-5 flex items-center justify-center text-white font-bold text-xs shadow-xs">
+            ✦
           </div>
-          <span>Funded by Y Combinator</span>
+          <span>YOUNOYA // For Every Chapter</span>
         </div>
 
         {/* Heading */}
@@ -33,25 +34,25 @@ export default function Home() {
           className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight text-[#1B133C] max-w-4xl animate-fade-rise"
           style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
         >
-          Deploy digital workers
+          Consecrated grace
           <br />
-          for mundane workflows
+          for every chapter
         </h1>
 
         {/* Subtitle */}
         <p className="mt-5 sm:mt-6 max-w-3xl text-xs sm:text-sm md:text-base leading-relaxed text-[#1B133C]/70 font-normal animate-fade-rise-delay">
-          Eliminate your tedious browser work and 10x your team&apos;s capacity.
-          Put intelligent agents on every routine process so you grow faster and
-          deliver more for clients — effortlessly.
+          Handcrafted spiritual keepsakes, sacred elements, and timeless
+          artistry energized with authentic Vedic blessings. Delivered across
+          India with frictionless zero-password express checkout.
         </p>
 
         {/* CTA Button */}
-        <button
-          type="button"
-          className="mt-7 sm:mt-8 rounded-xl bg-[#FEFEFE] px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold text-[#1B133C] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_16px_rgba(0,0,0,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 animate-fade-rise-delay-2 cursor-pointer"
+        <Link
+          href="/products"
+          className="mt-7 sm:mt-8 rounded-xl bg-[#FEFEFE] px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold text-[#1B133C] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_16px_rgba(0,0,0,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 animate-fade-rise-delay-2 cursor-pointer inline-flex items-center justify-center"
         >
-          Get Early Access
-        </button>
+          Explore Collection
+        </Link>
       </div>
     </section>
   );

@@ -5,10 +5,10 @@ const BG_VIDEO =
 
 export const App: React.FC = () => {
   const navLinks = [
-    { label: 'Features', href: '#features' },
-    { label: 'Plans', href: '#plans' },
-    { label: 'Security', href: '#security' },
-    { label: 'About', href: '#about' },
+    { label: 'Collection', href: '#collection' },
+    { label: 'Our Story', href: '#story' },
+    { label: 'Rituals', href: '#rituals' },
+    { label: 'Reach Us', href: '#contact' },
   ];
 
   return (
@@ -26,21 +26,16 @@ export const App: React.FC = () => {
       {/* Navigation Bar (z-20) */}
       <header className="relative z-20 w-full pt-4 md:pt-6 flex justify-center px-4">
         <nav className="inline-flex items-center justify-between gap-6 sm:gap-8 bg-white/70 backdrop-blur-md rounded-xl px-4 md:px-6 py-3 shadow-sm border border-white/40">
-          {/* Custom Geometric SVG Logo + Brand */}
+          {/* YOUNOYA Brand Logo */}
           <a
             href="#"
-            className="flex items-center gap-2.5 transition-opacity hover:opacity-80 select-none"
+            className="flex items-center gap-2.5 transition-opacity hover:opacity-80 select-none group"
           >
-            <svg
-              viewBox="0 0 256 256"
-              className="w-6 h-6 fill-[#1B133C]"
-              aria-hidden="true"
-            >
-              <path d="M 256 256 L 128 256 L 0 128 L 128 128 Z" />
-              <path d="M 256 128 L 128 128 L 0 0 L 128 0 Z" />
-            </svg>
-            <span className="font-semibold text-sm tracking-tight text-[#1B133C]">
-              Axon
+            <div className="w-5 h-5 flex items-center justify-center text-[#B8860B] font-bold text-sm">
+              ✦
+            </div>
+            <span className="font-serif tracking-widest text-base font-semibold text-[#1B133C] uppercase">
+              YOUNOYA
             </span>
           </a>
 
@@ -61,12 +56,12 @@ export const App: React.FC = () => {
 
       {/* Hero Content (z-10) */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center mt-8 md:mt-16 max-w-4xl mx-auto px-4">
-        {/* Badge: Funded by Y Combinator */}
+        {/* Badge: YOUNOYA Signature */}
         <div className="mb-6 inline-flex items-center gap-2.5 rounded-xl border border-[#1B133C]/10 bg-white/70 backdrop-blur-sm px-4 py-2 text-sm font-medium text-[#1B133C] shadow-xs animate-fade-rise">
-          <div className="bg-orange-500 rounded w-5 h-5 flex items-center justify-center text-white font-bold text-xs shadow-xs">
-            Y
+          <div className="bg-[#B8860B] rounded w-5 h-5 flex items-center justify-center text-white font-bold text-xs shadow-xs">
+            ✦
           </div>
-          <span>Funded by Y Combinator</span>
+          <span>YOUNOYA // For Every Chapter</span>
         </div>
 
         {/* Heading */}
@@ -74,16 +69,16 @@ export const App: React.FC = () => {
           className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight text-[#1B133C] max-w-4xl animate-fade-rise"
           style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
         >
-          Deploy digital workers
+          Consecrated grace
           <br />
-          for mundane workflows
+          for every chapter
         </h1>
 
         {/* Subtitle */}
         <p className="mt-5 sm:mt-6 max-w-3xl text-xs sm:text-sm md:text-base leading-relaxed text-[#1B133C]/70 font-normal animate-fade-rise-delay">
-          Eliminate your tedious browser work and 10x your team's capacity. Put
-          intelligent agents on every routine process so you grow faster and
-          deliver more for clients — effortlessly.
+          Handcrafted spiritual keepsakes, sacred elements, and timeless
+          artistry energized with authentic Vedic blessings. Delivered across
+          India with frictionless zero-password express checkout.
         </p>
 
         {/* CTA Button */}
@@ -91,7 +86,7 @@ export const App: React.FC = () => {
           type="button"
           className="mt-7 sm:mt-8 rounded-xl bg-[#FEFEFE] px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold text-[#1B133C] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_16px_rgba(0,0,0,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 animate-fade-rise-delay-2 cursor-pointer"
         >
-          Get Early Access
+          Explore Collection
         </button>
       </div>
     </div>
