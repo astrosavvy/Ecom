@@ -1,204 +1,98 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
 
 const BG_VIDEO =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260717_120352_eb988725-1351-43b3-8095-16e4a1005e3d.mp4';
+  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260714_113715_c7e0daa0-8bdd-4486-a2da-040901f8f0ea.mp4';
 
 export const App: React.FC = () => {
-  return (
-    <div className="h-screen w-full bg-black p-3 md:p-4 font-inter select-none">
-      {/* Inner Container: Liquid-glass container with rounded corners and background video */}
-      <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden relative bg-black">
-        {/* Background Video */}
-        <video
-          src={BG_VIDEO}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover anim-fade"
-          style={{ animationDelay: '0.2s' }}
-        />
+  const navLinks = [
+    { label: 'Features', href: '#features' },
+    { label: 'Plans', href: '#plans' },
+    { label: 'Security', href: '#security' },
+    { label: 'About', href: '#about' },
+  ];
 
-        {/* Navbar */}
-        <nav className="relative z-10 flex items-center justify-between px-6 md:px-10 pt-6 md:pt-8">
-          {/* Logo Block */}
-          <div
-            className="anim-stagger flex flex-col items-center"
-            style={{ animationDelay: '0.1s' }}
+  return (
+    <div className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-start text-center px-4 font-sans select-none">
+      {/* Background Video (z-0) */}
+      <video
+        src={BG_VIDEO}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 z-0 w-full h-[130%] object-cover object-top pointer-events-none"
+      />
+
+      {/* Navigation Bar (z-20) */}
+      <header className="relative z-20 w-full pt-4 md:pt-6 flex justify-center px-4">
+        <nav className="inline-flex items-center justify-between gap-6 sm:gap-8 bg-white/70 backdrop-blur-md rounded-xl px-4 md:px-6 py-3 shadow-sm border border-white/40">
+          {/* Custom Geometric SVG Logo + Brand */}
+          <a
+            href="#"
+            className="flex items-center gap-2.5 transition-opacity hover:opacity-80 select-none"
           >
             <svg
               viewBox="0 0 256 256"
-              className="w-14 h-14 md:w-16 md:h-16 fill-white"
+              className="w-6 h-6 fill-[#1B133C]"
+              aria-hidden="true"
             >
-              <path d="M 128 128 L 128 0 A 128 128 0 0 0 0 128 Z M 128 128 L 256 128 A 128 128 0 0 0 128 0 Z M 128 128 L 128 256 A 128 128 0 0 0 256 128 Z M 128 128 L 0 128 A 128 128 0 0 0 128 256 Z" />
+              <path d="M 256 256 L 128 256 L 0 128 L 128 128 Z" />
+              <path d="M 256 128 L 128 128 L 0 0 L 128 0 Z" />
             </svg>
-            <span className="text-white text-[10px] md:text-xs tracking-[0.4em] mt-1 font-light block text-center">
-              V O R T X
+            <span className="font-semibold text-sm tracking-tight text-[#1B133C]">
+              Axon
             </span>
-          </div>
+          </a>
 
-          {/* Nav Buttons */}
-          <div
-            className="anim-stagger flex items-center gap-3"
-            style={{ animationDelay: '0.2s' }}
-          >
-            <button
-              type="button"
-              className="hidden md:block px-5 py-2.5 text-white text-sm hover:bg-white/10 btn-cut-border cursor-pointer transition-colors"
-            >
-              <span>Neural Synergy</span>
-            </button>
-
-            <button
-              type="button"
-              className="hidden md:block px-5 py-2.5 bg-white text-black text-sm hover:bg-white/90 btn-cut cursor-pointer transition-colors"
-            >
-              <span>Cyber Synthesis</span>
-            </button>
+          {/* Navigation Links (hidden on mobile, shown sm+) */}
+          <div className="hidden sm:flex items-center gap-6">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-sm font-medium text-[#1B133C]/80 hover:text-[#1B133C] transition-colors duration-200"
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
         </nav>
+      </header>
 
-        {/* Main Content */}
-        <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-10 pb-8 md:pb-10">
-          {/* Top Section */}
-          <div className="flex-1 flex items-center relative">
-            {/* Left Column (hidden below lg) */}
-            <div
-              className="anim-stagger hidden lg:flex flex-col gap-6 absolute left-0 top-[18%]"
-              style={{ animationDelay: '0.4s' }}
-            >
-              <p className="text-white/80 text-base leading-relaxed max-w-[220px]">
-                Come with us
-                <br />
-                exploring the
-                <br />
-                horizon
-              </p>
-
-              {/* Decorative Group */}
-              <div className="flex flex-col gap-2 mt-4">
-                <div className="flex items-center gap-1">
-                  <div className="w-1 h-1 rounded-full border border-white/40" />
-                  <div className="w-1 h-1 rounded-full border border-white/40" />
-                </div>
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="text-white/70 text-xs leading-tight">
-                    Perpetual
-                    <br />
-                    Immersion
-                  </span>
-                  <span className="text-white/50 text-xs font-mono">01</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Center Heading */}
-            <div
-              className="anim-stagger w-full text-center"
-              style={{ animationDelay: '0.5s' }}
-            >
-              <h1
-                className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal leading-[1.1] tracking-[-0.04em]"
-                style={{ textShadow: '0 2px 12px rgba(0,0,0,0.25)' }}
-              >
-                Forging Tomorrow
-                <br />
-                Virtual Horizon
-                <br />
-                VortxLab Creations
-              </h1>
-            </div>
+      {/* Hero Content (z-10) */}
+      <div className="relative z-10 flex flex-col items-center justify-center text-center mt-8 md:mt-16 max-w-4xl mx-auto px-4">
+        {/* Badge: Funded by Y Combinator */}
+        <div className="mb-6 inline-flex items-center gap-2.5 rounded-xl border border-[#1B133C]/10 bg-white/70 backdrop-blur-sm px-4 py-2 text-sm font-medium text-[#1B133C] shadow-xs animate-fade-rise">
+          <div className="bg-orange-500 rounded w-5 h-5 flex items-center justify-center text-white font-bold text-xs shadow-xs">
+            Y
           </div>
-
-          {/* Bottom Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center mt-8">
-            {/* Col 1 */}
-            <div
-              className="anim-stagger flex items-center justify-center md:justify-end"
-              style={{ animationDelay: '0.7s' }}
-            >
-              <p className="text-white text-sm leading-relaxed max-w-[260px] text-center md:text-left md:ml-auto">
-                We push past conventions, reshaping the virtual terrain with
-                next-level technologies.
-              </p>
-            </div>
-
-            {/* Col 2 */}
-            <div
-              className="anim-stagger flex flex-col items-center gap-8 md:gap-24"
-              style={{ animationDelay: '0.85s' }}
-            >
-              <span className="text-white text-2xl md:text-3xl font-medium">
-                Net Dynamics
-              </span>
-              <button
-                type="button"
-                className="w-full max-w-[280px] py-3.5 bg-white flex items-center justify-center gap-2 text-black hover:bg-white/90 transition-colors group btn-cut cursor-pointer"
-              >
-                <span className="text-sm font-medium">Discover Now</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-
-            {/* Col 3: Social Icons */}
-            <div
-              className="anim-stagger flex items-center justify-center md:justify-end gap-3"
-              style={{ animationDelay: '1s' }}
-            >
-              {/* X (Twitter) */}
-              <a
-                href="https://x.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="X"
-                className="w-10 h-10 bg-white flex items-center justify-center text-black hover:bg-white/90 transition-colors btn-cut-sm cursor-pointer"
-              >
-                <svg
-                  className="w-4 h-4 fill-current"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-              </a>
-
-              {/* LinkedIn */}
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
-                className="w-10 h-10 bg-white flex items-center justify-center text-black hover:bg-white/90 transition-colors btn-cut-sm cursor-pointer"
-              >
-                <svg
-                  className="w-4 h-4 fill-current"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z" />
-                </svg>
-              </a>
-
-              {/* Facebook */}
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Facebook"
-                className="w-10 h-10 bg-white flex items-center justify-center text-black hover:bg-white/90 transition-colors btn-cut-sm cursor-pointer"
-              >
-                <svg
-                  className="w-4 h-4 fill-current"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
-                </svg>
-              </a>
-            </div>
-          </div>
+          <span>Funded by Y Combinator</span>
         </div>
+
+        {/* Heading */}
+        <h1
+          className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight text-[#1B133C] max-w-4xl animate-fade-rise"
+          style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
+        >
+          Deploy digital workers
+          <br />
+          for mundane workflows
+        </h1>
+
+        {/* Subtitle */}
+        <p className="mt-5 sm:mt-6 max-w-3xl text-xs sm:text-sm md:text-base leading-relaxed text-[#1B133C]/70 font-normal animate-fade-rise-delay">
+          Eliminate your tedious browser work and 10x your team's capacity. Put
+          intelligent agents on every routine process so you grow faster and
+          deliver more for clients — effortlessly.
+        </p>
+
+        {/* CTA Button */}
+        <button
+          type="button"
+          className="mt-7 sm:mt-8 rounded-xl bg-[#FEFEFE] px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold text-[#1B133C] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_16px_rgba(0,0,0,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 animate-fade-rise-delay-2 cursor-pointer"
+        >
+          Get Early Access
+        </button>
       </div>
     </div>
   );
