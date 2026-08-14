@@ -56,10 +56,12 @@ export function FoldCard({ product, index, total, progress }: FoldCardProps) {
     e.preventDefault();
     addItem({
       id: product.id,
+      handle: product.handle,
       title: product.title,
+      subtitle: product.subtitle,
       price: product.price,
+      original_price: product.original_price,
       image: displayImages[0],
-      quantity: 1,
       variant: "Standard Edition",
     });
     setIsAdded(true);
