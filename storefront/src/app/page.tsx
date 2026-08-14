@@ -4,20 +4,24 @@ import React from "react";
 import Link from "next/link";
 
 const BG_VIDEO =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260714_113715_c7e0daa0-8bdd-4486-a2da-040901f8f0ea.mp4";
+  "https://7jpz6d1nkrer2cbv.public.blob.vercel-storage.com/new-ecom";
 
 export default function Home() {
   return (
-    <section className="relative h-[calc(100vh-72px)] sm:h-[calc(100vh-80px)] w-full overflow-hidden flex flex-col items-center justify-start text-center px-4 font-sans select-none">
-      {/* Background Video (z-0) */}
-      <video
-        src={BG_VIDEO}
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 z-0 w-full h-[130%] object-cover object-top pointer-events-none"
-      />
+    <section className="relative min-h-[100dvh] w-full overflow-hidden flex flex-col items-center justify-start text-center px-4 font-sans select-none">
+      {/* Background Video (Responsive Desktop & Mobile Adjustments) */}
+      <div className="absolute inset-0 z-0 w-full h-full overflow-hidden pointer-events-none">
+        <video
+          src={BG_VIDEO}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover object-center md:object-top"
+        />
+        {/* Subtle atmospheric vignette for contrast across both light/dark devices */}
+        <div className="absolute inset-0 bg-black/10 md:bg-transparent" />
+      </div>
 
       {/* Hero Content (z-10) */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center mt-8 md:mt-16 max-w-4xl mx-auto px-4">
