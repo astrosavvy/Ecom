@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="min-h-screen bg-transparent text-[#1B133C] flex flex-col font-sans antialiased overflow-hidden select-none">
+      <body className="min-h-screen bg-[#07080E] text-[#FDFCF8] flex flex-col font-sans antialiased selection:bg-[#D4AF37] selection:text-[#07080E]">
         <CartProvider>
           <Header />
           <main className="flex-1 w-full">{children}</main>

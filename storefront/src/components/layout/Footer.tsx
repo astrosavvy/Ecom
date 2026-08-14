@@ -8,8 +8,8 @@ import { ArrowRight, Sparkles } from "lucide-react";
 export function Footer() {
   const pathname = usePathname();
 
-  // Hide footer on fullscreen hero home page and admin
-  if (pathname === "/" || pathname?.startsWith("/admin")) {
+  // Hide footer on admin routes
+  if (pathname?.startsWith("/admin")) {
     return null;
   }
 
