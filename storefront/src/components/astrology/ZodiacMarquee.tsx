@@ -185,46 +185,28 @@ export function ZodiacMarquee() {
             <div
               key={`${sign.id}-${idx}`}
               onClick={() => setSelectedZodiac(sign)}
-              className="relative w-60 sm:w-72 flex-shrink-0 group cursor-pointer transition-transform duration-500 hover:scale-105"
+              className="relative w-64 sm:w-80 flex-shrink-0 group cursor-pointer transition-transform duration-500 hover:scale-105"
             >
               {/* Card Outer Golden Frame */}
-              <div className="relative rounded-[26px] p-0.5 bg-gradient-to-b from-[#D4AF37]/60 via-[#1C1C1C] to-[#D4AF37]/30 shadow-[0_12px_40px_rgba(0,0,0,0.8)] group-hover:shadow-[0_16px_50px_rgba(212,175,55,0.35)] transition-all duration-300">
-                <div className="relative rounded-[24px] overflow-hidden bg-[#0A0B10] flex flex-col">
-                  {/* Image Display */}
+              <div className="relative rounded-[26px] p-0.5 bg-gradient-to-b from-[#D4AF37]/70 via-[#1C1C1C] to-[#D4AF37]/40 shadow-[0_12px_45px_rgba(0,0,0,0.85)] group-hover:shadow-[0_18px_60px_rgba(212,175,55,0.45)] transition-all duration-300">
+                <div className="relative rounded-[24px] overflow-hidden bg-[#0A0B10]">
+                  {/* Full Card Image Display (Direct Tarot/Zodiac Card Dimensions) */}
                   <div className="relative w-full aspect-[9/16] overflow-hidden bg-[#07080E]">
                     <img
                       src={sign.image}
                       alt={sign.name}
-                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                      loading="eager"
+                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-108"
                     />
-                    
-                    {/* Hover Highlight Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0B10] via-transparent to-transparent opacity-80" />
 
-                    {/* Element Pill Badge */}
-                    <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#07080E]/85 backdrop-blur-md border border-[#D4AF37]/40 text-[#D4AF37] text-[10px] font-mono uppercase tracking-wider">
-                      {sign.element} // {sign.rulingPlanet.split(" ")[0]}
-                    </div>
-                  </div>
-
-                  {/* Card Bottom Meta */}
-                  <div className="p-4 sm:p-5 text-left space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg sm:text-xl font-bold text-[#FDFCF8] group-hover:text-[#D4AF37] transition-colors">
+                    {/* Ambient Bottom Fade with Clean Minimalist Name & Sanskrit Title */}
+                    <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex items-center justify-between">
+                      <span className="text-base sm:text-lg font-bold text-[#FDFCF8] font-heading group-hover:text-[#D4AF37] transition-colors drop-shadow-md">
                         {sign.name}
-                      </h3>
-                      <span className="text-[11px] font-mono text-[#D4AF37]/90 font-medium">
+                      </span>
+                      <span className="text-xs font-mono text-[#D4AF37] font-semibold drop-shadow-md">
                         {sign.sanskritName.split(" ")[0]}
                       </span>
-                    </div>
-
-                    <p className="text-[11px] sm:text-xs text-stone-400 font-mono">
-                      {sign.dates}
-                    </p>
-
-                    <div className="pt-2 flex items-center justify-between text-xs font-semibold text-[#D4AF37] group-hover:translate-x-1 transition-transform">
-                      <span>View Blessing</span>
-                      <ArrowRight size={14} />
                     </div>
                   </div>
                 </div>
