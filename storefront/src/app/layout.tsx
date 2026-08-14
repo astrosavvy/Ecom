@@ -5,9 +5,9 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/lib/CartContext";
 
 export const metadata: Metadata = {
-  title: "Axon — Digital Workers for Mundane Workflows",
+  title: "YOUNOYA — Sacred Astrology-Blessed Rakhis & Vedic Ritual Keepsakes",
   description:
-    "Eliminate your tedious browser work and 10x your team's capacity with intelligent digital workers.",
+    "Handcrafted Vedic Rakhis, authentic astrological gemstones, and sacred puja keepsakes crafted with devotion and delivered across India with zero-password checkout.",
   icons: {
     icon: "/favicon.ico",
   },

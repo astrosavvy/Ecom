@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
-import { motion, useTransform, MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Sparkles, ArrowRight, ShieldCheck, ShoppingBag, Check } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
 import { Product } from "@/components/ui/ProductCard";
@@ -11,30 +11,24 @@ interface FoldCardProps {
   product: Product;
   index: number;
   total: number;
-  progress: MotionValue<number>;
 }
 
-export function FoldCard({ product, index, total, progress }: FoldCardProps) {
+export function FoldCard({ product, index, total }: FoldCardProps) {
+  const cardContainerRef = useRef<HTMLDivElement>(null);
   const { addItem } = useCart();
   const [isAdded, setIsAdded] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
 
-  // Compute individual scroll step for stacking & 3D folding
-  const start = index / total;
-  const end = (index + 1) / total;
+  // Measure scroll progress relative to this specific card
+  const { scrollYProgress } = useScroll({
+    target: cardContainerRef,
+    offset: ["start end", "start start"],
+  });
 
-  // Stacking scale: cards underneath scale down slightly
-  const scale = useTransform(progress, [start, end], [1, 0.92 - index * 0.02]);
-  
-  // 3D Fold rotation: tilts back on the X-axis as user scrolls past
-  const rotateX = useTransform(progress, [start, end], [0, -12]);
-  
-  // Opacity fadeout when buried deeply
-  const opacity = useTransform(
-    progress,
-    [start, end, Math.min(1, end + 0.15)],
-    [1, 1, 0.4]
-  );
+  // Smooth entrance scale & 3D tilt
+  const scale = useTransform(scrollYProgress, [0, 1], [0.88, 1]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], [15, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.4, 1], [0.3, 0.8, 1]);
 
   // Parse images
   const imagesList: string[] = Array.isArray(product.images)
@@ -69,19 +63,26 @@ export function FoldCard({ product, index, total, progress }: FoldCardProps) {
   };
 
   return (
-    <div className="sticky top-20 sm:top-24 w-full flex items-center justify-center py-4 px-2 sm:px-6">
+    <div
+      ref={cardContainerRef}
+      className="sticky top-28 sm:top-32 w-full flex items-center justify-center py-6 px-2 sm:px-4"
+      style={{
+        zIndex: index + 10,
+        marginBottom: index === total - 1 ? "4rem" : "6rem",
+      }}
+    >
       <motion.div
         style={{
           scale,
           rotateX,
           opacity,
           transformPerspective: 1200,
-          transformOrigin: "top center",
+          transformOrigin: "bottom center",
         }}
-        className="w-full max-w-5xl rounded-3xl sm:rounded-[36px] bg-[#0E1017]/95 backdrop-blur-2xl border border-[#D4AF37]/25 shadow-[0_20px_60px_rgba(0,0,0,0.65)] hover:border-[#D4AF37]/50 transition-colors duration-300 overflow-hidden relative group"
+        className="w-full max-w-5xl rounded-3xl sm:rounded-[36px] bg-[#0E1017]/95 backdrop-blur-2xl border border-[#D4AF37]/30 shadow-[0_25px_70px_rgba(0,0,0,0.85)] hover:border-[#D4AF37]/60 transition-colors duration-300 overflow-hidden relative group"
       >
-        {/* Ambient Top Glow */}
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/60 to-transparent" />
+        {/* Ambient Top Radiant Line */}
+        <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 p-6 sm:p-10 items-center">
           {/* Left Visual Gallery (5 cols) */}

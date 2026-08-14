@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useScroll } from "framer-motion";
-import { Sparkles, ChevronDown, ArrowRight, ShieldCheck, Flame, Compass } from "lucide-react";
+import { Sparkles, ChevronDown, ArrowRight } from "lucide-react";
 import { FoldCard } from "@/components/ui/FoldCard";
 import { Product } from "@/components/ui/ProductCard";
 
@@ -66,7 +65,6 @@ const FALLBACK_PRODUCTS: Product[] = [
 ];
 
 export default function Home() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [products, setProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
 
   // Fetch live products from backend
@@ -75,7 +73,6 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         if (data?.success && Array.isArray(data.data) && data.data.length > 0) {
-          // Filter unhidden products
           const visible = data.data.filter((p: Product) => !p.is_hidden);
           if (visible.length > 0) {
             setProducts(visible);
@@ -85,14 +82,11 @@ export default function Home() {
       .catch((e) => console.log("Using fallback consecrated collection:", e));
   }, []);
 
-  // Track scroll progress across the folding cards container
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
   const scrollToCards = () => {
-    containerRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = document.getElementById("collection-cards");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -110,17 +104,17 @@ export default function Home() {
             className="w-full h-full object-cover object-center md:object-top"
           />
           {/* Subtle bottom fade to transition seamlessly into the folding cards canvas */}
-          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#07080E] via-[#07080E]/60 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#07080E] via-[#07080E]/70 to-transparent" />
         </div>
 
-        {/* Top spacer (navigation space) */}
-        <div className="h-20" />
+        {/* Top spacer */}
+        <div className="h-24" />
 
         {/* Minimal Kinetic Scroll-Down Indicator */}
         <div className="relative z-10 pb-8 sm:pb-12 flex flex-col items-center gap-3">
           <button
             onClick={scrollToCards}
-            className="group flex flex-col items-center gap-2 px-5 py-2.5 rounded-full bg-[#07080E]/70 backdrop-blur-xl border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#07080E]/90 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.5)] cursor-pointer"
+            className="group flex flex-col items-center gap-2 px-6 py-3 rounded-full bg-[#07080E]/80 backdrop-blur-xl border border-[#D4AF37]/35 text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#07080E] transition-all duration-300 shadow-[0_4px_25px_rgba(0,0,0,0.6)] cursor-pointer"
           >
             <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.2em] font-bold">
               Scroll to Explore Consecrated Editions
@@ -131,7 +125,7 @@ export default function Home() {
       </section>
 
       {/* 2. Kinetic Scroll-Folding Cards Canvas */}
-      <section ref={containerRef} className="relative w-full px-3 sm:px-8 py-16 sm:py-24 max-w-7xl mx-auto">
+      <section id="collection-cards" className="relative w-full px-3 sm:px-8 pt-16 pb-24 max-w-7xl mx-auto">
         {/* Section Header with Luminescence Tokens */}
         <div className="text-center space-y-4 mb-16 sm:mb-20 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-[#D4AF37]/30 text-[10px] sm:text-xs font-mono tracking-widest text-[#D4AF37] uppercase">
@@ -150,20 +144,19 @@ export default function Home() {
         </div>
 
         {/* Stacking / Folding Card Container */}
-        <div className="relative space-y-24 sm:space-y-36 pb-32">
+        <div className="relative pb-24">
           {products.map((product, index) => (
             <FoldCard
               key={product.id}
               product={product}
               index={index}
               total={products.length}
-              progress={scrollYProgress}
             />
           ))}
         </div>
 
         {/* Bottom Catalog Discovery Banner */}
-        <div className="mt-20 p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-[#0E1017] to-[#141724] border border-[#D4AF37]/20 text-center space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="mt-12 p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-[#0E1017] to-[#141724] border border-[#D4AF37]/25 text-center space-y-6 shadow-2xl relative overflow-hidden">
           <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-[#D4AF37]/10 blur-3xl pointer-events-none" />
           <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-[#DC2626]/10 blur-3xl pointer-events-none" />
 
@@ -182,7 +175,7 @@ export default function Home() {
           <div className="pt-2 relative z-10">
             <Link
               href="/products"
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-[#FDFCF8] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider hover:bg-[#D4AF37] hover:text-[#07080E] transition-all duration-300 shadow-[0_4px_25px_rgba(255,255,255,0.15)] hover:scale-105 active:scale-95"
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider hover:opacity-95 transition-all duration-300 shadow-[0_4px_25px_rgba(212,175,55,0.25)] hover:scale-105 active:scale-95"
             >
               <span>View All Products</span>
               <ArrowRight size={16} />
