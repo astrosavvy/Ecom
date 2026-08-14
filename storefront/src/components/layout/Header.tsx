@@ -24,25 +24,8 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none transition-all duration-300">
-      {/* Top Scarcity Promo Bar */}
-      <div className="pointer-events-auto h-8 sm:h-9 w-full bg-[#07080E]/90 backdrop-blur-md border-b border-[#D4AF37]/20 px-3 sm:px-6 flex items-center justify-between text-[10px] sm:text-xs font-semibold text-[#FDFCF8] tracking-tight">
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center px-2 py-0.5 rounded bg-[#DC2626] text-white text-[8px] sm:text-[9px] font-bold uppercase tracking-wider animate-pulse">
-            Almost Gone
-          </span>
-          <span className="truncate max-w-[200px] sm:max-w-none text-stone-300 font-mono text-[10px]">
-            LIMITED CONSECRATION BATCH // 100% FREE EXPRESS AIR DELIVERY
-          </span>
-        </div>
-
-        <div className="hidden sm:flex items-center gap-4 text-[10px] font-mono text-[#D4AF37]">
-          <span>✦ 108 GAYATRI MANTRAS BLESSED</span>
-          <span>✦ ZERO-PASSWORD OTP CHECKOUT</span>
-        </div>
-      </div>
-
       {/* Main Floating Navbar (Left Logo + Centered Nav Pill + Right Standalone Actions) */}
-      <div className="pt-3 sm:pt-4 px-3 sm:px-8 max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <div className="pt-4 sm:pt-6 px-3 sm:px-8 max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* 1. Large, Seamless Gold Logo on the Far Left (No Box / No Border) */}
         <Link href="/" className="pointer-events-auto flex items-center group flex-shrink-0">
           <div className="transition-transform duration-300 group-hover:scale-105">

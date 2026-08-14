@@ -1,183 +1,105 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import { Sparkles, ChevronDown, ArrowRight } from "lucide-react";
-import { FoldCard } from "@/components/ui/FoldCard";
-import { Product } from "@/components/ui/ProductCard";
+import { motion, useSpring, useMotionValue } from "framer-motion";
+import { Sparkles, ArrowRight, ShieldCheck, Star } from "lucide-react";
+import { ZodiacMarquee } from "@/components/astrology/ZodiacMarquee";
 
 const BG_VIDEO =
   "https://7jpz6d1nkrer2cbv.public.blob.vercel-storage.com/new-ecom";
 
-// Fallback initial products if offline or hydrating
-const FALLBACK_PRODUCTS: Product[] = [
-  {
-    id: "1",
-    handle: "vedic-prosperity-rakhi",
-    sku: "YN-001",
-    title: "Vedic Prosperity & Abundance Rakhi",
-    subtitle: "Consecrated with 108 chants of the Gayatri Mantra to attract divine wealth, health, and familial harmony.",
-    price: 999,
-    original_price: 1199,
-    badge: "Most Auspicious",
-    images: ["/younoya_logo.png"],
-    features: [
-      "Natural Gomti Chakra Embedded",
-      "108 Gayatri Chants Blessed",
-      "Pure Resham Silk Thread",
-      "Free Express Air Delivery"
-    ]
-  },
-  {
-    id: "2",
-    handle: "navagraha-om-protection-kaudi-rakhi",
-    sku: "YN-002",
-    title: "Navagraha Om Protection Kaudi Rakhi",
-    subtitle: "Harmonizes planetary doshas with natural Yellow Kaudi and authentic 5-Mukhi Indonesian Rudraksha.",
-    price: 1299,
-    original_price: 1599,
-    badge: "Planetary Shield",
-    images: ["/younoya_logo.png"],
-    features: [
-      "Natural Sacred Kaudi Shell",
-      "Certified 5-Mukhi Rudraksha",
-      "Planetary Dosha Harmonization",
-      "Free Express Air Delivery"
-    ]
-  },
-  {
-    id: "3",
-    handle: "vedic-abundance-blessing-rakhi",
-    sku: "YN-003",
-    title: "Vedic Abundance Blessing Rakhi",
-    subtitle: "Energized during the auspicious Shravan Purnima Muhurat for long-term health, protection, and boundless grace.",
-    price: 1099,
-    original_price: 1399,
-    badge: "Limited Edition",
-    images: ["/younoya_logo.png"],
-    features: [
-      "Energized at Shravan Purnima",
-      "Hand-braided Sacred Silk",
-      "Consecration Certificate",
-      "Zero-Password Express Checkout"
-    ]
-  }
-];
-
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
+  const heroRef = useRef<HTMLDivElement>(null);
 
-  // Fetch live products from backend
-  useEffect(() => {
-    fetch("https://api.younoya.com/api/v1/products")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.success && Array.isArray(data.data) && data.data.length > 0) {
-          const visible = data.data.filter((p: Product) => !p.is_hidden);
-          if (visible.length > 0) {
-            setProducts(visible);
-          }
-        }
-      })
-      .catch((e) => console.log("Using fallback consecrated collection:", e));
-  }, []);
+  // Mouse cursor tracking values
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  const scrollToCards = () => {
-    const el = document.getElementById("collection-cards");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
+  // Spring physics for smooth cursor-following parallax on the video & ambient glow
+  const smoothMouseX = useSpring(mouseX, { stiffness: 60, damping: 20 });
+  const smoothMouseY = useSpring(mouseY, { stiffness: 60, damping: 20 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { width, height, left, top } = currentTarget.getBoundingClientRect();
+    
+    // Normalized offset from center: -1 to +1
+    const xOffset = ((clientX - left) / width - 0.5) * 2;
+    const yOffset = ((clientY - top) / height - 0.5) * 2;
+
+    // Shift video subtly by up to 25px in response to cursor
+    mouseX.set(xOffset * -25);
+    mouseY.set(yOffset * -25);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
   };
 
   return (
-    <div className="relative w-full bg-[#07080E] text-[#FDFCF8] font-sans selection:bg-[#D4AF37] selection:text-[#07080E]">
-      {/* 1. Fullscreen Cinematic Background Video (Pure Video — No Text Overlays) */}
-      <section className="relative h-[100dvh] w-full overflow-hidden flex flex-col justify-between items-center px-4 select-none">
-        {/* Responsive Background Video Player */}
-        <div className="absolute inset-0 z-0 w-full h-full overflow-hidden pointer-events-none">
+    <div className="relative w-full bg-[#07080E] text-[#FDFCF8] font-sans selection:bg-[#D4AF37] selection:text-[#07080E] overflow-x-hidden">
+      {/* 1. Enhanced Cursor-Tracked Cinematic Hero Video Section */}
+      <section
+        ref={heroRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="relative w-full h-[100dvh] min-h-[600px] overflow-hidden flex items-center justify-center select-none"
+      >
+        {/* Cursor-Tracked Animated Video Canvas */}
+        <motion.div
+          style={{
+            x: smoothMouseX,
+            y: smoothMouseY,
+            scale: 1.08, // Scale slightly to accommodate cursor motion without revealing edges
+          }}
+          className="absolute inset-0 z-0 w-full h-full pointer-events-none will-change-transform"
+        >
           <video
             src={BG_VIDEO}
             autoPlay
             muted
             loop
             playsInline
-            className="w-full h-full object-cover object-center md:object-top"
+            className="w-full h-full object-cover object-center"
           />
-          {/* Subtle bottom fade to transition seamlessly into the folding cards canvas */}
-          <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#07080E] via-[#07080E]/70 to-transparent" />
-        </div>
-
-        {/* Top spacer */}
-        <div className="h-24" />
-
-        {/* Minimal Kinetic Scroll-Down Indicator */}
-        <div className="relative z-10 pb-8 sm:pb-12 flex flex-col items-center gap-3">
-          <button
-            onClick={scrollToCards}
-            className="group flex flex-col items-center gap-2 px-6 py-3 rounded-full bg-[#07080E]/80 backdrop-blur-xl border border-[#D4AF37]/35 text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#07080E] transition-all duration-300 shadow-[0_4px_25px_rgba(0,0,0,0.6)] cursor-pointer"
-          >
-            <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.2em] font-bold">
-              Scroll to Explore Consecrated Editions
-            </span>
-            <ChevronDown size={16} className="animate-bounce" />
-          </button>
-        </div>
+          
+          {/* Seamless Bottom Vignette Gradient */}
+          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#07080E] via-[#07080E]/60 to-transparent" />
+        </motion.div>
       </section>
 
-      {/* 2. Kinetic Scroll-Folding Cards Canvas */}
-      <section id="collection-cards" className="relative w-full px-3 sm:px-8 pt-16 pb-24 max-w-7xl mx-auto">
-        {/* Section Header with Luminescence Tokens */}
-        <div className="text-center space-y-4 mb-16 sm:mb-20 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-[#D4AF37]/30 text-[10px] sm:text-xs font-mono tracking-widest text-[#D4AF37] uppercase">
-            <Sparkles size={13} className="text-[#D4AF37]" />
-            <span>AUTHENTIC VEDIC KEEPSAKES // 2026 EDITION</span>
-          </div>
+      {/* 2. Twitch-Style Astrology Zodiac Sign Carousel (Right-to-Left Continuous Scrolling) */}
+      <ZodiacMarquee />
 
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#FDFCF8] font-heading">
-            Consecrated Sacred Editions
-          </h2>
+      {/* 3. Bottom Consecrated Catalog Gateway */}
+      <section className="relative w-full px-4 sm:px-8 py-20 max-w-7xl mx-auto">
+        <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-br from-[#0E1017] to-[#141724] border border-[#D4AF37]/30 text-center space-y-6 shadow-2xl relative overflow-hidden">
+          <div className="absolute -right-24 -top-24 w-80 h-80 rounded-full bg-[#D4AF37]/15 blur-3xl pointer-events-none" />
+          <div className="absolute -left-24 -bottom-24 w-80 h-80 rounded-full bg-[#DC2626]/15 blur-3xl pointer-events-none" />
 
-          <p className="text-xs sm:text-sm md:text-base text-stone-300 leading-relaxed font-normal">
-            Each sacred rakhi is energized with 108 Vedic Gayatri Chants by learned pandits.
-            Experience the collection as each chapter unfolds.
-          </p>
-        </div>
+          <div className="space-y-3 relative z-10 max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] sm:text-xs font-mono uppercase tracking-wider">
+              <Star size={12} />
+              <span>AUTHENTIC VEDIC KEEPSAKES</span>
+            </div>
 
-        {/* Stacking / Folding Card Container */}
-        <div className="relative pb-24">
-          {products.map((product, index) => (
-            <FoldCard
-              key={product.id}
-              product={product}
-              index={index}
-              total={products.length}
-            />
-          ))}
-        </div>
-
-        {/* Bottom Catalog Discovery Banner */}
-        <div className="mt-12 p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-[#0E1017] to-[#141724] border border-[#D4AF37]/25 text-center space-y-6 shadow-2xl relative overflow-hidden">
-          <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-[#D4AF37]/10 blur-3xl pointer-events-none" />
-          <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-[#DC2626]/10 blur-3xl pointer-events-none" />
-
-          <div className="space-y-2 relative z-10">
-            <span className="text-xs font-mono text-[#D4AF37] uppercase tracking-widest font-bold">
-              LOOKING FOR MORE SPIRITUAL KEEPSAKES?
-            </span>
-            <h3 className="text-2xl sm:text-4xl font-extrabold text-[#FDFCF8]">
-              Explore the Full YOUNOYA Catalog
+            <h3 className="text-3xl sm:text-5xl font-extrabold text-[#FDFCF8] font-heading tracking-tight">
+              Consecrated Sacred Keepsakes
             </h3>
-            <p className="text-xs sm:text-sm text-stone-300 max-w-xl mx-auto">
-              Browse our complete catalog of consecrated rakhis, natural gemstones, and ritual boxes with 100% Free Express Air Shipping.
+
+            <p className="text-xs sm:text-sm text-stone-300 leading-relaxed font-normal">
+              Handcrafted Gomti Chakras, certified 5-Mukhi Rudrakshas, and pure resham silk rakhis energized with 108 Gayatri Mantras under auspicious astrological transits.
             </p>
           </div>
 
-          <div className="pt-2 relative z-10">
+          <div className="pt-3 relative z-10 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/products"
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider hover:opacity-95 transition-all duration-300 shadow-[0_4px_25px_rgba(212,175,55,0.25)] hover:scale-105 active:scale-95"
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-[0_4px_25px_rgba(212,175,55,0.35)] hover:scale-105 active:scale-95 transition-all duration-300"
             >
-              <span>View All Products</span>
+              <span>Explore Complete Collection</span>
               <ArrowRight size={16} />
             </Link>
           </div>
