@@ -8,8 +8,8 @@ import { ArrowRight, Sparkles } from "lucide-react";
 export function Footer() {
   const pathname = usePathname();
 
-  // Hide footer on admin routes
-  if (pathname?.startsWith("/admin")) {
+  // Hide footer on admin routes and home page (where FluidCardDeck manages the 4 tiles)
+  if (pathname?.startsWith("/admin") || pathname === "/") {
     return null;
   }
 

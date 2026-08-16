@@ -180,14 +180,18 @@ export function FluidCardDeck() {
               className="absolute inset-0 z-0 w-full h-full pointer-events-none will-change-transform"
             >
               <video
+                key={BG_VIDEO}
                 src={BG_VIDEO}
                 autoPlay
                 muted
                 loop
                 playsInline
+                preload="auto"
+                controls={false}
+                disablePictureInPicture
                 className="w-full h-full object-cover object-center"
               />
-              <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#040508] via-[#040508]/40 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#040508] via-[#040508]/40 to-transparent pointer-events-none" />
             </motion.div>
 
             {/* Subtle floating swipe hint at the very bottom */}
