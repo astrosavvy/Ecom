@@ -3,6 +3,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/lib/CartContext";
+import { DeckProvider } from "@/components/home/DeckContext";
 
 export const metadata: Metadata = {
   title: "YOUNOYA — Sacred Astrology-Blessed Rakhis & Vedic Ritual Keepsakes",
@@ -21,11 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className="min-h-screen bg-[#07080E] text-[#FDFCF8] flex flex-col font-sans antialiased selection:bg-[#D4AF37] selection:text-[#07080E]">
-        <CartProvider>
-          <Header />
-          <main className="flex-1 w-full">{children}</main>
-          <Footer />
-        </CartProvider>
+        <DeckProvider>
+          <CartProvider>
+            <Header />
+            <main className="flex-1 w-full">{children}</main>
+            <Footer />
+          </CartProvider>
+        </DeckProvider>
       </body>
     </html>
   );

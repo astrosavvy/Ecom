@@ -6,14 +6,27 @@ import { usePathname } from "next/navigation";
 import { ShoppingBag, Menu, X } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
 
+import { useDeck } from "@/components/home/DeckContext";
+
 export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { totalItems } = useCart();
+  let activeTile = 0;
+  try {
+    const deck = useDeck();
+    activeTile = deck.activeTile;
+  } catch {
+    activeTile = 1;
+  }
 
   if (pathname?.startsWith("/admin")) {
     return null;
   }
+
+  // Hide header completely on the first tile (Hero Video) when on the home page
+  const isHomePage = pathname === "/";
+  const shouldHideOnHero = isHomePage && activeTile === 0;
 
   const navItems = [
     { label: "Our Heritage", href: "/about" },
@@ -23,16 +36,20 @@ export function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none transition-all duration-300">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 w-full pointer-events-none transition-all duration-700 ${
+        shouldHideOnHero ? "opacity-0 -translate-y-10 pointer-events-none" : "opacity-100 translate-y-0"
+      }`}
+    >
       {/* Main Floating Navbar (Left Logo + Centered Nav Pill + Right Standalone Actions) */}
       <div className="pt-4 sm:pt-6 px-3 sm:px-8 max-w-7xl mx-auto flex items-center justify-between gap-4">
-        {/* 1. Large, Seamless Gold Logo on the Far Left (No Box / No Border) */}
+        {/* 1. Large, Seamless Gold & Cosmic Nebula Logo on the Far Left */}
         <Link href="/" className="pointer-events-auto flex items-center group flex-shrink-0">
-          <div className="transition-transform duration-300 group-hover:scale-105">
+          <div className="transition-transform duration-300 group-hover:scale-105 rounded-2xl overflow-hidden shadow-[0_4px_25px_rgba(212,175,55,0.35)]">
             <img
-              src="/younoya_celestial_gold_clean.png"
+              src="/younoya_celestial_nebula_logo.png"
               alt="YOUNOYA — for every chapter"
-              className="h-10 sm:h-14 w-auto max-w-[160px] sm:max-w-[220px] object-contain drop-shadow-[0_2px_14px_rgba(212,175,55,0.5)]"
+              className="h-11 sm:h-14 w-auto object-cover"
             />
           </div>
         </Link>
