@@ -10,6 +10,7 @@ interface Card1BOtpDetachedProps {
   setOtp: (val: string) => void;
   onVerify: (val: string) => void;
   onResend?: () => void;
+  onBypass?: () => void;
   isLoading: boolean;
   error?: string | null;
 }
@@ -20,6 +21,7 @@ export function Card1BOtpDetached({
   setOtp,
   onVerify,
   onResend,
+  onBypass,
   isLoading,
   error,
 }: Card1BOtpDetachedProps) {
@@ -71,7 +73,7 @@ export function Card1BOtpDetached({
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono uppercase tracking-wider">
           <KeyRound size={11} className="animate-pulse" />
-          <span>GOOEY DETACHED // AUTHENTICATION PORTAL</span>
+          <span>INSTANT ASTRAL ACCESS</span>
         </div>
         <h3 className="text-2xl sm:text-3xl font-extrabold text-[#FDFCF8] font-heading tracking-tight">
           Verify Verification Code
@@ -82,7 +84,7 @@ export function Card1BOtpDetached({
       </div>
 
       {/* OTP Inputs */}
-      <div className="space-y-5 my-auto">
+      <div className="space-y-4 my-auto">
         <div className="flex justify-between gap-2 sm:gap-3 max-w-sm mx-auto">
           {[0, 1, 2, 3, 4, 5].map((i) => (
             <input
@@ -113,7 +115,7 @@ export function Card1BOtpDetached({
           type="button"
           disabled={isLoading || otp.length < 6}
           onClick={() => onVerify(otp)}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(212,175,55,0.35)] hover:shadow-[0_6px_25px_rgba(212,175,55,0.5)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none transition-all duration-300"
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(212,175,55,0.35)] hover:shadow-[0_6px_25px_rgba(212,175,55,0.5)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none transition-all duration-300 cursor-pointer"
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
@@ -128,6 +130,18 @@ export function Card1BOtpDetached({
             </>
           )}
         </button>
+
+        {/* Discrete Fast Fallback Button: OTP not received proceed to next card */}
+        {onBypass && (
+          <button
+            type="button"
+            onClick={onBypass}
+            className="w-full py-2 text-[11px] font-mono text-[#D4AF37]/90 hover:text-[#D4AF37] text-center hover:underline flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+          >
+            <span>OTP not received? Proceed with Guest Pass</span>
+            <ArrowRight size={12} />
+          </button>
+        )}
       </div>
 
       {/* Resend Cooldown */}
@@ -136,7 +150,7 @@ export function Card1BOtpDetached({
         <button
           type="button"
           onClick={onResend}
-          className="text-[#D4AF37] hover:underline font-bold transition-all"
+          className="text-[#D4AF37] hover:underline font-bold transition-all cursor-pointer"
         >
           Resend OTP
         </button>

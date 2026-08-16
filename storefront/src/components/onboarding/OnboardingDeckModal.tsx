@@ -45,24 +45,58 @@ export function OnboardingDeckModal({ isOpen, onClose }: OnboardingDeckModalProp
 
       {/* Main Modal Shell */}
       <div className="relative w-full max-w-lg z-10 flex flex-col items-center">
-        {/* Top Control Bar */}
-        <div className="w-full flex items-center justify-between px-2 mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono tracking-widest text-[#D4AF37] uppercase font-bold">
-              YOUNOYA // CONSECRATION ONBOARDING
-            </span>
+        {/* Top Control Bar & Mode / Tutorial Switcher */}
+        <div className="w-full flex flex-col gap-2.5 px-2 mb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono tracking-widest text-[#D4AF37] uppercase font-bold flex items-center gap-1.5">
+                <Sparkles size={12} className="animate-spin-slow" />
+                <span>YOUNOYA // SACRED VEDIC ALIGNMENT</span>
+              </span>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white transition-colors cursor-pointer"
+              aria-label="Close modal"
+            >
+              <X size={18} />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white transition-colors"
-            aria-label="Close modal"
-          >
-            <X size={18} />
-          </button>
+
+          {/* Testing / Tutorial Sandbox Switcher */}
+          <div className="flex items-center justify-between p-1.5 rounded-2xl bg-black/60 border border-[#D4AF37]/30 backdrop-blur-md">
+            <div className="flex items-center gap-1 text-[10px] font-mono text-stone-400 pl-2">
+              <span>TEST MODE:</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={machine.loadDemoNewUser}
+                className={`px-3 py-1 rounded-xl text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
+                  machine.currentStep === "CARD_1_PHONE" || machine.currentStep === "CARD_1B_OTP"
+                    ? "bg-[#D4AF37] text-[#07080E] shadow-sm"
+                    : "bg-white/5 text-stone-300 hover:bg-white/10"
+                }`}
+              >
+                ✦ New User
+              </button>
+              <button
+                type="button"
+                onClick={machine.loadDemoReturningUser}
+                className={`px-3 py-1 rounded-xl text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
+                  machine.currentStep === "CARD_3_GIFT_INTENT"
+                    ? "bg-[#D4AF37] text-[#07080E] shadow-sm"
+                    : "bg-white/5 text-stone-300 hover:bg-white/10"
+                }`}
+              >
+                ✦ Returning User
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Stacked Cards Deck Area */}
-        <div className="relative w-full min-h-[480px] flex items-center justify-center [perspective:1200px]">
+        {/* Stacked Cards Deck Area with 3D Depth Layering */}
+        <div className="relative w-full min-h-[500px] flex items-center justify-center [perspective:1400px]">
           {machine.currentStep === "DISSOLVING" || machine.currentStep === "COMPLETED" ? (
             <FluidBubbleDissolve
               userProfile={machine.userProfile}
@@ -71,7 +105,7 @@ export function OnboardingDeckModal({ isOpen, onClose }: OnboardingDeckModalProp
               onComplete={machine.completeDissolve}
             />
           ) : (
-            <div className="relative w-full h-[480px]">
+            <div className="relative w-full h-[500px]">
               {/* Card 1 & 1B Container (with Gooey Detachment) */}
               <AnimatePresence mode="wait">
                 {machine.currentStep === "CARD_1_PHONE" && (
@@ -108,6 +142,7 @@ export function OnboardingDeckModal({ isOpen, onClose }: OnboardingDeckModalProp
                       setOtp={machine.setOtp}
                       onVerify={machine.verifyOtp}
                       onResend={() => machine.submitPhone(machine.phone)}
+                      onBypass={machine.bypassOtp}
                       isLoading={machine.isLoading}
                       error={machine.error}
                     />

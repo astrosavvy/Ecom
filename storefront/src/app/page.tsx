@@ -79,26 +79,26 @@ export default function Home() {
 
         {/* Hero Interactive Overlay CTA */}
         <div className="relative z-10 text-center px-4 max-w-3xl mx-auto space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#07080E]/80 backdrop-blur-md border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-mono uppercase tracking-widest shadow-2xl">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#07080E]/85 backdrop-blur-md border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-mono uppercase tracking-widest shadow-2xl">
             <Sparkles size={13} className="animate-spin-slow" />
-            <span>SACRED KUNDALI CONSECRATION</span>
+            <span>SACRED VEDIC ALIGNMENT ENGINE</span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight font-heading text-[#FDFCF8] drop-shadow-2xl">
-            Divine Rakhis Aligned to Your Rashi
+            Celestial Guidance Aligned To Your Birth Chart
           </h1>
 
           <p className="text-xs sm:text-base text-stone-200 max-w-xl mx-auto leading-relaxed drop-shadow-md">
-            Energized with 108 Gayatri Chants and consecrated gemstones to awaken cosmic protection for your loved ones.
+            Enter your exact birth parameters. Our Vedic ephemeris engine calculates your planetary transits and prescribes your customized consecrated talisman.
           </p>
 
           <div className="pt-2 flex items-center justify-center gap-4">
             <button
               onClick={() => setIsOnboardingOpen(true)}
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-[0_4px_30px_rgba(212,175,55,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-widest shadow-[0_4px_30px_rgba(212,175,55,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
             >
               <Compass size={16} />
-              <span>Begin Astral Alignment</span>
+              <span>✦ Calculate Your Kundali</span>
               <ArrowRight size={16} />
             </button>
           </div>
@@ -108,41 +108,35 @@ export default function Home() {
       {/* 2. Twitch-Style Astrology Zodiac Sign Carousel (Right-to-Left Continuous Scrolling) */}
       <ZodiacMarquee />
 
-      {/* 3. Bottom Consecrated Catalog Gateway */}
+      {/* 3. Bottom Sacred Alignment Prescription Gateway */}
       <section className="relative w-full px-4 sm:px-8 py-20 max-w-7xl mx-auto">
-        <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-br from-[#0E1017] to-[#141724] border border-[#D4AF37]/30 text-center space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-br from-[#080A10] to-[#121522] border border-[#D4AF37]/35 text-center space-y-6 shadow-2xl relative overflow-hidden">
           <div className="absolute -right-24 -top-24 w-80 h-80 rounded-full bg-[#D4AF37]/15 blur-3xl pointer-events-none" />
           <div className="absolute -left-24 -bottom-24 w-80 h-80 rounded-full bg-[#DC2626]/15 blur-3xl pointer-events-none" />
 
           <div className="space-y-3 relative z-10 max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] sm:text-xs font-mono uppercase tracking-wider">
               <Star size={12} />
-              <span>AUTHENTIC VEDIC KEEPSAKES</span>
+              <span>INDIVIDUAL ASTRAL PRESCRIPTION</span>
             </div>
 
             <h3 className="text-3xl sm:text-5xl font-extrabold text-[#FDFCF8] font-heading tracking-tight">
-              Consecrated Sacred Keepsakes
+              Bespoke Consecrated Talismans
             </h3>
 
             <p className="text-xs sm:text-sm text-stone-300 leading-relaxed font-normal">
-              Handcrafted Gomti Chakras, certified 5-Mukhi Rudrakshas, and pure resham silk rakhis energized with 108 Gayatri Mantras under auspicious astrological transits.
+              Every seeker receives an energized sacred item tailored precisely to their planetary dasha, moon rashi, and elemental synergy.
             </p>
           </div>
 
           <div className="pt-3 relative z-10 flex flex-wrap items-center justify-center gap-4">
             <button
               onClick={() => setIsOnboardingOpen(true)}
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-[0_4px_25px_rgba(212,175,55,0.35)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-widest shadow-[0_4px_25px_rgba(212,175,55,0.35)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
             >
-              <span>Calculate Astral Match</span>
+              <span>✦ Reveal My Astral Match</span>
               <ArrowRight size={16} />
             </button>
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-white/10 text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider border border-white/15 hover:bg-white/20 transition-all duration-300"
-            >
-              <span>Explore Complete Collection</span>
-            </Link>
           </div>
         </div>
       </section>

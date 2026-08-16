@@ -16,10 +16,10 @@ export function Header() {
   }
 
   const navItems = [
-    { label: "All Products", href: "/products" },
-    { label: "Our Story", href: "/about" },
-    { label: "Consecration Rituals", href: "/#rituals" },
-    { label: "Contact Us", href: "/contact" },
+    { label: "Our Heritage", href: "/about" },
+    { label: "Vedic Consecration", href: "/#rituals" },
+    { label: "Astrological Matrix", href: "/#zodiac" },
+    { label: "Reach Sanctuary", href: "/contact" },
   ];
 
   return (
@@ -38,24 +38,24 @@ export function Header() {
         </Link>
 
         {/* 2. Desktop: Centered Frosted Glass Navigation Pill */}
-        <nav className="pointer-events-auto hidden md:flex items-center gap-1 px-5 py-2.5 rounded-full bg-[#0E1017]/85 backdrop-blur-2xl border border-[#D4AF37]/25 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-[#D4AF37]/45 transition-all duration-300">
+        <nav className="pointer-events-auto hidden md:flex items-center gap-1 px-5 py-2.5 rounded-full bg-[#080A10]/90 backdrop-blur-2xl border border-[#D4AF37]/30 shadow-[0_8px_32px_rgba(0,0,0,0.6)] hover:border-[#D4AF37]/50 transition-all duration-300">
           {navItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
-              className="text-xs font-semibold px-3.5 py-1.5 rounded-full text-stone-200 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
+              className="text-xs font-semibold px-3.5 py-1.5 rounded-full text-stone-200 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap font-mono tracking-wider"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        {/* 3. Desktop: Direct Standalone Cart & Shop Now Buttons */}
+        {/* 3. Desktop: Direct Standalone Cart & Sacred Alignment CTA */}
         <div className="pointer-events-auto hidden md:flex items-center gap-3">
           <Link
             href="/cart"
-            className="relative p-3 rounded-full bg-[#0E1017]/90 backdrop-blur-xl border border-[#D4AF37]/30 text-white hover:border-[#D4AF37] hover:bg-[#141724] transition-all flex items-center justify-center shadow-lg hover:scale-105 active:scale-95"
-            aria-label="View Cart"
+            className="relative p-3 rounded-full bg-[#080A10]/90 backdrop-blur-xl border border-[#D4AF37]/30 text-white hover:border-[#D4AF37] hover:bg-[#121522] transition-all flex items-center justify-center shadow-lg hover:scale-105 active:scale-95"
+            aria-label="View Sacred Cart"
           >
             <ShoppingBag size={17} className="text-[#D4AF37]" />
             {totalItems > 0 && (
@@ -66,10 +66,10 @@ export function Header() {
           </Link>
 
           <Link
-            href="/products"
-            className="px-6 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] text-xs font-extrabold uppercase tracking-wider hover:opacity-90 transition-all transform hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(212,175,55,0.3)] whitespace-nowrap"
+            href="/#onboard"
+            className="px-6 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#B8860B] text-[#07080E] text-xs font-extrabold uppercase tracking-widest hover:opacity-95 transition-all transform hover:scale-105 active:scale-95 shadow-[0_4px_25px_rgba(212,175,55,0.4)] whitespace-nowrap cursor-pointer"
           >
-            Shop Collection
+            ✦ Calculate Kundali
           </Link>
         </div>
 

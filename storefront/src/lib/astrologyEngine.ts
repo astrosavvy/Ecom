@@ -248,6 +248,7 @@ export function calculateVedicRashi(dob: string, tob?: string): {
 
 export interface AstroKundaliProfile {
   name: string;
+  email?: string;
   dob: string;
   tob?: string;
   pob?: string;

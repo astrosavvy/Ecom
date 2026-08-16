@@ -36,30 +36,30 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Collections (2 cols) */}
+          {/* Column 2: Vedic Sanctuary (2 cols) */}
           <div className="md:col-span-2 space-y-4">
             <h4 className="text-xs font-mono uppercase tracking-widest text-stone-400 font-bold">
-              Collections
+              Sanctuary
             </h4>
             <ul className="space-y-2.5 text-xs text-stone-300">
               <li>
-                <Link href="/products" className="hover:text-white transition-colors">
-                  Signature Editions
-                </Link>
-              </li>
-              <li>
-                <Link href="/products" className="hover:text-white transition-colors">
-                  Studio Editions
-                </Link>
-              </li>
-              <li>
-                <Link href="/products" className="hover:text-white transition-colors">
-                  All Products
-                </Link>
-              </li>
-              <li>
                 <Link href="/about" className="hover:text-white transition-colors">
-                  Brand Story
+                  Sacred Heritage
+                </Link>
+              </li>
+              <li>
+                <Link href="/#rituals" className="hover:text-white transition-colors">
+                  108 Mantra Rituals
+                </Link>
+              </li>
+              <li>
+                <Link href="/#zodiac" className="hover:text-white transition-colors">
+                  12 Rashis Matrix
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-white transition-colors">
+                  Reach Priests
                 </Link>
               </li>
             </ul>

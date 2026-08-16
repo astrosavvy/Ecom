@@ -105,6 +105,49 @@ export function useOnboardingMachine() {
   }, []);
 
   /**
+   * Bypass OTP if code is delayed or in testing mode
+   */
+  const bypassOtp = useCallback(() => {
+    setError(null);
+    setIsGooeySeparating(false);
+    // Set fallback phone if empty
+    if (!phone) setPhone("9876543210");
+    setCurrentStep("CARD_2_PERSONAL_ASTRO");
+  }, [phone]);
+
+  /**
+   * Testing Mode: Fast-track to Returning User with Pre-computed Kundali
+   */
+  const loadDemoReturningUser = useCallback(() => {
+    setError(null);
+    setIsGooeySeparating(false);
+    setPhone("9876543210");
+    setUserProfile({
+      name: "Aaditya Sharma",
+      email: "aaditya.sharma@example.com",
+      dob: "1995-08-18",
+      tob: "07:15",
+      pob: "Jaipur, Rajasthan",
+      sunSign: getWesternSunSign("1995-08-18"),
+      moonSign: calculateVedicRashi("1995-08-18", "07:15").rashi,
+      nakshatra: calculateVedicRashi("1995-08-18", "07:15").nakshatra,
+    });
+    // Advance directly to gift recipient card
+    setCurrentStep("CARD_3_GIFT_INTENT");
+  }, []);
+
+  /**
+   * Testing Mode: Reset to Fresh New User Journey
+   */
+  const loadDemoNewUser = useCallback(() => {
+    setError(null);
+    setIsGooeySeparating(false);
+    setPhone("");
+    setOtp("");
+    setCurrentStep("CARD_1_PHONE");
+  }, []);
+
+  /**
    * Card 2: Personal Astrology Profile Submit
    */
   const submitPersonalAstro = useCallback(
@@ -200,6 +243,9 @@ export function useOnboardingMachine() {
     synergy,
     submitPhone,
     verifyOtp,
+    bypassOtp,
+    loadDemoReturningUser,
+    loadDemoNewUser,
     submitPersonalAstro,
     selectGiftIntent,
     submitRecipientAstro,
