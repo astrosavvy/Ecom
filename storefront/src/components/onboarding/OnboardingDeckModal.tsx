@@ -95,8 +95,8 @@ export function OnboardingDeckModal({ isOpen, onClose }: OnboardingDeckModalProp
           </div>
         </div>
 
-        {/* Stacked Cards Deck Area with 3D Depth Layering */}
-        <div className="relative w-full min-h-[500px] flex items-center justify-center [perspective:1400px]">
+        {/* Stacked Cards Deck Area with Realistic 3D Cascading & Spring Physics */}
+        <div className="relative w-full min-h-[520px] flex items-center justify-center [perspective:1600px]">
           {machine.currentStep === "DISSOLVING" || machine.currentStep === "COMPLETED" ? (
             <FluidBubbleDissolve
               userProfile={machine.userProfile}
@@ -105,19 +105,23 @@ export function OnboardingDeckModal({ isOpen, onClose }: OnboardingDeckModalProp
               onComplete={machine.completeDissolve}
             />
           ) : (
-            <div className="relative w-full h-[500px]">
-              {/* Card 1 & 1B Container (with Gooey Detachment) */}
+            <div className="relative w-full h-[520px]">
+              {/* Backing Cascade Silhouette Cards for 3D Deck Depth */}
+              <div className="absolute inset-0 translate-y-4 scale-[0.92] rounded-[32px] bg-[#0A0C14]/60 border border-[#D4AF37]/15 blur-[1px] pointer-events-none transition-transform duration-500" />
+              <div className="absolute inset-0 translate-y-2 scale-[0.96] rounded-[32px] bg-[#0C0E18]/80 border border-[#D4AF37]/25 pointer-events-none transition-transform duration-500" />
+
+              {/* Active Stacked Card with Organic Fluid Motion */}
               <AnimatePresence mode="wait">
                 {machine.currentStep === "CARD_1_PHONE" && (
                   <motion.div
                     key="card-1"
-                    initial={{ y: 60, opacity: 0, scale: 0.92, rotateX: 10 }}
+                    initial={{ y: 80, opacity: 0, scale: 0.9, rotateX: 12 }}
                     animate={{ y: 0, opacity: 1, scale: 1, rotateX: 0 }}
-                    exit={{ y: -60, opacity: 0, scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                    className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#0E1017]/95 backdrop-blur-2xl border border-[#D4AF37]/40 shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden"
+                    exit={{ y: -90, opacity: 0, scale: 0.94, rotateX: -8, filter: "blur(4px)" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 26, mass: 0.8 }}
+                    className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_30px_70px_rgba(0,0,0,0.95)] overflow-hidden"
                   >
-                    <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+                    <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                     <Card1MobileLogin
                       onSubmit={machine.submitPhone}
                       isLoading={machine.isLoading}
@@ -129,13 +133,13 @@ export function OnboardingDeckModal({ isOpen, onClose }: OnboardingDeckModalProp
                 {machine.currentStep === "CARD_1B_OTP" && (
                   <motion.div
                     key="card-1b"
-                    initial={{ y: 40, opacity: 0, scale: 0.94 }}
+                    initial={{ y: 50, opacity: 0, scale: 0.92 }}
                     animate={{ y: 0, opacity: 1, scale: 1 }}
-                    exit={{ y: -60, opacity: 0, scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 220, damping: 20 }}
-                    className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#0E1017]/95 backdrop-blur-2xl border border-[#D4AF37]/40 shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden"
+                    exit={{ y: -90, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
+                    transition={{ type: "spring", stiffness: 280, damping: 24 }}
+                    className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_30px_70px_rgba(0,0,0,0.95)] overflow-hidden"
                   >
-                    <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+                    <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                     <Card1BOtpDetached
                       phone={machine.phone}
                       otp={machine.otp}
@@ -152,13 +156,13 @@ export function OnboardingDeckModal({ isOpen, onClose }: OnboardingDeckModalProp
                 {machine.currentStep === "CARD_2_PERSONAL_ASTRO" && (
                   <motion.div
                     key="card-2"
-                    initial={{ y: 60, opacity: 0, scale: 0.92, rotateX: 10 }}
+                    initial={{ y: 80, opacity: 0, scale: 0.9, rotateX: 12 }}
                     animate={{ y: 0, opacity: 1, scale: 1, rotateX: 0 }}
-                    exit={{ y: -60, opacity: 0, scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                    className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#0E1017]/95 backdrop-blur-2xl border border-[#D4AF37]/40 shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden"
+                    exit={{ y: -90, opacity: 0, scale: 0.94, rotateX: -8, filter: "blur(4px)" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 26, mass: 0.8 }}
+                    className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_30px_70px_rgba(0,0,0,0.95)] overflow-hidden"
                   >
-                    <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+                    <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                     <Card2PersonalAstro onSubmit={machine.submitPersonalAstro} />
                   </motion.div>
                 )}
@@ -166,13 +170,13 @@ export function OnboardingDeckModal({ isOpen, onClose }: OnboardingDeckModalProp
                 {machine.currentStep === "CARD_3_GIFT_INTENT" && (
                   <motion.div
                     key="card-3"
-                    initial={{ y: 60, opacity: 0, scale: 0.92, rotateX: 10 }}
+                    initial={{ y: 80, opacity: 0, scale: 0.9, rotateX: 12 }}
                     animate={{ y: 0, opacity: 1, scale: 1, rotateX: 0 }}
-                    exit={{ y: -60, opacity: 0, scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                    className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#0E1017]/95 backdrop-blur-2xl border border-[#D4AF37]/40 shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden"
+                    exit={{ y: -90, opacity: 0, scale: 0.94, rotateX: -8, filter: "blur(4px)" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 26, mass: 0.8 }}
+                    className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_30px_70px_rgba(0,0,0,0.95)] overflow-hidden"
                   >
-                    <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+                    <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                     <Card3GiftIntent onSelect={machine.selectGiftIntent} />
                   </motion.div>
                 )}
@@ -180,13 +184,13 @@ export function OnboardingDeckModal({ isOpen, onClose }: OnboardingDeckModalProp
                 {machine.currentStep === "CARD_4_RECIPIENT_ASTRO" && (
                   <motion.div
                     key="card-4"
-                    initial={{ y: 60, opacity: 0, scale: 0.92, rotateX: 10 }}
+                    initial={{ y: 80, opacity: 0, scale: 0.9, rotateX: 12 }}
                     animate={{ y: 0, opacity: 1, scale: 1, rotateX: 0 }}
-                    exit={{ y: -60, opacity: 0, scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                    className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#0E1017]/95 backdrop-blur-2xl border border-[#D4AF37]/40 shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden"
+                    exit={{ y: -90, opacity: 0, scale: 0.94, rotateX: -8, filter: "blur(4px)" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 26, mass: 0.8 }}
+                    className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_30px_70px_rgba(0,0,0,0.95)] overflow-hidden"
                   >
-                    <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+                    <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                     <Card4RecipientAstro
                       relationship={machine.recipient.relationship}
                       userProfile={machine.userProfile}

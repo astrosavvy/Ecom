@@ -48,7 +48,7 @@ export default function Home() {
         onClose={() => setIsOnboardingOpen(false)}
       />
 
-      {/* 1. Enhanced Cursor-Tracked Cinematic Hero Video Section */}
+      {/* 1. Enhanced Cursor-Tracked Cinematic Hero Video Section (Zero Text Obstruction) */}
       <section
         ref={heroRef}
         onMouseMove={handleMouseMove}
@@ -76,33 +76,6 @@ export default function Home() {
           {/* Seamless Bottom Vignette Gradient */}
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#07080E] via-[#07080E]/60 to-transparent" />
         </motion.div>
-
-        {/* Hero Interactive Overlay CTA */}
-        <div className="relative z-10 text-center px-4 max-w-3xl mx-auto space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#07080E]/85 backdrop-blur-md border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-mono uppercase tracking-widest shadow-2xl">
-            <Sparkles size={13} className="animate-spin-slow" />
-            <span>SACRED VEDIC ALIGNMENT ENGINE</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight font-heading text-[#FDFCF8] drop-shadow-2xl">
-            Celestial Guidance Aligned To Your Birth Chart
-          </h1>
-
-          <p className="text-xs sm:text-base text-stone-200 max-w-xl mx-auto leading-relaxed drop-shadow-md">
-            Enter your exact birth parameters. Our Vedic ephemeris engine calculates your planetary transits and prescribes your customized consecrated talisman.
-          </p>
-
-          <div className="pt-2 flex items-center justify-center gap-4">
-            <button
-              onClick={() => setIsOnboardingOpen(true)}
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-widest shadow-[0_4px_30px_rgba(212,175,55,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
-            >
-              <Compass size={16} />
-              <span>✦ Calculate Your Kundali</span>
-              <ArrowRight size={16} />
-            </button>
-          </div>
-        </div>
       </section>
 
       {/* 2. Twitch-Style Astrology Zodiac Sign Carousel (Right-to-Left Continuous Scrolling) */}
