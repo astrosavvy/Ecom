@@ -13,6 +13,8 @@ import { Card4RecipientAstro } from "@/components/onboarding/cards/Card4Recipien
 import { FluidBubbleDissolve } from "@/components/onboarding/transitions/FluidBubbleDissolve";
 import { useOnboardingMachine } from "@/components/onboarding/useOnboardingMachine";
 import { GooeyFilterDefs } from "@/components/onboarding/GooeyFilterDefs";
+import Link from "next/link";
+import { ArrowRight as ArrowIcon } from "lucide-react";
 
 const BG_VIDEO = "https://7jpz6d1nkrer2cbv.public.blob.vercel-storage.com/new-ecom";
 
@@ -20,7 +22,7 @@ const TILES = [
   { id: "hero", label: "Celestial Vision" },
   { id: "zodiac", label: "12 Rashis Stream" },
   { id: "kundali", label: "Kundali Prescription" },
-  { id: "sanctuary", label: "Sacred Sanctuary" },
+  { id: "footer", label: "Sanctuary & Details" },
 ];
 
 export function FluidCardDeck() {
@@ -131,24 +133,24 @@ export function FluidCardDeck() {
       <GooeyFilterDefs />
 
       {/* Floating Minimalist Right Deck Indicator */}
-      <div className="fixed right-4 sm:right-8 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-3 py-3 px-2 rounded-full bg-[#080A10]/70 backdrop-blur-xl border border-[#D4AF37]/30 shadow-2xl">
+      <div className="fixed right-3 sm:right-8 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-2.5 sm:gap-3 py-2.5 sm:py-3 px-1.5 sm:px-2 rounded-full bg-[#080A10]/70 backdrop-blur-xl border border-[#D4AF37]/30 shadow-2xl">
         {TILES.map((tile, idx) => (
           <button
             key={tile.id}
             onClick={() => switchTile(idx)}
             title={tile.label}
-            className="group relative flex items-center justify-center p-1.5 cursor-pointer"
+            className="group relative flex items-center justify-center p-1 cursor-pointer"
             aria-label={`Jump to ${tile.label}`}
           >
             <div
               className={`transition-all duration-500 rounded-full ${
                 activeTile === idx
-                  ? "w-3 h-8 bg-gradient-to-b from-[#D4AF37] to-[#B8860B] shadow-[0_0_12px_#D4AF37]"
-                  : "w-2.5 h-2.5 bg-white/20 hover:bg-[#D4AF37]/60"
+                  ? "w-2.5 sm:w-3 h-6 sm:h-8 bg-gradient-to-b from-[#D4AF37] to-[#B8860B] shadow-[0_0_12px_#D4AF37]"
+                  : "w-2 sm:w-2.5 h-2 sm:h-2.5 bg-white/20 hover:bg-[#D4AF37]/60"
               }`}
             />
-            {/* Tooltip on hover */}
-            <span className="absolute right-8 px-2.5 py-1 rounded-lg bg-[#0E1017] border border-[#D4AF37]/30 text-[10px] font-mono text-[#D4AF37] tracking-wider whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity">
+            {/* Tooltip on hover (desktop only) */}
+            <span className="hidden md:block absolute right-8 px-2.5 py-1 rounded-lg bg-[#0E1017] border border-[#D4AF37]/30 text-[10px] font-mono text-[#D4AF37] tracking-wider whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity">
               {tile.label}
             </span>
           </button>
@@ -197,12 +199,12 @@ export function FluidCardDeck() {
             {/* Subtle floating swipe hint at the very bottom */}
             <button
               onClick={() => switchTile(1)}
-              className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 text-stone-400 hover:text-[#D4AF37] transition-colors cursor-pointer group"
+              className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 text-stone-400 hover:text-[#D4AF37] transition-colors cursor-pointer group"
             >
-              <span className="text-[10px] font-mono tracking-widest uppercase opacity-70 group-hover:opacity-100">
+              <span className="text-[9px] sm:text-[10px] font-mono tracking-widest uppercase opacity-75 group-hover:opacity-100">
                 Scroll to Explore ✦
               </span>
-              <ChevronDown size={16} className="animate-bounce text-[#D4AF37]" />
+              <ChevronDown size={15} className="animate-bounce text-[#D4AF37]" />
             </button>
           </motion.div>
         )}
@@ -216,14 +218,14 @@ export function FluidCardDeck() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: direction > 0 ? -80 : 80, scale: 0.94, filter: "blur(6px)" }}
             transition={{ type: "spring", stiffness: 280, damping: 28 }}
-            className="absolute inset-0 w-full h-full flex flex-col justify-center items-center px-4 pt-16 pb-8 overflow-hidden bg-gradient-to-b from-[#07080E] via-[#080A12] to-[#040508]"
+            className="absolute inset-0 w-full h-full flex flex-col justify-between items-center px-2 sm:px-4 pt-16 sm:pt-20 pb-4 overflow-hidden bg-gradient-to-b from-[#07080E] via-[#080A12] to-[#040508]"
           >
-            <div className="w-full max-w-7xl mx-auto my-auto">
+            <div className="w-full max-w-7xl mx-auto my-auto flex flex-col items-center justify-center">
               <ZodiacMarquee />
             </div>
 
-            {/* Navigation Pips */}
-            <div className="flex items-center gap-4 mt-auto pb-4 z-20">
+            {/* Navigation Controls */}
+            <div className="flex items-center gap-3 sm:gap-4 pb-2 z-20">
               <button
                 onClick={() => switchTile(0)}
                 className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-stone-400 hover:text-white transition-all cursor-pointer"
@@ -233,7 +235,7 @@ export function FluidCardDeck() {
               </button>
               <button
                 onClick={() => switchTile(2)}
-                className="px-6 py-2.5 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-mono uppercase tracking-wider hover:bg-[#D4AF37] hover:text-[#07080E] transition-all cursor-pointer flex items-center gap-2 shadow-lg"
+                className="px-5 sm:px-6 py-2 sm:py-2.5 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] text-[11px] sm:text-xs font-mono uppercase tracking-wider hover:bg-[#D4AF37] hover:text-[#07080E] transition-all cursor-pointer flex items-center gap-2 shadow-lg"
               >
                 <span>✦ Calculate Kundali</span>
                 <ChevronDown size={14} />
@@ -251,20 +253,20 @@ export function FluidCardDeck() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: direction > 0 ? -80 : 80, scale: 0.94, filter: "blur(6px)" }}
             transition={{ type: "spring", stiffness: 280, damping: 28 }}
-            className="absolute inset-0 w-full h-full flex flex-col justify-center items-center px-4 pt-20 pb-8 overflow-hidden bg-gradient-to-b from-[#080A12] via-[#0D101C] to-[#040508]"
+            className="absolute inset-0 w-full h-full flex flex-col justify-between items-center px-3 sm:px-4 pt-16 sm:pt-20 pb-4 overflow-hidden bg-gradient-to-b from-[#080A12] via-[#0D101C] to-[#040508]"
           >
             <div className="w-full max-w-lg z-10 my-auto flex flex-col items-center">
               {/* Test Mode Switcher */}
-              <div className="w-full flex items-center justify-between p-1.5 mb-4 rounded-2xl bg-black/60 border border-[#D4AF37]/30 backdrop-blur-md">
-                <div className="flex items-center gap-1 text-[10px] font-mono text-stone-400 pl-2">
+              <div className="w-full flex items-center justify-between p-1 sm:p-1.5 mb-2 sm:mb-3 rounded-2xl bg-black/60 border border-[#D4AF37]/30 backdrop-blur-md">
+                <div className="flex items-center gap-1 text-[9px] sm:text-[10px] font-mono text-stone-400 pl-2">
                   <Sparkles size={11} className="text-[#D4AF37]" />
                   <span>TEST MODE:</span>
                 </div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1 sm:gap-1.5">
                   <button
                     type="button"
                     onClick={machine.loadDemoNewUser}
-                    className={`px-3 py-1 rounded-xl text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
+                    className={`px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-xl text-[9px] sm:text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
                       machine.currentStep === "CARD_1_PHONE" || machine.currentStep === "CARD_1B_OTP"
                         ? "bg-[#D4AF37] text-[#07080E] shadow-sm"
                         : "bg-white/5 text-stone-300 hover:bg-white/10"
@@ -275,7 +277,7 @@ export function FluidCardDeck() {
                   <button
                     type="button"
                     onClick={machine.loadDemoReturningUser}
-                    className={`px-3 py-1 rounded-xl text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
+                    className={`px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-xl text-[9px] sm:text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
                       machine.currentStep === "CARD_3_GIFT_INTENT"
                         ? "bg-[#D4AF37] text-[#07080E] shadow-sm"
                         : "bg-white/5 text-stone-300 hover:bg-white/10"
@@ -287,7 +289,7 @@ export function FluidCardDeck() {
               </div>
 
               {/* 3D Stacked Card Swapping Surface */}
-              <div className="relative w-full min-h-[490px] [perspective:1600px]">
+              <div className="relative w-full min-h-[460px] sm:min-h-[490px] [perspective:1600px]">
                 {machine.currentStep === "DISSOLVING" || machine.currentStep === "COMPLETED" ? (
                   <FluidBubbleDissolve
                     userProfile={machine.userProfile}
@@ -296,20 +298,20 @@ export function FluidCardDeck() {
                     onComplete={machine.completeDissolve}
                   />
                 ) : (
-                  <div className="relative w-full h-[490px]">
+                  <div className="relative w-full h-[460px] sm:h-[490px]">
                     {/* Backing Depth Silhouettes */}
-                    <div className="absolute inset-0 translate-y-4 scale-[0.92] rounded-[32px] bg-[#0A0C14]/60 border border-[#D4AF37]/15 blur-[1px] pointer-events-none" />
-                    <div className="absolute inset-0 translate-y-2 scale-[0.96] rounded-[32px] bg-[#0C0E18]/80 border border-[#D4AF37]/25 pointer-events-none" />
+                    <div className="absolute inset-0 translate-y-3 sm:translate-y-4 scale-[0.93] rounded-[28px] sm:rounded-[32px] bg-[#0A0C14]/60 border border-[#D4AF37]/15 blur-[1px] pointer-events-none" />
+                    <div className="absolute inset-0 translate-y-1.5 sm:translate-y-2 scale-[0.97] rounded-[28px] sm:rounded-[32px] bg-[#0C0E18]/80 border border-[#D4AF37]/25 pointer-events-none" />
 
                     <AnimatePresence mode="wait">
                       {machine.currentStep === "CARD_1_PHONE" && (
                         <motion.div
                           key="card-1"
-                          initial={{ y: 80, opacity: 0, scale: 0.9, rotateX: 12 }}
+                          initial={{ y: 60, opacity: 0, scale: 0.9, rotateX: 10 }}
                           animate={{ y: 0, opacity: 1, scale: 1, rotateX: 0 }}
-                          exit={{ y: -90, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
+                          exit={{ y: -70, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
                           transition={{ type: "spring", stiffness: 300, damping: 26 }}
-                          className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_30px_70px_rgba(0,0,0,0.95)] overflow-hidden"
+                          className="absolute inset-0 rounded-2xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_20px_60px_rgba(0,0,0,0.95)] overflow-hidden"
                         >
                           <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                           <Card1MobileLogin
@@ -323,11 +325,11 @@ export function FluidCardDeck() {
                       {machine.currentStep === "CARD_1B_OTP" && (
                         <motion.div
                           key="card-1b"
-                          initial={{ y: 50, opacity: 0, scale: 0.92 }}
+                          initial={{ y: 40, opacity: 0, scale: 0.92 }}
                           animate={{ y: 0, opacity: 1, scale: 1 }}
-                          exit={{ y: -90, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
+                          exit={{ y: -70, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
                           transition={{ type: "spring", stiffness: 280, damping: 24 }}
-                          className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_30px_70px_rgba(0,0,0,0.95)] overflow-hidden"
+                          className="absolute inset-0 rounded-2xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_20px_60px_rgba(0,0,0,0.95)] overflow-hidden"
                         >
                           <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                           <Card1BOtpDetached
@@ -346,11 +348,11 @@ export function FluidCardDeck() {
                       {machine.currentStep === "CARD_2_PERSONAL_ASTRO" && (
                         <motion.div
                           key="card-2"
-                          initial={{ y: 80, opacity: 0, scale: 0.9, rotateX: 12 }}
+                          initial={{ y: 60, opacity: 0, scale: 0.9, rotateX: 10 }}
                           animate={{ y: 0, opacity: 1, scale: 1, rotateX: 0 }}
-                          exit={{ y: -90, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
+                          exit={{ y: -70, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
                           transition={{ type: "spring", stiffness: 300, damping: 26 }}
-                          className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_30px_70px_rgba(0,0,0,0.95)] overflow-hidden"
+                          className="absolute inset-0 rounded-2xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_20px_60px_rgba(0,0,0,0.95)] overflow-hidden"
                         >
                           <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                           <Card2PersonalAstro onSubmit={machine.submitPersonalAstro} />
@@ -360,11 +362,11 @@ export function FluidCardDeck() {
                       {machine.currentStep === "CARD_3_GIFT_INTENT" && (
                         <motion.div
                           key="card-3"
-                          initial={{ y: 80, opacity: 0, scale: 0.9, rotateX: 12 }}
+                          initial={{ y: 60, opacity: 0, scale: 0.9, rotateX: 10 }}
                           animate={{ y: 0, opacity: 1, scale: 1, rotateX: 0 }}
-                          exit={{ y: -90, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
+                          exit={{ y: -70, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
                           transition={{ type: "spring", stiffness: 300, damping: 26 }}
-                          className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_30px_70px_rgba(0,0,0,0.95)] overflow-hidden"
+                          className="absolute inset-0 rounded-2xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_20px_60px_rgba(0,0,0,0.95)] overflow-hidden"
                         >
                           <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                           <Card3GiftIntent onSelect={machine.selectGiftIntent} />
@@ -374,11 +376,11 @@ export function FluidCardDeck() {
                       {machine.currentStep === "CARD_4_RECIPIENT_ASTRO" && (
                         <motion.div
                           key="card-4"
-                          initial={{ y: 80, opacity: 0, scale: 0.9, rotateX: 12 }}
+                          initial={{ y: 60, opacity: 0, scale: 0.9, rotateX: 10 }}
                           animate={{ y: 0, opacity: 1, scale: 1, rotateX: 0 }}
-                          exit={{ y: -90, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
+                          exit={{ y: -70, opacity: 0, scale: 0.94, filter: "blur(4px)" }}
                           transition={{ type: "spring", stiffness: 300, damping: 26 }}
-                          className="absolute inset-0 rounded-3xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_30px_70px_rgba(0,0,0,0.95)] overflow-hidden"
+                          className="absolute inset-0 rounded-2xl sm:rounded-[32px] bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_20px_60px_rgba(0,0,0,0.95)] overflow-hidden"
                         >
                           <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                           <Card4RecipientAstro
@@ -395,7 +397,7 @@ export function FluidCardDeck() {
             </div>
 
             {/* Bottom Deck Navigation */}
-            <div className="flex items-center gap-4 mt-auto pb-4 z-20">
+            <div className="flex items-center gap-3 sm:gap-4 pb-2 z-20">
               <button
                 onClick={() => switchTile(1)}
                 className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-stone-400 hover:text-white transition-all cursor-pointer"
@@ -405,7 +407,7 @@ export function FluidCardDeck() {
               </button>
               <button
                 onClick={() => switchTile(3)}
-                className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-stone-300 text-xs font-mono uppercase tracking-wider hover:bg-white/10 transition-all cursor-pointer flex items-center gap-1.5"
+                className="px-5 sm:px-6 py-2 rounded-full bg-white/5 border border-white/10 text-stone-300 text-[11px] sm:text-xs font-mono uppercase tracking-wider hover:bg-white/10 transition-all cursor-pointer flex items-center gap-1.5"
               >
                 <span>Explore Sanctuary</span>
                 <ChevronDown size={14} />
@@ -414,50 +416,140 @@ export function FluidCardDeck() {
           </motion.div>
         )}
 
-        {/* TILE 3: Sacred Consecration Sanctuary */}
+        {/* TILE 3: Full Luxury Footer Card (Replacing old 4th tile) */}
         {activeTile === 3 && (
           <motion.div
-            key="tile-3-sanctuary"
+            key="tile-3-footer"
             custom={direction}
             initial={{ opacity: 0, y: direction > 0 ? 80 : -80, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: direction > 0 ? -80 : 80, scale: 0.94, filter: "blur(6px)" }}
             transition={{ type: "spring", stiffness: 280, damping: 28 }}
-            className="absolute inset-0 w-full h-full flex flex-col justify-center items-center px-4 pt-20 pb-8 overflow-hidden bg-gradient-to-b from-[#0D101C] via-[#090B14] to-[#040508]"
+            className="absolute inset-0 w-full h-full flex flex-col justify-between items-center px-4 sm:px-8 pt-16 sm:pt-20 pb-6 overflow-y-auto bg-gradient-to-b from-[#0D101C] via-[#090B14] to-[#040508]"
           >
-            <div className="w-full max-w-4xl mx-auto my-auto text-center space-y-6 p-8 sm:p-12 rounded-3xl bg-[#080A10]/90 border border-[#D4AF37]/35 shadow-2xl relative overflow-hidden backdrop-blur-2xl">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono uppercase tracking-wider">
-                <Star size={12} />
-                <span>SACRED VEDIC CONSECRATION SANCTUARY</span>
+            <div className="w-full max-w-7xl mx-auto my-auto space-y-8 sm:space-y-12">
+              {/* Top Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-10 border-b border-white/10 pb-8 sm:pb-12">
+                {/* Column 1: Brand */}
+                <div className="md:col-span-5 space-y-4">
+                  <div className="rounded-2xl overflow-hidden shadow-[0_4px_25px_rgba(212,175,55,0.35)] inline-block">
+                    <img
+                      src="/younoya_celestial_nebula_logo.png"
+                      alt="YOUNOYA"
+                      className="h-10 sm:h-12 w-auto object-cover"
+                    />
+                  </div>
+                  <p className="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-md font-normal">
+                    Sacred Vedic Astrology-Blessed talismans and consecrated ritual keepsakes energized with 108 Gayatri Mantras under auspicious cosmic transits.
+                  </p>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono tracking-widest text-[#D4AF37] uppercase">
+                    <Sparkles size={11} />
+                    <span>TIMELESS CONSECRATION & ZERO-PASSWORD FLOW</span>
+                  </div>
+                </div>
+
+                {/* Column 2: Sanctuary */}
+                <div className="md:col-span-2 space-y-3">
+                  <h4 className="text-xs font-mono uppercase tracking-widest text-stone-400 font-bold">
+                    Sanctuary
+                  </h4>
+                  <ul className="space-y-2 text-xs text-stone-300">
+                    <li>
+                      <Link href="/about" className="hover:text-white transition-colors">
+                        Sacred Heritage
+                      </Link>
+                    </li>
+                    <li>
+                      <button onClick={() => switchTile(1)} className="hover:text-white transition-colors cursor-pointer text-left">
+                        12 Rashis Matrix
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => switchTile(2)} className="hover:text-white transition-colors cursor-pointer text-left">
+                        Kundali Alignment
+                      </button>
+                    </li>
+                    <li>
+                      <Link href="/contact" className="hover:text-white transition-colors">
+                        Reach Priests
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 3: Policies */}
+                <div className="md:col-span-2 space-y-3">
+                  <h4 className="text-xs font-mono uppercase tracking-widest text-stone-400 font-bold">
+                    Policies
+                  </h4>
+                  <ul className="space-y-2 text-xs text-stone-300">
+                    <li>
+                      <Link href="/shipping" className="hover:text-white transition-colors">
+                        Express Shipping
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/refund" className="hover:text-white transition-colors">
+                        Refund & Returns
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/terms" className="hover:text-white transition-colors">
+                        Terms of Service
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/privacy" className="hover:text-white transition-colors">
+                        Privacy Policy
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 4: Concierge */}
+                <div className="md:col-span-3 space-y-3">
+                  <h4 className="text-xs font-mono uppercase tracking-widest text-stone-400 font-bold">
+                    Concierge
+                  </h4>
+                  <p className="text-xs text-stone-400">
+                    Direct Astrological Inquiries:
+                  </p>
+                  <div className="text-xs font-mono text-[#D4AF37] font-bold">
+                    support@younoya.com
+                  </div>
+                  <div className="pt-2">
+                    <button
+                      onClick={() => switchTile(2)}
+                      className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-lg"
+                    >
+                      <span>✦ Calculate Kundali</span>
+                      <ArrowIcon size={13} />
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-[#FDFCF8] font-heading tracking-tight">
-                Authentic 108 Gayatri Mantra Energization
-              </h2>
-
-              <p className="text-xs sm:text-sm text-stone-300 max-w-2xl mx-auto leading-relaxed font-normal">
-                Every sacred keepsake is hand-blessed by revered temple priests in Jaipur under auspicious astrological muhurtas, infused with Akshat and pure Gangajal, and dispatched via Express Air Shipping across India.
-              </p>
-
-              <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
-                <button
-                  onClick={() => switchTile(2)}
-                  className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-widest shadow-[0_4px_25px_rgba(212,175,55,0.35)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer flex items-center gap-2"
-                >
-                  <Compass size={15} />
-                  <span>Begin My Sacred Prescription</span>
-                </button>
+              {/* Bottom Copyright */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-stone-400 pb-2">
+                <div>
+                  © {new Date().getFullYear()} YOUNOYA. All Rights Reserved.
+                </div>
+                <div className="flex items-center gap-4 text-[10px] font-mono text-stone-400">
+                  <span>Free Express Air Delivery</span>
+                  <span>•</span>
+                  <span>Razorpay 256-Bit Encrypted</span>
+                </div>
               </div>
             </div>
 
-            {/* Back to top */}
-            <div className="mt-auto pb-4 z-20">
+            {/* Back to top Button */}
+            <div className="pt-2 z-20">
               <button
                 onClick={() => switchTile(0)}
-                className="px-5 py-2 rounded-full bg-white/5 border border-white/10 text-stone-300 text-xs font-mono uppercase tracking-wider hover:bg-white/10 transition-all cursor-pointer flex items-center gap-1.5"
+                className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-stone-300 text-[11px] font-mono uppercase tracking-wider hover:bg-white/10 transition-all cursor-pointer flex items-center gap-1.5"
               >
-                <ChevronUp size={14} />
-                <span>Back to Cosmic Vision</span>
+                <ChevronUp size={13} />
+                <span>Back to Top</span>
               </button>
             </div>
           </motion.div>

@@ -155,31 +155,31 @@ export function ZodiacMarquee() {
   const [selectedZodiac, setSelectedZodiac] = useState<ZodiacSign | null>(null);
 
   return (
-    <section className="relative w-full py-20 sm:py-28 overflow-hidden bg-[#07080E] text-[#FDFCF8] select-none">
+    <section className="relative w-full py-6 sm:py-16 md:py-20 overflow-hidden bg-transparent text-[#FDFCF8] select-none">
       {/* Background Ambient Radial Glows */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 rounded-full bg-[#D4AF37]/10 blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 rounded-full bg-[#DC2626]/10 blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-[#D4AF37]/10 blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-[#DC2626]/10 blur-[120px] pointer-events-none" />
 
       {/* Header */}
-      <div className="relative z-10 max-w-5xl mx-auto text-center px-4 mb-12 sm:mb-16 space-y-4">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[11px] font-mono tracking-widest uppercase shadow-sm">
-          <Sparkles size={13} className="animate-spin-slow" />
+      <div className="relative z-10 max-w-4xl mx-auto text-center px-4 mb-4 sm:mb-8 space-y-2 sm:space-y-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[9px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
+          <Sparkles size={11} className="animate-spin-slow" />
           <span>ASTROLOGICAL HARMONIZATION // 12 RASHIS</span>
         </div>
 
-        <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight font-heading text-[#FDFCF8]">
+        <h2 className="text-xl sm:text-3xl md:text-5xl font-extrabold tracking-tight font-heading text-[#FDFCF8] leading-tight">
           Find Your Sacred Zodiac Alignment
         </h2>
 
-        <p className="text-xs sm:text-sm md:text-base text-stone-300 max-w-2xl mx-auto leading-relaxed">
-          Hover over your Rashi to uncover the consecrated planetary elements, ruling devatas, and custom Vedic rakhi energized for your astrological sign.
+        <p className="text-[11px] sm:text-xs md:text-sm text-stone-300 max-w-xl mx-auto leading-relaxed px-2">
+          Tap or hover over your Rashi to uncover the consecrated planetary elements, ruling devatas, and cosmic alignments.
         </p>
       </div>
 
       {/* Marquee Container with Gradient Edge Masks (Like Twitch Stream Carousel) */}
       <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
         {/* Continuous Right-to-Left Scrolling Track */}
-        <div className="flex w-max gap-6 sm:gap-8 animate-marquee hover:[animation-play-state:paused] py-4">
+        <div className="flex w-max gap-4 sm:gap-6 md:gap-8 animate-marquee hover:[animation-play-state:paused] py-2 sm:py-4">
           {/* Repeat twice for seamless infinite loop */}
           {[...ZODIAC_SIGNS, ...ZODIAC_SIGNS].map((sign, idx) => (
             <div
