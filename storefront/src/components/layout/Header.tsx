@@ -29,14 +29,11 @@ export function Header() {
         {/* 1. Large, Seamless Gold Logo on the Far Left (No Box / No Border) */}
         <Link href="/" className="pointer-events-auto flex items-center group flex-shrink-0">
           <div className="transition-transform duration-300 group-hover:scale-105">
-            <picture>
-              <source srcSet="/younoya_logo_nobg.webp" type="image/webp" />
-              <img
-                src="/younoya_logo_nobg.png"
-                alt="YOUNOYA — for every chapter"
-                className="h-10 sm:h-14 w-auto max-w-[160px] sm:max-w-[220px] object-contain drop-shadow-[0_2px_12px_rgba(212,175,55,0.4)]"
-              />
-            </picture>
+            <img
+              src="/younoya_celestial_gold_clean.png"
+              alt="YOUNOYA — for every chapter"
+              className="h-10 sm:h-14 w-auto max-w-[160px] sm:max-w-[220px] object-contain drop-shadow-[0_2px_14px_rgba(212,175,55,0.5)]"
+            />
           </div>
         </Link>
 

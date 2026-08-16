@@ -3,14 +3,16 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useSpring, useMotionValue } from "framer-motion";
-import { Sparkles, ArrowRight, ShieldCheck, Star } from "lucide-react";
+import { Sparkles, ArrowRight, ShieldCheck, Star, Compass } from "lucide-react";
 import { ZodiacMarquee } from "@/components/astrology/ZodiacMarquee";
+import { OnboardingDeckModal } from "@/components/onboarding/OnboardingDeckModal";
 
 const BG_VIDEO =
   "https://7jpz6d1nkrer2cbv.public.blob.vercel-storage.com/new-ecom";
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
 
   // Mouse cursor tracking values
   const mouseX = useMotionValue(0);
@@ -40,6 +42,12 @@ export default function Home() {
 
   return (
     <div className="relative w-full bg-[#07080E] text-[#FDFCF8] font-sans selection:bg-[#D4AF37] selection:text-[#07080E] overflow-x-hidden">
+      {/* Interactive Onboarding Deck Modal */}
+      <OnboardingDeckModal
+        isOpen={isOnboardingOpen}
+        onClose={() => setIsOnboardingOpen(false)}
+      />
+
       {/* 1. Enhanced Cursor-Tracked Cinematic Hero Video Section */}
       <section
         ref={heroRef}
@@ -68,6 +76,33 @@ export default function Home() {
           {/* Seamless Bottom Vignette Gradient */}
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#07080E] via-[#07080E]/60 to-transparent" />
         </motion.div>
+
+        {/* Hero Interactive Overlay CTA */}
+        <div className="relative z-10 text-center px-4 max-w-3xl mx-auto space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#07080E]/80 backdrop-blur-md border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-mono uppercase tracking-widest shadow-2xl">
+            <Sparkles size={13} className="animate-spin-slow" />
+            <span>SACRED KUNDALI CONSECRATION</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight font-heading text-[#FDFCF8] drop-shadow-2xl">
+            Divine Rakhis Aligned to Your Rashi
+          </h1>
+
+          <p className="text-xs sm:text-base text-stone-200 max-w-xl mx-auto leading-relaxed drop-shadow-md">
+            Energized with 108 Gayatri Chants and consecrated gemstones to awaken cosmic protection for your loved ones.
+          </p>
+
+          <div className="pt-2 flex items-center justify-center gap-4">
+            <button
+              onClick={() => setIsOnboardingOpen(true)}
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-[0_4px_30px_rgba(212,175,55,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+            >
+              <Compass size={16} />
+              <span>Begin Astral Alignment</span>
+              <ArrowRight size={16} />
+            </button>
+          </div>
+        </div>
       </section>
 
       {/* 2. Twitch-Style Astrology Zodiac Sign Carousel (Right-to-Left Continuous Scrolling) */}
@@ -95,12 +130,18 @@ export default function Home() {
           </div>
 
           <div className="pt-3 relative z-10 flex flex-wrap items-center justify-center gap-4">
+            <button
+              onClick={() => setIsOnboardingOpen(true)}
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-[0_4px_25px_rgba(212,175,55,0.35)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+            >
+              <span>Calculate Astral Match</span>
+              <ArrowRight size={16} />
+            </button>
             <Link
               href="/products"
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-[0_4px_25px_rgba(212,175,55,0.35)] hover:scale-105 active:scale-95 transition-all duration-300"
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-white/10 text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider border border-white/15 hover:bg-white/20 transition-all duration-300"
             >
               <span>Explore Complete Collection</span>
-              <ArrowRight size={16} />
             </Link>
           </div>
         </div>

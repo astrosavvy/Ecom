@@ -14,22 +14,21 @@ export function Footer() {
   }
 
   return (
-    <footer className="w-full bg-[#111111] text-white pt-16 pb-12 border-t border-white/10 relative z-10 font-sans">
+    <footer className="w-full bg-[#07080E] text-[#FDFCF8] pt-16 pb-12 border-t border-[#D4AF37]/20 relative z-10 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
         {/* Top Grid (4 Columns) */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 border-b border-white/10 pb-12">
           {/* Column 1: Brand & Philosophy (5 cols) */}
           <div className="md:col-span-5 space-y-5">
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <svg viewBox="0 0 256 256" className="w-7 h-7 fill-white">
-                <path d="M 256 64 L 256 128 L 192.5 128 L 160 95 L 128 64 L 96 95 L 63.5 128 L 64 128 L 128 192 L 128 256 L 64.5 256 L 32 223 L 0 192 L 0 64 L 64 0 L 192 0 Z M 256 192 L 256 256 L 192.5 256 L 160 223 L 128 192 L 128 128 L 192 128 Z" />
-              </svg>
-              <span className="font-serif tracking-widest text-xl font-normal text-white uppercase">
-                YOUNOYA
-              </span>
+              <img
+                src="/younoya_celestial_gold_clean.png"
+                alt="YOUNOYA"
+                className="h-10 sm:h-12 w-auto object-contain drop-shadow-[0_2px_12px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-105"
+              />
             </Link>
-            <p className="text-xs sm:text-sm text-stone-400 leading-relaxed max-w-md font-normal">
-              Building platforms for brilliant minds, fearless makers, and thoughtful souls. Crafting digital havens with zero-password express checkout.
+            <p className="text-xs sm:text-sm text-stone-300 leading-relaxed max-w-md font-normal">
+              Sacred Vedic Astrology-Blessed Rakhis, authentic gemstones, and consecrated ritual keepsakes energized with 108 Gayatri Mantras and delivered across India with zero-password checkout.
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono tracking-widest text-stone-300 uppercase">
               <Sparkles size={12} />
