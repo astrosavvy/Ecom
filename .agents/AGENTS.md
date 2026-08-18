@@ -114,3 +114,21 @@ Savvy_Ecom/
 1. **Maintain Zero Build Errors**: Always run `npm run build` in `storefront/` prior to pushing to `main`.
 2. **Preserve Fluid Card Motion**: Keep 3D perspective (`perspective: 1600px`), spring physics (`stiffness: 300, damping: 26`), and backing silhouette cards for depth cues.
 3. **Preserve MSP Positioning**: Never add generic product buttons, shop collections, or rakhi disclosures to the initial browsing view.
+
+---
+
+## 8. GitHub Push & Authentication Specifications
+
+- **Repository**: `https://github.com/astrosavvy/Ecom.git`
+- **Active Personal Access Token (PAT)**: Stored securely in environment / GitHub developer settings (`github_pat_11CJCJPKQ0MRYDW...`)
+- **Issued Date**: August 18, 2026
+- **Expiration Date (90 Days)**: **November 16, 2026**
+- **Required Token Permissions**:
+  - Repository Access: `astrosavvy/Ecom` (or All Repositories)
+  - Repository Permissions: **Contents: Read & write**
+- **Git Push Command Format**:
+  ```bash
+  git -c credential.helper= push https://x-access-token:<GITHUB_PAT_TOKEN>@github.com/astrosavvy/Ecom.git main
+  ```
+
+
