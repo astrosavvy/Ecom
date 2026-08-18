@@ -227,7 +227,7 @@ export function FluidCardDeck() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: direction > 0 ? -80 : 80, scale: 0.94, filter: "blur(6px)" }}
             transition={{ type: "spring", stiffness: 280, damping: 28 }}
-            className="absolute inset-0 w-full h-full flex flex-col justify-between items-center px-2 sm:px-4 pt-16 sm:pt-20 pb-4 overflow-hidden bg-gradient-to-b from-[#07080E]/80 via-[#080A12]/80 to-[#040508]/80"
+            className="absolute inset-0 w-full h-full flex flex-col justify-between items-center px-2 sm:px-4 pt-16 sm:pt-20 pb-4 overflow-hidden bg-gradient-to-b from-transparent via-[#040508]/15 to-[#040508]/35"
           >
             <div className="w-full max-w-7xl mx-auto my-auto flex flex-col items-center justify-center">
               <ZodiacMarquee />
@@ -263,7 +263,7 @@ export function FluidCardDeck() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: direction > 0 ? -80 : 80, scale: 0.94, filter: "blur(6px)" }}
             transition={{ type: "spring", stiffness: 280, damping: 28 }}
-            className="absolute inset-0 w-full h-full flex flex-col justify-between items-center pt-14 sm:pt-18 pb-4 overflow-hidden bg-gradient-to-b from-[#080A12]/80 via-[#0D101C]/80 to-[#040508]/80"
+            className="absolute inset-0 w-full h-full flex flex-col justify-between items-center pt-14 sm:pt-18 pb-4 overflow-hidden bg-gradient-to-b from-transparent via-[#040508]/20 to-[#040508]/40"
           >
             {/* Self-contained OnboardingDeck with wheel isolation */}
             <OnboardingDeck />
@@ -299,7 +299,7 @@ export function FluidCardDeck() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: direction > 0 ? -80 : 80, scale: 0.94, filter: "blur(6px)" }}
             transition={{ type: "spring", stiffness: 280, damping: 28 }}
-            className="absolute inset-0 w-full h-full flex flex-col items-center justify-center px-4 sm:px-8 overflow-hidden bg-gradient-to-b from-[#0D101C]/80 via-[#090B14]/80 to-[#040508]/80"
+            className="absolute inset-0 w-full h-full flex flex-col items-center justify-center px-4 sm:px-8 overflow-hidden bg-gradient-to-b from-transparent via-[#040508]/15 to-[#040508]/45"
           >
             <div className="w-full max-w-xl mx-auto flex flex-col items-center text-center gap-6 sm:gap-8">
               {/* Centered Clean Logo with Ambient Glow */}
