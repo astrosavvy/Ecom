@@ -28,7 +28,6 @@ export function Card1BOtpDetached({
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
-    // Auto focus first input upon appearance
     inputsRef.current[0]?.focus();
   }, []);
 
@@ -61,30 +60,25 @@ export function Card1BOtpDetached({
       initial={{ y: 20, opacity: 0, scale: 0.95 }}
       animate={{ y: 0, opacity: 1, scale: 1 }}
       exit={{ y: -20, opacity: 0, scale: 0.95 }}
-      transition={{
-        type: "spring",
-        stiffness: 220,
-        damping: 20,
-        mass: 0.9,
-      }}
-      className="w-full flex flex-col justify-between h-full p-6 sm:p-8 select-none text-left"
+      transition={{ type: "spring", stiffness: 220, damping: 20, mass: 0.9 }}
+      className="w-full flex flex-col justify-between h-full p-4 sm:p-6 select-none text-left"
     >
-      {/* Header */}
-      <div className="space-y-2">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono uppercase tracking-wider">
-          <KeyRound size={11} className="animate-pulse" />
+      {/* Compact Header */}
+      <div className="space-y-1.5">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[9px] font-mono uppercase tracking-wider">
+          <KeyRound size={10} className="animate-pulse" />
           <span>INSTANT ASTRAL ACCESS</span>
         </div>
-        <h3 className="text-2xl sm:text-3xl font-extrabold text-[#FDFCF8] font-heading tracking-tight">
-          Verify Verification Code
+        <h3 className="text-xl sm:text-2xl font-extrabold text-[#FDFCF8] tracking-tight">
+          Verify Your Code
         </h3>
-        <p className="text-xs sm:text-sm text-stone-300 leading-relaxed">
-          Enter the 6-digit passcode sent to <span className="font-mono text-[#D4AF37] font-semibold">+91 {phone}</span>
+        <p className="text-xs text-stone-300">
+          6-digit passcode sent to <span className="font-mono text-[#D4AF37] font-semibold">+91 {phone}</span>
         </p>
       </div>
 
-      {/* OTP Inputs */}
-      <div className="space-y-4 my-auto">
+      {/* OTP Inputs + Actions */}
+      <div className="space-y-3 my-auto">
         <div className="flex justify-between gap-2 sm:gap-3 max-w-sm mx-auto">
           {[0, 1, 2, 3, 4, 5].map((i) => (
             <input
@@ -98,9 +92,9 @@ export function Card1BOtpDetached({
               value={otp[i] || ""}
               onChange={(e) => handleChange(e, i)}
               onKeyDown={(e) => handleKeyDown(e, i)}
-              className={`w-11 sm:w-12 h-14 text-center text-xl font-mono font-extrabold rounded-2xl bg-white/5 border transition-all duration-200 focus:outline-none ${
+              className={`w-10 sm:w-11 h-12 sm:h-13 text-center text-lg font-mono font-extrabold rounded-xl bg-white/5 border transition-all duration-200 focus:outline-none ${
                 otp[i]
-                  ? "border-[#D4AF37] text-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.25)] bg-[#D4AF37]/5"
+                  ? "border-[#D4AF37] text-[#D4AF37] shadow-[0_0_12px_rgba(212,175,55,0.2)] bg-[#D4AF37]/5"
                   : "border-white/10 text-white focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
               }`}
             />
@@ -115,38 +109,37 @@ export function Card1BOtpDetached({
           type="button"
           disabled={isLoading || otp.length < 6}
           onClick={() => onVerify(otp)}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(212,175,55,0.35)] hover:shadow-[0_6px_25px_rgba(212,175,55,0.5)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none transition-all duration-300 cursor-pointer"
+          className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] font-extrabold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(212,175,55,0.35)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none transition-all duration-300 cursor-pointer"
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
               <RefreshCw size={14} className="animate-spin" />
-              <span>Verifying Astral Pass...</span>
+              <span>Verifying...</span>
             </div>
           ) : (
             <>
-              <CheckCircle2 size={15} />
+              <CheckCircle2 size={14} />
               <span>Verify & Continue</span>
-              <ArrowRight size={15} />
+              <ArrowRight size={14} />
             </>
           )}
         </button>
 
-        {/* Discrete Fast Fallback Button: OTP not received proceed to next card */}
+        {/* Guest Pass Bypass */}
         {onBypass && (
           <button
             type="button"
             onClick={onBypass}
-            className="w-full py-2 text-[11px] font-mono text-[#D4AF37]/90 hover:text-[#D4AF37] text-center hover:underline flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            className="w-full py-1.5 text-[11px] font-mono text-[#D4AF37]/80 hover:text-[#D4AF37] text-center hover:underline flex items-center justify-center gap-1.5 transition-all cursor-pointer"
           >
-            <span>OTP not received? Proceed with Guest Pass</span>
-            <ArrowRight size={12} />
+            <span>OTP not received? Proceed with Guest Pass →</span>
           </button>
         )}
       </div>
 
-      {/* Resend Cooldown */}
-      <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-stone-400">
-        <span>Didn't receive code?</span>
+      {/* Resend */}
+      <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-stone-400">
+        <span>Didn&apos;t receive code?</span>
         <button
           type="button"
           onClick={onResend}

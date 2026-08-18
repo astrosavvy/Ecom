@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ShoppingBag, Menu, X } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
-
 import { useDeck } from "@/components/home/DeckContext";
 
 export function Header() {
@@ -41,15 +40,15 @@ export function Header() {
         shouldHideOnHero ? "opacity-0 -translate-y-10 pointer-events-none" : "opacity-100 translate-y-0"
       }`}
     >
-      {/* Main Floating Navbar (Left Logo + Centered Nav Pill + Right Standalone Actions) */}
+      {/* Main Floating Navbar */}
       <div className="pt-4 sm:pt-6 px-3 sm:px-8 max-w-7xl mx-auto flex items-center justify-between gap-4">
-        {/* 1. Large, Seamless Gold & Cosmic Nebula Logo on the Far Left */}
+        {/* 1. Clean Transparent Gold Logo with Ambient Glow */}
         <Link href="/" className="pointer-events-auto flex items-center group flex-shrink-0">
-          <div className="transition-transform duration-300 group-hover:scale-105 rounded-2xl overflow-hidden shadow-[0_4px_25px_rgba(212,175,55,0.35)]">
+          <div className="logo-ambient-glow transition-transform duration-300 group-hover:scale-105">
             <img
-              src="/younoya_celestial_nebula_logo.png"
+              src="/younoya_celestial_gold_clean.png"
               alt="YOUNOYA — for every chapter"
-              className="h-11 sm:h-14 w-auto object-cover"
+              className="h-10 sm:h-12 w-auto object-contain drop-shadow-[0_2px_12px_rgba(212,175,55,0.3)]"
             />
           </div>
         </Link>
@@ -61,18 +60,20 @@ export function Header() {
               key={item.label}
               href={item.href}
               className="text-xs font-semibold px-3.5 py-1.5 rounded-full text-stone-200 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap font-mono tracking-wider"
+              data-cursor="hover"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        {/* 3. Desktop: Direct Standalone Cart & Sacred Alignment CTA */}
+        {/* 3. Desktop: Cart & Sacred Alignment CTA */}
         <div className="pointer-events-auto hidden md:flex items-center gap-3">
           <Link
             href="/cart"
             className="relative p-3 rounded-full bg-[#080A10]/90 backdrop-blur-xl border border-[#D4AF37]/30 text-white hover:border-[#D4AF37] hover:bg-[#121522] transition-all flex items-center justify-center shadow-lg hover:scale-105 active:scale-95"
             aria-label="View Sacred Cart"
+            data-cursor="hover"
           >
             <ShoppingBag size={17} className="text-[#D4AF37]" />
             {totalItems > 0 && (
@@ -84,13 +85,14 @@ export function Header() {
 
           <Link
             href="/#onboard"
-            className="px-6 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#B8860B] text-[#07080E] text-xs font-extrabold uppercase tracking-widest hover:opacity-95 transition-all transform hover:scale-105 active:scale-95 shadow-[0_4px_25px_rgba(212,175,55,0.4)] whitespace-nowrap cursor-pointer"
+            className="px-6 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#B8860B] text-[#07080E] text-xs font-extrabold uppercase tracking-widest hover:opacity-95 transition-all transform hover:scale-105 active:scale-95 shadow-[0_4px_25px_rgba(212,175,55,0.4)] whitespace-nowrap"
+            data-cursor="hover"
           >
             ✦ Calculate Kundali
           </Link>
         </div>
 
-        {/* Mobile: Direct Standalone Cart & Menu Buttons */}
+        {/* Mobile: Cart & Menu Buttons */}
         <div className="pointer-events-auto md:hidden flex items-center gap-2">
           <Link
             href="/cart"
@@ -115,7 +117,7 @@ export function Header() {
         </div>
       </div>
 
-      {/* Mobile Drawer (Clean Dropdown Menu) */}
+      {/* Mobile Drawer */}
       {isMobileMenuOpen && (
         <div className="pointer-events-auto md:hidden mt-3 mx-3 bg-[#0E1017]/98 backdrop-blur-2xl rounded-3xl border border-[#D4AF37]/30 p-5 space-y-4 shadow-2xl animate-fade-rise">
           <div className="divide-y divide-white/10">
@@ -139,11 +141,11 @@ export function Header() {
               Cart ({totalItems})
             </Link>
             <Link
-              href="/products"
+              href="/#onboard"
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex-1 py-3 text-center rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#07080E] text-xs font-extrabold uppercase tracking-wider shadow-md"
             >
-              Shop Collection
+              ✦ Calculate Kundali
             </Link>
           </div>
         </div>
