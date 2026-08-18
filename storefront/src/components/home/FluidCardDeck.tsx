@@ -306,7 +306,7 @@ export function FluidCardDeck() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: direction > 0 ? -80 : 80, scale: 0.94, filter: "blur(6px)" }}
             transition={{ type: "spring", stiffness: 280, damping: 28 }}
-            className="absolute inset-0 w-full h-full flex flex-col justify-between items-center pt-14 sm:pt-18 pb-4 overflow-hidden bg-transparent"
+            className="absolute inset-0 w-full h-full flex flex-col justify-between items-center pt-12 sm:pt-16 pb-2 sm:pb-3 overflow-hidden bg-transparent"
           >
             {/* Self-contained OnboardingDeck with wheel isolation */}
             <OnboardingDeck />

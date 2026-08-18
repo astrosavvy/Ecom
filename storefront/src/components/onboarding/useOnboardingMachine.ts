@@ -57,6 +57,29 @@ export function useOnboardingMachine() {
   const [synergy, setSynergy] = useState<SynergyResult | null>(null);
 
   /**
+   * Universal Backward Navigation (Go to Previous Step)
+   */
+  const goBack = useCallback(() => {
+    setError(null);
+    if (currentStep === "CARD_1B_OTP") {
+      setCurrentStep("CARD_1_PHONE");
+      setIsGooeySeparating(false);
+    } else if (currentStep === "CARD_2_PERSONAL_ASTRO") {
+      setCurrentStep("CARD_1_PHONE");
+    } else if (currentStep === "CARD_3_GIFT_INTENT") {
+      setCurrentStep("CARD_2_PERSONAL_ASTRO");
+    } else if (currentStep === "CARD_4_RECIPIENT_ASTRO") {
+      setCurrentStep("CARD_3_GIFT_INTENT");
+    }
+  }, [currentStep]);
+
+  const canGoBack =
+    currentStep === "CARD_1B_OTP" ||
+    currentStep === "CARD_2_PERSONAL_ASTRO" ||
+    currentStep === "CARD_3_GIFT_INTENT" ||
+    currentStep === "CARD_4_RECIPIENT_ASTRO";
+
+  /**
    * Card 1: Submit Phone Number -> Trigger Gooey Separation to Card 1B
    */
   const submitPhone = useCallback(async (phoneNumber: string) => {
@@ -71,7 +94,6 @@ export function useOnboardingMachine() {
     setIsLoading(true);
 
     try {
-      // Begin Gooey Detachment Animation
       setIsGooeySeparating(true);
       setCurrentStep("CARD_1B_OTP");
     } finally {
@@ -91,10 +113,7 @@ export function useOnboardingMachine() {
 
     setIsLoading(true);
     try {
-      // Simulate API verification
       await new Promise((resolve) => setTimeout(resolve, 600));
-      
-      // Advance to Card 2 (Personal Astrology)
       setIsGooeySeparating(false);
       setCurrentStep("CARD_2_PERSONAL_ASTRO");
     } catch {
@@ -110,7 +129,6 @@ export function useOnboardingMachine() {
   const bypassOtp = useCallback(() => {
     setError(null);
     setIsGooeySeparating(false);
-    // Set fallback phone if empty
     if (!phone) setPhone("9876543210");
     setCurrentStep("CARD_2_PERSONAL_ASTRO");
   }, [phone]);
@@ -132,7 +150,6 @@ export function useOnboardingMachine() {
       moonSign: calculateVedicRashi("1995-08-18", "07:15").rashi,
       nakshatra: calculateVedicRashi("1995-08-18", "07:15").nakshatra,
     });
-    // Advance directly to gift recipient card
     setCurrentStep("CARD_3_GIFT_INTENT");
   }, []);
 
@@ -178,7 +195,6 @@ export function useOnboardingMachine() {
     (relationship: string) => {
       setRecipient((prev) => ({ ...prev, relationship }));
       if (relationship === "Self") {
-        // Compute Self Synergy and skip recipient form directly to dissolve
         const selfSynergy = calculateAstrologySynergy(userProfile, {
           name: userProfile.name,
           dob: userProfile.dob,
@@ -241,6 +257,8 @@ export function useOnboardingMachine() {
     userProfile,
     recipient,
     synergy,
+    goBack,
+    canGoBack,
     submitPhone,
     verifyOtp,
     bypassOtp,

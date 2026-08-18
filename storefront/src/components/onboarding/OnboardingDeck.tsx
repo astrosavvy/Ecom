@@ -2,7 +2,7 @@
 
 import React, { useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Sparkles, ArrowLeft } from "lucide-react";
 import { Card1MobileLogin } from "@/components/onboarding/cards/Card1MobileLogin";
 import { Card1BOtpDetached } from "@/components/onboarding/cards/Card1BOtpDetached";
 import { Card2PersonalAstro } from "@/components/onboarding/cards/Card2PersonalAstro";
@@ -13,19 +13,19 @@ import { useOnboardingMachine } from "@/components/onboarding/useOnboardingMachi
 import { GridCrosshair } from "@/components/ui/GridCrosshair";
 
 /**
- * OnboardingDeck — Complete self-contained QnA card deck with:
- * - Wheel/touch event isolation (prevents parent tile switching)
- * - Horizontal card slide transitions (no conflict with vertical deck)
- * - Step progress bar
- * - Compact mobile-first layout
+ * OnboardingDeck — High-performance, luxury pearl-gold QnA deck featuring:
+ * - Spacious max-w-2xl desktop proportions and balanced mobile side gutters
+ * - Full backward navigation (goBack) on all steps
+ * - High-contrast pearl & white UI components
+ * - Horizontal card slide transitions isolated from parent wheel gestures
  */
 
 const STEPS = [
-  { key: "CARD_1_PHONE", label: "Login", num: 1 },
-  { key: "CARD_1B_OTP", label: "Verify", num: 1 },
-  { key: "CARD_2_PERSONAL_ASTRO", label: "Birth Chart", num: 2 },
-  { key: "CARD_3_GIFT_INTENT", label: "Intent", num: 3 },
-  { key: "CARD_4_RECIPIENT_ASTRO", label: "Recipient", num: 4 },
+  { key: "CARD_1_PHONE", label: "Mobile Pass", num: 1 },
+  { key: "CARD_1B_OTP", label: "Verify Code", num: 1 },
+  { key: "CARD_2_PERSONAL_ASTRO", label: "Your Blueprint", num: 2 },
+  { key: "CARD_3_GIFT_INTENT", label: "Sacred Intent", num: 3 },
+  { key: "CARD_4_RECIPIENT_ASTRO", label: "Recipient Synergy", num: 4 },
 ];
 
 function getStepIndex(step: string): number {
@@ -55,14 +55,13 @@ export function OnboardingDeck() {
   }, [machine.currentStep]);
 
   // ═══════════════════════════════════════════
-  // CRITICAL: Isolate wheel events from parent deck
+  // CRITICAL: Isolate wheel & touch events from parent tile swiper
   // ═══════════════════════════════════════════
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const handleWheel = (e: WheelEvent) => {
-      // Stop wheel events from reaching the parent FluidCardDeck
       e.stopPropagation();
     };
 
@@ -90,12 +89,12 @@ export function OnboardingDeck() {
   const isDissolving = machine.currentStep === "DISSOLVING" || machine.currentStep === "COMPLETED";
   const totalSteps = 4;
 
-  // Horizontal slide variants
+  // Horizontal slide spring variants
   const slideVariants = {
     enter: (dir: number) => ({
-      x: dir > 0 ? 300 : -300,
+      x: dir > 0 ? 280 : -280,
       opacity: 0,
-      scale: 0.92,
+      scale: 0.94,
     }),
     center: {
       x: 0,
@@ -103,9 +102,9 @@ export function OnboardingDeck() {
       scale: 1,
     },
     exit: (dir: number) => ({
-      x: dir > 0 ? -300 : 300,
+      x: dir > 0 ? -280 : 280,
       opacity: 0,
-      scale: 0.92,
+      scale: 0.94,
     }),
   };
 
@@ -113,23 +112,23 @@ export function OnboardingDeck() {
     <div
       ref={containerRef}
       data-scroll-container
-      className="w-full h-full flex flex-col items-center justify-center px-3 sm:px-4 py-4"
+      className="w-full h-full flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-2 md:py-4"
     >
-      <div className="w-full max-w-lg z-10 flex flex-col items-center gap-3">
+      <div className="w-full max-w-2xl z-10 flex flex-col items-center gap-2.5 sm:gap-3.5">
         {/* Test Mode Switcher */}
-        <div className="w-full flex items-center justify-between p-1 sm:p-1.5 rounded-2xl bg-black/60 border border-[#D4AF37]/30 backdrop-blur-md">
-          <div className="flex items-center gap-1 text-[9px] sm:text-[10px] font-mono text-stone-400 pl-2">
+        <div className="w-full flex items-center justify-between p-1.5 rounded-2xl bg-black/60 border border-[#D4AF37]/35 backdrop-blur-xl shadow-lg">
+          <div className="flex items-center gap-1.5 text-[9px] sm:text-[10px] font-mono text-stone-300 pl-2">
             <Sparkles size={11} className="text-[#D4AF37]" />
-            <span>TEST:</span>
+            <span>TEST SANDBOX:</span>
           </div>
-          <div className="flex items-center gap-1 sm:gap-1.5">
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={machine.loadDemoNewUser}
-              className={`px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-xl text-[9px] sm:text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-xl text-[9px] sm:text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
                 machine.currentStep === "CARD_1_PHONE" || machine.currentStep === "CARD_1B_OTP"
-                  ? "bg-[#D4AF37] text-[#07080E] shadow-sm"
-                  : "bg-white/5 text-stone-300 hover:bg-white/10"
+                  ? "bg-[#D4AF37] text-[#07080E] shadow-[0_0_12px_rgba(212,175,55,0.4)]"
+                  : "bg-white/10 text-stone-200 hover:bg-white/20"
               }`}
             >
               ✦ New User
@@ -137,10 +136,10 @@ export function OnboardingDeck() {
             <button
               type="button"
               onClick={machine.loadDemoReturningUser}
-              className={`px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-xl text-[9px] sm:text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-xl text-[9px] sm:text-[10px] font-mono uppercase tracking-wider font-bold transition-all cursor-pointer ${
                 machine.currentStep === "CARD_3_GIFT_INTENT"
-                  ? "bg-[#D4AF37] text-[#07080E] shadow-sm"
-                  : "bg-white/5 text-stone-300 hover:bg-white/10"
+                  ? "bg-[#D4AF37] text-[#07080E] shadow-[0_0_12px_rgba(212,175,55,0.4)]"
+                  : "bg-white/10 text-stone-200 hover:bg-white/20"
               }`}
             >
               ✦ Returning
@@ -148,9 +147,9 @@ export function OnboardingDeck() {
           </div>
         </div>
 
-        {/* Step Progress Bar */}
+        {/* Step Progress Bar with Connected Gold Fill */}
         {!isDissolving && (
-          <div className="w-full flex items-center gap-2 px-1">
+          <div className="w-full flex items-center gap-2.5 px-2">
             {Array.from({ length: totalSteps }, (_, i) => {
               const stepNum = i + 1;
               const isActive = currentStepNum === stepNum;
@@ -158,10 +157,10 @@ export function OnboardingDeck() {
               return (
                 <React.Fragment key={stepNum}>
                   {i > 0 && (
-                    <div className="flex-1 h-px relative">
-                      <div className="absolute inset-0 bg-white/10" />
+                    <div className="flex-1 h-[2px] relative rounded-full overflow-hidden">
+                      <div className="absolute inset-0 bg-white/15" />
                       <motion.div
-                        className="absolute inset-0 bg-[#D4AF37] origin-left"
+                        className="absolute inset-0 bg-[#D4AF37] origin-left shadow-[0_0_8px_#D4AF37]"
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: isCompleted ? 1 : 0 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
@@ -169,12 +168,12 @@ export function OnboardingDeck() {
                     </div>
                   )}
                   <div
-                    className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-mono font-bold transition-all duration-300 shrink-0 ${
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-mono font-bold transition-all duration-300 shrink-0 ${
                       isActive
-                        ? "bg-[#D4AF37] text-[#07080E] shadow-[0_0_12px_rgba(212,175,55,0.4)]"
+                        ? "bg-[#D4AF37] text-[#07080E] shadow-[0_0_16px_rgba(212,175,55,0.55)] scale-110"
                         : isCompleted
-                        ? "bg-[#D4AF37]/30 text-[#D4AF37] border border-[#D4AF37]/50"
-                        : "bg-white/5 text-stone-500 border border-white/10"
+                        ? "bg-[#D4AF37]/30 text-[#D4AF37] border border-[#D4AF37]"
+                        : "bg-white/10 text-stone-400 border border-white/20"
                     }`}
                   >
                     {stepNum}
@@ -185,9 +184,9 @@ export function OnboardingDeck() {
           </div>
         )}
 
-        {/* Card Surface with Crosshair Decorations */}
-        <div className="relative w-full min-h-[400px] sm:min-h-[440px]">
-          {/* Crosshair decorations at corners */}
+        {/* Card Surface Container */}
+        <div className="relative w-full min-h-[460px] md:min-h-[500px]">
+          {/* Structural Crosshairs at Corners */}
           <GridCrosshair className="absolute -top-1.5 -left-1.5 z-20" />
           <GridCrosshair className="absolute -top-1.5 -right-1.5 z-20" />
           <GridCrosshair className="absolute -bottom-1.5 -left-1.5 z-20" />
@@ -201,10 +200,10 @@ export function OnboardingDeck() {
               onComplete={machine.completeDissolve}
             />
           ) : (
-            <div className="relative w-full h-[400px] sm:h-[440px]">
-              {/* Backing Depth Silhouettes */}
-              <div className="absolute inset-0 translate-y-2 scale-[0.95] rounded-2xl sm:rounded-3xl bg-[#0A0C14]/50 border border-[#D4AF37]/10 blur-[1px] pointer-events-none" />
-              <div className="absolute inset-0 translate-y-1 scale-[0.98] rounded-2xl sm:rounded-3xl bg-[#0C0E18]/70 border border-[#D4AF37]/20 pointer-events-none" />
+            <div className="relative w-full h-[460px] md:h-[500px]">
+              {/* Backing Depth Silhouettes with Gold Rim Glow */}
+              <div className="absolute inset-0 translate-y-3 scale-[0.96] rounded-3xl bg-[#090b14]/70 border border-[#D4AF37]/20 blur-[1px] pointer-events-none" />
+              <div className="absolute inset-0 translate-y-1.5 scale-[0.98] rounded-3xl bg-[#0c0e18]/85 border border-[#D4AF37]/30 pointer-events-none" />
 
               <AnimatePresence mode="wait" custom={direction}>
                 {machine.currentStep === "CARD_1_PHONE" && (
@@ -215,8 +214,8 @@ export function OnboardingDeck() {
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                    className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/40 shadow-[0_16px_48px_rgba(0,0,0,0.9)] overflow-hidden"
+                    transition={{ type: "spring", stiffness: 280, damping: 26 }}
+                    className="absolute inset-0 rounded-3xl bg-[#0a0c16]/90 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_24px_80px_rgba(0,0,0,0.9),0_0_50px_rgba(212,175,55,0.12)] overflow-hidden"
                   >
                     <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                     <Card1MobileLogin
@@ -236,7 +235,7 @@ export function OnboardingDeck() {
                     animate="center"
                     exit="exit"
                     transition={{ type: "spring", stiffness: 280, damping: 26 }}
-                    className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/40 shadow-[0_16px_48px_rgba(0,0,0,0.9)] overflow-hidden"
+                    className="absolute inset-0 rounded-3xl bg-[#0a0c16]/90 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_24px_80px_rgba(0,0,0,0.9),0_0_50px_rgba(212,175,55,0.12)] overflow-hidden"
                   >
                     <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                     <Card1BOtpDetached
@@ -246,6 +245,7 @@ export function OnboardingDeck() {
                       onVerify={machine.verifyOtp}
                       onResend={() => machine.submitPhone(machine.phone)}
                       onBypass={machine.bypassOtp}
+                      onBack={machine.goBack}
                       isLoading={machine.isLoading}
                       error={machine.error}
                     />
@@ -260,11 +260,14 @@ export function OnboardingDeck() {
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                    className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/40 shadow-[0_16px_48px_rgba(0,0,0,0.9)] overflow-hidden"
+                    transition={{ type: "spring", stiffness: 280, damping: 26 }}
+                    className="absolute inset-0 rounded-3xl bg-[#0a0c16]/90 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_24px_80px_rgba(0,0,0,0.9),0_0_50px_rgba(212,175,55,0.12)] overflow-hidden"
                   >
                     <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
-                    <Card2PersonalAstro onSubmit={machine.submitPersonalAstro} />
+                    <Card2PersonalAstro
+                      onSubmit={machine.submitPersonalAstro}
+                      onBack={machine.goBack}
+                    />
                   </motion.div>
                 )}
 
@@ -276,11 +279,14 @@ export function OnboardingDeck() {
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                    className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/40 shadow-[0_16px_48px_rgba(0,0,0,0.9)] overflow-hidden"
+                    transition={{ type: "spring", stiffness: 280, damping: 26 }}
+                    className="absolute inset-0 rounded-3xl bg-[#0a0c16]/90 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_24px_80px_rgba(0,0,0,0.9),0_0_50px_rgba(212,175,55,0.12)] overflow-hidden"
                   >
                     <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
-                    <Card3GiftIntent onSelect={machine.selectGiftIntent} />
+                    <Card3GiftIntent
+                      onSelect={machine.selectGiftIntent}
+                      onBack={machine.goBack}
+                    />
                   </motion.div>
                 )}
 
@@ -292,14 +298,15 @@ export function OnboardingDeck() {
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                    className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-[#080A10]/95 backdrop-blur-3xl border border-[#D4AF37]/40 shadow-[0_16px_48px_rgba(0,0,0,0.9)] overflow-hidden"
+                    transition={{ type: "spring", stiffness: 280, damping: 26 }}
+                    className="absolute inset-0 rounded-3xl bg-[#0a0c16]/90 backdrop-blur-3xl border border-[#D4AF37]/45 shadow-[0_24px_80px_rgba(0,0,0,0.9),0_0_50px_rgba(212,175,55,0.12)] overflow-hidden"
                   >
                     <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
                     <Card4RecipientAstro
                       relationship={machine.recipient.relationship}
                       userProfile={machine.userProfile}
                       onSubmit={machine.submitRecipientAstro}
+                      onBack={machine.goBack}
                     />
                   </motion.div>
                 )}
