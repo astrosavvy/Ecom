@@ -5,7 +5,6 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/lib/CartContext";
 import { DeckProvider } from "@/components/home/DeckContext";
 import { CursorSpotlight } from "@/components/ui/CursorSpotlight";
-import { AuroraBackground } from "@/components/ui/AuroraBackground";
 
 export const metadata: Metadata = {
   title: "YOUNOYA — Sacred Vedic Astrology-Blessed Keepsakes & Ritual Consecrations",
@@ -26,8 +25,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-[#040508] text-[#FDFCF8] flex flex-col font-sans antialiased selection:bg-[#D4AF37] selection:text-[#07080E]">
         <DeckProvider>
           <CartProvider>
-            {/* Trionn-Inspired Persistent Layers */}
-            <AuroraBackground />
+            {/* Global Spotlight Cursor */}
             <CursorSpotlight />
 
             <Header />

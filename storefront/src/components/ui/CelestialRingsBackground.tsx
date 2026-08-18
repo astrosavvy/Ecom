@@ -1,51 +1,70 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { useEffect } from "react";
 
 /**
- * CelestialRingsBackground — Sacred Vedic ephemeris concentric orbital rings
- * and 12-house dividers rotating slowly in opposite directions with subtle cursor parallax.
+ * CelestialRingsBackground — Sacred Vedic ephemeris rings with
+ * 3D cursor-perspective tilt (rotateX, rotateY) and subtle slow continuous rotation.
  */
 export function CelestialRingsBackground() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const transX = useMotionValue(0);
+  const transY = useMotionValue(0);
 
-  const smoothX = useSpring(mouseX, { stiffness: 20, damping: 30 });
-  const smoothY = useSpring(mouseY, { stiffness: 20, damping: 30 });
+  const springConfig = { stiffness: 35, damping: 25 };
+  const smoothRotateX = useSpring(rotateX, springConfig);
+  const smoothRotateY = useSpring(rotateY, springConfig);
+  const smoothTransX = useSpring(transX, springConfig);
+  const smoothTransY = useSpring(transY, springConfig);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      const xNorm = (e.clientX / window.innerWidth - 0.5) * 20;
-      const yNorm = (e.clientY / window.innerHeight - 0.5) * 20;
-      mouseX.set(xNorm);
-      mouseY.set(yNorm);
+      const xNorm = (e.clientX / window.innerWidth - 0.5) * 2;
+      const yNorm = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      // ±14deg 3D tilt
+      rotateY.set(xNorm * 14);
+      rotateX.set(-yNorm * 14);
+
+      // ±30px parallax translation
+      transX.set(xNorm * 30);
+      transY.set(yNorm * 30);
     };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
+  }, [rotateX, rotateY, transX, transY]);
 
   return (
-    <motion.div
-      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0 overflow-hidden"
-      style={{ x: smoothX, y: smoothY }}
-      aria-hidden="true"
+    <div
+      className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none z-0 overflow-hidden"
+      style={{ perspective: 1400 }}
     >
-      <div className="relative w-[850px] h-[850px] md:w-[1100px] md:h-[1100px] flex items-center justify-center opacity-25">
-        {/* Outer Ring — Clockwise rotation (90s) */}
+      <motion.div
+        className="relative w-[850px] h-[850px] md:w-[1150px] md:h-[1150px] flex items-center justify-center opacity-35 will-change-transform"
+        style={{
+          rotateX: smoothRotateX,
+          rotateY: smoothRotateY,
+          x: smoothTransX,
+          y: smoothTransY,
+          transformStyle: "preserve-3d",
+        }}
+        aria-hidden="true"
+      >
+        {/* Outer Ring — Clockwise rotation (120s) */}
         <motion.div
           className="absolute inset-0"
           animate={{ rotate: 360 }}
-          transition={{ duration: 110, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
         >
           <svg viewBox="0 0 1000 1000" className="w-full h-full">
             {/* Concentric circles */}
-            <circle cx="500" cy="500" r="480" fill="none" stroke="#D4AF37" strokeWidth="1" strokeDasharray="4 8" opacity="0.6" />
-            <circle cx="500" cy="500" r="440" fill="none" stroke="#D4AF37" strokeWidth="1" opacity="0.4" />
-            <circle cx="500" cy="500" r="380" fill="none" stroke="#D4AF37" strokeWidth="0.8" strokeDasharray="12 6" opacity="0.5" />
-            <circle cx="500" cy="500" r="300" fill="none" stroke="#D4AF37" strokeWidth="1" opacity="0.35" />
+            <circle cx="500" cy="500" r="480" fill="none" stroke="#D4AF37" strokeWidth="1" strokeDasharray="4 8" opacity="0.65" />
+            <circle cx="500" cy="500" r="440" fill="none" stroke="#D4AF37" strokeWidth="1" opacity="0.45" />
+            <circle cx="500" cy="500" r="380" fill="none" stroke="#D4AF37" strokeWidth="0.8" strokeDasharray="12 6" opacity="0.55" />
+            <circle cx="500" cy="500" r="300" fill="none" stroke="#D4AF37" strokeWidth="1" opacity="0.4" />
 
             {/* 12 House Radial Rays */}
             {Array.from({ length: 12 }, (_, i) => {
@@ -63,23 +82,23 @@ export function CelestialRingsBackground() {
                   y2={y2}
                   stroke="#D4AF37"
                   strokeWidth="0.8"
-                  opacity="0.35"
+                  opacity="0.4"
                 />
               );
             })}
           </svg>
         </motion.div>
 
-        {/* Inner Ring — Counter-Clockwise rotation (75s) */}
+        {/* Inner Ring — Counter-Clockwise rotation (90s) */}
         <motion.div
           className="absolute inset-[15%]"
           animate={{ rotate: -360 }}
-          transition={{ duration: 85, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
         >
           <svg viewBox="0 0 700 700" className="w-full h-full">
-            <circle cx="350" cy="350" r="320" fill="none" stroke="#F59E0B" strokeWidth="1" strokeDasharray="6 10" opacity="0.5" />
-            <circle cx="350" cy="350" r="220" fill="none" stroke="#D4AF37" strokeWidth="0.8" opacity="0.4" />
-            <circle cx="350" cy="350" r="140" fill="none" stroke="#D4AF37" strokeWidth="1.2" strokeDasharray="2 6" opacity="0.6" />
+            <circle cx="350" cy="350" r="320" fill="none" stroke="#F59E0B" strokeWidth="1" strokeDasharray="6 10" opacity="0.55" />
+            <circle cx="350" cy="350" r="220" fill="none" stroke="#D4AF37" strokeWidth="0.8" opacity="0.45" />
+            <circle cx="350" cy="350" r="140" fill="none" stroke="#D4AF37" strokeWidth="1.2" strokeDasharray="2 6" opacity="0.65" />
 
             {/* 8 Cardinal / Nakshatra Points */}
             {Array.from({ length: 8 }, (_, i) => {
@@ -93,13 +112,13 @@ export function CelestialRingsBackground() {
                   cy={cy}
                   r="3.5"
                   fill="#D4AF37"
-                  opacity="0.7"
+                  opacity="0.8"
                 />
               );
             })}
           </svg>
         </motion.div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
