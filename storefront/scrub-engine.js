@@ -76,7 +76,7 @@ function mountLetsScroll(container, config) {
   const CONNECTORS_M = config.connectorsMobile || [];
   const DIVE_W = config.diveScroll || 1.3;
   const CONN_W = config.connScroll || 0.9;
-  const CROSSFADE = (config.crossfade != null) ? config.crossfade : 0.12;  // seam dissolve width (vh)
+  const CROSSFADE = (config.crossfade != null) ? config.crossfade : 0.30;  // seam dissolve width (vh)
   const N = SECTIONS.length;
   if (!N) return;
 
@@ -176,8 +176,10 @@ function mountLetsScroll(container, config) {
   // (where the copy peaks) and moves quicker near the seams. L=0 linear, L=1 full
   // mid-scene pause. f(0)=0, f(1)=1 always, so seam frames are untouched.
   const lingerEase = (x, L) => { L = clamp(L); const c = x - 0.5; return (1 - L) * x + L * (4 * c * c * c + 0.5); };
-  let vh = window.innerHeight, stageX = 0, totalW = 0, activeIndex = -1, ticking = false;
-  let laidOutW = window.innerWidth;   // width the current layout was computed at (see onResize)
+  let vh = window.innerHeight, stageX = 0, totalW = 0, activeIndex = -1;
+  let laidOutW = window.innerWidth;
+  let currentY = window.scrollY || 0;
+  let targetY = window.scrollY || 0;
 
   function layout() {
     vh = window.innerHeight;
@@ -187,7 +189,9 @@ function mountLetsScroll(container, config) {
     SEGMENTS.forEach(s => { s.start = off * vh; off += s.w; s.end = off * vh; });
     totalW = off;
     track.style.height = (totalW * vh + vh) + 'px';   // +1vh so the last flight completes
-    read();
+    targetY = window.scrollY || window.pageYOffset || 0;
+    currentY = targetY;
+    read(currentY);
   }
 
   function jumpTo(i) {
@@ -211,7 +215,7 @@ function mountLetsScroll(container, config) {
     const onReady = () => {
       s.ready = true;
       s.hasClip = true;
-      read();
+      read(currentY);
     };
 
     v.addEventListener('loadedmetadata', onReady, { once: true });
@@ -219,7 +223,7 @@ function mountLetsScroll(container, config) {
       s.ready = true;
       s.hasClip = true;
       s.el.classList.add('has-clip');
-      read();
+      read(currentY);
     }, { once: true });
 
     v.addEventListener('seeked', () => {
@@ -238,8 +242,8 @@ function mountLetsScroll(container, config) {
     s.hasClip = true;
   }
 
-  function read() {
-    const y = window.scrollY || window.pageYOffset;
+  function read(y) {
+    if (typeof y !== 'number') y = currentY;
     const fade = CROSSFADE * vh;
     let ci = 0;
     for (let i = 0; i < NSEG; i++) if (y >= SEGMENTS[i].start) ci = i;
@@ -286,17 +290,29 @@ function mountLetsScroll(container, config) {
     scrollbarFill.style.transform = `scaleX(${clamp(y / (totalW * vh))})`;
     hint.style.opacity = clamp(1 - y / (0.5 * vh));
     if (particles) particles.style.transform = `translate3d(0, ${-y * 0.05}px, 0)`;
-    ticking = false;
   }
 
   function raf() {
-    const eps = isMobile() ? 0.008 : 0.002;
+    // Virtual smooth momentum interpolation (eliminates discrete mouse-wheel notch stepping)
+    const scrollFactor = isMobile() ? 0.22 : 0.08;
+    if (Math.abs(targetY - currentY) > 0.05) {
+      currentY += (targetY - currentY) * (reduce ? 1 : scrollFactor);
+    } else {
+      currentY = targetY;
+    }
+
+    read(currentY);
+
+    const eps = isMobile() ? 0.005 : 0.001;
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];
       if (!s.hasClip || !s.ready || !s.video) continue;
       if (s.video.seeking && isMobile()) continue;
       if (!s.visible && Math.abs(s.cur - s.target) < 0.002) continue;
-      s.cur += (s.target - s.cur) * (reduce ? 1 : 0.16);
+
+      // Video seek smoothing
+      const videoFactor = isMobile() ? 0.20 : 0.12;
+      s.cur += (s.target - s.cur) * (reduce ? 1 : videoFactor);
       const dur = s.video.duration || 1;
       const t = clamp(s.cur, 0, 0.999) * dur;
       if (Math.abs(s.video.currentTime - t) > eps) {
@@ -332,7 +348,9 @@ function mountLetsScroll(container, config) {
 
   // Particles are a per-frame cost we can't afford alongside video scrubbing on a phone.
   seedParticles(particles, reduce || coarse);
-  window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(read); } }, { passive: true });
+  window.addEventListener('scroll', () => {
+    targetY = window.scrollY || window.pageYOffset || 0;
+  }, { passive: true });
   // Mobile browsers fire `resize` every time the URL bar slides in/out. Re-running
   // layout() there rebuilds the track height and yanks the scroll position, so on
   // touch we ignore height-only changes and only relayout when the width actually
