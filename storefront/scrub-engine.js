@@ -212,13 +212,37 @@ function mountLetsScroll(container, config) {
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
 
-    const onReady = () => {
+    const primeAndPaint = () => {
       s.ready = true;
       s.hasClip = true;
+      try {
+        const p = v.play();
+        if (p && p.then) {
+          p.then(() => {
+            v.pause();
+            v.currentTime = 0.001;
+            s.el.classList.add('has-clip');
+          }).catch(() => {
+            v.currentTime = 0.001;
+            s.el.classList.add('has-clip');
+          });
+        } else {
+          v.currentTime = 0.001;
+          s.el.classList.add('has-clip');
+        }
+      } catch (e) {
+        s.el.classList.add('has-clip');
+      }
       read(currentY);
     };
 
-    v.addEventListener('loadedmetadata', onReady, { once: true });
+    v.addEventListener('loadedmetadata', () => {
+      s.ready = true;
+      s.hasClip = true;
+      read(currentY);
+    }, { once: true });
+
+    v.addEventListener('loadeddata', primeAndPaint, { once: true });
     v.addEventListener('canplay', () => {
       s.ready = true;
       s.hasClip = true;
@@ -229,11 +253,6 @@ function mountLetsScroll(container, config) {
     v.addEventListener('seeked', () => {
       s.el.classList.add('has-clip');
     });
-
-    v.addEventListener('loadeddata', () => {
-      try { v.pause(); } catch (e) {}
-      if (userReady) primeVideo(v);
-    }, { once: true });
 
     v.src = url;
     v.load();
@@ -429,7 +448,7 @@ function injectCSS() {
   .sw-stage{position:fixed;inset:0;z-index:10;pointer-events:none;transform:translateZ(0);backface-visibility:hidden;}
   .sw-scene{position:absolute;inset:0;opacity:0;overflow:hidden;will-change:opacity;transform:translateZ(0);backface-visibility:hidden;}
   .sw-scene__video,.sw-scene__still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;transform:translateZ(0);backface-visibility:hidden;}
-  .sw-scene__still{will-change:transform;} .sw-scene.has-clip .sw-scene__still{opacity:0;} .sw-scene__video{z-index:1;}
+  .sw-scene__still{will-change:transform;transition:opacity 0.4s ease;z-index:0;} .sw-scene.has-clip .sw-scene__still{opacity:0;} .sw-scene__video{z-index:1;}
   .sw-copylayer{position:fixed;inset:0;z-index:20;pointer-events:none;}
   .sw-copylayer::before{content:"";position:absolute;inset:0;width:min(58vw,780px);background:linear-gradient(90deg,var(--sw-bg) 0%,color-mix(in srgb,var(--sw-bg) 82%,transparent) 34%,color-mix(in srgb,var(--sw-bg) 40%,transparent) 62%,transparent 100%);}
   .sw-copy{position:absolute;left:clamp(18px,5vw,64px);top:50%;transform:translateY(-50%);width:min(42vw,460px);opacity:0;will-change:opacity,transform;}
