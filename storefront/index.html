@@ -37,47 +37,66 @@
       border-radius: 0;
     }
     .sw-brand__name { display: none; }
+
+    /* Header tagline — e-commerce style */
+    .sw-topbar::after {
+      content: "Younoya — Astrology Recommendation Engine for Gifting";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sw-ink-soft);
+      pointer-events: none;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
   <div id="top"></div>
   <div id="world"></div>
 
-  <script src="scrub-engine.js"></script>
+<script src="scrub-engine.js"></script>
   <script>
+    // Prevent browser from restoring scroll position on reload
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+
     mountLetsScroll(document.getElementById('world'), {
       brand: { name: 'YOUNOYA', href: '#top' },
+      cta: { label: 'Shop Consecrated Rakhis', href: '#reveal' },
       hint: 'scroll to enter the store',
-      diveScroll: 1.35,   // viewport-heights of scroll per dive clip
-      connScroll: 0.95,   // ...per aerial connector
+      diveScroll: 1.35,
+      connScroll: 0.95,
 
       // ── The journey (N=6, Architecture B: dive-in + aerial connectors) ──
-      // Scene background everywhere: #0B0E18 · shared style: neon-night miniature.
       sections: [
         {
-          id: 'threshold', label: 'Threshold',
+          id: 'threshold', label: 'Shop',
           still: 'assets/threshold.webp',
           clip: 'assets/vid/threshold.mp4',
           accent: '#D4AF37',
           scroll: 1.5, linger: 0.45,
-          eyebrow: 'Open · Cosmic Hours',
+          eyebrow: 'Younoya — Astrology Recommendation Engine for Gifting',
           title: 'The store that finds you first.',
-          body: 'Scroll to fly through a little neon-night shop where a robot-ninja guide walks the shelves for you.',
-          tags: ['Robot-ninja guide', 'One unbroken flight'],
+          body: 'Scroll to fly through a neon-night miniature gift store where a robot-ninja guide reads your intention and walks the shelves for you.',
+          tags: ['Robot-ninja guide', 'One unbroken flight', 'Consecrated Rakhis'],
         },
         {
-          id: 'intent', label: 'Intention',
+          id: 'intent', label: 'Astrology',
           still: 'assets/intent.webp',
           clip: 'assets/vid/intent.mp4',
           accent: '#E8A0BF',
           scroll: 1.4, linger: 0.5,
-          eyebrow: 'Choose an intention',
+          eyebrow: 'Choose your intention',
           title: 'Four altars, one wish.',
           body: 'Love, prosperity, momentum or calm — whichever altar glows back decides how every shelf rearranges.',
           tags: ['Rose quartz', 'Temple gold', 'Jade & moonstone'],
         },
         {
-          id: 'cosmos', label: 'Cosmos',
+          id: 'cosmos', label: 'Your Chart',
           still: 'assets/cosmos.webp',
           clip: 'assets/vid/cosmos.mp4',
           accent: '#9BB5D6',
@@ -88,7 +107,7 @@
           tags: ['27 lunar mansions', 'Simulated · stored nowhere'],
         },
         {
-          id: 'seek', label: 'The Seek',
+          id: 'seek', label: 'Discovery',
           still: 'assets/seek.webp',
           clip: 'assets/vid/seek.mp4',
           accent: '#34D399',
@@ -99,7 +118,7 @@
           tags: ['Magnetic shelves', 'Weight-tested', 'Curated to three'],
         },
         {
-          id: 'reveal', label: 'The Reveal',
+          id: 'reveal', label: 'Curated Gifts',
           still: 'assets/reveal.webp',
           clip: 'assets/vid/reveal.mp4',
           accent: '#F59E0B',
@@ -110,7 +129,7 @@
           tags: ['Symbolism included', 'Consecration noted', 'Gift-ready'],
         },
         {
-          id: 'companion', label: 'Companion',
+          id: 'companion', label: 'Our Story',
           still: 'assets/companion.webp',
           clip: 'assets/vid/companion.mp4',
           accent: '#D4AF37',
