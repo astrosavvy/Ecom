@@ -9,9 +9,6 @@
   <meta property="og:title" content="YOUNOYA — The Magical Gift Store" />
   <meta property="og:description" content="One unbroken scroll-driven flight through a neon-night miniature gift store, guided by a robot-ninja." />
 
-  <!-- High-Priority Critical Preloading -->
-  <link rel="preload" href="assets/vid/threshold.mp4" as="video" type="video/mp4" crossorigin="anonymous" />
-  <link rel="preload" href="assets/vid/conn1.mp4" as="video" type="video/mp4" crossorigin="anonymous" />
   <link rel="preload" href="assets/younoya-logo.png" as="image" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -178,7 +175,7 @@
     const gate = document.getElementById('celestial-gate');
     const gateBar = document.getElementById('gate-bar');
     const gatePct = document.getElementById('gate-pct');
-    let loadProgress = 15;
+    let loadProgress = 20;
     let isGateDismissed = false;
 
     function updateProgress(val) {
@@ -189,32 +186,21 @@
         isGateDismissed = true;
         setTimeout(() => {
           if (gate) gate.classList.add('is-loaded');
-        }, 300);
+        }, 200);
       }
     }
 
-    // Simulated progress increment while initial clips buffer
     const progressInterval = setInterval(() => {
-      if (loadProgress < 85) {
-        updateProgress(loadProgress + 8);
+      if (loadProgress < 90) {
+        updateProgress(loadProgress + 10);
       }
-    }, 150);
+    }, 120);
 
-    // Safety fallback: Dismiss gate after maximum 2.4s so user is never blocked
+    // Safety fallback: Dismiss gate after maximum 2.0s
     setTimeout(() => {
       clearInterval(progressInterval);
       updateProgress(100);
-    }, 2400);
-
-    // Preload critical initial video directly
-    const primerVideo = document.createElement('video');
-    primerVideo.src = 'assets/vid/threshold.mp4';
-    primerVideo.preload = 'auto';
-    primerVideo.muted = true;
-    primerVideo.addEventListener('canplay', () => {
-      clearInterval(progressInterval);
-      updateProgress(100);
-    }, { once: true });
+    }, 2000);
 
     mountLetsScroll(document.getElementById('world'), {
       brand: { name: 'YOUNOYA', href: '#top' },
@@ -222,6 +208,10 @@
       hint: 'scroll to enter the store',
       diveScroll: 1.35,
       connScroll: 0.95,
+      onReady: () => {
+        clearInterval(progressInterval);
+        updateProgress(100);
+      },
 
       // ── The journey (N=6, Architecture B: dive-in + aerial connectors) ──
       sections: [

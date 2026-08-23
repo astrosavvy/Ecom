@@ -200,8 +200,9 @@ function mountLetsScroll(container, config) {
   }
 
   function loadClip(s) {
-    if (reduce || s.loading || !s.clip) return;
+    if (reduce || s.loading || s.hasClip || !s.clip) return;
     s.loading = true;
+    s.hasClip = true;
     const url = (isMobile() && s.clipM) ? s.clipM : s.clip;
     const v = document.createElement('video');
     v.className = 'sw-scene__video';
@@ -214,39 +215,45 @@ function mountLetsScroll(container, config) {
 
     const primeAndPaint = () => {
       s.ready = true;
-      s.hasClip = true;
+      s.el.classList.add('has-clip');
       try {
         const p = v.play();
         if (p && p.then) {
           p.then(() => {
             v.pause();
             v.currentTime = 0.001;
-            s.el.classList.add('has-clip');
           }).catch(() => {
             v.currentTime = 0.001;
-            s.el.classList.add('has-clip');
           });
         } else {
           v.currentTime = 0.001;
-          s.el.classList.add('has-clip');
         }
-      } catch (e) {
-        s.el.classList.add('has-clip');
+      } catch (e) {}
+      
+      // Notify parent on initial clip ready
+      if (s === SEGMENTS[0] && typeof config.onReady === 'function') {
+        config.onReady();
+      }
+
+      // Preload next clip in sequence once current clip has painted
+      const idx = SEGMENTS.indexOf(s);
+      if (idx >= 0 && idx + 1 < NSEG) {
+        setTimeout(() => {
+          if (SEGMENTS[idx + 1] && !SEGMENTS[idx + 1].loading) {
+            loadClip(SEGMENTS[idx + 1]);
+          }
+        }, 150);
       }
       read(currentY);
     };
 
-    v.addEventListener('loadedmetadata', () => {
-      s.ready = true;
-      s.hasClip = true;
-      read(currentY);
-    }, { once: true });
-
     v.addEventListener('loadeddata', primeAndPaint, { once: true });
     v.addEventListener('canplay', () => {
       s.ready = true;
-      s.hasClip = true;
       s.el.classList.add('has-clip');
+      if (s === SEGMENTS[0] && typeof config.onReady === 'function') {
+        config.onReady();
+      }
       read(currentY);
     }, { once: true });
 
@@ -255,10 +262,8 @@ function mountLetsScroll(container, config) {
     });
 
     v.src = url;
-    v.load();
     s.el.appendChild(v);
     s.video = v;
-    s.hasClip = true;
   }
 
   function read(y) {
@@ -269,7 +274,7 @@ function mountLetsScroll(container, config) {
 
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];
-      if (y > s.start - 2.5 * vh && y < s.end + 2.5 * vh) loadClip(s);
+      if (y > s.start - 1.2 * vh && y < s.end + 1.2 * vh) loadClip(s);
       const local = clamp((y - s.start) / (s.end - s.start), 0, 1);
       s.target = s.linger ? lingerEase(local, s.linger) : local;
       let outside = 0;
@@ -385,8 +390,6 @@ function mountLetsScroll(container, config) {
   window.addEventListener('load', layout);
   layout();
   if (SEGMENTS[0]) loadClip(SEGMENTS[0]);
-  if (SEGMENTS[1]) setTimeout(() => loadClip(SEGMENTS[1]), 200);
-  if (SEGMENTS[2]) setTimeout(() => loadClip(SEGMENTS[2]), 600);
   requestAnimationFrame(raf);
 
   // ---- helpers ----
