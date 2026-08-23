@@ -8,6 +8,12 @@
   <link rel="icon" type="image/png" href="assets/younoya-logo.png" />
   <meta property="og:title" content="YOUNOYA — The Magical Gift Store" />
   <meta property="og:description" content="One unbroken scroll-driven flight through a neon-night miniature gift store, guided by a robot-ninja." />
+
+  <!-- High-Priority Critical Preloading -->
+  <link rel="preload" href="assets/vid/threshold.mp4" as="video" type="video/mp4" crossorigin="anonymous" />
+  <link rel="preload" href="assets/vid/conn1.mp4" as="video" type="video/mp4" crossorigin="anonymous" />
+  <link rel="preload" href="assets/younoya-logo.png" as="image" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -52,17 +58,163 @@
       pointer-events: none;
       white-space: nowrap;
     }
+
+    /* ─── CELESTIAL PRELOADER GATE ───────────────────────────────────────── */
+    #celestial-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #0B0E18;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #celestial-gate.is-loaded {
+      opacity: 0;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+    .gate-emblem {
+      position: relative;
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .gate-star {
+      color: #D4AF37;
+      font-size: 28px;
+      filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.8));
+      animation: pulse-star 2s ease-in-out infinite alternate;
+    }
+    .gate-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-top-color: #D4AF37;
+      animation: spin-ring 1.8s linear infinite;
+    }
+    .gate-ring-outer {
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 1px dashed rgba(212, 175, 55, 0.15);
+      animation: spin-ring-rev 6s linear infinite;
+    }
+    @keyframes spin-ring { to { transform: rotate(360deg); } }
+    @keyframes spin-ring-rev { to { transform: rotate(-360deg); } }
+    @keyframes pulse-star { 0% { transform: scale(0.9); opacity: 0.8; } 100% { transform: scale(1.15); opacity: 1; } }
+
+    .gate-title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 24px;
+      letter-spacing: 0.25em;
+      color: #D4AF37;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .gate-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #A79FB3;
+      margin-bottom: 28px;
+      opacity: 0.7;
+    }
+    .gate-progress-wrap {
+      width: 180px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .gate-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.4), #D4AF37, rgba(212, 175, 55, 0.8));
+      transition: width 0.3s ease-out;
+    }
+    .gate-status {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: rgba(212, 175, 55, 0.7);
+    }
   </style>
 </head>
 <body>
+  <!-- ─── CELESTIAL PRELOADER GATE ─────────────────────────────────────────── -->
+  <div id="celestial-gate">
+    <div class="gate-emblem">
+      <div class="gate-ring-outer"></div>
+      <div class="gate-ring"></div>
+      <span class="gate-star">✦</span>
+    </div>
+    <div class="gate-title">YOUNOYA</div>
+    <div class="gate-subtitle">Vedic Sanctuary · Gifting Recommendation Engine</div>
+    <div class="gate-progress-wrap">
+      <div id="gate-bar" class="gate-progress-bar"></div>
+    </div>
+    <div class="gate-status">Aligning Sanctuary... <span id="gate-pct">0%</span></div>
+  </div>
+
   <div id="top"></div>
   <div id="world"></div>
 
-<script src="scrub-engine.js"></script>
+  <script src="scrub-engine.js"></script>
   <script>
     // Prevent browser from restoring scroll position on reload
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
+
+    // ── Preloader Gate Progress Management ──
+    const gate = document.getElementById('celestial-gate');
+    const gateBar = document.getElementById('gate-bar');
+    const gatePct = document.getElementById('gate-pct');
+    let loadProgress = 15;
+    let isGateDismissed = false;
+
+    function updateProgress(val) {
+      loadProgress = Math.max(loadProgress, Math.min(100, val));
+      if (gateBar) gateBar.style.width = loadProgress + '%';
+      if (gatePct) gatePct.textContent = Math.round(loadProgress) + '%';
+      if (loadProgress >= 100 && !isGateDismissed) {
+        isGateDismissed = true;
+        setTimeout(() => {
+          if (gate) gate.classList.add('is-loaded');
+        }, 300);
+      }
+    }
+
+    // Simulated progress increment while initial clips buffer
+    const progressInterval = setInterval(() => {
+      if (loadProgress < 85) {
+        updateProgress(loadProgress + 8);
+      }
+    }, 150);
+
+    // Safety fallback: Dismiss gate after maximum 2.4s so user is never blocked
+    setTimeout(() => {
+      clearInterval(progressInterval);
+      updateProgress(100);
+    }, 2400);
+
+    // Preload critical initial video directly
+    const primerVideo = document.createElement('video');
+    primerVideo.src = 'assets/vid/threshold.mp4';
+    primerVideo.preload = 'auto';
+    primerVideo.muted = true;
+    primerVideo.addEventListener('canplay', () => {
+      clearInterval(progressInterval);
+      updateProgress(100);
+    }, { once: true });
 
     mountLetsScroll(document.getElementById('world'), {
       brand: { name: 'YOUNOYA', href: '#top' },
@@ -145,9 +297,6 @@
         },
       ],
 
-      // Aerial hops restored — connectors watermark-stripped + color-matched to
-      // their neighbouring dives (fix_videos.py). If the mid-flight buildings
-      // still feel off, re-roll conn_*.mp4 with the SAME tool/session as dives.
       connectors: [
         'assets/vid/conn1.mp4',
         'assets/vid/conn2.mp4',
@@ -155,8 +304,6 @@
         'assets/vid/conn4.mp4',
         'assets/vid/conn5.mp4',
       ],
-      // Native 9:16 portrait chain (mobile opt-in) — pending renders. Phones
-      // currently fall back to the desktop clips above (engine hardening stays on).
       connectorsMobile: [],
     });
   </script>
