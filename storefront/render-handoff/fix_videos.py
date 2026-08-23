@@ -65,16 +65,15 @@ def build_delogo_vf():
     parts = []
     for (x, y, w, h) in WM_REGIONS:
         parts.append(f"delogo=x={x}:y={y}:w={w}:h={h}:show=0")
-    return ",".join(parts) + ",noise=alls=2:allf=t"
+    return ",".join(parts)
 
 
 def watermark_pass(src, dst):
-    vf = build_delogo_vf() + ",scale=854:-2:flags=lanczos"
     return run([
         "-v", "error", "-y", "-i", str(src),
-        "-an", "-vf", vf,
-        "-c:v", "libx264", "-preset", "slow", "-crf", "26", "-pix_fmt", "yuv420p",
-        "-g", "4", "-keyint_min", "4", "-sc_threshold", "0",
+        "-an", "-vf", build_delogo_vf(),
+        "-c:v", "libx264", "-preset", "slow", "-crf", "22", "-pix_fmt", "yuv420p",
+        "-g", "8", "-keyint_min", "8", "-sc_threshold", "0",
         "-movflags", "+faststart", str(dst),
     ])
 
@@ -96,13 +95,13 @@ def colour_match_pass(src, dst, target_r, target_g, target_b):
     rs = off(cr, target_r); gs = off(cg, target_g); bs = off(cb, target_b)
     vf = (
         f"colorbalance=rs={rs:.3f}:gs={gs:.3f}:bs={bs:.3f},"
-        "eq=saturation=1.05:contrast=1.03:brightness=0,scale=854:-2:flags=lanczos"
+        "eq=saturation=1.05:contrast=1.03:brightness=0"
     )
     return run([
         "-v", "error", "-y", "-i", str(src),
         "-an", "-vf", vf,
-        "-c:v", "libx264", "-preset", "slow", "-crf", "26", "-pix_fmt", "yuv420p",
-        "-g", "4", "-keyint_min", "4", "-sc_threshold", "0",
+        "-c:v", "libx264", "-preset", "slow", "-crf", "22", "-pix_fmt", "yuv420p",
+        "-g", "8", "-keyint_min", "8", "-sc_threshold", "0",
         "-movflags", "+faststart", str(dst),
     ])
 

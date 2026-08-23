@@ -9,7 +9,8 @@
   <meta property="og:title" content="YOUNOYA — The Magical Gift Store" />
   <meta property="og:description" content="One unbroken scroll-driven flight through a neon-night miniature gift store, guided by a robot-ninja." />
 
-  <link rel="preload" href="assets/younoya-logo.png" as="image" />
+  <link rel="preload" href="assets/younoya-logo.webp" as="image" />
+  <link rel="preload" href="assets/threshold.webp" as="image" fetchpriority="high" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,6 +41,10 @@
       border-radius: 0;
     }
     .sw-brand__name { display: none; }
+
+    /* Remove all per-section text overlays (eyebrow / title / body / tags / CTA).
+       Header nav, tagline, CTA button and route rail stay. */
+    .sw-copylayer { display: none !important; }
 
     /* Header tagline — e-commerce style */
     .sw-topbar::after {
