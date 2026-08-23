@@ -69,11 +69,11 @@ def build_delogo_vf():
 
 
 def watermark_pass(src, dst):
-    vf = build_delogo_vf()
+    vf = build_delogo_vf() + ",scale=854:-2:flags=lanczos"
     return run([
         "-v", "error", "-y", "-i", str(src),
         "-an", "-vf", vf,
-        "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-pix_fmt", "yuv420p",
+        "-c:v", "libx264", "-preset", "slow", "-crf", "26", "-pix_fmt", "yuv420p",
         "-g", "4", "-keyint_min", "4", "-sc_threshold", "0",
         "-movflags", "+faststart", str(dst),
     ])
@@ -96,13 +96,12 @@ def colour_match_pass(src, dst, target_r, target_g, target_b):
     rs = off(cr, target_r); gs = off(cg, target_g); bs = off(cb, target_b)
     vf = (
         f"colorbalance=rs={rs:.3f}:gs={gs:.3f}:bs={bs:.3f},"
-        "eq=saturation=1.05:contrast=1.03:brightness=0,"
-        "noise=alls=1.5:allf=t"
+        "eq=saturation=1.05:contrast=1.03:brightness=0,scale=854:-2:flags=lanczos"
     )
     return run([
         "-v", "error", "-y", "-i", str(src),
         "-an", "-vf", vf,
-        "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-pix_fmt", "yuv420p",
+        "-c:v", "libx264", "-preset", "slow", "-crf", "26", "-pix_fmt", "yuv420p",
         "-g", "4", "-keyint_min", "4", "-sc_threshold", "0",
         "-movflags", "+faststart", str(dst),
     ])
