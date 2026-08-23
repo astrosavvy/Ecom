@@ -293,8 +293,7 @@ function mountLetsScroll(container, config) {
   }
 
   function raf() {
-    // Virtual smooth momentum interpolation (eliminates discrete mouse-wheel notch stepping)
-    const scrollFactor = isMobile() ? 0.22 : 0.08;
+    const scrollFactor = isMobile() ? 0.25 : 0.12;
     if (Math.abs(targetY - currentY) > 0.05) {
       currentY += (targetY - currentY) * (reduce ? 1 : scrollFactor);
     } else {
@@ -303,19 +302,21 @@ function mountLetsScroll(container, config) {
 
     read(currentY);
 
-    const eps = isMobile() ? 0.005 : 0.001;
+    const minFrameDelta = 1 / 60;   // Don't seek faster than the display refresh / video frame duration
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];
       if (!s.hasClip || !s.ready || !s.video) continue;
-      if (s.video.seeking && isMobile()) continue;
+      // Guard against decoder queue pile-up on ALL devices
+      if (s.video.seeking) continue;
       if (!s.visible && Math.abs(s.cur - s.target) < 0.002) continue;
 
-      // Video seek smoothing
-      const videoFactor = isMobile() ? 0.20 : 0.12;
+      const videoFactor = isMobile() ? 0.25 : 0.18;
       s.cur += (s.target - s.cur) * (reduce ? 1 : videoFactor);
       const dur = s.video.duration || 1;
-      const t = clamp(s.cur, 0, 0.999) * dur;
-      if (Math.abs(s.video.currentTime - t) > eps) {
+      const rawT = clamp(s.cur, 0, 0.999) * dur;
+      // Quantize to 30fps boundary for exact zero-interpolation keyframe hits
+      const t = Math.round(rawT * 30) / 30;
+      if (Math.abs(s.video.currentTime - t) >= minFrameDelta) {
         try {
           if (typeof s.video.fastSeek === 'function') {
             s.video.fastSeek(t);
@@ -425,9 +426,9 @@ function injectCSS() {
   .sw-nav__item{font:inherit;font-size:.82rem;color:var(--sw-ink-soft);border:0;background:transparent;cursor:pointer;padding:7px 14px;border-radius:999px;transition:color .25s,background .25s;}
   .sw-nav__item:hover{color:var(--sw-ink);} .sw-nav__item.is-active{color:#fff;background:var(--sw-accent);}
   .sw-topcta{text-decoration:none;font-weight:600;font-size:.9rem;color:#fff;background:var(--sw-ink);padding:10px 20px;border-radius:999px;white-space:nowrap;}
-  .sw-stage{position:fixed;inset:0;z-index:10;pointer-events:none;}
-  .sw-scene{position:absolute;inset:0;opacity:0;overflow:hidden;will-change:opacity;}
-  .sw-scene__video,.sw-scene__still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;}
+  .sw-stage{position:fixed;inset:0;z-index:10;pointer-events:none;transform:translateZ(0);backface-visibility:hidden;}
+  .sw-scene{position:absolute;inset:0;opacity:0;overflow:hidden;will-change:opacity;transform:translateZ(0);backface-visibility:hidden;}
+  .sw-scene__video,.sw-scene__still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;transform:translateZ(0);backface-visibility:hidden;}
   .sw-scene__still{will-change:transform;} .sw-scene.has-clip .sw-scene__still{opacity:0;} .sw-scene__video{z-index:1;}
   .sw-copylayer{position:fixed;inset:0;z-index:20;pointer-events:none;}
   .sw-copylayer::before{content:"";position:absolute;inset:0;width:min(58vw,780px);background:linear-gradient(90deg,var(--sw-bg) 0%,color-mix(in srgb,var(--sw-bg) 82%,transparent) 34%,color-mix(in srgb,var(--sw-bg) 40%,transparent) 62%,transparent 100%);}
