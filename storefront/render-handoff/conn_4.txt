@@ -1,0 +1,27 @@
+Single continuous cinematic camera move, no cuts. The camera smoothly pulls up and back
+out of the seek scene — a towering library of gift shelves climbing into the dark, dozens of
+small keepsake boxes glowing from within in pink, gold, jade and blue, sliding ladders and
+rope pulleys between shelves, the small white robot-ninja with gold headband mid-leap
+between shelves reaching for a glowing box — rising into the night sky, then glides forward
+across the connected miniature world and arrives above the reveal scene, beginning to
+descend toward it. The reveal scene: a single opened gift box on a round marble pedestal
+under a soft spotlight beam, warm golden light rising from within, three small talismans
+orbiting — a rose stone, a pyrite sun, a tiger-eye bead — the small robot-ninja presenting
+the box with both hands.
+One connected night-lit miniature world floating in a plain solid #0B0E18 void — empty
+backdrop, no sky, no clouds — seamless flowing aerial transition.
+Style continuity (MUST MATCH EXACTLY):
+- Same isometric low-poly 3D diorama floating as small rounded island on solid #0B0E18
+- Night miniature: warm interior glow, neon signage in temple gold #D4AF37, rose pink #E8A0BF,
+  jade green #34D399, moonstone blue #9BB5D6, moody rim light, wet reflective ground,
+  soft matte toy-model shapes, tilt-shift miniature look
+- Identical cohesive palette: midnight #0B0E18, temple gold #D4AF37, parchment cream #F5EDE0,
+  rose quartz pink #E8A0BF, jade green #34D399, moonstone blue #9BB5D6
+- Same camera grammar: slow graceful aerial glide, subtle parallax, no sudden moves
+- Robot-ninja (white with gold headband, same scale) transitions naturally
+- Architecture: shelf library's toy-model aesthetic flows into marble pedestal's clean curves
+- Lighting: shelf box glows (pink/gold/jade/blue) match the three orbiting talismans' colors
+- Spotlight beam warmth matches the shelf interior warm glow
+- Ground: wet reflective #0B0E18 catching all glows identically
+- No text, no letters, no numbers, no logos anywhere.
+Smooth, graceful, slow motion. No text, no captions.

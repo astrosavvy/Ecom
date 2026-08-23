@@ -1,0 +1,26 @@
+Single continuous cinematic camera move, no cuts. The camera smoothly pulls up and back
+out of the threshold scene — a tiny two-storey magical gift store with curved golden awning,
+warm lit windows showing shelves of glowing trinkets, star-shaped neon sign above the door,
+floating gift boxes with ribbons drifting around the roof, lantern-lit path, small white
+robot-ninja figure with gold headband at the threshold — rising into the night sky, then
+glides forward across the connected miniature world and arrives above the intent scene,
+beginning to descend toward it. The intent scene: four floating crystal altars arranged
+around a round brass compass dais — rose-pink heart crystal, golden coin-and-bloom crystal,
+jade ascending-stairs crystal, moonstone still-water crystal — each casting soft colored
+light upward, the small robot-ninja kneeling at the dais reading the compass needle.
+One connected night-lit miniature world floating in a plain solid #0B0E18 void — empty
+backdrop, no sky, no clouds — seamless flowing aerial transition.
+Style continuity (MUST MATCH EXACTLY):
+- Same isometric low-poly 3D diorama floating as small rounded island on solid #0B0E18
+- Night miniature: warm interior glow, neon signage in temple gold #D4AF37, rose pink #E8A0BF,
+  jade green #34D399, moonstone blue #9BB5D6, moody rim light, wet reflective ground,
+  soft matte toy-model shapes, tilt-shift miniature look
+- Identical cohesive palette: midnight #0B0E18, temple gold #D4AF37, parchment cream #F5EDE0,
+  rose quartz pink #E8A0BF, jade green #34D399, moonstone blue #9BB5D6
+- Same camera grammar: slow graceful aerial glide, subtle parallax, no sudden moves
+- Robot-ninja (white with gold headband) appears in both scenes at same scale
+- Building architecture: same toy-model aesthetic, curved organic shapes, glowing windows
+- Lighting: consistent warm gold rim light from upper-left, cool moon fill from right
+- Ground plane: wet reflective #0B0E18 surface catching neon glows identically
+- No text, no letters, no numbers, no logos anywhere.
+Smooth, graceful, slow motion. No text, no captions.

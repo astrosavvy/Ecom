@@ -37,4 +37,16 @@ media/
 Thumbs.db
 .idea/
 .vscode/
+.kilo/
 *.swp
+
+# Local templates and render scratch files
+lets-scroll-main/
+storefront/assets/vid/Old/
+storefront/render-handoff/raw/
+storefront/render-handoff/frames/
+storefront/render-handoff/stills_raw/
+storefront/render-handoff/_inspect/
+storefront/render-handoff/_verify/
+storefront/render-handoff/portrait_canvas/
+
