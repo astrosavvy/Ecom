@@ -3,6 +3,9 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "build": "echo 'Static storefront assets ready for Cloudflare Pages'"
+    "build": "echo 'Static storefront assets ready for Cloudflare Pages'",
+    "deploy": "echo 'Deployment ready'",
+    "start": "echo 'Static site ready'",
+    "preview": "echo 'Preview ready'"
   }
 }
