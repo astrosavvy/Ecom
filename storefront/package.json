@@ -1,11 +1,12 @@
 {
-  "name": "younoya-storefront",
+  "name": "ecom",
   "version": "2.0.0",
   "private": true,
   "scripts": {
     "build": "node build.js",
-    "deploy": "echo 'Deployment ready'",
-    "start": "echo 'Static site ready'",
-    "preview": "echo 'Preview ready'"
+    "deploy": "npx wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.114.0"
   }
 }
