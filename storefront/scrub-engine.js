@@ -196,27 +196,46 @@ function mountLetsScroll(container, config) {
   }
 
   function loadClip(s) {
-    // Under prefers-reduced-motion we never load the clips at all — the stills stay up
-    // and simply cross-dissolve as you scroll. No scrubbed video motion, no decode cost.
     if (reduce || s.loading || !s.clip) return;
     s.loading = true;
-    // Serve the lighter mobile encode on phones when one was provided.
     const url = (isMobile() && s.clipM) ? s.clipM : s.clip;
-    fetch(url).then(r => r.ok ? r.blob() : Promise.reject(new Error('404')))
-      .then(blob => {
-        const v = document.createElement('video');
-        v.className = 'sw-scene__video';
-        v.muted = true; v.playsInline = true; v.preload = 'auto';
-        v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
-        v.src = URL.createObjectURL(blob);
-        v.addEventListener('loadedmetadata', () => { s.ready = true; read(); });
-        // Reveal the video (hide the still poster) only once a real frame has
-        // painted — on iOS a seeked-but-never-played muted video stays blank, so
-        // hiding the still on metadata alone would flash an empty scene.
-        v.addEventListener('seeked', () => { s.el.classList.add('has-clip'); }, { once: true });
-        v.addEventListener('loadeddata', () => { try { v.pause(); } catch (e) {} if (userReady) primeVideo(v); });
-        s.el.appendChild(v); s.video = v; s.hasClip = true;
-      }).catch(() => { s.loading = false; });
+    const v = document.createElement('video');
+    v.className = 'sw-scene__video';
+    v.muted = true;
+    v.playsInline = true;
+    v.preload = 'auto';
+    v.setAttribute('muted', '');
+    v.setAttribute('playsinline', '');
+    v.setAttribute('webkit-playsinline', '');
+
+    const onReady = () => {
+      s.ready = true;
+      s.hasClip = true;
+      read();
+    };
+
+    v.addEventListener('loadedmetadata', onReady, { once: true });
+    v.addEventListener('canplay', () => {
+      s.ready = true;
+      s.hasClip = true;
+      s.el.classList.add('has-clip');
+      read();
+    }, { once: true });
+
+    v.addEventListener('seeked', () => {
+      s.el.classList.add('has-clip');
+    });
+
+    v.addEventListener('loadeddata', () => {
+      try { v.pause(); } catch (e) {}
+      if (userReady) primeVideo(v);
+    }, { once: true });
+
+    v.src = url;
+    v.load();
+    s.el.appendChild(v);
+    s.video = v;
+    s.hasClip = true;
   }
 
   function read() {
@@ -227,7 +246,7 @@ function mountLetsScroll(container, config) {
 
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];
-      if (y > s.start - 1.6 * vh && y < s.end + 1.6 * vh) loadClip(s);
+      if (y > s.start - 2.5 * vh && y < s.end + 2.5 * vh) loadClip(s);
       const local = clamp((y - s.start) / (s.end - s.start), 0, 1);
       s.target = s.linger ? lingerEase(local, s.linger) : local;
       let outside = 0;
@@ -271,19 +290,24 @@ function mountLetsScroll(container, config) {
   }
 
   function raf() {
-    const eps = isMobile() ? 0.02 : 0.008;   // coarser seek step on phones = fewer decodes
+    const eps = isMobile() ? 0.008 : 0.002;
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];
       if (!s.hasClip || !s.ready || !s.video) continue;
-      // Never queue a seek while the decoder is still resolving the last one.
-      // On phones a fast flick would otherwise pile up seeks and freeze the clip;
-      // cur keeps lerping, so we snap to the latest target the moment it's free.
-      if (s.video.seeking) continue;
+      if (s.video.seeking && isMobile()) continue;
       if (!s.visible && Math.abs(s.cur - s.target) < 0.002) continue;
-      s.cur += (s.target - s.cur) * (reduce ? 1 : 0.18);
+      s.cur += (s.target - s.cur) * (reduce ? 1 : 0.16);
       const dur = s.video.duration || 1;
       const t = clamp(s.cur, 0, 0.999) * dur;
-      if (Math.abs(s.video.currentTime - t) > eps) { try { s.video.currentTime = t; } catch (e) {} }
+      if (Math.abs(s.video.currentTime - t) > eps) {
+        try {
+          if (typeof s.video.fastSeek === 'function') {
+            s.video.fastSeek(t);
+          } else {
+            s.video.currentTime = t;
+          }
+        } catch (e) {}
+      }
     }
     requestAnimationFrame(raf);
   }
@@ -322,6 +346,9 @@ function mountLetsScroll(container, config) {
   window.addEventListener('orientationchange', layout);
   window.addEventListener('load', layout);
   layout();
+  if (SEGMENTS[0]) loadClip(SEGMENTS[0]);
+  if (SEGMENTS[1]) setTimeout(() => loadClip(SEGMENTS[1]), 200);
+  if (SEGMENTS[2]) setTimeout(() => loadClip(SEGMENTS[2]), 600);
   requestAnimationFrame(raf);
 
   // ---- helpers ----
