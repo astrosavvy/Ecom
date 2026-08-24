@@ -59,9 +59,7 @@ export default function Explore() {
   async function handleAdd(item: RecommendationItem) {
     setAdding(item.id)
     try {
-      // fetch variant id for this product
-      const { getProduct } = await import("../../lib/api")
-      const p = await getProduct(item.handle)
+      const p = await api.getProduct(item.handle)
       const variant = p?.variants?.[0]
       if (variant) await addToCart(variant.id)
       nav("/cart")
