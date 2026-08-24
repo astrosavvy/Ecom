@@ -1,9 +1,0 @@
-Isometric low-poly 3D diorama floating as a small rounded island on a plain solid
-#0B0E18 background with a soft contact shadow beneath it. Night miniature: isometric miniature at night, warm interior glow and neon signage, moody rim light, wet reflective ground, soft matte toy-model shapes, tilt-shift miniature look. Cohesive color palette of midnight #0B0E18, temple gold #D4AF37, parchment cream #F5EDE0, rose quartz pink #E8A0BF, jade green #34D399, moonstone blue #9BB5D6. Highly detailed,
-centered composition, absolutely no text, no letters, no numbers, no logos.
-Render a wide 3:2 landscape image, at least 1536 px wide. The background stays a plain
-solid #0B0E18 across the whole frame — a completely empty backdrop: no sky, no clouds,
-no horizon, no gradient. Centered composition with a little headroom; the focal subject
-horizontally centred and nothing essential at the far left/right edges. Absolutely no
-text, no letters, no numbers, no logos.
-Subject: four floating crystal altars arranged around a round brass compass dais — a rose-pink heart-shaped crystal, a golden coin-and-bloom crystal, a jade ascending-stairs crystal, and a moonstone still-water crystal — each casting soft colored light upward, the small robot-ninja kneeling at the dais reading the compass needle
