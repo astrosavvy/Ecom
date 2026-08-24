@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { formatINR } from "../../lib/api"
+import * as api from "../../lib/api"
 import { useStore } from "../../lib/store"
-import type { RecommendationItem } from "../../lib/api"
+import { formatINR, type RecommendationItem } from "../../lib/api"
 
 function GiftCard({
   item,
