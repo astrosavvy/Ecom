@@ -1,0 +1,9 @@
+{
+  "name": "younoya",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix younoya-web run build",
+    "deploy": "npm --prefix younoya-web run deploy"
+  }
+}
