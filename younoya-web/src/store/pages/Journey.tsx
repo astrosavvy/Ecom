@@ -17,7 +17,7 @@ const OCCASIONS = [
 
 export default function Journey() {
   const nav = useNavigate()
-  const { customer, refreshCustomer, refreshProfiles, setLastResult } = useStore()
+  const { customer, profiles, refreshCustomer, refreshProfiles, setLastResult } = useStore()
   const [step, setStep] = useState<Step>(customer ? 2 : 1)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -54,9 +54,19 @@ export default function Journey() {
   const myProfileId = useRef<string | null>(null)
   const pendingCustomer = useRef(false)
 
+  // returning users re-enter where they belong:
+  // logged in + has self chart → recipient choice; logged in without chart → their details
   useEffect(() => {
-    if (customer && step === 1 && !pendingCustomer.current) setStep(2)
-  }, [customer, step])
+    if (!customer || pendingCustomer.current) return
+    if (step !== 1) return
+    const self = profiles.find((p) => p.is_self)
+    if (self) {
+      myProfileId.current = self.id
+      setStep(3)
+    } else if (profiles.length === 0) {
+      setStep(2)
+    }
+  }, [customer, profiles, step])
 
   // city autocomplete
   useEffect(() => {

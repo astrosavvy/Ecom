@@ -41,7 +41,7 @@ export function Header() {
       <button
         className="header__cta"
         type="button"
-        onClick={() => scrollToSection('#chapter-0')}
+        onClick={() => window.location.assign('/journey')}
         data-hover
       >
         Begin the Journey

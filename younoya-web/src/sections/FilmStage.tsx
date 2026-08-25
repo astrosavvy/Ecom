@@ -206,9 +206,7 @@ export default function FilmStage({ stateRef, onProgress, onReady }: Props) {
             className="finale__cta"
             type="button"
             data-hover
-            onClick={() =>
-              window.open('mailto:hello@younoya.com?subject=My%20first%20gift', '_self')
-            }
+            onClick={() => window.location.assign('/journey')}
           >
             <span>Begin the reading</span>
             <i aria-hidden="true">→</i>
