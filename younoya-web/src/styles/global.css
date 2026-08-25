@@ -1596,16 +1596,17 @@ button {
   background: rgba(7,9,18,0.55);
   border: 1px solid rgba(245,237,224,0.16);
   border-radius: 12px;
-  padding: 22px 16px 10px;
+  padding: 16px;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 15px;
   caret-color: var(--gold);
   outline: none;
-  transition: border-color var(--fc-dur-field) ease, box-shadow var(--fc-dur-field) ease, background var(--fc-dur-field) ease;
+  transition: border-color var(--fc-dur-field) ease, box-shadow var(--fc-dur-field) ease, background var(--fc-dur-field) ease, padding var(--fc-dur-field) var(--fc-ease);
   color-scheme: dark;
 }
-.ff--float input, .ff--float select { padding-top: 22px; }
+.ff--float input, .ff--float select,
+.ff:focus-within input, .ff:focus-within select { padding-top: 24px; padding-bottom: 7px; }
 .ff input::placeholder { color: transparent; transition: color var(--fc-dur-field) ease; }
 .ff input:focus::placeholder { color: rgba(167,159,179,0.55); }
 .ff__label {
@@ -1620,7 +1621,8 @@ button {
   transform-origin: left center;
   transition: transform var(--fc-dur-field) var(--fc-ease), color var(--fc-dur-field) ease, opacity var(--fc-dur-field) ease;
 }
-.ff--float .ff__label {
+.ff--float .ff__label,
+.ff:focus-within .ff__label {
   transform: translateY(-9px) scale(0.74);
   color: var(--gold);
   letter-spacing: 0.22em;
