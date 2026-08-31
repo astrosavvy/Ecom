@@ -7,9 +7,16 @@ export default function HeroCinematic() {
     let cleanup: (() => void) | undefined
     ;(async () => {
       // @ts-ignore
-      const mod = await import("../../lib/scrub-engine.js")
-      const mount = (mod as any).mountLetsScroll || (mod as any).default
-      if (!mount || !ref.current) return
+      const mod: any = await import("../../lib/scrub-engine.js")
+      const mount =
+        mod.mountLetsScroll ||
+        mod.default?.mountLetsScroll ||
+        mod.default ||
+        (typeof window !== "undefined" && (window as any).mountLetsScroll)
+      if (typeof mount !== "function" || !ref.current) {
+        console.warn("[HeroCinematic] scrub-engine mount not found", mod)
+        return
+      }
       cleanup = mount(ref.current, {
         brand: { name: "YOUNOYA" },
         diveScroll: 1.3,

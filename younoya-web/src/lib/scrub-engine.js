@@ -446,3 +446,7 @@ function injectCSS() {
 // Expose for module + global use.
 if (typeof module !== 'undefined' && module.exports) module.exports = { mountLetsScroll };
 if (typeof window !== 'undefined') window.mountLetsScroll = mountLetsScroll;
+
+// ESM export for Vite dynamic import
+export { mountLetsScroll };
+export default mountLetsScroll;

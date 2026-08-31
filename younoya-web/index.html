@@ -16,7 +16,8 @@
     <meta name="twitter:description" content="One unbroken scroll through a living neon-night diorama." />
     <meta name="twitter:image" content="/og.jpg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="preload" as="image" href="/scenes/threshold-c.webp" fetchpriority="high" />
+    <!-- threshold-c preload only needed for /film; kept as prefetch to avoid warn on / -->
+    <link rel="prefetch" as="image" href="/scenes/threshold-c.webp" />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/montserrat-var.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/source-sans-3-var.woff2" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

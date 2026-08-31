@@ -226,11 +226,24 @@ export async function getIndiaRegionId(): Promise<string | undefined> {
 }
 
 export async function listProducts(opts: { limit?: number; handle?: string } = {}): Promise<{ products: Product[]; count: number }> {
-  const params = new URLSearchParams({ limit: String(opts.limit ?? 24), fields: "*variants.calculated_price" })
+  const params = new URLSearchParams({ limit: String(opts.limit ?? 24) })
   const regionId = await getIndiaRegionId()
-  if (regionId) params.set("region_id", regionId)
+  if (regionId) {
+    params.set("region_id", regionId)
+    params.set("fields", "*variants.calculated_price")
+  }
   if (opts.handle) params.set("handle", opts.handle)
-  return req(`/store/products?${params}`)
+  try {
+    return await req(`/store/products?${params}`)
+  } catch (e) {
+    // Fallback: if pricing context still fails, retry without calculated_price
+    if (e instanceof ApiError && e.status === 400 && params.has("fields")) {
+      params.delete("fields")
+      params.delete("region_id")
+      return req(`/store/products?${params}`)
+    }
+    throw e
+  }
 }
 
 export function variantPrice(p: Product): { amount?: number; original?: number } {
