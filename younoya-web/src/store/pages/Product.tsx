@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, Link } from "react-router-dom"
 import * as api from "../../lib/api"
 import { useStore } from "../../lib/store"
+import HeritageStrip from "../components/HeritageStrip"
 
 export default function Product() {
   const { handle } = useParams()
@@ -70,11 +71,30 @@ export default function Product() {
           </p>
         )}
 
+        <HeritageStrip productHandle={product.handle} nakshatra={typeof md.nakshatra === "string" ? md.nakshatra : undefined} />
+
         <p className="product__desc">{product.description}</p>
 
-        <button className="btn" onClick={add} disabled={busy || !product.variants?.length}>
-          {busy ? "Adding…" : "Add to cart"}
-        </button>
+        <div style={{ marginTop: 12, padding: 12, background: "rgba(255,251,240,0.7)", border: "1px solid rgba(212,175,55,0.14)", borderRadius: 12, display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <span style={{ fontFamily: "var(--yn-font-label)", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(26,26,30,0.6)" }}>Deep craft:</span>
+          <span style={{ fontSize: 11, color: "#6b645c" }}>Stone table 1× · Mantra etch 1× · Hallmark 1× (zoom on hover)</span>
+        </div>
+
+        {api.purchaseType(product) === "enquire" ? (
+          <div style={{ display: "grid", gap: 10, marginTop: 16 }}>
+            <Link to={`/contact?product=${product.handle}`} className="btn" style={{ textDecoration: "none", justifyContent: "center", background: "var(--yn-gold)", color: "#1a1a1e" }}>
+              Enquire — check Mahādaśā fit before payment
+            </Link>
+            <p style={{ fontFamily: "var(--yn-font-label)", fontSize: 10, color: "rgba(26,26,30,0.5)", textAlign: "center" }}>Remedial piece · No checkout until dasha is read</p>
+            <button className="btn btn--ghost" onClick={add} disabled={busy || !product.variants?.length} style={{ opacity: 0.7 }}>
+              {busy ? "Adding…" : "Or add to cart directly"}
+            </button>
+          </div>
+        ) : (
+          <button className="btn" onClick={add} disabled={busy || !product.variants?.length} style={{ marginTop: 16 }}>
+            {busy ? "Adding…" : `Add to cart — ${api.formatINR(price)}`}
+          </button>
+        )}
       </div>
     </div>
   )

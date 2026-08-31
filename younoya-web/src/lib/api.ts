@@ -330,5 +330,15 @@ export async function getPost(slug: string): Promise<BlogPost | null> {
   }
 }
 
+export function purchaseType(p: Product): "direct" | "enquire" {
+  const md = (p.metadata ?? {}) as Record<string, unknown>
+  const price = variantPrice(p).amount ?? 0
+  const tags = (md.synergy_tags as string[]) || []
+  const crystal = String(md.gemstone_crystal || "")
+  if (md.purchase_type === "enquire" || md.purchase_type === "direct") return md.purchase_type as any
+  if (price >= 349900 || tags.includes("remedy") || crystal.includes("Sapphire") || crystal.includes("Panna") || crystal.includes("Navagraha")) return "enquire"
+  return "direct"
+}
+
 export const formatINR = (paise: number | undefined | null) =>
   paise == null ? "—" : `₹${(paise / 100).toLocaleString("en-IN")}`
