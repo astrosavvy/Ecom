@@ -7,9 +7,9 @@
   --rose: #e8a0bf;
   --mint: #34d399;
   --blue: #9bb5d6;
-  --font-display: 'Cormorant', 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Tenor Sans', 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-label: 'Manrope', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Outfit', 'Instrument Serif', 'Inter', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-label: 'Manrope', 'Inter', sans-serif;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 

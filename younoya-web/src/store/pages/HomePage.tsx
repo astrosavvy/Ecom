@@ -65,13 +65,26 @@ export default function HomePage() {
       </section>
 
       {/* 5. Explore by Intention */}
-      <section className="section">
-        <h2 className="section__title" style={{ textAlign: "center" }}>Explore by Intention</h2>
-        <div className="intention-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "1rem", marginTop: "2rem" }}>
-          {["Love", "Career", "Money", "Calm", "New Beginnings", "Confidence", "Focus", "Gifting"].map(intent => (
-            <div key={intent} className="intention-card glass-card" style={{ padding: "1.5rem", textAlign: "center", cursor: "pointer" }} onClick={() => navigate("/products")}>
-              <div className="intention-card__icon" style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>✨</div>
-              <div className="intention-card__label">{intent}</div>
+      <section className="section" style={{ background: '#FFFBF0', borderRadius: '24px', padding: '48px 24px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '620px', margin: '0 auto' }}>
+          <span className="section__label" style={{ display: 'block', marginBottom: '10px' }}>Curated by meaning</span>
+          <h2 className="section__title" style={{ textAlign: "center", color: '#1a1a1e', fontFamily: 'var(--yn-font-display)', fontWeight: 600 }}>Explore by Intention</h2>
+          <p className="text-editorial" style={{ textAlign: 'center', marginTop: '10px', color: '#6b645c', fontSize: '14px' }}>Not by category — by what you want to invite. Tap an intention, see the objects that hold it.</p>
+        </div>
+        <div className="intention-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(148px, 1fr))", gap: "14px", marginTop: "28px" }}>
+          {[
+            { label: "Love", letter: "L" },
+            { label: "Career", letter: "C" },
+            { label: "Money", letter: "M" },
+            { label: "Calm", letter: "C" },
+            { label: "New Beginnings", letter: "N" },
+            { label: "Confidence", letter: "C" },
+            { label: "Focus", letter: "F" },
+            { label: "Gifting", letter: "G" },
+          ].map(intent => (
+            <div key={intent.label} className="intention-card" style={{ padding: "18px 14px", textAlign: "center", cursor: "pointer", background: "#fff", border: "1px solid rgba(212,175,55,0.18)", borderRadius: "16px", boxShadow: "0 6px 18px -14px rgba(0,0,0,0.18)", transition: "transform 0.2s, border-color 0.2s, box-shadow 0.2s" }} onClick={() => navigate("/shop")} onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(212,175,55,0.42)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)' }} onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(212,175,55,0.18)'; (e.currentTarget as HTMLDivElement).style.transform = 'none' }}>
+              <div className="intention-card__icon" style={{ width: "38px", height: "38px", borderRadius: "50%", display: "grid", placeItems: "center", margin: "0 auto 10px", background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.22)", fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "14px", color: "var(--yn-gold-strong)", letterSpacing: "0.04em" }}>{intent.letter}</div>
+              <div className="intention-card__label" style={{ fontFamily: "var(--yn-font-label)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#1e1c16" }}>{intent.label}</div>
             </div>
           ))}
         </div>
@@ -99,12 +112,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 8. Personalised Gifting CTA */}
-      <section className="section personal-banner" style={{ textAlign: "center", padding: "4rem 1rem", marginTop: "4rem", marginBottom: "4rem" }}>
-        <div className="personal-banner__icon" style={{ fontSize: "3rem", marginBottom: "1rem" }}>🎁</div>
-        <h2 className="personal-banner__title text-h1">The Perfect Gift</h2>
-        <p className="personal-banner__text section__subtitle" style={{ maxWidth: "600px", margin: "0 auto 2rem" }}>Give a gift that speaks to their soul. Build a personalised toolkit based on their astrological profile.</p>
-        <Link to="/personalise" className="cta-personal">Start Gifting</Link>
+      {/* 8. The Perfect Gift — high contrast midnight card */}
+      <section className="section" style={{ paddingLeft: 0, paddingRight: 0 }}>
+        <div className="personal-banner" style={{ textAlign: "center", padding: "56px 28px", background: "#0B0E18", border: "1px solid rgba(212,175,55,0.22)", borderRadius: "24px", boxShadow: "0 18px 48px -24px rgba(0,0,0,0.55)", position: "relative", overflow: "hidden" }}>
+          <div aria-hidden style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,175,55,0.10), transparent 62%)", pointerEvents: "none" }} />
+          <div style={{ position: "relative" }}>
+            <span style={{ display: "inline-block", fontFamily: "var(--yn-font-label)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--yn-gold)", border: "1px solid rgba(212,175,55,0.22)", background: "rgba(212,175,55,0.08)", padding: "6px 14px", borderRadius: "999px", marginBottom: "16px" }}>Editor&apos;s pick</span>
+            <h2 className="personal-banner__title" style={{ fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "clamp(28px, 3.6vw, 38px)", lineHeight: 1.1, color: "#fff", letterSpacing: "-0.01em", margin: 0 }}>The Perfect Gift</h2>
+            <p className="personal-banner__text" style={{ maxWidth: "560px", margin: "12px auto 0", fontFamily: "var(--yn-font-body)", fontSize: "15px", lineHeight: 1.65, color: "rgba(245,237,224,0.82)" }}>Give a gift that speaks to their soul. Curated by intention and chart — not by shelf. A personalised selection, made to be kept.</p>
+            <Link to="/shop" className="cta-personal" style={{ marginTop: "22px", background: "var(--yn-gold)", color: "#0B0E18", padding: "12px 26px" }}>Explore Gifts</Link>
+            <p style={{ marginTop: "10px", fontFamily: "var(--yn-font-label)", fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(245,237,224,0.45)" }}>No generic. Only personal.</p>
+          </div>
+        </div>
       </section>
 
       {/* 9. Journal */}
