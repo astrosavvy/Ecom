@@ -38,8 +38,8 @@ export default function StoreHeader() {
   return (
     <>
       <header className="store-header" ref={ref} data-hidden="false">
-        <Link to="/" className="store-header__brand" aria-label="YOUNOYA Home">
-          <img src="/brand.webp" alt="YOUNOYA" className="store-header__logo" />
+        <Link to="/" className="store-header__brand" aria-label="YOUNOYA — for every chapter">
+          <img src="/younoya-gold.svg" alt="YOUNOYA for every chapter" className="store-header__logo" style={{ height: "44px", width: "auto" }} />
         </Link>
 
         <nav className="store-header__nav" aria-label="Main navigation">

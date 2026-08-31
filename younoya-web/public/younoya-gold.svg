@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340" role="img" aria-labelledby="title">
+<title id="title">YOUNOYA — for every chapter</title>
+<defs>
+  <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#F9E498"/>
+    <stop offset="22%" stop-color="#D4AF37"/>
+    <stop offset="50%" stop-color="#B8860B"/>
+    <stop offset="78%" stop-color="#D4AF37"/>
+    <stop offset="100%" stop-color="#7A5A14"/>
+  </linearGradient>
+  <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.35"/>
+  </filter>
+</defs>
+<!-- Background transparent -->
+<g filter="url(#softShadow)">
+  <!-- YU Monogram -->
+  <g transform="translate(300, 98)" text-anchor="middle">
+    <!-- Sparkle -->
+    <g transform="translate(0, -62)">
+      <path d="M0 -14 L2 -2 L14 0 L2 2 L0 14 L-2 2 L-14 0 L-2 -2 Z" fill="url(#gold)" opacity="0.95"/>
+      <circle cx="0" cy="0" r="2.2" fill="#fff" opacity="0.85"/>
+    </g>
+    <!-- Y -->
+    <text x="0" y="22" font-family="Cormorant, Georgia, serif" font-size="96" font-weight="600" letter-spacing="-2" fill="url(#gold)" style="paint-order: stroke; stroke:#5c4a12; stroke-width:0.6px; stroke-linejoin:round;">Y</text>
+    <!-- U overlapping -->
+    <text x="0" y="22" font-family="Cormorant, Georgia, serif" font-size="96" font-weight="600" fill="none" stroke="url(#gold)" stroke-width="3" opacity="0.92" style="transform: translate(2px, 18px) scale(0.98); transform-origin: center;">U</text>
+    <text x="2.5" y="40" font-family="Cormorant, Georgia, serif" font-size="96" font-weight="600" fill="url(#gold)">U</text>
+  </g>
+  <!-- YOUNOYA wordmark -->
+  <text x="300" y="212" text-anchor="middle" font-family="Cormorant, 'Instrument Serif', Georgia, serif" font-size="74" font-weight="600" letter-spacing="6" fill="url(#gold)" style="paint-order: stroke; stroke:#3e340d; stroke-width:0.7px; stroke-linejoin:round;">YOUNOYA</text>
+  <!-- Tail on Y — flourish under YOUNOYA -->
+  <path d="M 158 228 C 158 228 285 242 348 208 C 362 199 368 184 368 184 C 368 184 358 202 348 212 C 328 230 238 246 158 228 Z" fill="url(#gold)" opacity="0.95"/>
+  <rect x="42" y="234" width="112" height="3" rx="1.5" fill="url(#gold)" opacity="0.9"/>
+  <rect x="445" y="234" width="112" height="3" rx="1.5" fill="url(#gold)" opacity="0.9"/>
+  <!-- tagline -->
+  <text x="300" y="278" text-anchor="middle" font-family="Cormorant, Georgia, serif" font-style="italic" font-size="26" font-weight="400" letter-spacing="1.2" fill="#2b2410" opacity="0.85">for every chapter</text>
+</g>
+</svg>
