@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router"
 import * as api from "../../lib/api"
 import { useStore } from "../../lib/store"
+import HeroCinematic from "./HeroCinematic"
 
 export default function HomePage() {
   const [products, setProducts] = useState<api.Product[]>([])
@@ -20,15 +21,7 @@ export default function HomePage() {
 
   return (
     <div className="homepage">
-      {/* 1. Hero */}
-      <section className="section" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", background: "var(--color-canvas)", backgroundSize: "cover" }}>
-        <h1 className="text-display" style={{ textAlign: "center", marginBottom: "1rem" }}>Meaning, Made Personal.</h1>
-        <p className="section__subtitle" style={{ textAlign: "center", maxWidth: "600px", marginBottom: "2rem" }}>Discover objects aligned with your cosmic blueprint and personal intentions.</p>
-        <div style={{ display: "flex", gap: "1rem" }}>
-          <Link to="/products" className="cta-outline">Shop YOUNOYA</Link>
-          <Link to="/personalise" className="cta-personal">Build My Toolkit</Link>
-        </div>
-      </section>
+      <HeroCinematic />
 
       {/* 2. Discover */}
       <section className="section" style={{ textAlign: "center", padding: "4rem 1rem" }}>

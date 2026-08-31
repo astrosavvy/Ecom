@@ -1,0 +1,69 @@
+/* YOUNOYA — Premium Design Tokens
+   Midnight Obsidian + Celestial Amber + Glassmorphism
+   Extracted from brand brief §31 + AGENTS.md:4 — single source of truth */
+
+:root {
+  /* Canvas — Midnight Obsidian */
+  --yn-canvas: #07080E;
+  --yn-canvas-deep: #080A10;
+  --yn-canvas-ink: #040508;
+  --yn-bg: #0b0e18; /* legacy alias */
+  --yn-bg-deep: #070912;
+
+  /* Ink */
+  --yn-ink: #f5ede0;
+  --yn-ink-soft: #a79fb3;
+  --yn-ink-muted: rgba(245,237,224,0.65);
+  --yn-ink-faint: rgba(245,237,224,0.35);
+
+  /* Celestial Amber — primary */
+  --yn-gold: #D4AF37;
+  --yn-gold-strong: #B8860B;
+  --yn-gold-soft: #F59E0B;
+  --yn-amber: #D4AF37;
+  --yn-amber-glow: rgba(212,175,55,0.35);
+
+  /* Accents */
+  --yn-rose: #e8a0bf;
+  --yn-kumkum: #DC2626;
+  --yn-kumkum-deep: #991B1B;
+  --yn-astral: #0E2A47;
+  --yn-teal: #0D9488;
+  --yn-mint: #34d399;
+  --yn-blue: #9bb5d6;
+
+  /* Glass Surfaces — §4 */
+  --yn-glass: rgba(8,10,16,0.95);
+  --yn-glass-soft: rgba(17,21,36,0.55);
+  --yn-glass-border: rgba(212,175,55,0.35);
+  --yn-glass-border-soft: rgba(212,175,55,0.14);
+  --yn-blur: blur(24px);
+  --yn-blur-soft: blur(14px);
+
+  /* Typography — Outfit/Instrument Serif headings, Inter body, JetBrains Mono badges */
+  --yn-font-display: 'Outfit', 'Instrument Serif', Georgia, serif;
+  --yn-font-body: 'Inter', 'Tenor Sans', -apple-system, sans-serif;
+  --yn-font-label: 'Manrope', 'Inter', sans-serif;
+  --yn-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Motion */
+  --yn-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --yn-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --yn-dur-micro: 180ms;
+  --yn-dur: 340ms;
+  --yn-dur-card: 480ms;
+
+  /* Legacy aliases for gradual migration */
+  --bg: var(--yn-canvas);
+  --bg-deep: var(--yn-canvas-deep);
+  --ink: var(--yn-ink);
+  --ink-soft: var(--yn-ink-soft);
+  --gold: var(--yn-gold);
+  --rose: var(--yn-rose);
+  --mint: var(--yn-mint);
+  --blue: var(--yn-blue);
+  --font-display: var(--yn-font-display);
+  --font-body: var(--yn-font-body);
+  --font-label: var(--yn-font-label);
+  --ease-out-expo: var(--yn-ease);
+}
