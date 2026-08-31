@@ -16,7 +16,7 @@ export default function Journal() {
       .then(res => {
         // MOCK filtering since backend endpoint doesn't support category filtering directly here
         const filtered = category && category.toLowerCase() !== "all" 
-          ? res.posts.filter(p => true) // If category existed in metadata, we'd filter here
+          ? res.posts.filter(() => true) // If category existed in metadata, we'd filter here
           : res.posts
         setPosts(filtered)
       })

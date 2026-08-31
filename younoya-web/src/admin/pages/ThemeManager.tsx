@@ -12,7 +12,7 @@ const MOCK_THEMES = [
 ]
 
 export default function ThemeManager() {
-  const [themes, setThemes] = useState(MOCK_THEMES)
+  const [themes] = useState(MOCK_THEMES)
   const [showModal, setShowModal] = useState(false)
   const [editTheme, setEditTheme] = useState<any>(null)
 

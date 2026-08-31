@@ -7,7 +7,7 @@ const MOCK_RULES = [
 ]
 
 export default function RecommendationRules() {
-  const [rules, setRules] = useState(MOCK_RULES)
+  const [rules] = useState(MOCK_RULES)
   const [showModal, setShowModal] = useState(false)
   const [editRule, setEditRule] = useState<any>(null)
 
