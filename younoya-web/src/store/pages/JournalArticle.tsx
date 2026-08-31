@@ -37,8 +37,7 @@ export default function JournalArticle() {
 
       <div className="personal-banner glass-card" style={{ marginTop: "4rem", padding: "3rem", textAlign: "center" }}>
         <h2 className="personal-banner__title text-h2" style={{ marginBottom: "1rem" }}>Make It Personal</h2>
-        <p className="personal-banner__text" style={{ marginBottom: "2rem", color: "var(--color-muted)" }}>Discover objects that resonate with your unique astrological profile and current intentions.</p>
-        <Link to="/personalise" className="cta-personal">Build My Toolkit</Link>
+        <p className="personal-banner__text" style={{ color: "var(--color-muted)" }}>Discover objects that resonate with your unique astrological profile and current intentions.</p>
       </div>
     </article>
   )

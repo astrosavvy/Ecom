@@ -95,11 +95,8 @@ export default function HeroCinematic() {
           Curated by your stars — not the shelf.
         </p>
         <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap", marginTop: "20px" }}>
-          <a href="/shop" className="fbtn fbtn--ghost" style={{ backdropFilter: "blur(10px)", background: "rgba(255,255,255,0.88)", color: "#1a1a1e", borderColor: "rgba(255,255,255,0.9)" }}>
+          <a href="/shop" className="fbtn" style={{ background: "var(--yn-gold)", color: "#1a1a1e" }}>
             Shop YOUNOYA
-          </a>
-          <a href="/personalise" className="fbtn" style={{ background: "var(--yn-gold)", color: "#1a1a1e" }}>
-            Build My Toolkit
           </a>
         </div>
       </div>

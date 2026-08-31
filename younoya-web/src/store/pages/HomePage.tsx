@@ -58,7 +58,6 @@ export default function HomePage() {
           <span className="section__label">Personalise</span>
           <h2 className="section__title">Make It Personal</h2>
           <p className="text-editorial">Discover exactly what you need right now based on your unique astrological profile and current intentions.</p>
-          <Link to="/personalise" className="cta-personal" style={{ marginTop: "1rem", display: "inline-block" }}>Build My Toolkit</Link>
         </div>
         <div className="glass-card" style={{ flex: "1 1 400px", padding: "2rem", textAlign: "center" }}>
           <p>Your Cosmic Toolkit Awaits</p>
@@ -135,8 +134,7 @@ export default function HomePage() {
       <section className="section" style={{ textAlign: "center", padding: "6rem 1rem", borderTop: "1px solid var(--color-glass-border)", marginTop: "4rem" }}>
         <h2 className="text-display" style={{ marginBottom: "2rem" }}>Ready to Discover?</h2>
         <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
-          <Link to="/products" className="cta-outline">Shop Collection</Link>
-          <Link to="/personalise" className="cta-personal">Build My Toolkit</Link>
+          <Link to="/shop" className="cta-personal">Shop Collection</Link>
         </div>
       </section>
     </div>

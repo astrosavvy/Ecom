@@ -55,10 +55,6 @@ export default function StoreHeader() {
         </nav>
 
         <div className="store-header__actions">
-          <Link to="/personalise" className="cta-personal" style={{ padding: '8px 20px', fontSize: '0.6875rem' }}>
-            ✦ Build My Toolkit
-          </Link>
-
           <Link to="/cart" className="store-header__cart-badge" aria-label={`Cart (${cartCount} items)`}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
@@ -88,10 +84,6 @@ export default function StoreHeader() {
                 {link.label}
               </Link>
             ))}
-            <div className="mobile-nav__divider" />
-            <Link to="/personalise" className="cta-personal" style={{ width: '100%', justifyContent: 'center' }} onClick={() => setMenuOpen(false)}>
-              ✦ Build My Toolkit
-            </Link>
           </nav>
         </div>
       )}
