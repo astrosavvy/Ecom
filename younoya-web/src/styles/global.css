@@ -2176,32 +2176,33 @@ button {
 .mobile-nav__link--active, .mobile-nav__link:hover { background: rgba(212,175,55,0.1); color: var(--gold); }
 .mobile-nav__divider { height: 1px; background: rgba(245,237,224,0.08); margin: 8px 0; }
 
-/* ================= homepage — midnight + amber ================= */
-.homepage { background: var(--yn-canvas); }
+/* ================= homepage — WARM LIGHT (cream + gold) ================= */
+.homepage { background: #FFFBF0; }
 .homepage .section {
   max-width: 1180px; margin: 0 auto; padding: clamp(36px, 5vw, 64px) clamp(16px, 4vw, 32px);
 }
 .homepage .section__title {
-  font-family: var(--yn-font-display); font-weight: 420; font-size: clamp(26px, 3.2vw, 36px); line-height: 1.1; color: var(--yn-ink);
+  font-family: var(--yn-font-display); font-weight: 520; font-size: clamp(26px, 3.2vw, 34px); line-height: 1.1; color: #1a1a1e;
 }
 .homepage .section__label {
-  font-family: var(--yn-font-label); font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--yn-gold);
+  font-family: var(--yn-font-label); font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--yn-gold-strong);
 }
-.homepage .section__divider { width: 64px; height: 1px; background: rgba(212,175,55,0.35); border: 0; }
+.homepage .section__divider { width: 64px; height: 1px; background: rgba(212,175,55,0.28); border: 0; }
 .text-display { font-family: var(--yn-font-display); font-weight: 420; }
-.text-editorial { font-family: var(--yn-font-body); color: var(--yn-ink-soft); line-height: 1.7; }
+.text-editorial { font-family: var(--yn-font-body); color: #5a534a; line-height: 1.7; }
 .glass-card {
-  background: rgba(17,21,36,0.55); border: 1px solid rgba(212,175,55,0.14); border-radius: 18px; backdrop-filter: blur(14px);
+  background: #ffffff; border: 1px solid rgba(212,175,55,0.16); border-radius: 18px; box-shadow: 0 8px 24px -16px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.06);
 }
 .product-card { overflow: hidden; transition: transform 0.35s var(--yn-ease), border-color 0.3s; }
 .product-card:hover { transform: translateY(-4px); border-color: rgba(212,175,55,0.38); }
-.product-card__image-wrap { display: block; aspect-ratio: 1; overflow: hidden; background: #0e1120; position: relative; }
+.product-card { background: #fff; }
+.product-card__image-wrap { display: block; aspect-ratio: 1; overflow: hidden; background: #fef9ec; position: relative; }
 .product-card__image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--yn-ease); }
 .product-card:hover .product-card__image { transform: scale(1.05); }
-.product-card__badge { position: absolute; top: 10px; left: 10px; font-family: var(--yn-font-label); font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; background: rgba(7,8,14,0.72); backdrop-filter: blur(6px); border: 1px solid rgba(212,175,55,0.3); color: var(--yn-gold); padding: 5px 9px; border-radius: 999px; }
+.product-card__badge { position: absolute; top: 10px; left: 10px; font-family: var(--yn-font-label); font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; background: rgba(255,255,255,0.92); backdrop-filter: blur(6px); border: 1px solid rgba(212,175,55,0.28); color: var(--yn-gold-strong); padding: 5px 9px; border-radius: 999px; }
 .product-card__info { padding: 14px 16px 16px; display: grid; gap: 6px; }
-.product-card__name { font-family: var(--yn-font-display); font-weight: 500; font-size: 16px; color: var(--yn-ink); line-height: 1.25; }
-.product-card__price { font-family: var(--yn-font-display); font-style: italic; color: var(--yn-gold); font-size: 16px; }
+.product-card__name { font-family: var(--yn-font-display); font-weight: 540; font-size: 16px; color: #1e1c16; line-height: 1.25; }
+.product-card__price { font-family: var(--yn-font-display); font-style: italic; color: var(--yn-gold-strong); font-size: 16px; }
 .cta-personal {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   padding: 10px 20px; border-radius: 999px; background: var(--yn-gold); color: #07080E;

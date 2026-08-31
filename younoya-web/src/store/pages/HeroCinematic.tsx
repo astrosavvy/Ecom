@@ -40,32 +40,17 @@ export default function HeroCinematic() {
           height: "100%",
           objectFit: "cover",
           objectPosition: "center 42%",
-          filter: "brightness(0.72) saturate(1.05)",
+          filter: "brightness(0.98) saturate(1.02) contrast(1.02)",
         }}
       />
-      {/* Midnight scrim for legibility - premium */}
+      {/* Light scrim — barely there, just bottom legibility */}
       <div
         aria-hidden
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(ellipse 70% 60% at 50% 38%, rgba(7,8,14,0.18) 0%, rgba(7,8,14,0.55) 62%, rgba(7,8,14,0.82) 100%), linear-gradient(to bottom, rgba(7,8,14,0.22) 0%, transparent 28%, rgba(7,8,14,0.48) 100%)",
-        }}
-      />
-      {/* Amber glow accent */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "18%",
-          width: "680px",
-          height: "680px",
-          transform: "translateX(-50%)",
-          background: "radial-gradient(circle at 50% 50%, rgba(212,175,55,0.11), transparent 66%)",
-          filter: "blur(8px)",
-          pointerEvents: "none",
+            "linear-gradient(to bottom, transparent 0%, transparent 52%, rgba(7,8,14,0.22) 85%, rgba(7,8,14,0.38) 100%)",
         }}
       />
 
@@ -80,68 +65,43 @@ export default function HeroCinematic() {
           width: "100%",
         }}
       >
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "10px",
-            padding: "7px 16px",
-            borderRadius: "999px",
-            background: "rgba(8,10,16,0.58)",
-            border: "1px solid rgba(212,175,55,0.22)",
-            backdropFilter: "blur(10px)",
-            fontFamily: "var(--yn-font-label)",
-            fontSize: "10px",
-            fontWeight: 700,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "var(--yn-gold)",
-            marginBottom: "18px",
-          }}
-        >
-          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--yn-gold)", boxShadow: "0 0 10px rgba(212,175,55,0.7)" }} />
-          For every chapter
-        </div>
-
         <h1
           className="text-display"
           style={{
-            color: "var(--yn-ink)",
+            color: "#fff",
             fontFamily: "var(--yn-font-display)",
-            fontWeight: 420,
-            fontSize: "clamp(38px, 6vw, 64px)",
-            lineHeight: 0.98,
+            fontWeight: 440,
+            fontSize: "clamp(36px, 5.8vw, 62px)",
+            lineHeight: 0.97,
             letterSpacing: "-0.02em",
-            textShadow: "0 2px 18px rgba(0,0,0,0.65), 0 12px 44px rgba(0,0,0,0.55)",
+            textShadow: "0 1px 18px rgba(0,0,0,0.38), 0 6px 32px rgba(0,0,0,0.32)",
             margin: 0,
           }}
         >
-          Meaning, <em style={{ fontStyle: "italic", fontWeight: 440, color: "var(--yn-gold)" }}>made personal.</em>
+          Meaning, <em style={{ fontStyle: "italic", fontWeight: 440, color: "#FFE9A3", textShadow: "0 1px 12px rgba(0,0,0,0.22)" }}>made personal.</em>
         </h1>
         <p
           className="section__subtitle"
           style={{
-            color: "rgba(245,237,224,0.88)",
-            fontSize: "clamp(14px, 1.6vw, 17px)",
-            lineHeight: 1.6,
-            maxWidth: "560px",
-            margin: "14px auto 0",
-            textShadow: "0 2px 14px rgba(0,0,0,0.7)",
+            color: "rgba(255,255,255,0.92)",
+            fontSize: "clamp(14px, 1.45vw, 16px)",
+            lineHeight: 1.55,
+            maxWidth: "520px",
+            margin: "12px auto 0",
+            textShadow: "0 1px 10px rgba(0,0,0,0.45)",
+            fontWeight: 400,
           }}
         >
-          Two objects, not twenty. A thrilling, minimal drop — curated by your stars, not a cluttered shelf.
+          Curated by your stars — not the shelf.
         </p>
-        <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap", marginTop: "22px" }}>
-          <a href="/shop" className="fbtn fbtn--ghost" style={{ backdropFilter: "blur(8px)", background: "rgba(8,10,16,0.46)" }}>
+        <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap", marginTop: "20px" }}>
+          <a href="/shop" className="fbtn fbtn--ghost" style={{ backdropFilter: "blur(10px)", background: "rgba(255,255,255,0.88)", color: "#1a1a1e", borderColor: "rgba(255,255,255,0.9)" }}>
             Shop YOUNOYA
           </a>
-          <a href="/personalise" className="fbtn">
+          <a href="/personalise" className="fbtn" style={{ background: "var(--yn-gold)", color: "#1a1a1e" }}>
             Build My Toolkit
           </a>
         </div>
-        <p style={{ marginTop: "14px", fontFamily: "var(--yn-font-label)", fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(245,237,224,0.55)" }}>
-          Astrology • Intention • Craft
-        </p>
       </div>
 
       {/* Scroll cue */}
