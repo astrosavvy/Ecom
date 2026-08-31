@@ -1,7 +1,7 @@
 const API_BASE = (import.meta.env.VITE_API_BASE as string) || "https://api.younoya.com"
 const PUBLISHABLE_KEY =
   (import.meta.env.VITE_PUBLISHABLE_KEY as string) ||
-  "pk_fe6f25d425dbefc81508541538e1007d229a450f06697a1d58f4cda7bc390c35"
+  "pk_d4577228b532cf8c81a5b63e898652da2dbaf9730acd3f8f449ccda1f8482c75"
 
 const TOKEN_KEY = "younoya_customer_token"
 
