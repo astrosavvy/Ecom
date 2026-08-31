@@ -1,17 +1,4 @@
-:root {
-  --bg: #0b0e18;
-  --bg-deep: #070912;
-  --ink: #f5ede0;
-  --ink-soft: #a79fb3;
-  --gold: #d4af37;
-  --rose: #e8a0bf;
-  --mint: #34d399;
-  --blue: #9bb5d6;
-  --font-display: 'Outfit', 'Instrument Serif', 'Inter', -apple-system, sans-serif;
-  --font-body: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-label: 'Manrope', 'Inter', sans-serif;
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-}
+/* tokens.css is SSOT — do not redeclare --bg/--gold here */
 
 * {
   margin: 0;
@@ -2231,3 +2218,18 @@ button {
 /* footer light */
 .store-footer { background: #FFFBF0; }
 .store-footer__brand-desc { color: #6b645c; }
+
+/* bento responsive */
+@media (max-width: 860px) {
+  .yn-bento { grid-template-columns: 1fr !important; }
+  .yn-bento > a[style*="gridRow"] { grid-row: auto !important; }
+}
+@media (max-width: 520px) {
+  .yn-bento { gap: 12px !important; }
+}
+
+/* proof marquee */
+.yn-marquee { overflow: hidden; white-space: nowrap; }
+.yn-marquee__track { display: inline-flex; gap: 28px; animation: yn-marquee 28s linear infinite; }
+@keyframes yn-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .yn-marquee__track { animation: none; } }

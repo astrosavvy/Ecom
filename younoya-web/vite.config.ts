@@ -5,13 +5,15 @@ export default defineConfig({
   plugins: [react()],
   build: {
     target: 'es2020',
-    cssCodeSplit: false,
+    cssCodeSplit: true,
     rollupOptions: {
       output: {
         manualChunks: {
-          react: ['react', 'react-dom'],
+          react: ['react', 'react-dom', 'react-router-dom'],
           gsap: ['gsap'],
         },
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
       },
     },
   },

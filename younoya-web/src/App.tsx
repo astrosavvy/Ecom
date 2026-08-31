@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
 import { initScroll, ScrollTrigger } from './lib/scroll'
 import { StoreProvider } from './lib/store'
 import FilmStage from './sections/FilmStage'
@@ -7,18 +7,15 @@ import { Header, Rail, Cursor } from './sections/Header'
 import Preloader from './sections/Preloader'
 import StoreLayout from './store/StoreLayout'
 import HomePage from './store/pages/HomePage'
-import Journey from './store/pages/Journey'
-import Explore from './store/pages/Explore'
 import Shop from './store/pages/Shop'
 import Product from './store/pages/Product'
 import CartPage from './store/pages/CartPage'
 import Checkout from './store/pages/Checkout'
 import Order from './store/pages/Order'
 import Account from './store/pages/Account'
-import Blog from './store/pages/Blog'
-import BlogPost from './store/pages/BlogPost'
 import AdminApp from './admin/AdminApp'
 
+const Configurator = lazy(() => import('./store/pages/Configurator'))
 const PersonaliseFlow = lazy(() => import('./store/pages/PersonaliseFlow'))
 const Journal = lazy(() => import('./store/pages/Journal'))
 const JournalArticle = lazy(() => import('./store/pages/JournalArticle'))
@@ -86,14 +83,16 @@ export default function App() {
         <Route element={<StoreLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/gifts" element={<Shop />} />
+          <Route path="/gifts" element={<Navigate to="/shop" replace />} />
+          <Route path="/products/:handle" element={<Navigate to="/product/:handle" replace />} />
           <Route path="/product/:handle" element={<Product />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order/:id" element={<Order />} />
 
-          {/* Personalisation */}
-          <Route path="/personalise" element={<Suspense fallback={SuspenseFallback}><PersonaliseFlow /></Suspense>} />
+          {/* Personalisation — Cartier-style configurator */}
+          <Route path="/personalise" element={<Suspense fallback={SuspenseFallback}><Configurator /></Suspense>} />
+          <Route path="/personalise-legacy" element={<Suspense fallback={SuspenseFallback}><PersonaliseFlow /></Suspense>} />
 
           {/* Journal */}
           <Route path="/journal" element={<Suspense fallback={SuspenseFallback}><Journal /></Suspense>} />
@@ -110,10 +109,10 @@ export default function App() {
           <Route path="/about" element={<Suspense fallback={SuspenseFallback}><About /></Suspense>} />
 
           {/* Legacy routes (kept for backward compatibility) */}
-          <Route path="/journey" element={<Journey />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/journey" element={<Navigate to="/personalise?chapter=threshold" replace />} />
+          <Route path="/explore" element={<Navigate to="/personalise?chapter=reveal" replace />} />
+          <Route path="/blog" element={<Navigate to="/journal" replace />} />
+          <Route path="/blog/:slug" element={<Navigate to="/journal/:slug" replace />} />
         </Route>
 
         {/* Admin console */}

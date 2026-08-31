@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router"
+import { Link } from "react-router"
 import * as api from "../../lib/api"
 import { useStore } from "../../lib/store"
 import HeroCinematic from "./HeroCinematic"
@@ -9,7 +9,6 @@ export default function HomePage() {
   const [featuredProducts, setFeaturedProducts] = useState<api.Product[]>([])
   const [posts, setPosts] = useState<api.BlogPost[]>([])
   const { addToCart } = useStore()
-  const navigate = useNavigate()
 
   useEffect(() => {
     api.listProducts({ limit: 8 }).then((res) => {
@@ -37,7 +36,7 @@ export default function HomePage() {
             const price = api.variantPrice(p)
             return (
               <div key={p.id} className="product-card glass-card" style={{ minWidth: "250px" }}>
-                <Link to={`/products/${p.handle}`} className="product-card__image-wrap">
+                <Link to={`/product/${p.handle}`} className="product-card__image-wrap">
                   {p.thumbnail && <img src={p.thumbnail} alt={p.title} className="product-card__image" style={{ width: "100%", height: "auto" }} />}
                   <span className="product-card__badge">Curated</span>
                 </Link>
@@ -68,27 +67,49 @@ export default function HomePage() {
       <section className="section" style={{ background: '#FFFBF0', borderRadius: '24px', padding: '48px 24px' }}>
         <div style={{ textAlign: 'center', maxWidth: '620px', margin: '0 auto' }}>
           <span className="section__label" style={{ display: 'block', marginBottom: '10px' }}>Curated by meaning</span>
-          <h2 className="section__title" style={{ textAlign: "center", color: '#1a1a1e', fontFamily: 'var(--yn-font-display)', fontWeight: 600 }}>Explore by Intention</h2>
-          <p className="text-editorial" style={{ textAlign: 'center', marginTop: '10px', color: '#6b645c', fontSize: '14px' }}>Not by category — by what you want to invite. Tap an intention, see the objects that hold it.</p>
+          <h2 className="section__title" style={{ textAlign: "center", color: '#1a1a1e', fontFamily: 'var(--yn-font-display)', fontWeight: 600 }}>For every chapter</h2>
+          <p className="text-editorial" style={{ textAlign: 'center', marginTop: '10px', color: '#6b645c', fontSize: '14px' }}>One question, one chapter — your chart picks the objects that hold it.</p>
         </div>
-        <div className="intention-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(148px, 1fr))", gap: "14px", marginTop: "28px" }}>
-          {[
-            { label: "Love", letter: "L" },
-            { label: "Career", letter: "C" },
-            { label: "Money", letter: "M" },
-            { label: "Calm", letter: "C" },
-            { label: "New Beginnings", letter: "N" },
-            { label: "Confidence", letter: "C" },
-            { label: "Focus", letter: "F" },
-            { label: "Gifting", letter: "G" },
-          ].map(intent => (
-            <div key={intent.label} className="intention-card" style={{ padding: "18px 14px", textAlign: "center", cursor: "pointer", background: "#fff", border: "1px solid rgba(212,175,55,0.18)", borderRadius: "16px", boxShadow: "0 6px 18px -14px rgba(0,0,0,0.18)", transition: "transform 0.2s, border-color 0.2s, box-shadow 0.2s" }} onClick={() => navigate("/shop")} onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(212,175,55,0.42)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)' }} onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(212,175,55,0.18)'; (e.currentTarget as HTMLDivElement).style.transform = 'none' }}>
-              <div className="intention-card__icon" style={{ width: "38px", height: "38px", borderRadius: "50%", display: "grid", placeItems: "center", margin: "0 auto 10px", background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.22)", fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "14px", color: "var(--yn-gold-strong)", letterSpacing: "0.04em" }}>{intent.letter}</div>
-              <div className="intention-card__label" style={{ fontFamily: "var(--yn-font-label)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#1e1c16" }}>{intent.label}</div>
+        <div className="yn-bento" style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gridTemplateRows: "auto auto", gap: "16px", marginTop: "28px" }}>
+          {/* Love — 1.6fr spanning 2 rows */}
+          <Link to="/shop?chapter=love" style={{ gridRow: "1 / span 2", background: "#fff", border: "1px solid rgba(232,160,191,0.22)", borderRadius: "16px", padding: "22px 18px", display: "grid", gap: "12px", textDecoration: "none", boxShadow: "0 6px 18px -14px rgba(0,0,0,0.18)", transition: "transform 0.3s, border-color 0.3s", color: "inherit" }}>
+            <div style={{ width: "44px", height: "44px", borderRadius: "50%", display: "grid", placeItems: "center", background: "rgba(232,160,191,0.14)", border: "1px solid rgba(232,160,191,0.28)", fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "14px", color: "#8a4a6a" }}>♡</div>
+            <span style={{ fontFamily: "var(--yn-font-label)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--yn-gold-strong)" }}>Chapter 01</span>
+            <h3 style={{ fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "22px", color: "#1a1a1e", margin: 0 }}>Love</h3>
+            <p style={{ fontFamily: "var(--yn-font-body)", fontSize: "13px", color: "#6b645c", lineHeight: 1.6, margin: 0 }}>Attraction, harmony, repair — Venus-led picks.</p>
+            <div style={{ aspectRatio: "4/3", borderRadius: "12px", overflow: "hidden", background: "#FFFBF0", marginTop: "4px" }}>
+              <img src="/products/pearl-chandra-sukh-bracelet.webp" alt="Love" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
             </div>
-          ))}
+            <span style={{ fontFamily: "var(--yn-font-label)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--yn-gold-strong)" }}>Explore Love →</span>
+          </Link>
+          {/* Becoming — top right */}
+          <Link to="/shop?chapter=becoming" style={{ background: "#fff", border: "1px solid rgba(212,175,55,0.18)", borderRadius: "16px", padding: "18px", display: "grid", gap: "8px", textDecoration: "none", boxShadow: "0 6px 18px -14px rgba(0,0,0,0.18)", color: "inherit" }}>
+            <div style={{ width: "36px", height: "36px", borderRadius: "50%", display: "grid", placeItems: "center", background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.22)", fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "13px", color: "var(--yn-gold-strong)" }}>↗</div>
+            <h3 style={{ fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "18px", color: "#1a1a1e", margin: 0 }}>Becoming</h3>
+            <p style={{ fontFamily: "var(--yn-font-body)", fontSize: "12px", color: "#6b645c", lineHeight: 1.5, margin: 0 }}>Grow, start, steady — Mercury & Saturn.</p>
+            <span style={{ fontFamily: "var(--yn-font-label)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--yn-gold-strong)" }}>Career · Confidence →</span>
+          </Link>
+          {/* Shelter — bottom right */}
+          <Link to="/shop?chapter=shelter" style={{ background: "#fff", border: "1px solid rgba(14,42,71,0.14)", borderRadius: "16px", padding: "18px", display: "grid", gap: "8px", textDecoration: "none", boxShadow: "0 6px 18px -14px rgba(0,0,0,0.18)", color: "inherit" }}>
+            <div style={{ width: "36px", height: "36px", borderRadius: "50%", display: "grid", placeItems: "center", background: "rgba(14,42,71,0.08)", border: "1px solid rgba(14,42,71,0.18)", fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "13px", color: "#0E2A47" }}>⌂</div>
+            <h3 style={{ fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "18px", color: "#1a1a1e", margin: 0 }}>Shelter</h3>
+            <p style={{ fontFamily: "var(--yn-font-body)", fontSize: "12px", color: "#6b645c", lineHeight: 1.5, margin: 0 }}>Calm, home, gifting — Moon & Jupiter.</p>
+            <span style={{ fontFamily: "var(--yn-font-label)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#0E2A47" }}>Calm · Home →</span>
+          </Link>
+        </div>
+        <div style={{ marginTop: "16px", textAlign: "center" }}>
+          <Link to="/shop" style={{ fontFamily: "var(--yn-font-label)", fontSize: "11px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--yn-gold-strong)", textDecoration: "none" }}>View all intentions →</Link>
         </div>
       </section>
+
+      {/* Proof marquee — trust */}
+      <div className="yn-marquee" style={{ background: '#FFFBF0', borderTop: '1px solid rgba(212,175,55,0.12)', borderBottom: '1px solid rgba(212,175,55,0.12)', padding: '12px 0', margin: '8px 0' }}>
+        <div className="yn-marquee__track" style={{ display: 'inline-flex', gap: '28px', alignItems: 'center' }}>
+          {['14 keepsakes · 108 chants', '27 nakshatras · 120-year cycle', 'Vedic + intention curated', 'No generic · Only personal', 'Crafted to birth time'].concat(['14 keepsakes · 108 chants', '27 nakshatras · 120-year cycle', 'Vedic + intention curated', 'No generic · Only personal', 'Crafted to birth time']).map((t, i) => (
+            <span key={i} style={{ fontFamily: 'var(--yn-font-label)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(26,26,30,0.55)', whiteSpace: 'nowrap', display: 'inline-flex', gap: '8px', alignItems: 'center' }}><span style={{ color: 'var(--yn-gold)' }}>✦</span>{t}</span>
+          ))}
+        </div>
+      </div>
 
       {/* 7. Featured Products */}
       <section className="section">
@@ -98,7 +119,7 @@ export default function HomePage() {
             const price = api.variantPrice(p)
             return (
               <div key={p.id} className="product-card glass-card">
-                <Link to={`/products/${p.handle}`} className="product-card__image-wrap">
+                <Link to={`/product/${p.handle}`} className="product-card__image-wrap">
                   {p.thumbnail && <img src={p.thumbnail} alt={p.title} className="product-card__image" style={{ width: "100%", height: "auto" }} />}
                 </Link>
                 <div className="product-card__info">

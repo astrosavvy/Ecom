@@ -16,6 +16,13 @@
   --yn-ink-muted: rgba(245,237,224,0.65);
   --yn-ink-faint: rgba(245,237,224,0.35);
 
+  /* Cream paper — light editorial surfaces */
+  --yn-cream: #FFFBF0;
+  --yn-cream-soft: #FFF8E8;
+  --yn-ink-on-cream: #1a1a1e;
+  --yn-ink-on-cream-soft: #6b645c;
+  --yn-ink-on-cream-muted: #4a443c;
+
   /* Celestial Amber — primary */
   --yn-gold: #D4AF37;
   --yn-gold-strong: #B8860B;
