@@ -12,14 +12,23 @@ import Products from "./pages/Products"
 import Journal from "./pages/Journal"
 import Team from "./pages/Team"
 import JournalEdit from "./pages/JournalEdit"
+import ThemeManager from "./pages/ThemeManager"
+import RecommendationRules from "./pages/RecommendationRules"
+import ProductMetadata from "./pages/ProductMetadata"
 
-const NAV: Array<{ to: string; label: string; icon: string; roles: Role[] }> = [
+const MAIN_NAV: Array<{ to: string; label: string; icon: string; roles: Role[] }> = [
   { to: "/admin", label: "Home", icon: "◈", roles: ["admin"] },
   { to: "/admin/orders", label: "Orders", icon: "❒", roles: ["admin", "support"] },
   { to: "/admin/customers", label: "Customers", icon: "☺", roles: ["admin", "support"] },
   { to: "/admin/products", label: "Products", icon: "❖", roles: ["admin"] },
   { to: "/admin/journal", label: "Journal", icon: "✎", roles: ["admin", "marketing"] },
   { to: "/admin/team", label: "Team", icon: "⚭", roles: ["admin"] },
+]
+
+const PERS_NAV: Array<{ to: string; label: string; icon: string; roles: Role[] }> = [
+  { to: "/admin/themes", label: "Themes", icon: "✧", roles: ["admin"] },
+  { to: "/admin/rules", label: "Rules", icon: "⍟", roles: ["admin"] },
+  { to: "/admin/metadata", label: "Metadata", icon: "⎈", roles: ["admin"] },
 ]
 
 export default function AdminApp() {
@@ -58,7 +67,8 @@ export default function AdminApp() {
     return <Login onDone={setMe} />
   }
 
-  const nav = NAV.filter((n) => n.roles.includes(me.role))
+  const mainNav = MAIN_NAV.filter((n) => n.roles.includes(me.role))
+  const persNav = PERS_NAV.filter((n) => n.roles.includes(me.role))
 
   return (
     <div className="ad">
@@ -68,9 +78,20 @@ export default function AdminApp() {
           <span>Younoya <em>Console</em></span>
         </Link>
         <nav className="ad__nav">
-          {nav.map((n) => (
-            <NavLink key={n.to} to={n.to} end={n.to === "/admin"} icon={n.icon} label={n.label} />
-          ))}
+          <div className="ad__nav-section">
+            <small style={{ padding: "0 1rem", color: "#6B7280", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "0.5rem" }}>Main</small>
+            {mainNav.map((n) => (
+              <NavLink key={n.to} to={n.to} end={n.to === "/admin"} icon={n.icon} label={n.label} />
+            ))}
+          </div>
+          {persNav.length > 0 && (
+            <div className="ad__nav-section" style={{ marginTop: "1.5rem" }}>
+              <small style={{ padding: "0 1rem", color: "#6B7280", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: "0.5rem" }}>Personalisation</small>
+              {persNav.map((n) => (
+                <NavLink key={n.to} to={n.to} end={false} icon={n.icon} label={n.label} />
+              ))}
+            </div>
+          )}
         </nav>
         <div className="ad__me">
           <span className="ad__me-avatar">{me.first_name.slice(0, 1).toUpperCase()}</span>
@@ -93,6 +114,9 @@ export default function AdminApp() {
           <Route path="/journal/new" element={<JournalEdit />} />
           <Route path="/journal/:id" element={<JournalEdit />} />
           <Route path="/team" element={<Team />} />
+          <Route path="/themes" element={<ThemeManager />} />
+          <Route path="/rules" element={<RecommendationRules />} />
+          <Route path="/metadata" element={<ProductMetadata />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </main>

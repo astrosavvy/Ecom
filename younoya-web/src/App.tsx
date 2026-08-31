@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { initScroll, ScrollTrigger } from './lib/scroll'
 import { StoreProvider } from './lib/store'
@@ -6,6 +6,7 @@ import FilmStage from './sections/FilmStage'
 import { Header, Rail, Cursor } from './sections/Header'
 import Preloader from './sections/Preloader'
 import StoreLayout from './store/StoreLayout'
+import HomePage from './store/pages/HomePage'
 import Journey from './store/pages/Journey'
 import Explore from './store/pages/Explore'
 import Shop from './store/pages/Shop'
@@ -17,6 +18,11 @@ import Account from './store/pages/Account'
 import Blog from './store/pages/Blog'
 import BlogPost from './store/pages/BlogPost'
 import AdminApp from './admin/AdminApp'
+
+const PersonaliseFlow = lazy(() => import('./store/pages/PersonaliseFlow'))
+const Journal = lazy(() => import('./store/pages/Journal'))
+const JournalArticle = lazy(() => import('./store/pages/JournalArticle'))
+const About = lazy(() => import('./store/pages/About'))
 
 function FilmHome() {
   const filmState = useRef({ t: 0, vel: 0 })
@@ -46,7 +52,7 @@ function FilmHome() {
 
   return (
     <div id="top">
-      <h1 className="sr-only">Younoya — gifts chosen by the stars, from a neon-night vault</h1>
+      <h1 className="sr-only">YOUNOYA — Personalised gifting. Personal meaning.</h1>
       {!gateGone && <Preloader done={gateOpen} />}
       <Header />
       <Rail />
@@ -66,26 +72,53 @@ function ScrollToTop() {
   return null
 }
 
+const SuspenseFallback = <div className="section" style={{ minHeight: '40vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><p style={{ color: 'var(--ink-soft)' }}>Loading...</p></div>
+
 export default function App() {
   return (
     <StoreProvider>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<FilmHome />} />
+        {/* Cinematic WebGL film experience (legacy) */}
+        <Route path="/film" element={<FilmHome />} />
+
+        {/* Main storefront with header + footer */}
         <Route element={<StoreLayout />}>
-          <Route path="/journey" element={<Journey />} />
-          <Route path="/explore" element={<Explore />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/gifts" element={<Shop />} />
           <Route path="/product/:handle" element={<Product />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order/:id" element={<Order />} />
+
+          {/* Personalisation */}
+          <Route path="/personalise" element={<Suspense fallback={SuspenseFallback}><PersonaliseFlow /></Suspense>} />
+
+          {/* Journal */}
+          <Route path="/journal" element={<Suspense fallback={SuspenseFallback}><Journal /></Suspense>} />
+          <Route path="/journal/category/:category" element={<Suspense fallback={SuspenseFallback}><Journal /></Suspense>} />
+          <Route path="/journal/:slug" element={<Suspense fallback={SuspenseFallback}><JournalArticle /></Suspense>} />
+
+          {/* Account & Dashboard */}
           <Route path="/account" element={<Account />} />
+          <Route path="/account/toolkits" element={<Account />} />
+          <Route path="/account/recipients" element={<Account />} />
+          <Route path="/account/wishlist" element={<Account />} />
+
+          {/* About */}
+          <Route path="/about" element={<Suspense fallback={SuspenseFallback}><About /></Suspense>} />
+
+          {/* Legacy routes (kept for backward compatibility) */}
+          <Route path="/journey" element={<Journey />} />
+          <Route path="/explore" element={<Explore />} />
           <Route path="/blog" element={<Blog />} />
-<Route path="/blog/:slug" element={<BlogPost />} />
-</Route>
-<Route path="/admin/*" element={<AdminApp />} />
-</Routes>
+          <Route path="/blog/:slug" element={<BlogPost />} />
+        </Route>
+
+        {/* Admin console */}
+        <Route path="/admin/*" element={<AdminApp />} />
+      </Routes>
     </StoreProvider>
   )
 }
