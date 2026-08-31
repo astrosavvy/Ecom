@@ -2227,3 +2227,7 @@ button {
 .journal-card__image { width: 100%; height: 200px; object-fit: cover; }
 .store__main { padding-top: 70px; } /* offset for fixed header */
 .sw-topbar, .sw-brand, .sw-nav, .sw-route, .sw-hint { display: none !important; }
+
+/* footer light */
+.store-footer { background: #FFFBF0; }
+.store-footer__brand-desc { color: #6b645c; }

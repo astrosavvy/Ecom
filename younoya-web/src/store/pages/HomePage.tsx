@@ -65,25 +65,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. How It Works */}
-      <section className="section">
-        <h2 className="section__title" style={{ textAlign: "center" }}>How It Works</h2>
-        <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap", justifyContent: "center", marginTop: "2rem" }}>
-          {[
-            { step: "01", title: "Share Details", desc: "Tell us a bit about yourself or the recipient." },
-            { step: "02", title: "Set Intentions", desc: "Choose what you want to manifest or support." },
-            { step: "03", title: "Receive Insights", desc: "Get a curated selection of objects aligned with the stars." }
-          ].map(s => (
-            <div key={s.step} className="glass-card" style={{ padding: "2rem", maxWidth: "300px", textAlign: "center" }}>
-              <h3 className="text-h2" style={{ color: "var(--color-gold)" }}>{s.step}</h3>
-              <h4 className="text-h2">{s.title}</h4>
-              <p>{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 6. Explore by Intention */}
+      {/* 5. Explore by Intention */}
       <section className="section">
         <h2 className="section__title" style={{ textAlign: "center" }}>Explore by Intention</h2>
         <div className="intention-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "1rem", marginTop: "2rem" }}>
