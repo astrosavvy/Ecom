@@ -43,15 +43,19 @@ export default function StoreHeader() {
         </Link>
 
         <nav className="store-header__nav" aria-label="Main navigation">
-          {NAV_LINKS.map(link => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`store-header__link${pathname.startsWith(link.path) ? ' store-header__link--active' : ''}`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map(link => {
+            const active = pathname === link.path || pathname.startsWith(link.path + '/')
+            return (
+              <Link
+                key={link.path}
+                to={link.path}
+                aria-current={active ? 'page' : undefined}
+                className={`store-header__link${active ? ' store-header__link--active' : ''}`}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
         </nav>
 
         <div className="store-header__actions">

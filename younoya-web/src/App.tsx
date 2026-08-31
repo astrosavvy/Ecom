@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react'
-import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
+import { Route, Routes, Navigate, Link, useLocation } from 'react-router-dom'
 import { initScroll, ScrollTrigger } from './lib/scroll'
 import { StoreProvider } from './lib/store'
-import FilmStage from './sections/FilmStage'
-import { Header, Rail, Cursor } from './sections/Header'
-import Preloader from './sections/Preloader'
 import StoreLayout from './store/StoreLayout'
+import { Header, Rail, Cursor } from './sections/Header'
+const FilmStage = lazy(() => import('./sections/FilmStage'))
+const Preloader = lazy(() => import('./sections/Preloader'))
 import HomePage from './store/pages/HomePage'
 import Shop from './store/pages/Shop'
 import Product from './store/pages/Product'
@@ -50,12 +50,14 @@ function FilmHome() {
   return (
     <div id="top">
       <h1 className="sr-only">YOUNOYA — Personalised gifting. Personal meaning.</h1>
-      {!gateGone && <Preloader done={gateOpen} />}
+      <Suspense fallback={null}>{!gateGone && <Preloader done={gateOpen} />}</Suspense>
       <Header />
       <Rail />
       <Cursor />
       <main>
-        <FilmStage stateRef={filmState} onProgress={onProgress} onReady={onReady} />
+        <Suspense fallback={<div style={{ height: '100vh', background: '#07080E' }} />}>
+          <FilmStage stateRef={filmState} onProgress={onProgress} onReady={onReady} />
+        </Suspense>
       </main>
     </div>
   )
@@ -107,6 +109,7 @@ export default function App() {
 
           {/* About */}
           <Route path="/about" element={<Suspense fallback={SuspenseFallback}><About /></Suspense>} />
+          <Route path="*" element={<div className="page" style={{ textAlign: 'center', padding: '80px 20px' }}><h1 style={{ fontFamily: 'var(--yn-font-display)', fontSize: '32px', color: '#1a1a1e' }}>Page not found</h1><p style={{ marginTop: 12, fontFamily: 'var(--yn-font-body)', color: '#6b645c' }}>The chapter you seek has moved. <Link to="/" style={{ color: 'var(--yn-gold-strong)', textDecoration: 'underline' }}>Back to home</Link></p></div>} />
 
           {/* Legacy routes (kept for backward compatibility) */}
           <Route path="/journey" element={<Navigate to="/personalise?chapter=threshold" replace />} />
