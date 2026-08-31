@@ -16,6 +16,7 @@ import Order from './store/pages/Order'
 import Account from './store/pages/Account'
 import Blog from './store/pages/Blog'
 import BlogPost from './store/pages/BlogPost'
+import AdminApp from './admin/AdminApp'
 
 function FilmHome() {
   const filmState = useRef({ t: 0, vel: 0 })
@@ -81,9 +82,10 @@ export default function App() {
           <Route path="/order/:id" element={<Order />} />
           <Route path="/account" element={<Account />} />
           <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-        </Route>
-      </Routes>
+<Route path="/blog/:slug" element={<BlogPost />} />
+</Route>
+<Route path="/admin/*" element={<AdminApp />} />
+</Routes>
     </StoreProvider>
   )
 }
