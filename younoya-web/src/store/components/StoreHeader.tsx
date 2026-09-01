@@ -3,11 +3,10 @@ import { Link, useLocation } from 'react-router-dom'
 import { useStore } from '../../lib/store'
 
 const NAV_LINKS = [
-  { label: 'Shop', path: '/shop' },
-  { label: 'Personalised', path: '/personalise' },
-  { label: 'Gifts', path: '/gifts' },
-  { label: 'Journal', path: '/journal' },
+  { label: 'Work', path: '/shop' },
   { label: 'About', path: '/about' },
+  { label: 'Journal', path: '/journal' },
+  { label: 'Personalise', path: '/personalise' },
 ]
 
 export default function StoreHeader() {
@@ -37,12 +36,12 @@ export default function StoreHeader() {
 
   return (
     <>
-      <header className="store-header" ref={ref} data-hidden="false">
-        <Link to="/" className="store-header__brand" aria-label="YOUNOYA — for every chapter">
-          <img src="/younoya-gold.svg" alt="YOUNOYA for every chapter" className="store-header__logo" style={{ height: "44px", width: "auto" }} />
+      <header className="store-header dash-header" ref={ref} data-hidden="false">
+        <Link to="/" className="store-header__brand dash-brand" aria-label="YOUNOYA — for every chapter">
+          <img src="/younoya-gold.svg" alt="YOUNOYA for every chapter" className="store-header__logo" style={{ height: "36px", width: "auto" }} />
         </Link>
 
-        <nav className="store-header__nav" aria-label="Main navigation">
+        <nav className="store-header__nav dash-nav" aria-label="Main navigation">
           {NAV_LINKS.map(link => {
             const active = pathname === link.path || pathname.startsWith(link.path + '/')
             return (
@@ -50,7 +49,7 @@ export default function StoreHeader() {
                 key={link.path}
                 to={link.path}
                 aria-current={active ? 'page' : undefined}
-                className={`store-header__link${active ? ' store-header__link--active' : ''}`}
+                className={`store-header__link dash-nav-link${active ? ' store-header__link--active' : ''}`}
               >
                 {link.label}
               </Link>
@@ -58,20 +57,20 @@ export default function StoreHeader() {
           })}
         </nav>
 
-        <div className="store-header__actions">
+        <div className="store-header__actions dash-actions">
           <Link to="/cart" className="store-header__cart-badge" aria-label={`Cart (${cartCount} items)`}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
             </svg>
             {cartCount > 0 && <span className="store-header__cart-count">{cartCount}</span>}
           </Link>
-
-          <Link to="/account" className="store-header__cart-badge" aria-label="My Account">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" />
-            </svg>
+          <Link to="/personalise" className="dash-cta">
+            Begin your chart
+            <span className="dash-cta__arrows" aria-hidden>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M5 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ marginLeft: "-6px" }}><path d="M5 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </span>
           </Link>
-
           <button className="store-header__menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               {menuOpen ? <path d="M18 6L6 18M6 6l12 12" /> : <path d="M3 12h18M3 6h18M3 18h18" />}
