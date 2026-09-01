@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from "react"
-import { useSearchParams } from "react-router-dom"
-import { api, fmtDate, getToken } from "../api"
-
-const API = import.meta.env.VITE_API_URL || "https://api.younoya.com"
+import { useEffect, useMemo, useState } from "react"
+import { Link } from "react-router-dom"
+import { api, fmtDate } from "../api"
 
 type Post = {
   id: string
@@ -30,39 +28,32 @@ function normalizeImageUrl(url: string): string {
   return trimmed
 }
 
-export default function Journal() {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const editIdFromUrl = searchParams.get("edit")
+const CATEGORIES = [
+  "All",
+  "Love & Relationships",
+  "Becoming & Career",
+  "Shelter & Home",
+  "Vedic Astrology",
+  "Consecration & Rituals",
+  "Gifting Guides",
+]
 
+export default function Journal() {
   const [posts, setPosts] = useState<Post[]>([])
   const [busy, setBusy] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
-
-  // Form states
-  const [editingId, setEditingId] = useState<string | null>(editIdFromUrl)
-  const [title, setTitle] = useState("")
-  const [excerpt, setExcerpt] = useState("")
-  const [content, setContent] = useState("")
-  const [cover, setCover] = useState<string>("")
-  const [listImage, setListImage] = useState<string>("")
-  const [customCoverUrl, setCustomCoverUrl] = useState("")
-  const [customListUrl, setCustomListUrl] = useState("")
-  const [author, setAuthor] = useState("YOUNOYA")
-  const [published, setPublished] = useState(false)
-  const [saving, setSaving] = useState(false)
-  const [uploading, setUploading] = useState<"cover" | "list" | false>(false)
-  const [activeTab, setActiveTab] = useState<"write" | "preview">("write")
-
-  const editorRef = useRef<HTMLDivElement>(null)
-  const contentTextareaRef = useRef<HTMLTextAreaElement>(null)
-  const fileInput = useRef<HTMLInputElement>(null)
-  const listInput = useRef<HTMLInputElement>(null)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all")
+  const [categoryFilter, setCategoryFilter] = useState("All")
 
   function loadPosts() {
     setBusy(true)
     api("/admin/blog/posts?limit=50")
-      .then((d: any) => setPosts(d.posts ?? []))
+      .then((d: any) => {
+        setPosts(d.posts ?? [])
+        setError(null)
+      })
       .catch((e) => setError(e instanceof Error ? e.message : "Could not load posts."))
       .finally(() => setBusy(false))
   }
@@ -71,652 +62,350 @@ export default function Journal() {
     loadPosts()
   }, [])
 
-  // Sync editing post when editingId changes
-  useEffect(() => {
-    if (!editingId) return
-    api(`/admin/blog/posts/${editingId}`)
-      .then((d: any) => {
-        if (!d.post) return
-        const p: Post = d.post
-        setTitle(p.title)
-        setExcerpt(p.excerpt ?? "")
-        setContent(p.content || "")
-        setCover(normalizeImageUrl(p.cover_image ?? ""))
-        setListImage(normalizeImageUrl(p.list_image ?? ""))
-        setCustomCoverUrl(normalizeImageUrl(p.cover_image ?? ""))
-        setCustomListUrl(normalizeImageUrl(p.list_image ?? ""))
-        setAuthor(p.author || "YOUNOYA")
-        setPublished(p.published)
-        editorRef.current?.scrollIntoView({ behavior: "smooth" })
-      })
-      .catch(() => setError("Could not load selected post."))
-  }, [editingId])
-
-  function resetForm() {
-    setEditingId(null)
-    setTitle("")
-    setExcerpt("")
-    setContent("")
-    setCover("")
-    setListImage("")
-    setCustomCoverUrl("")
-    setCustomListUrl("")
-    setAuthor("YOUNOYA")
-    setPublished(false)
-    setError(null)
-    setSuccessMsg(null)
-    setSearchParams({})
-  }
-
-  function startEdit(p: Post) {
-    setEditingId(p.id)
-    setTitle(p.title)
-    setExcerpt(p.excerpt ?? "")
-    setContent(p.content || "")
-    setCover(normalizeImageUrl(p.cover_image ?? ""))
-    setListImage(normalizeImageUrl(p.list_image ?? ""))
-    setCustomCoverUrl(normalizeImageUrl(p.cover_image ?? ""))
-    setCustomListUrl(normalizeImageUrl(p.list_image ?? ""))
-    setAuthor(p.author || "YOUNOYA")
-    setPublished(p.published)
-    setSuccessMsg(null)
-    setError(null)
-    setSearchParams({ edit: p.id })
-    editorRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
-
-  function insertFormat(tagOpen: string, tagClose: string) {
-    const el = contentTextareaRef.current
-    if (!el) return
-    const start = el.selectionStart || 0
-    const end = el.selectionEnd || 0
-    const selected = el.value.substring(start, end) || "text"
-    const replacement = `${tagOpen}${selected}${tagClose}`
-    const nextValue = el.value.substring(0, start) + replacement + el.value.substring(end)
-    setContent(nextValue)
-    setTimeout(() => {
-      el.focus()
-      el.setSelectionRange(start + tagOpen.length, start + tagOpen.length + selected.length)
-    }, 0)
-  }
-
-  async function uploadImage(file: File, target: "cover" | "list") {
-    setUploading(target)
-    setError(null)
-    setSuccessMsg(null)
-    try {
-      const form = new FormData()
-      form.append("files", file)
-      const res = await fetch(`${API}/admin/uploads`, {
-        method: "POST",
-        headers: { authorization: `Bearer ${getToken()}` },
-        body: form,
-      })
-      if (!res.ok) {
-        const t = await res.text()
-        throw new Error(t || "Upload failed. Try a different image or paste image URL below.")
-      }
-      const data = await res.json()
-      const rawUrl = data.files?.[0]?.url ?? data.file?.url ?? data[0]?.url
-      if (rawUrl) {
-        const normalized = normalizeImageUrl(rawUrl)
-        if (target === "cover") {
-          setCover(normalized)
-          setCustomCoverUrl(normalized)
-        } else {
-          setListImage(normalized)
-          setCustomListUrl(normalized)
-        }
-        setSuccessMsg(`Image uploaded successfully!`)
-      } else {
-        throw new Error("Upload returned no image URL.")
-      }
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Image upload failed. You can paste a direct image URL instead.")
-    } finally {
-      setUploading(false)
-    }
-  }
-
-  async function handleSave(publishDirectly?: boolean) {
-    if (!title.trim()) {
-      setError("Please provide a title for the blog post.")
-      return
-    }
-
-    if (!content.trim() || content.trim().length < 5) {
-      setError("Please add article content before publishing or saving.")
-      return
-    }
-
-    setSaving(true)
-    setError(null)
-    setSuccessMsg(null)
-
-    const isPublished = publishDirectly !== undefined ? publishDirectly : published
-    const body: Record<string, unknown> = {
-      title: title.trim(),
-      content: content.trim(),
-      excerpt: excerpt.trim() || undefined,
-      cover_image: cover.trim() || undefined,
-      list_image: listImage.trim() || undefined,
-      author: author.trim() || "YOUNOYA",
-      published: isPublished,
-    }
-
-    try {
-      if (editingId) {
-        await api(`/admin/blog/posts/${editingId}`, {
-          method: "PUT",
-          body: JSON.stringify(body),
-        })
-        setSuccessMsg(isPublished ? "Article updated and published to storefront!" : "Draft updated successfully.")
-      } else {
-        const d = await api<{ post: { id: string } }>("/admin/blog/posts", {
-          method: "POST",
-          body: JSON.stringify(body),
-        })
-        setSuccessMsg(isPublished ? "New article published live to storefront!" : "New draft saved successfully.")
-        setEditingId(d.post.id)
-      }
-      if (publishDirectly !== undefined) setPublished(publishDirectly)
-      loadPosts()
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to save post.")
-    } finally {
-      setSaving(false)
-    }
-  }
-
   async function togglePublish(p: Post) {
     try {
       await api(`/admin/blog/posts/${p.id}`, {
         method: "PUT",
         body: JSON.stringify({ published: !p.published }),
       })
+      setSuccessMsg(`"${p.title}" is now ${!p.published ? "Live on Storefront" : "Draft"}.`)
       loadPosts()
-      if (editingId === p.id) {
-        setPublished(!p.published)
-      }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not toggle publish state.")
+      setError(e instanceof Error ? e.message : "Could not update status.")
     }
   }
 
   async function removePost(p: Post) {
-    if (!confirm(`Delete "${p.title}"? This action cannot be undone.`)) return
+    if (!confirm(`Are you sure you want to delete "${p.title}"? This cannot be undone.`)) return
     try {
       await api(`/admin/blog/posts/${p.id}`, { method: "DELETE" })
-      if (editingId === p.id) {
-        resetForm()
-      }
-      loadPosts()
       setSuccessMsg(`Deleted "${p.title}".`)
+      loadPosts()
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not delete post.")
     }
   }
 
+  const filteredPosts = useMemo(() => {
+    return posts.filter((p) => {
+      // Status filter
+      if (statusFilter === "published" && !p.published) return false
+      if (statusFilter === "draft" && p.published) return false
+
+      // Category filter matching
+      if (categoryFilter !== "All") {
+        const cat = categoryFilter.toLowerCase()
+        const text = `${p.title} ${p.excerpt || ""} ${p.content || ""}`.toLowerCase()
+        if (cat.includes("love") && !text.includes("love") && !text.includes("relationship")) return false
+        if (cat.includes("becoming") && !text.includes("career") && !text.includes("becoming") && !text.includes("work")) return false
+        if (cat.includes("shelter") && !text.includes("home") && !text.includes("shelter") && !text.includes("vastu")) return false
+        if (cat.includes("astrology") && !text.includes("astro") && !text.includes("vedic") && !text.includes("star") && !text.includes("dasha")) return false
+        if (cat.includes("consecration") && !text.includes("consecrat") && !text.includes("ritual") && !text.includes("108")) return false
+        if (cat.includes("gifting") && !text.includes("gift")) return false
+      }
+
+      // Search query
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase()
+        const matches =
+          p.title.toLowerCase().includes(q) ||
+          p.slug.toLowerCase().includes(q) ||
+          (p.author && p.author.toLowerCase().includes(q)) ||
+          (p.excerpt && p.excerpt.toLowerCase().includes(q))
+        if (!matches) return false
+      }
+
+      return true
+    })
+  }, [posts, statusFilter, categoryFilter, searchQuery])
+
   return (
     <div className="ad__page ad__page--wide" style={{ paddingBottom: "4rem" }}>
-      {/* Top Header */}
-      <header className="ad__head ad__head--row" style={{ alignItems: "center", marginBottom: "1.5rem" }}>
+      {/* Top Header with + New Article Action */}
+      <header className="ad__head ad__head--row" style={{ alignItems: "center", marginBottom: "1.75rem" }}>
         <div>
-          <h1 style={{ fontSize: "1.75rem", margin: "0 0 4px", color: "#1a1a1e" }}>Journal Studio</h1>
+          <h1 style={{ fontSize: "1.875rem", margin: "0 0 6px", color: "#1a1a1e", fontWeight: 400 }}>Journal & Stories</h1>
           <p style={{ margin: 0, color: "#6b645c", fontSize: "0.9375rem" }}>
-            Write stories, ritual guides, and keepsakes chronicles for the storefront.
+            Publish rituals, keepsakes guides, and astrological chapters to the storefront.
           </p>
         </div>
-        <div className="ad-actions">
-          {editingId ? (
-            <button className="ad-btn-plain" onClick={resetForm}>
-              + Write New Post
-            </button>
-          ) : (
-            <span className="ad-chip ad-chip--ok">Editor Ready</span>
-          )}
+        <div className="ad-actions" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <Link
+            to="/admin/journal/new"
+            className="ad-btn"
+            style={{
+              background: "var(--yn-gold, #D4AF37)",
+              color: "#07080E",
+              fontWeight: 600,
+              padding: "10px 22px",
+              borderRadius: "10px",
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "0.875rem",
+              boxShadow: "0 4px 14px -4px rgba(212, 175, 55, 0.4)",
+            }}
+          >
+            <span>+</span> Write New Article
+          </Link>
         </div>
       </header>
 
+      {/* Status Alerts */}
       {error && (
-        <div className="ad-error" style={{ padding: "10px 14px", background: "rgba(220, 38, 38, 0.08)", border: "1px solid rgba(220, 38, 38, 0.3)", borderRadius: "8px", color: "#dc2626", marginBottom: "1rem" }}>
+        <div style={{ padding: "12px 16px", background: "rgba(220, 38, 38, 0.08)", border: "1px solid rgba(220, 38, 38, 0.25)", borderRadius: "10px", color: "#dc2626", marginBottom: "1.25rem", fontSize: "0.875rem" }}>
           {error}
         </div>
       )}
       {successMsg && (
-        <div style={{ padding: "12px 16px", background: "rgba(52, 211, 153, 0.12)", border: "1px solid #34d399", borderRadius: "10px", color: "#065f46", marginBottom: "1.25rem", fontWeight: 500 }}>
+        <div style={{ padding: "12px 16px", background: "rgba(52, 211, 153, 0.12)", border: "1px solid #34d399", borderRadius: "10px", color: "#065f46", marginBottom: "1.25rem", fontSize: "0.875rem", fontWeight: 500 }}>
           ✓ {successMsg}
         </div>
       )}
 
-      {/* Main Authoring Card */}
-      <section
+      {/* Filter and Search Bar Card */}
+      <div
         className="ad-card"
-        ref={editorRef}
         style={{
-          background: "#FFFBF0",
-          border: "1px solid rgba(212, 175, 55, 0.25)",
-          borderRadius: "16px",
-          padding: "20px 24px",
-          marginBottom: "2.5rem",
-          boxShadow: "0 4px 20px -6px rgba(0,0,0,0.08)"
+          background: "#fff",
+          borderRadius: "14px",
+          padding: "14px 18px",
+          marginBottom: "1.5rem",
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "14px",
+          justifyContent: "space-between",
+          alignItems: "center",
+          border: "1px solid rgba(26,26,30,0.06)",
         }}
       >
-        {/* Editor Title Banner */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(26,26,30,0.08)", paddingBottom: "14px", marginBottom: "18px", flexWrap: "wrap", gap: "12px" }}>
-          <div>
-            <span style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 700, color: "var(--yn-gold, #D4AF37)", display: "block" }}>
-              {editingId ? "Editing Existing Post" : "Compose New Story"}
-            </span>
-            <h2 style={{ fontSize: "1.35rem", margin: "4px 0 0", color: "#1a1a1e", fontWeight: 500 }}>
-              {title ? title : "Untitled Story"}
-            </h2>
-          </div>
-          <div className="ad-actions" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            {editingId && (
-              <button className="ad-btn-plain" type="button" onClick={resetForm} disabled={saving}>
-                Cancel Edit
-              </button>
-            )}
-            <button
-              className="ad-btn-plain"
-              type="button"
-              disabled={saving || !!uploading}
-              onClick={() => handleSave(false)}
-              style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.15)", padding: "8px 16px", borderRadius: "8px", cursor: "pointer" }}
-            >
-              {saving ? "Saving…" : "Save Draft"}
-            </button>
-            <button
-              className="ad-btn"
-              type="button"
-              style={{ background: "var(--yn-gold, #D4AF37)", color: "#07080E", fontWeight: 600, padding: "8px 20px", borderRadius: "8px", cursor: "pointer", border: "none" }}
-              disabled={saving || !!uploading}
-              onClick={() => handleSave(true)}
-            >
-              {saving ? "Publishing…" : published && editingId ? "Update Live Post" : "★ Publish Live"}
-            </button>
-          </div>
-        </div>
-
-        {/* Post Title */}
-        <div style={{ marginBottom: "16px" }}>
-          <label style={{ display: "block", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "#6b645c", marginBottom: "6px", fontWeight: 700 }}>
-            Post Title *
-          </label>
+        {/* Search Input */}
+        <div style={{ flex: "1", minWidth: "260px", position: "relative" }}>
           <input
-            className="ad-editor__title"
-            placeholder="e.g. Consecration of the Rose Quartz Atelier"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            style={{ width: "100%", fontSize: "1.5rem", padding: "10px 14px", background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "10px", outline: "none", color: "#1a1a1e" }}
+            type="text"
+            placeholder="Search stories by title, slug, or author…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "9px 14px",
+              borderRadius: "8px",
+              border: "1px solid rgba(26,26,30,0.1)",
+              background: "#FFFBF0",
+              fontSize: "0.875rem",
+              outline: "none",
+              color: "#1a1a1e",
+            }}
           />
         </div>
 
-        {/* Excerpt */}
-        <div style={{ marginBottom: "18px" }}>
-          <label style={{ display: "block", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "#6b645c", marginBottom: "6px", fontWeight: 700 }}>
-            Teaser Excerpt (1-2 sentences shown on journal grid cards and SEO)
-          </label>
-          <textarea
-            placeholder="A short teaser summary for preview cards..."
-            value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
-            rows={2}
-            style={{ width: "100%", padding: "10px 14px", background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "10px", outline: "none", fontSize: "0.875rem", color: "#1a1a1e", resize: "vertical" }}
-          />
+        {/* Status Dropdown */}
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <label style={{ fontSize: "0.8125rem", color: "#6b645c", fontWeight: 600 }}>Status:</label>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as any)}
+            style={{
+              padding: "8px 12px",
+              borderRadius: "8px",
+              border: "1px solid rgba(26,26,30,0.1)",
+              background: "#FFFBF0",
+              fontSize: "0.8125rem",
+              color: "#1a1a1e",
+              outline: "none",
+              cursor: "pointer",
+            }}
+          >
+            <option value="all">All ({posts.length})</option>
+            <option value="published">Live on Store ({posts.filter((p) => p.published).length})</option>
+            <option value="draft">Drafts ({posts.filter((p) => !p.published).length})</option>
+          </select>
         </div>
+      </div>
 
-        {/* Dual Image Uploaders */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "18px", marginBottom: "20px" }}>
-          {/* 16:9 Cover Hero */}
-          <div style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.08)", borderRadius: "12px", padding: "16px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-              <strong style={{ fontSize: "0.875rem", color: "#1a1a1e" }}>Cover Image (16:9)</strong>
-              <small style={{ color: "#8a8175" }}>Article hero header</small>
-            </div>
-            
-            {cover ? (
-              <div style={{ position: "relative", marginBottom: "10px" }}>
-                <img
-                  src={cover}
-                  alt="16:9 Cover Preview"
-                  style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", borderRadius: "8px", border: "1px solid rgba(26,26,30,0.1)" }}
-                  onError={() => setError("Cover image URL failed to load. Please verify link.")}
-                />
-                <button
-                  type="button"
-                  onClick={() => { setCover(""); setCustomCoverUrl(""); }}
-                  style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,0.75)", color: "#fff", border: "none", borderRadius: "4px", padding: "4px 8px", fontSize: "11px", cursor: "pointer" }}
-                >
-                  Remove
-                </button>
-              </div>
-            ) : (
-              <div style={{ width: "100%", aspectRatio: "16/9", display: "grid", placeItems: "center", border: "1px dashed rgba(26,26,30,0.2)", borderRadius: "8px", background: "rgba(255,251,240,0.6)", color: "#8a8175", textAlign: "center", padding: "12px", marginBottom: "10px", fontSize: "0.8125rem" }}>
-                No cover image selected
-                <br /><small style={{ opacity: 0.7 }}>1920×1080 or 1200×675 recommended</small>
-              </div>
-            )}
-
-            <input
-              ref={fileInput}
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], "cover")}
-            />
-            <div style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
-              <button
-                type="button"
-                className="ad-btn-plain"
-                disabled={!!uploading}
-                onClick={() => fileInput.current?.click()}
-                style={{ fontSize: "0.8125rem", padding: "7px 14px", background: "#f3ede2", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.1)", cursor: "pointer" }}
-              >
-                {uploading === "cover" ? "Uploading…" : "📁 Upload 16:9 Image"}
-              </button>
-            </div>
-            <div>
-              <input
-                type="url"
-                placeholder="Or paste direct image URL (https://...)"
-                value={customCoverUrl}
-                onChange={(e) => {
-                  setCustomCoverUrl(e.target.value)
-                  setCover(normalizeImageUrl(e.target.value))
-                }}
-                style={{ width: "100%", fontSize: "0.75rem", padding: "7px 10px", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.12)", background: "#FFFBF0" }}
-              />
-            </div>
-          </div>
-
-          {/* 1:1 List Image */}
-          <div style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.08)", borderRadius: "12px", padding: "16px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-              <strong style={{ fontSize: "0.875rem", color: "#1a1a1e" }}>Grid Image (1:1)</strong>
-              <small style={{ color: "#8a8175" }}>Card listing square</small>
-            </div>
-
-            {listImage ? (
-              <div style={{ position: "relative", marginBottom: "10px", width: "140px", margin: "0 auto" }}>
-                <img
-                  src={listImage}
-                  alt="1:1 List Preview"
-                  style={{ width: "140px", height: "140px", objectFit: "cover", borderRadius: "8px", border: "1px solid rgba(26,26,30,0.1)" }}
-                  onError={() => setError("1:1 image URL failed to load. Please verify link.")}
-                />
-                <button
-                  type="button"
-                  onClick={() => { setListImage(""); setCustomListUrl(""); }}
-                  style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,0.75)", color: "#fff", border: "none", borderRadius: "4px", padding: "4px 8px", fontSize: "11px", cursor: "pointer" }}
-                >
-                  Remove
-                </button>
-              </div>
-            ) : (
-              <div style={{ width: "100%", aspectRatio: "16/9", display: "grid", placeItems: "center", border: "1px dashed rgba(26,26,30,0.2)", borderRadius: "8px", background: "rgba(255,251,240,0.6)", color: "#8a8175", textAlign: "center", padding: "12px", marginBottom: "10px", fontSize: "0.8125rem" }}>
-                No grid image selected
-                <br /><small style={{ opacity: 0.7 }}>600×600 square recommended</small>
-              </div>
-            )}
-
-            <input
-              ref={listInput}
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], "list")}
-            />
-            <div style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
-              <button
-                type="button"
-                className="ad-btn-plain"
-                disabled={!!uploading}
-                onClick={() => listInput.current?.click()}
-                style={{ fontSize: "0.8125rem", padding: "7px 14px", background: "#f3ede2", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.1)", cursor: "pointer" }}
-              >
-                {uploading === "list" ? "Uploading…" : "📁 Upload 1:1 Image"}
-              </button>
-            </div>
-            <div>
-              <input
-                type="url"
-                placeholder="Or paste direct image URL (https://...)"
-                value={customListUrl}
-                onChange={(e) => {
-                  setCustomListUrl(e.target.value)
-                  setListImage(normalizeImageUrl(e.target.value))
-                }}
-                style={{ width: "100%", fontSize: "0.75rem", padding: "7px 10px", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.12)", background: "#FFFBF0" }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Content Formatting Toolbar & Editor Tabs */}
-        <div style={{ marginBottom: "18px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", flexWrap: "wrap", gap: "8px" }}>
-            <label style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "#6b645c", fontWeight: 700 }}>
-              Article Body Content *
-            </label>
-            <div style={{ display: "flex", gap: "6px" }}>
-              <button
-                type="button"
-                onClick={() => setActiveTab("write")}
-                style={{
-                  padding: "5px 12px",
-                  borderRadius: "6px",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  border: "1px solid rgba(26,26,30,0.15)",
-                  background: activeTab === "write" ? "var(--yn-gold, #D4AF37)" : "#fff",
-                  color: activeTab === "write" ? "#07080E" : "#1a1a1e"
-                }}
-              >
-                ✏️ Write
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("preview")}
-                style={{
-                  padding: "5px 12px",
-                  borderRadius: "6px",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  border: "1px solid rgba(26,26,30,0.15)",
-                  background: activeTab === "preview" ? "var(--yn-gold, #D4AF37)" : "#fff",
-                  color: activeTab === "preview" ? "#07080E" : "#1a1a1e"
-                }}
-              >
-                👁️ Live Preview
-              </button>
-            </div>
-          </div>
-
-          {activeTab === "write" ? (
-            <div>
-              {/* Quick formatting buttons */}
-              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "8px", background: "#f3ede2", padding: "6px 8px", borderRadius: "8px", border: "1px solid rgba(26,26,30,0.08)" }}>
-                <button type="button" onClick={() => insertFormat("<strong>", "</strong>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }}><b>B</b></button>
-                <button type="button" onClick={() => insertFormat("<em>", "</em>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }}><i>I</i></button>
-                <button type="button" onClick={() => insertFormat("<h2>", "</h2>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }}>H2</button>
-                <button type="button" onClick={() => insertFormat("<h3>", "</h3>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }}>H3</button>
-                <button type="button" onClick={() => insertFormat("<ul>\n  <li>", "</li>\n</ul>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }}>• List</button>
-                <button type="button" onClick={() => insertFormat("<blockquote>", "</blockquote>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }}>❝ Quote</button>
-                <button type="button" onClick={() => insertFormat("<hr />\n", "")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }}>― Line</button>
-                <button type="button" onClick={() => insertFormat("<p>", "</p>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }}>Paragraph</button>
-              </div>
-
-              <textarea
-                ref={contentTextareaRef}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={12}
-                placeholder="Write your article story here (supports paragraphs, headings, lists, quotes)..."
-                style={{
-                  width: "100%",
-                  minHeight: "280px",
-                  padding: "14px 16px",
-                  background: "#fff",
-                  border: "1px solid rgba(26,26,30,0.12)",
-                  borderRadius: "10px",
-                  outline: "none",
-                  fontFamily: "var(--font-body, Inter, sans-serif)",
-                  fontSize: "0.9375rem",
-                  lineHeight: "1.7",
-                  color: "#1a1a1e",
-                  resize: "vertical"
-                }}
-              />
-            </div>
-          ) : (
-            <div
+      {/* Category Pills Strip */}
+      <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "12px", marginBottom: "1.25rem" }}>
+        {CATEGORIES.map((cat) => {
+          const active = categoryFilter === cat
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setCategoryFilter(cat)}
               style={{
-                minHeight: "280px",
-                padding: "20px 24px",
-                background: "#fff",
-                border: "1px solid rgba(26,26,30,0.12)",
-                borderRadius: "10px",
-                fontFamily: "var(--font-body, Inter, sans-serif)",
-                color: "#1a1a1e",
-                lineHeight: "1.7"
+                padding: "6px 14px",
+                borderRadius: "20px",
+                fontSize: "0.8125rem",
+                fontWeight: active ? 600 : 500,
+                border: active ? "1px solid var(--yn-gold, #D4AF37)" : "1px solid rgba(26,26,30,0.08)",
+                background: active ? "rgba(212, 175, 55, 0.12)" : "#fff",
+                color: active ? "#B8860B" : "#5a534a",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+                transition: "all 0.15s ease",
               }}
             >
-              {content ? (
-                <div dangerouslySetInnerHTML={{ __html: content }} />
-              ) : (
-                <p style={{ color: "#8a8175", fontStyle: "italic" }}>No content written yet. Switch to the 'Write' tab to compose your story.</p>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Author & Actions Bar */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "14px", borderTop: "1px solid rgba(26,26,30,0.08)", flexWrap: "wrap", gap: "12px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <label style={{ fontSize: "0.8125rem", color: "#6b645c", fontWeight: 600 }}>Author:</label>
-            <input
-              type="text"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              style={{ padding: "6px 10px", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.12)", fontSize: "0.8125rem", width: "160px", background: "#fff" }}
-            />
-            <span className={`ad-chip ad-chip--${published ? "ok" : "wait"}`}>
-              {published ? "● Live on Store" : "○ Draft Mode"}
-            </span>
-          </div>
-
-          <div className="ad-actions" style={{ display: "flex", gap: "10px" }}>
-            {editingId && (
-              <button className="ad-btn-plain" type="button" onClick={resetForm} disabled={saving}>
-                Reset
-              </button>
-            )}
-            <button
-              className="ad-btn-plain"
-              type="button"
-              disabled={saving || !!uploading}
-              onClick={() => handleSave(false)}
-              style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.15)", padding: "8px 16px", borderRadius: "8px", cursor: "pointer" }}
-            >
-              {saving ? "Saving…" : "Save Draft"}
+              {cat}
             </button>
-            <button
-              className="ad-btn"
-              type="button"
-              style={{ background: "var(--yn-gold, #D4AF37)", color: "#07080E", fontWeight: 600, padding: "8px 20px", borderRadius: "8px", cursor: "pointer", border: "none" }}
-              disabled={saving || !!uploading}
-              onClick={() => handleSave(true)}
-            >
-              {saving ? "Publishing…" : published && editingId ? "Update Live Post" : "★ Publish Live"}
-            </button>
-          </div>
-        </div>
-      </section>
+          )
+        })}
+      </div>
 
-      {/* Published & Draft Articles Table */}
-      <section className="ad-card" style={{ background: "#fff", borderRadius: "16px", padding: "18px 20px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+      {/* Articles Table Card */}
+      <section className="ad-card" style={{ background: "#fff", borderRadius: "16px", padding: "18px 22px", border: "1px solid rgba(26,26,30,0.06)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", borderBottom: "1px solid rgba(26,26,30,0.06)", paddingBottom: "12px" }}>
           <div>
-            <h2 style={{ fontSize: "1.125rem", margin: 0, color: "#1a1a1e" }}>All Articles ({posts.length})</h2>
-            <p style={{ fontSize: "0.8125rem", color: "#6b645c", margin: "2px 0 0" }}>
-              Click 'Edit' on any story to load it into the studio above.
-            </p>
+            <h2 style={{ fontSize: "1.125rem", margin: 0, color: "#1a1a1e", fontWeight: 500 }}>
+              Stories List ({filteredPosts.length})
+            </h2>
           </div>
+          <Link
+            to="/admin/journal/new"
+            style={{ fontSize: "0.8125rem", color: "var(--yn-gold, #D4AF37)", textDecoration: "none", fontWeight: 600 }}
+          >
+            + New Article →
+          </Link>
         </div>
 
         <table className="ad-table" style={{ width: "100%" }}>
           <thead>
             <tr>
-              <th style={{ width: "50px" }}>Image</th>
-              <th>Title</th>
+              <th style={{ width: "56px" }}>Media</th>
+              <th>Title & URL Slug</th>
               <th>Author</th>
-              <th>Date</th>
+              <th>Created</th>
               <th>Status</th>
-              <th className="ad-right">Actions</th>
+              <th className="ad-right" style={{ width: "170px" }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {busy && posts.length === 0 && (
-              <tr><td colSpan={6} className="ad-empty">Loading articles…</td></tr>
-            )}
-            {!busy && posts.length === 0 && (
-              <tr><td colSpan={6} className="ad-empty">No posts yet — write your first story in the studio above!</td></tr>
-            )}
-            {posts.map((p) => (
-              <tr key={p.id} style={editingId === p.id ? { background: "rgba(212, 175, 55, 0.1)" } : undefined}>
-                <td>
-                  {p.list_image || p.cover_image ? (
-                    <img
-                      src={normalizeImageUrl(p.list_image || p.cover_image || "")}
-                      alt=""
-                      style={{ width: "40px", height: "40px", objectFit: "cover", borderRadius: "6px" }}
-                    />
-                  ) : (
-                    <div style={{ width: "40px", height: "40px", borderRadius: "6px", background: "rgba(26,26,30,0.06)", display: "grid", placeItems: "center", fontSize: "12px" }}>
-                      ✎
-                    </div>
-                  )}
-                </td>
-                <td>
-                  <strong style={{ display: "block", color: "#1a1a1e" }}>{p.title}</strong>
-                  <small style={{ color: "#6b645c" }}>/{p.slug}</small>
-                </td>
-                <td>{p.author || "YOUNOYA"}</td>
-                <td>{fmtDate(p.created_at)}</td>
-                <td>
-                  <span className={`ad-chip ad-chip--${p.published ? "ok" : "wait"}`}>
-                    {p.published ? "Live" : "Draft"}
-                  </span>
-                </td>
-                <td className="ad-right">
-                  <div className="ad-actions">
-                    <button
-                      className="ad-btn-plain"
-                      onClick={() => startEdit(p)}
-                      title="Load into editor above"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="ad-btn-plain"
-                      onClick={() => togglePublish(p)}
-                    >
-                      {p.published ? "Unpublish" : "Publish"}
-                    </button>
-                    <button
-                      className="ad-btn-plain ad-danger"
-                      onClick={() => removePost(p)}
-                    >
-                      Delete
-                    </button>
-                  </div>
+              <tr>
+                <td colSpan={6} className="ad-empty" style={{ padding: "2.5rem 1rem", textAlign: "center", color: "#8a8175" }}>
+                  Loading articles…
                 </td>
               </tr>
-            ))}
+            )}
+            {!busy && filteredPosts.length === 0 && (
+              <tr>
+                <td colSpan={6} className="ad-empty" style={{ padding: "3rem 1rem", textAlign: "center" }}>
+                  <p style={{ color: "#6b645c", fontSize: "0.9375rem", margin: "0 0 1rem" }}>
+                    {searchQuery || categoryFilter !== "All" || statusFilter !== "all"
+                      ? "No articles match the selected filters."
+                      : "No articles published yet. Ready to start your journal?"}
+                  </p>
+                  <Link
+                    to="/admin/journal/new"
+                    className="ad-btn"
+                    style={{
+                      background: "var(--yn-gold, #D4AF37)",
+                      color: "#07080E",
+                      fontWeight: 600,
+                      padding: "8px 18px",
+                      borderRadius: "8px",
+                      textDecoration: "none",
+                      display: "inline-block",
+                      fontSize: "0.8125rem",
+                    }}
+                  >
+                    + Compose Your First Story
+                  </Link>
+                </td>
+              </tr>
+            )}
+            {filteredPosts.map((p) => {
+              const displayImg = p.list_image || p.cover_image
+              return (
+                <tr key={p.id}>
+                  <td>
+                    {displayImg ? (
+                      <img
+                        src={normalizeImageUrl(displayImg)}
+                        alt=""
+                        style={{ width: "44px", height: "44px", objectFit: "cover", borderRadius: "8px", border: "1px solid rgba(26,26,30,0.08)" }}
+                        onError={(e) => { (e.currentTarget as HTMLElement).style.display = "none" }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          width: "44px",
+                          height: "44px",
+                          borderRadius: "8px",
+                          background: "#FFFBF0",
+                          border: "1px dashed rgba(26,26,30,0.15)",
+                          display: "grid",
+                          placeItems: "center",
+                          fontSize: "14px",
+                          color: "#8a8175",
+                        }}
+                      >
+                        ✎
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    <strong style={{ display: "block", color: "#1a1a1e", fontSize: "0.9375rem" }}>
+                      {p.title}
+                    </strong>
+                    <div style={{ display: "flex", gap: "6px", alignItems: "center", marginTop: "2px" }}>
+                      <code style={{ fontSize: "0.75rem", color: "#8a8175", background: "rgba(26,26,30,0.04)", padding: "1px 6px", borderRadius: "4px" }}>
+                        /{p.slug}
+                      </code>
+                      {p.published && (
+                        <a
+                          href={`https://younoya.com/journal/${p.slug}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{ fontSize: "0.75rem", color: "var(--yn-gold, #D4AF37)", textDecoration: "underline" }}
+                        >
+                          View ↗
+                        </a>
+                      )}
+                    </div>
+                  </td>
+                  <td style={{ fontSize: "0.8125rem", color: "#5a534a" }}>
+                    {p.author || "YOUNOYA"}
+                  </td>
+                  <td style={{ fontSize: "0.8125rem", color: "#5a534a" }}>
+                    {fmtDate(p.created_at)}
+                  </td>
+                  <td>
+                    <span className={`ad-chip ad-chip--${p.published ? "ok" : "wait"}`}>
+                      {p.published ? "● Live" : "○ Draft"}
+                    </span>
+                  </td>
+                  <td className="ad-right">
+                    <div className="ad-actions" style={{ display: "flex", gap: "6px", justifyContent: "flex-end" }}>
+                      <Link
+                        to={`/admin/journal/${p.id}`}
+                        className="ad-btn-plain"
+                        style={{ textDecoration: "none", fontSize: "0.75rem", padding: "5px 10px" }}
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        type="button"
+                        className="ad-btn-plain"
+                        onClick={() => togglePublish(p)}
+                        style={{ fontSize: "0.75rem", padding: "5px 10px" }}
+                      >
+                        {p.published ? "Unpublish" : "Publish"}
+                      </button>
+                      <button
+                        type="button"
+                        className="ad-btn-plain ad-danger"
+                        onClick={() => removePost(p)}
+                        style={{ fontSize: "0.75rem", padding: "5px 8px" }}
+                        title="Delete story"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </section>
