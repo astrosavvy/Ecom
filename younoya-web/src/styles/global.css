@@ -2302,3 +2302,70 @@ button {
 .dash-card__title { margin-top: 14px; font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 18px; color: #0a0a0a; display: flex; align-items: center; gap: 8px; }
 .dash-card__desc { margin-top: 6px; font-family: 'Inter', sans-serif; font-size: 13px; color: #6b645c; line-height: 1.5; }
 .dash-card__arrow { margin-left: auto; display: inline-flex; gap: 2px; color: #0a0a0a; }
+
+/* YOUNOYA Journal Editorial Typography */
+.yn-journal-article-body {
+  color: #2c2824;
+  font-family: var(--yn-font-body, 'Inter', sans-serif);
+  font-size: 1.125rem;
+  line-height: 1.85;
+}
+.yn-journal-article-body p {
+  margin-bottom: 1.5rem;
+  color: #2c2824;
+}
+.yn-journal-article-body h2 {
+  font-family: var(--yn-font-display, 'Outfit', serif);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 450;
+  color: #1a1a1e;
+  margin: 2.5rem 0 1rem;
+  line-height: 1.25;
+}
+.yn-journal-article-body h3 {
+  font-family: var(--yn-font-display, 'Outfit', serif);
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 500;
+  color: #1a1a1e;
+  margin: 2rem 0 0.85rem;
+}
+.yn-journal-article-body blockquote {
+  border-left: 3px solid #D4AF37;
+  padding: 18px 24px;
+  background: rgba(212, 175, 55, 0.08);
+  border-radius: 0 12px 12px 0;
+  font-style: italic;
+  font-family: var(--yn-font-display, 'Outfit', serif);
+  font-size: 1.2rem;
+  line-height: 1.65;
+  color: #1a1a1e;
+  margin: 2rem 0;
+}
+.yn-journal-article-body ul, .yn-journal-article-body ol {
+  margin: 1.5rem 0;
+  padding-left: 1.75rem;
+  color: #2c2824;
+}
+.yn-journal-article-body li {
+  margin-bottom: 0.6rem;
+  line-height: 1.75;
+}
+.yn-journal-article-body hr {
+  border: 0;
+  height: 1px;
+  background: rgba(212, 175, 55, 0.3);
+  margin: 3rem 0;
+}
+.yn-journal-article-body a {
+  color: #B8860B;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.yn-journal-article-body strong {
+  color: #1a1a1e;
+  font-weight: 600;
+}
+.yn-journal-article-body em {
+  font-style: italic;
+}
+
