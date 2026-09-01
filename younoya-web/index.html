@@ -3,6 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <script>
+      (function() {
+        var suppress = function(msg) {
+          var s = String(msg || "");
+          return s.includes("startTime") || s.includes("reportAllChanges") || s.includes("beacon.min.js") || s.includes("ERR_BLOCKED_BY_CLIENT");
+        };
+        window.addEventListener("error", function(e) {
+          if (suppress(e.message) || suppress(e.error && e.error.message) || suppress(e.error && e.error.stack)) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+        window.addEventListener("unhandledrejection", function(e) {
+          if (suppress(e.reason && e.reason.message) || suppress(e.reason)) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }
+        }, true);
+      })();
+    </script>
     <title>YOUNOYA — For every chapter. Personalised gifting, curated by your stars.</title>
     <meta name="description" content="For every chapter — Love, Becoming, Shelter. Personalised keepsakes curated by Vedic astrology (moon sign, nakshatra, 120-year dasha) and consecrated 108×. Not by category, by what you want to invite." />
     <meta name="keywords" content="personalised gifts India, astrology gifts, rakhi, rashi gifts, nakshatra jewellery, vedic gifting, younoya" />
