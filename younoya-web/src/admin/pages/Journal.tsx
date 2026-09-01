@@ -120,34 +120,51 @@ export default function Journal() {
   }, [posts, statusFilter, categoryFilter, searchQuery])
 
   return (
-    <div className="ad__page ad__page--wide" style={{ paddingBottom: "4rem" }}>
-      {/* Top Header with + New Article Action */}
-      <header className="ad__head ad__head--row" style={{ alignItems: "center", marginBottom: "1.75rem" }}>
+    <div style={{ maxWidth: "1080px", margin: "0 auto", paddingBottom: "5rem" }}>
+      {/* Top Header with + New Article Action (Zero ad- classes) */}
+      <header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1.75rem",
+          flexWrap: "wrap",
+          gap: "16px",
+          background: "#fff",
+          padding: "20px 24px",
+          borderRadius: "16px",
+          border: "1px solid rgba(26,26,30,0.06)",
+          boxShadow: "0 4px 18px -6px rgba(0,0,0,0.06)",
+        }}
+      >
         <div>
-          <h1 style={{ fontSize: "1.875rem", margin: "0 0 6px", color: "#1a1a1e", fontWeight: 400 }}>Journal & Stories</h1>
+          <h1 style={{ fontSize: "1.875rem", margin: "0 0 6px", color: "#1a1a1e", fontWeight: 500, fontFamily: "var(--font-display, Georgia, serif)" }}>
+            Journal & Stories
+          </h1>
           <p style={{ margin: 0, color: "#6b645c", fontSize: "0.9375rem" }}>
             Publish rituals, keepsakes guides, and astrological chapters to the storefront.
           </p>
         </div>
-        <div className="ad-actions" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+        <div>
           <Link
             to="/admin/journal/new"
-            className="ad-btn"
             style={{
               background: "var(--yn-gold, #D4AF37)",
               color: "#07080E",
-              fontWeight: 600,
-              padding: "10px 22px",
+              fontWeight: 700,
+              padding: "12px 26px",
               borderRadius: "10px",
               textDecoration: "none",
               display: "inline-flex",
               alignItems: "center",
-              gap: "6px",
-              fontSize: "0.875rem",
-              boxShadow: "0 4px 14px -4px rgba(212, 175, 55, 0.4)",
+              gap: "8px",
+              fontSize: "0.9375rem",
+              boxShadow: "0 4px 14px -2px rgba(212, 175, 55, 0.45)",
+              border: "none",
+              cursor: "pointer",
             }}
           >
-            <span>+</span> Write New Article
+            <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>+</span> Add New Article
           </Link>
         </div>
       </header>
@@ -164,9 +181,8 @@ export default function Journal() {
         </div>
       )}
 
-      {/* Filter and Search Bar Card */}
+      {/* Search and Filters Bar (Zero ad- classes) */}
       <div
-        className="ad-card"
         style={{
           background: "#fff",
           borderRadius: "14px",
@@ -178,10 +194,11 @@ export default function Journal() {
           justifyContent: "space-between",
           alignItems: "center",
           border: "1px solid rgba(26,26,30,0.06)",
+          boxShadow: "0 2px 10px -4px rgba(0,0,0,0.04)",
         }}
       >
         {/* Search Input */}
-        <div style={{ flex: "1", minWidth: "260px", position: "relative" }}>
+        <div style={{ flex: "1", minWidth: "260px" }}>
           <input
             type="text"
             placeholder="Search stories by title, slug, or author…"
@@ -189,7 +206,7 @@ export default function Journal() {
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
               width: "100%",
-              padding: "9px 14px",
+              padding: "10px 14px",
               borderRadius: "8px",
               border: "1px solid rgba(26,26,30,0.1)",
               background: "#FFFBF0",
@@ -202,12 +219,12 @@ export default function Journal() {
 
         {/* Status Dropdown */}
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <label style={{ fontSize: "0.8125rem", color: "#6b645c", fontWeight: 600 }}>Status:</label>
+          <label style={{ fontSize: "0.8125rem", color: "#6b645c", fontWeight: 600 }}>Filter Status:</label>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
             style={{
-              padding: "8px 12px",
+              padding: "9px 14px",
               borderRadius: "8px",
               border: "1px solid rgba(26,26,30,0.1)",
               background: "#FFFBF0",
@@ -217,7 +234,7 @@ export default function Journal() {
               cursor: "pointer",
             }}
           >
-            <option value="all">All ({posts.length})</option>
+            <option value="all">All Articles ({posts.length})</option>
             <option value="published">Live on Store ({posts.filter((p) => p.published).length})</option>
             <option value="draft">Drafts ({posts.filter((p) => !p.published).length})</option>
           </select>
@@ -225,7 +242,7 @@ export default function Journal() {
       </div>
 
       {/* Category Pills Strip */}
-      <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "12px", marginBottom: "1.25rem" }}>
+      <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "12px", marginBottom: "1.5rem" }}>
         {CATEGORIES.map((cat) => {
           const active = categoryFilter === cat
           return (
@@ -234,12 +251,12 @@ export default function Journal() {
               type="button"
               onClick={() => setCategoryFilter(cat)}
               style={{
-                padding: "6px 14px",
+                padding: "8px 16px",
                 borderRadius: "20px",
                 fontSize: "0.8125rem",
-                fontWeight: active ? 600 : 500,
+                fontWeight: active ? 700 : 500,
                 border: active ? "1px solid var(--yn-gold, #D4AF37)" : "1px solid rgba(26,26,30,0.08)",
-                background: active ? "rgba(212, 175, 55, 0.12)" : "#fff",
+                background: active ? "rgba(212, 175, 55, 0.14)" : "#fff",
                 color: active ? "#B8860B" : "#5a534a",
                 cursor: "pointer",
                 whiteSpace: "nowrap",
@@ -252,64 +269,76 @@ export default function Journal() {
         })}
       </div>
 
-      {/* Articles Table Card */}
-      <section className="ad-card" style={{ background: "#fff", borderRadius: "16px", padding: "18px 22px", border: "1px solid rgba(26,26,30,0.06)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", borderBottom: "1px solid rgba(26,26,30,0.06)", paddingBottom: "12px" }}>
+      {/* Articles Table (Zero ad- classes) */}
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: "16px",
+          padding: "20px 24px",
+          border: "1px solid rgba(26,26,30,0.06)",
+          boxShadow: "0 4px 18px -6px rgba(0,0,0,0.06)",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", borderBottom: "1px solid rgba(26,26,30,0.06)", paddingBottom: "14px" }}>
           <div>
-            <h2 style={{ fontSize: "1.125rem", margin: 0, color: "#1a1a1e", fontWeight: 500 }}>
-              Stories List ({filteredPosts.length})
+            <h2 style={{ fontSize: "1.125rem", margin: 0, color: "#1a1a1e", fontWeight: 600 }}>
+              All Articles ({filteredPosts.length})
             </h2>
           </div>
           <Link
             to="/admin/journal/new"
-            style={{ fontSize: "0.8125rem", color: "var(--yn-gold, #D4AF37)", textDecoration: "none", fontWeight: 600 }}
+            style={{
+              fontSize: "0.875rem",
+              color: "var(--yn-gold, #D4AF37)",
+              textDecoration: "none",
+              fontWeight: 700,
+            }}
           >
-            + New Article →
+            + Add New Article →
           </Link>
         </div>
 
-        <table className="ad-table" style={{ width: "100%" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.875rem" }}>
           <thead>
-            <tr>
-              <th style={{ width: "56px" }}>Media</th>
-              <th>Title & URL Slug</th>
-              <th>Author</th>
-              <th>Created</th>
-              <th>Status</th>
-              <th className="ad-right" style={{ width: "170px" }}>Actions</th>
+            <tr style={{ borderBottom: "1px solid rgba(26,26,30,0.08)", textAlign: "left" }}>
+              <th style={{ width: "56px", padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Media</th>
+              <th style={{ padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Title & URL Slug</th>
+              <th style={{ padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Author</th>
+              <th style={{ padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Date</th>
+              <th style={{ padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Status</th>
+              <th style={{ padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", textAlign: "right" }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {busy && posts.length === 0 && (
               <tr>
-                <td colSpan={6} className="ad-empty" style={{ padding: "2.5rem 1rem", textAlign: "center", color: "#8a8175" }}>
+                <td colSpan={6} style={{ padding: "3rem 1rem", textAlign: "center", color: "#8a8175" }}>
                   Loading articles…
                 </td>
               </tr>
             )}
             {!busy && filteredPosts.length === 0 && (
               <tr>
-                <td colSpan={6} className="ad-empty" style={{ padding: "3rem 1rem", textAlign: "center" }}>
-                  <p style={{ color: "#6b645c", fontSize: "0.9375rem", margin: "0 0 1rem" }}>
+                <td colSpan={6} style={{ padding: "3.5rem 1rem", textAlign: "center" }}>
+                  <p style={{ color: "#6b645c", fontSize: "0.9375rem", margin: "0 0 1.25rem" }}>
                     {searchQuery || categoryFilter !== "All" || statusFilter !== "all"
                       ? "No articles match the selected filters."
                       : "No articles published yet. Ready to start your journal?"}
                   </p>
                   <Link
                     to="/admin/journal/new"
-                    className="ad-btn"
                     style={{
                       background: "var(--yn-gold, #D4AF37)",
                       color: "#07080E",
-                      fontWeight: 600,
-                      padding: "8px 18px",
+                      fontWeight: 700,
+                      padding: "10px 22px",
                       borderRadius: "8px",
                       textDecoration: "none",
                       display: "inline-block",
-                      fontSize: "0.8125rem",
+                      fontSize: "0.875rem",
                     }}
                   >
-                    + Compose Your First Story
+                    + Write Your First Article
                   </Link>
                 </td>
               </tr>
@@ -317,20 +346,20 @@ export default function Journal() {
             {filteredPosts.map((p) => {
               const displayImg = p.list_image || p.cover_image
               return (
-                <tr key={p.id}>
-                  <td>
+                <tr key={p.id} style={{ borderBottom: "1px solid rgba(26,26,30,0.04)" }}>
+                  <td style={{ padding: "12px 8px" }}>
                     {displayImg ? (
                       <img
                         src={normalizeImageUrl(displayImg)}
                         alt=""
-                        style={{ width: "44px", height: "44px", objectFit: "cover", borderRadius: "8px", border: "1px solid rgba(26,26,30,0.08)" }}
+                        style={{ width: "46px", height: "46px", objectFit: "cover", borderRadius: "8px", border: "1px solid rgba(26,26,30,0.08)" }}
                         onError={(e) => { (e.currentTarget as HTMLElement).style.display = "none" }}
                       />
                     ) : (
                       <div
                         style={{
-                          width: "44px",
-                          height: "44px",
+                          width: "46px",
+                          height: "46px",
                           borderRadius: "8px",
                           background: "#FFFBF0",
                           border: "1px dashed rgba(26,26,30,0.15)",
@@ -344,12 +373,12 @@ export default function Journal() {
                       </div>
                     )}
                   </td>
-                  <td>
+                  <td style={{ padding: "12px 8px" }}>
                     <strong style={{ display: "block", color: "#1a1a1e", fontSize: "0.9375rem" }}>
                       {p.title}
                     </strong>
-                    <div style={{ display: "flex", gap: "6px", alignItems: "center", marginTop: "2px" }}>
-                      <code style={{ fontSize: "0.75rem", color: "#8a8175", background: "rgba(26,26,30,0.04)", padding: "1px 6px", borderRadius: "4px" }}>
+                    <div style={{ display: "flex", gap: "6px", alignItems: "center", marginTop: "4px" }}>
+                      <code style={{ fontSize: "0.75rem", color: "#8a8175", background: "rgba(26,26,30,0.04)", padding: "2px 8px", borderRadius: "4px" }}>
                         /{p.slug}
                       </code>
                       {p.published && (
@@ -357,49 +386,83 @@ export default function Journal() {
                           href={`https://younoya.com/journal/${p.slug}`}
                           target="_blank"
                           rel="noreferrer"
-                          style={{ fontSize: "0.75rem", color: "var(--yn-gold, #D4AF37)", textDecoration: "underline" }}
+                          style={{ fontSize: "0.75rem", color: "var(--yn-gold, #D4AF37)", textDecoration: "underline", marginLeft: "4px" }}
                         >
-                          View ↗
+                          View Live ↗
                         </a>
                       )}
                     </div>
                   </td>
-                  <td style={{ fontSize: "0.8125rem", color: "#5a534a" }}>
+                  <td style={{ padding: "12px 8px", color: "#5a534a" }}>
                     {p.author || "YOUNOYA"}
                   </td>
-                  <td style={{ fontSize: "0.8125rem", color: "#5a534a" }}>
+                  <td style={{ padding: "12px 8px", color: "#5a534a" }}>
                     {fmtDate(p.created_at)}
                   </td>
-                  <td>
-                    <span className={`ad-chip ad-chip--${p.published ? "ok" : "wait"}`}>
+                  <td style={{ padding: "12px 8px" }}>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        padding: "4px 10px",
+                        borderRadius: "20px",
+                        fontSize: "0.6875rem",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.06em",
+                        background: p.published ? "rgba(52,211,153,0.12)" : "rgba(212,175,55,0.12)",
+                        color: p.published ? "#059669" : "#B8860B",
+                      }}
+                    >
                       {p.published ? "● Live" : "○ Draft"}
                     </span>
                   </td>
-                  <td className="ad-right">
-                    <div className="ad-actions" style={{ display: "flex", gap: "6px", justifyContent: "flex-end" }}>
+                  <td style={{ padding: "12px 8px", textAlign: "right" }}>
+                    <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
                       <Link
                         to={`/admin/journal/${p.id}`}
-                        className="ad-btn-plain"
-                        style={{ textDecoration: "none", fontSize: "0.75rem", padding: "5px 10px" }}
+                        style={{
+                          textDecoration: "none",
+                          fontSize: "0.8125rem",
+                          padding: "6px 12px",
+                          borderRadius: "6px",
+                          background: "#FFFBF0",
+                          border: "1px solid rgba(26,26,30,0.1)",
+                          color: "#1a1a1e",
+                          fontWeight: 500,
+                        }}
                       >
                         Edit
                       </Link>
                       <button
                         type="button"
-                        className="ad-btn-plain"
                         onClick={() => togglePublish(p)}
-                        style={{ fontSize: "0.75rem", padding: "5px 10px" }}
+                        style={{
+                          fontSize: "0.8125rem",
+                          padding: "6px 12px",
+                          borderRadius: "6px",
+                          background: "#fff",
+                          border: "1px solid rgba(26,26,30,0.1)",
+                          color: "#1a1a1e",
+                          cursor: "pointer",
+                        }}
                       >
                         {p.published ? "Unpublish" : "Publish"}
                       </button>
                       <button
                         type="button"
-                        className="ad-btn-plain ad-danger"
                         onClick={() => removePost(p)}
-                        style={{ fontSize: "0.75rem", padding: "5px 8px" }}
+                        style={{
+                          fontSize: "0.8125rem",
+                          padding: "6px 10px",
+                          borderRadius: "6px",
+                          background: "rgba(220,38,38,0.06)",
+                          border: "1px solid rgba(220,38,38,0.2)",
+                          color: "#dc2626",
+                          cursor: "pointer",
+                        }}
                         title="Delete story"
                       >
-                        ✕
+                        Delete
                       </button>
                     </div>
                   </td>
@@ -408,7 +471,7 @@ export default function Journal() {
             })}
           </tbody>
         </table>
-      </section>
+      </div>
     </div>
   )
 }

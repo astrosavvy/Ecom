@@ -66,7 +66,6 @@ export default function JournalEdit() {
   const fileInput = useRef<HTMLInputElement>(null)
   const listInput = useRef<HTMLInputElement>(null)
 
-  // Auto-generate slug when title changes (if user hasn't manually customized slug)
   function handleTitleChange(newTitle: string) {
     setTitle(newTitle)
     if (!isSlugCustomized && isNew) {
@@ -74,7 +73,6 @@ export default function JournalEdit() {
     }
   }
 
-  // Load existing article if editing
   useEffect(() => {
     if (!id) return
     setBusy(true)
@@ -219,73 +217,84 @@ export default function JournalEdit() {
 
   if (busy) {
     return (
-      <div className="ad__page" style={{ padding: "4rem 1rem", textAlign: "center" }}>
+      <div style={{ maxWidth: "1080px", margin: "0 auto", padding: "4rem 1rem", textAlign: "center" }}>
         <p style={{ color: "#8a8175" }}>Loading story editor…</p>
       </div>
     )
   }
 
   return (
-    <div className="ad__page ad__page--wide" style={{ paddingBottom: "5rem" }}>
+    <div style={{ maxWidth: "1080px", margin: "0 auto", paddingBottom: "5rem" }}>
       {/* Top Breadcrumb & Action Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", flexWrap: "wrap", gap: "12px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.75rem", flexWrap: "wrap", gap: "12px", background: "#fff", padding: "16px 20px", borderRadius: "14px", border: "1px solid rgba(26,26,30,0.06)", boxShadow: "0 2px 12px -4px rgba(0,0,0,0.04)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           <Link
             to="/admin/journal"
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              color: "#5a534a",
+              color: "#1a1a1e",
               textDecoration: "none",
               fontSize: "0.875rem",
-              fontWeight: 600,
-              background: "#fff",
-              padding: "6px 14px",
+              fontWeight: 700,
+              background: "#FFFBF0",
+              padding: "8px 16px",
               borderRadius: "8px",
-              border: "1px solid rgba(26,26,30,0.08)",
+              border: "1px solid rgba(26,26,30,0.1)",
             }}
           >
-            ← Back to Articles
+            ← Back to All Articles
           </Link>
-          <span className={`ad-chip ad-chip--${published ? "ok" : "wait"}`}>
-            {published ? "● Live on Store" : "○ Draft Mode"}
+          <span
+            style={{
+              display: "inline-block",
+              padding: "4px 12px",
+              borderRadius: "20px",
+              fontSize: "0.6875rem",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              background: published ? "rgba(52,211,153,0.12)" : "rgba(212,175,55,0.12)",
+              color: published ? "#059669" : "#B8860B",
+            }}
+          >
+            {published ? "● Live on Storefront" : "○ Draft Mode"}
           </span>
         </div>
 
-        <div className="ad-actions" style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <button
             type="button"
-            className="ad-btn-plain"
             disabled={saving || !!uploading}
             onClick={() => handleSave(false)}
             style={{
               background: "#fff",
-              border: "1px solid rgba(26,26,30,0.12)",
-              padding: "9px 18px",
+              border: "1px solid rgba(26,26,30,0.15)",
+              padding: "10px 20px",
               borderRadius: "8px",
               cursor: "pointer",
               fontSize: "0.875rem",
-              fontWeight: 500,
+              fontWeight: 600,
+              color: "#1a1a1e",
             }}
           >
             {saving ? "Saving…" : "Save Draft"}
           </button>
           <button
             type="button"
-            className="ad-btn"
             disabled={saving || !!uploading}
             onClick={() => handleSave(true)}
             style={{
               background: "var(--yn-gold, #D4AF37)",
               color: "#07080E",
-              fontWeight: 600,
-              padding: "9px 24px",
+              fontWeight: 700,
+              padding: "10px 24px",
               borderRadius: "8px",
               cursor: "pointer",
               border: "none",
               fontSize: "0.875rem",
-              boxShadow: "0 4px 14px -4px rgba(212, 175, 55, 0.45)",
+              boxShadow: "0 4px 14px -2px rgba(212, 175, 55, 0.45)",
             }}
           >
             {saving ? "Publishing…" : published ? "Update Live Story" : "★ Publish Live"}
@@ -310,7 +319,7 @@ export default function JournalEdit() {
         {/* Left Column: Editorial Content (Title, Slug, Excerpt, Body) */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           {/* Post Title & Slug Card */}
-          <div className="ad-card" style={{ background: "#fff", borderRadius: "16px", padding: "20px 24px", border: "1px solid rgba(26,26,30,0.06)" }}>
+          <div style={{ background: "#fff", borderRadius: "16px", padding: "20px 24px", border: "1px solid rgba(26,26,30,0.06)", boxShadow: "0 2px 12px -4px rgba(0,0,0,0.04)" }}>
             {/* Title */}
             <div style={{ marginBottom: "16px" }}>
               <label style={{ display: "block", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "#6b645c", marginBottom: "6px", fontWeight: 700 }}>
@@ -409,7 +418,7 @@ export default function JournalEdit() {
           </div>
 
           {/* Article Body Content Card */}
-          <div className="ad-card" style={{ background: "#fff", borderRadius: "16px", padding: "20px 24px", border: "1px solid rgba(26,26,30,0.06)" }}>
+          <div style={{ background: "#fff", borderRadius: "16px", padding: "20px 24px", border: "1px solid rgba(26,26,30,0.06)", boxShadow: "0 2px 12px -4px rgba(0,0,0,0.04)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px", flexWrap: "wrap", gap: "10px" }}>
               <label style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "#6b645c", fontWeight: 700 }}>
                 Article Story Content *
@@ -420,10 +429,10 @@ export default function JournalEdit() {
                   type="button"
                   onClick={() => setActiveTab("write")}
                   style={{
-                    padding: "5px 14px",
+                    padding: "6px 16px",
                     borderRadius: "6px",
                     fontSize: "0.75rem",
-                    fontWeight: 600,
+                    fontWeight: 700,
                     cursor: "pointer",
                     border: "1px solid rgba(26,26,30,0.12)",
                     background: activeTab === "write" ? "var(--yn-gold, #D4AF37)" : "#FFFBF0",
@@ -436,10 +445,10 @@ export default function JournalEdit() {
                   type="button"
                   onClick={() => setActiveTab("preview")}
                   style={{
-                    padding: "5px 14px",
+                    padding: "6px 16px",
                     borderRadius: "6px",
                     fontSize: "0.75rem",
-                    fontWeight: 600,
+                    fontWeight: 700,
                     cursor: "pointer",
                     border: "1px solid rgba(26,26,30,0.12)",
                     background: activeTab === "preview" ? "var(--yn-gold, #D4AF37)" : "#FFFBF0",
@@ -515,10 +524,10 @@ export default function JournalEdit() {
         {/* Right Column: Media, Tags, Taxonomy & Publishing Settings */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           {/* Cover Hero Image (16:9) Card */}
-          <div className="ad-card" style={{ background: "#fff", borderRadius: "16px", padding: "18px", border: "1px solid rgba(26,26,30,0.06)" }}>
+          <div style={{ background: "#fff", borderRadius: "16px", padding: "18px", border: "1px solid rgba(26,26,30,0.06)", boxShadow: "0 2px 12px -4px rgba(0,0,0,0.04)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
               <strong style={{ fontSize: "0.875rem", color: "#1a1a1e" }}>Cover Image (16:9)</strong>
-              <small style={{ color: "#8a8175" }}>Article hero banner</small>
+              <small style={{ color: "#8a8175" }}>Hero banner</small>
             </div>
 
             {cover ? (
@@ -554,10 +563,9 @@ export default function JournalEdit() {
             <div style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
               <button
                 type="button"
-                className="ad-btn-plain"
                 disabled={!!uploading}
                 onClick={() => fileInput.current?.click()}
-                style={{ fontSize: "0.8125rem", padding: "7px 14px", background: "#f5eee1", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.1)", cursor: "pointer", width: "100%", textAlign: "center" }}
+                style={{ fontSize: "0.8125rem", padding: "8px 14px", background: "#f5eee1", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.1)", cursor: "pointer", width: "100%", textAlign: "center", fontWeight: 600 }}
               >
                 {uploading === "cover" ? "Uploading…" : "📁 Upload 16:9 Image"}
               </button>
@@ -571,16 +579,16 @@ export default function JournalEdit() {
                   setCustomCoverUrl(e.target.value)
                   setCover(normalizeImageUrl(e.target.value))
                 }}
-                style={{ width: "100%", fontSize: "0.75rem", padding: "7px 10px", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.12)", background: "#FFFBF0" }}
+                style={{ width: "100%", fontSize: "0.75rem", padding: "8px 10px", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.12)", background: "#FFFBF0" }}
               />
             </div>
           </div>
 
           {/* Listing Thumbnail Image (1:1) Card */}
-          <div className="ad-card" style={{ background: "#fff", borderRadius: "16px", padding: "18px", border: "1px solid rgba(26,26,30,0.06)" }}>
+          <div style={{ background: "#fff", borderRadius: "16px", padding: "18px", border: "1px solid rgba(26,26,30,0.06)", boxShadow: "0 2px 12px -4px rgba(0,0,0,0.04)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
               <strong style={{ fontSize: "0.875rem", color: "#1a1a1e" }}>Grid Image (1:1)</strong>
-              <small style={{ color: "#8a8175" }}>Card listing square</small>
+              <small style={{ color: "#8a8175" }}>Listing square</small>
             </div>
 
             {listImage ? (
@@ -616,10 +624,9 @@ export default function JournalEdit() {
             <div style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
               <button
                 type="button"
-                className="ad-btn-plain"
                 disabled={!!uploading}
                 onClick={() => listInput.current?.click()}
-                style={{ fontSize: "0.8125rem", padding: "7px 14px", background: "#f5eee1", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.1)", cursor: "pointer", width: "100%", textAlign: "center" }}
+                style={{ fontSize: "0.8125rem", padding: "8px 14px", background: "#f5eee1", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.1)", cursor: "pointer", width: "100%", textAlign: "center", fontWeight: 600 }}
               >
                 {uploading === "list" ? "Uploading…" : "📁 Upload 1:1 Image"}
               </button>
@@ -633,13 +640,13 @@ export default function JournalEdit() {
                   setCustomListUrl(e.target.value)
                   setListImage(normalizeImageUrl(e.target.value))
                 }}
-                style={{ width: "100%", fontSize: "0.75rem", padding: "7px 10px", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.12)", background: "#FFFBF0" }}
+                style={{ width: "100%", fontSize: "0.75rem", padding: "8px 10px", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.12)", background: "#FFFBF0" }}
               />
             </div>
           </div>
 
           {/* Category & Tags Card */}
-          <div className="ad-card" style={{ background: "#fff", borderRadius: "16px", padding: "18px", border: "1px solid rgba(26,26,30,0.06)" }}>
+          <div style={{ background: "#fff", borderRadius: "16px", padding: "18px", border: "1px solid rgba(26,26,30,0.06)", boxShadow: "0 2px 12px -4px rgba(0,0,0,0.04)" }}>
             <strong style={{ display: "block", fontSize: "0.875rem", color: "#1a1a1e", marginBottom: "10px" }}>
               Chapter & Categories
             </strong>
@@ -669,7 +676,7 @@ export default function JournalEdit() {
           </div>
 
           {/* Publishing Details Card */}
-          <div className="ad-card" style={{ background: "#fff", borderRadius: "16px", padding: "18px", border: "1px solid rgba(26,26,30,0.06)" }}>
+          <div style={{ background: "#fff", borderRadius: "16px", padding: "18px", border: "1px solid rgba(26,26,30,0.06)", boxShadow: "0 2px 12px -4px rgba(0,0,0,0.04)" }}>
             <strong style={{ display: "block", fontSize: "0.875rem", color: "#1a1a1e", marginBottom: "12px" }}>
               Publishing Details
             </strong>
@@ -687,7 +694,7 @@ export default function JournalEdit() {
             <label style={{ display: "block", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.06em", color: "#6b645c", marginBottom: "8px", fontWeight: 600 }}>
               Visibility Status
             </label>
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: "flex", gap: "12px" }}>
               <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.8125rem", cursor: "pointer", color: "#1a1a1e" }}>
                 <input
                   type="radio"
@@ -711,7 +718,7 @@ export default function JournalEdit() {
 
           {/* Delete Action (only if editing existing) */}
           {!isNew && (
-            <div style={{ padding: "12px", border: "1px dashed rgba(220,38,38,0.25)", borderRadius: "12px", background: "rgba(220,38,38,0.02)", textAlign: "center" }}>
+            <div style={{ padding: "14px", border: "1px dashed rgba(220,38,38,0.25)", borderRadius: "12px", background: "rgba(220,38,38,0.02)", textAlign: "center" }}>
               <button
                 type="button"
                 onClick={handleDelete}
