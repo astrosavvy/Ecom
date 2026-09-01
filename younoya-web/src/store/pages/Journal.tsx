@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams, Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import * as api from "../../lib/api"
 
 function normalizeImageUrl(url: string): string {
@@ -14,19 +14,7 @@ function normalizeImageUrl(url: string): string {
   return trimmed
 }
 
-const CATEGORIES = [
-  "All",
-  "Love & Relationships",
-  "Becoming & Career",
-  "Shelter & Home",
-  "Vedic Astrology",
-  "Consecration & Rituals",
-  "Gifting Guides",
-]
-
 export default function Journal() {
-  const { category } = useParams<{ category?: string }>()
-  const navigate = useNavigate()
   const [posts, setPosts] = useState<api.BlogPost[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -35,26 +23,11 @@ export default function Journal() {
     api.listPosts(24, 0)
       .then((res) => {
         const publishedPosts = (res.posts || []).filter((p: any) => p.published !== false)
-        if (!category || category.toLowerCase() === "all") {
-          setPosts(publishedPosts)
-        } else {
-          const cat = category.toLowerCase()
-          const filtered = publishedPosts.filter((p) => {
-            const text = `${p.title} ${p.excerpt || ""} ${p.content || ""}`.toLowerCase()
-            if (cat.includes("love") && (text.includes("love") || text.includes("relationship"))) return true
-            if (cat.includes("becoming") && (text.includes("career") || text.includes("becoming") || text.includes("growth"))) return true
-            if (cat.includes("shelter") && (text.includes("shelter") || text.includes("home") || text.includes("vastu"))) return true
-            if (cat.includes("astrology") && (text.includes("astro") || text.includes("vedic") || text.includes("star") || text.includes("dasha") || text.includes("nakshatra"))) return true
-            if (cat.includes("consecration") && (text.includes("consecrat") || text.includes("ritual") || text.includes("108"))) return true
-            if (cat.includes("gifting") && text.includes("gift")) return true
-            return false
-          })
-          setPosts(filtered)
-        }
+        setPosts(publishedPosts)
       })
       .catch(() => setPosts([]))
       .finally(() => setLoading(false))
-  }, [category])
+  }, [])
 
   return (
     <div style={{ background: "#FFFBF0", minHeight: "85vh", padding: "clamp(40px, 6vw, 80px) clamp(20px, 5vw, 64px) 100px" }}>
@@ -100,56 +73,6 @@ export default function Journal() {
             Reflections on sacred astrology, keepsake consecration, dasha cycles, and intentional living.
           </p>
         </header>
-
-        {/* Category Pills Strip */}
-        <div
-          style={{
-            display: "flex",
-            gap: "10px",
-            overflowX: "auto",
-            paddingBottom: "14px",
-            marginBottom: "clamp(32px, 4vw, 48px)",
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          {CATEGORIES.map((c) => {
-            const isCatActive = category
-              ? category.toLowerCase() === c.toLowerCase() ||
-                (c.toLowerCase().includes("love") && category.toLowerCase().includes("love")) ||
-                (c.toLowerCase().includes("becoming") && category.toLowerCase().includes("becoming")) ||
-                (c.toLowerCase().includes("shelter") && category.toLowerCase().includes("shelter")) ||
-                (c.toLowerCase().includes("astrology") && category.toLowerCase().includes("astrology")) ||
-                (c.toLowerCase().includes("consecration") && category.toLowerCase().includes("consecration")) ||
-                (c.toLowerCase().includes("gifting") && category.toLowerCase().includes("gifting"))
-              : c === "All"
-
-            return (
-              <button
-                key={c}
-                type="button"
-                onClick={() => navigate(c === "All" ? "/journal" : `/journal/category/${encodeURIComponent(c.toLowerCase())}`)}
-                style={{
-                  padding: "8px 18px",
-                  borderRadius: "999px",
-                  fontFamily: "var(--yn-font-label, 'Manrope', sans-serif)",
-                  fontSize: "12px",
-                  fontWeight: isCatActive ? 700 : 500,
-                  letterSpacing: "0.04em",
-                  border: isCatActive ? "1px solid #D4AF37" : "1px solid rgba(26,26,30,0.08)",
-                  background: isCatActive ? "rgba(212,175,55,0.16)" : "#ffffff",
-                  color: isCatActive ? "#1a1a1e" : "#5a534a",
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                  transition: "all 0.2s ease",
-                  boxShadow: isCatActive ? "0 2px 8px rgba(212,175,55,0.2)" : "0 1px 4px rgba(0,0,0,0.02)",
-                }}
-              >
-                {c}
-              </button>
-            )
-          })}
-        </div>
 
         {/* Loading State */}
         {loading && (
