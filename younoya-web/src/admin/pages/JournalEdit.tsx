@@ -6,6 +6,18 @@ import { api, getToken } from "../api"
 
 const API = import.meta.env.VITE_API_URL || "https://api.younoya.com"
 
+function normalizeImageUrl(url: string): string {
+  if (!url) return ""
+  const trimmed = url.trim()
+  if (trimmed.includes("localhost:9000/static")) {
+    return trimmed.replace("http://localhost:9000/static", "https://api.younoya.com/static")
+  }
+  if (trimmed.startsWith("/static")) {
+    return `https://api.younoya.com${trimmed}`
+  }
+  return trimmed
+}
+
 export default function JournalEdit() {
   const { id } = useParams()
   const nav = useNavigate()
@@ -13,6 +25,8 @@ export default function JournalEdit() {
   const [excerpt, setExcerpt] = useState("")
   const [cover, setCover] = useState<string>("")
   const [listImage, setListImage] = useState<string>("")
+  const [customCoverUrl, setCustomCoverUrl] = useState("")
+  const [customListUrl, setCustomListUrl] = useState("")
   const [published, setPublished] = useState(false)
   const [busy, setBusy] = useState(false)
   const [uploading, setUploading] = useState<"cover" | "list" | false>(false)
@@ -32,8 +46,12 @@ export default function JournalEdit() {
       .then((d: any) => {
         setTitle(d.post.title)
         setExcerpt(d.post.excerpt ?? "")
-        setCover(d.post.cover_image ?? "")
-        setListImage(d.post.list_image ?? "")
+        const normCover = normalizeImageUrl(d.post.cover_image ?? "")
+        const normList = normalizeImageUrl(d.post.list_image ?? "")
+        setCover(normCover)
+        setListImage(normList)
+        setCustomCoverUrl(normCover)
+        setCustomListUrl(normList)
         setPublished(d.post.published)
         editor?.commands.setContent(d.post.content || "")
       })
@@ -53,16 +71,22 @@ export default function JournalEdit() {
       })
       if (!res.ok) {
         const t = await res.text()
-        throw new Error(t || "Upload failed. Try a different image.")
+        throw new Error(t || "Upload failed. Try a different image or paste URL below.")
       }
       const data = await res.json()
-      const url = data.files?.[0]?.url ?? data.file?.url ?? data[0]?.url
-      if (url) {
-        if (target === "cover") setCover(url)
-        else setListImage(url)
+      const rawUrl = data.files?.[0]?.url ?? data.file?.url ?? data[0]?.url
+      if (rawUrl) {
+        const normalized = normalizeImageUrl(rawUrl)
+        if (target === "cover") {
+          setCover(normalized)
+          setCustomCoverUrl(normalized)
+        } else {
+          setListImage(normalized)
+          setCustomListUrl(normalized)
+        }
       } else throw new Error("Upload returned no URL.")
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Upload failed.")
+      setError(e instanceof Error ? e.message : "Upload failed. You can paste a direct image URL.")
     } finally {
       setUploading(false)
     }
@@ -143,7 +167,17 @@ export default function JournalEdit() {
             <div className="ad-editor__cover-actions">
               <input ref={fileInput} type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], "cover")} />
               <button className="ad-btn-plain" disabled={!!uploading} onClick={() => fileInput.current?.click()}>{uploading === "cover" ? "Uploading…" : cover ? "Change cover (16:9)" : "Add cover (16:9)"}</button>
-              {cover && <button className="ad-btn-plain ad-danger" onClick={() => setCover("")}>Remove</button>}
+              {cover && <button className="ad-btn-plain ad-danger" onClick={() => { setCover(""); setCustomCoverUrl(""); }}>Remove</button>}
+              <input
+                type="url"
+                placeholder="Or paste direct image URL"
+                value={customCoverUrl}
+                onChange={(e) => {
+                  setCustomCoverUrl(e.target.value)
+                  setCover(normalizeImageUrl(e.target.value))
+                }}
+                style={{ width: "100%", fontSize: "11px", padding: "4px 8px", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.1)", marginTop: "4px", background: "#FFFBF0" }}
+              />
             </div>
           </div>
           <div className="ad-editor__cover" style={{ flexDirection: "column", alignItems: "stretch" }}>
@@ -151,7 +185,17 @@ export default function JournalEdit() {
             <div className="ad-editor__cover-actions">
               <input ref={listInput} type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], "list")} />
               <button className="ad-btn-plain" disabled={!!uploading} onClick={() => listInput.current?.click()}>{uploading === "list" ? "Uploading…" : listImage ? "Change list (1:1)" : "Add list (1:1)"}</button>
-              {listImage && <button className="ad-btn-plain ad-danger" onClick={() => setListImage("")}>Remove</button>}
+              {listImage && <button className="ad-btn-plain ad-danger" onClick={() => { setListImage(""); setCustomListUrl(""); }}>Remove</button>}
+              <input
+                type="url"
+                placeholder="Or paste direct image URL"
+                value={customListUrl}
+                onChange={(e) => {
+                  setCustomListUrl(e.target.value)
+                  setListImage(normalizeImageUrl(e.target.value))
+                }}
+                style={{ width: "100%", fontSize: "11px", padding: "4px 8px", borderRadius: "6px", border: "1px solid rgba(26,26,30,0.1)", marginTop: "4px", background: "#FFFBF0" }}
+              />
             </div>
           </div>
         </div>

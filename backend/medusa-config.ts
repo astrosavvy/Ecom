@@ -57,5 +57,20 @@ module.exports = defineConfig({
         ],
       },
     },
+    {
+      resolve: "@medusajs/medusa/file",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/file-local",
+            id: "local",
+            options: {
+              upload_dir: "static",
+              backend_url: process.env.MEDUSA_BACKEND_URL || "https://api.younoya.com/static",
+            },
+          },
+        ],
+      },
+    },
   ],
 })
