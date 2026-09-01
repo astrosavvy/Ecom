@@ -29,8 +29,8 @@ export default function JournalArticle() {
         </div>
       </div>
 
-      {post.cover_image && (
-        <img src={post.cover_image} alt={post.title} style={{ width: "100%", maxHeight: "500px", objectFit: "cover", borderRadius: "8px", marginBottom: "3rem" }} />
+      {(post.cover_image || post.list_image) && (
+        <img src={post.cover_image || post.list_image || ""} alt={post.title} style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", borderRadius: "8px", marginBottom: "3rem" }} />
       )}
 
       <div className="article-body" style={{ lineHeight: "1.8", fontSize: "1.125rem", color: "var(--color-text)" }} dangerouslySetInnerHTML={{ __html: post.content }} />

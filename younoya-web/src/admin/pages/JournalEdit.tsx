@@ -12,11 +12,13 @@ export default function JournalEdit() {
   const [title, setTitle] = useState("")
   const [excerpt, setExcerpt] = useState("")
   const [cover, setCover] = useState<string>("")
+  const [listImage, setListImage] = useState<string>("")
   const [published, setPublished] = useState(false)
   const [busy, setBusy] = useState(false)
-  const [uploading, setUploading] = useState(false)
+  const [uploading, setUploading] = useState<"cover" | "list" | false>(false)
   const [error, setError] = useState<string | null>(null)
   const fileInput = useRef<HTMLInputElement>(null)
+  const listInput = useRef<HTMLInputElement>(null)
 
   const editor = useEditor({
     extensions: [StarterKit],
@@ -31,27 +33,34 @@ export default function JournalEdit() {
         setTitle(d.post.title)
         setExcerpt(d.post.excerpt ?? "")
         setCover(d.post.cover_image ?? "")
+        setListImage(d.post.list_image ?? "")
         setPublished(d.post.published)
         editor?.commands.setContent(d.post.content || "")
       })
       .catch((e) => setError(e instanceof Error ? e.message : "Could not load the post."))
   }, [id, editor])
 
-  async function uploadCover(file: File) {
-    setUploading(true)
+  async function uploadImage(file: File, target: "cover" | "list") {
+    setUploading(target)
     setError(null)
     try {
       const form = new FormData()
       form.append("files", file)
-      const res = await fetch(`${API}/admin/file`, {
+      const res = await fetch(`${API}/admin/files`, {
         method: "POST",
         headers: { authorization: `Bearer ${getToken()}` },
         body: form,
       })
-      if (!res.ok) throw new Error("Upload failed. Try a different image.")
+      if (!res.ok) {
+        const t = await res.text()
+        throw new Error(t || "Upload failed. Try a different image.")
+      }
       const data = await res.json()
-      const url = data.file?.url ?? data.files?.[0]?.url
-      if (url) setCover(url)
+      const url = data.files?.[0]?.url ?? data.file?.url ?? data[0]?.url
+      if (url) {
+        if (target === "cover") setCover(url)
+        else setListImage(url)
+      } else throw new Error("Upload returned no URL.")
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed.")
     } finally {
@@ -65,13 +74,19 @@ export default function JournalEdit() {
       setError("Give the post a title first.")
       return
     }
+    const html = editor.getHTML()
+    if (!html || html === "<p></p>" || html.trim().length < 10) {
+      setError("Add some content before saving.")
+      return
+    }
     setBusy(true)
     setError(null)
-    const body = {
+    const body: Record<string, unknown> = {
       title: title.trim(),
-      content: editor.getHTML(),
+      content: html,
       excerpt: excerpt.trim() || undefined,
       cover_image: cover || undefined,
+      list_image: listImage || undefined,
       published: publish ?? published,
     }
     try {
@@ -98,10 +113,10 @@ export default function JournalEdit() {
           <h1>{id ? "Edit post" : "New post"}</h1>
         </div>
         <div className="ad-actions">
-          <button className="ad-btn-plain" disabled={busy || uploading} onClick={() => save(false)}>
+          <button className="ad-btn-plain" disabled={busy || !!uploading} onClick={() => save(false)}>
             Save as draft
           </button>
-          <button className="ad-btn" disabled={busy || uploading} onClick={() => save(true)}>
+          <button className="ad-btn" disabled={busy || !!uploading} onClick={() => save(true)}>
             {published ? "Update live post" : "Publish"}
           </button>
         </div>
@@ -122,24 +137,22 @@ export default function JournalEdit() {
           onChange={(e) => setExcerpt(e.target.value)}
           rows={2}
         />
-        <div className="ad-editor__cover">
-          {cover ? (
-            <img src={cover} alt="" />
-          ) : (
-            <div className="ad-editor__cover-empty">No cover image</div>
-          )}
-          <div className="ad-editor__cover-actions">
-            <input
-              ref={fileInput}
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])}
-            />
-            <button className="ad-btn-plain" disabled={uploading} onClick={() => fileInput.current?.click()}>
-              {uploading ? "Uploading…" : cover ? "Change image" : "Add cover image"}
-            </button>
-            {cover && <button className="ad-btn-plain ad-danger" onClick={() => setCover("")}>Remove</button>}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="ad-editor__cover" style={{ flexDirection: "column", alignItems: "stretch" }}>
+            {cover ? <img src={cover} alt="Cover 16:9" style={{ aspectRatio: "16/9", objectFit: "cover" }} /> : <div className="ad-editor__cover-empty" style={{ aspectRatio: "16/9" }}>No cover image<br /><small style={{ opacity: 0.7 }}>16:9 for article hero</small></div>}
+            <div className="ad-editor__cover-actions">
+              <input ref={fileInput} type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], "cover")} />
+              <button className="ad-btn-plain" disabled={!!uploading} onClick={() => fileInput.current?.click()}>{uploading === "cover" ? "Uploading…" : cover ? "Change cover (16:9)" : "Add cover (16:9)"}</button>
+              {cover && <button className="ad-btn-plain ad-danger" onClick={() => setCover("")}>Remove</button>}
+            </div>
+          </div>
+          <div className="ad-editor__cover" style={{ flexDirection: "column", alignItems: "stretch" }}>
+            {listImage ? <img src={listImage} alt="List 1:1" style={{ aspectRatio: "1", objectFit: "cover" }} /> : <div className="ad-editor__cover-empty" style={{ aspectRatio: "1" }}>No list image<br /><small style={{ opacity: 0.7 }}>1:1 for grid</small></div>}
+            <div className="ad-editor__cover-actions">
+              <input ref={listInput} type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], "list")} />
+              <button className="ad-btn-plain" disabled={!!uploading} onClick={() => listInput.current?.click()}>{uploading === "list" ? "Uploading…" : listImage ? "Change list (1:1)" : "Add list (1:1)"}</button>
+              {listImage && <button className="ad-btn-plain ad-danger" onClick={() => setListImage("")}>Remove</button>}
+            </div>
           </div>
         </div>
         {editor && (

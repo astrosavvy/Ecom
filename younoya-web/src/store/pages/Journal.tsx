@@ -51,7 +51,7 @@ export default function Journal() {
         <div className="journal-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "2rem" }}>
           {posts.map(post => (
             <Link to={`/journal/${post.slug}`} key={post.id} className="journal-card glass-card">
-              {post.cover_image && <img src={post.cover_image} alt={post.title} className="journal-card__image" style={{ width: "100%", height: "250px", objectFit: "cover" }} />}
+              {(post.list_image || post.cover_image) && <img src={post.list_image || post.cover_image || ""} alt={post.title} className="journal-card__image" style={{ width: "100%", aspectRatio: "1", objectFit: "cover" }} />}
               <div style={{ padding: "1.5rem" }}>
                 <div className="journal-card__meta" style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem", color: "var(--color-muted)", fontSize: "0.875rem" }}>
                   <span className="journal-card__category">{post.author}</span>

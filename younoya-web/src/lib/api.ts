@@ -111,7 +111,8 @@ export type BlogPost = {
   slug: string
   content: string
   excerpt: string | null
-  cover_image: string | null
+  cover_image: string | null // 16:9 hero
+  list_image: string | null // 1:1 square for listing
   author: string
   published_at: string | null
 }
