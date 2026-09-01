@@ -1,3 +1,2 @@
-/products/*  /product/:splat  301
 /gifts       /shop            200
 /blog/*      /journal/:splat  301

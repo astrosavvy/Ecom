@@ -1,17 +1,10 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router"
-import * as api from "../../lib/api"
 
 export default function HomePage() {
-  const [products, setProducts] = useState<api.Product[]>([])
 
-  useEffect(() => {
-    api.listProducts({ limit: 8 }).then((res) => setProducts(res.products))
-  }, [])
-
-  // Dash replica: define work cases from products + chapters
+  // Dash replica: define work cases from products + chapters — static assets, no API thumbnail
   const workCases = [
-    { title: "Love — Pearl Sukh", desc: "Bespoke keepsake for harmony · Venus-led, moonstone calm.", img: products[0]?.thumbnail || "/products/pearl-chandra-sukh-bracelet.webp", handle: products[0]?.handle || "pearl-chandra-sukh-bracelet" },
+    { title: "Love — Pearl Sukh", desc: "Bespoke keepsake for harmony · Venus-led, moonstone calm.", img: "/products/pearl-chandra-sukh-bracelet.webp", handle: "pearl-chandra-sukh-bracelet" },
     { title: "Becoming — Guru Blessing", desc: "Heritage gold for growth · Jupiter pukhraj, panchaloha weight.", img: "/products/yellow-sapphire-guru-blessing-ring.webp", handle: "yellow-sapphire-guru-blessing-ring" },
     { title: "Shelter — Shree Yantra", desc: "Clear-quartz geometry · Lakshmi's Sphatik, consecrated 108×.", img: "/products/sphatik-shree-yantra-pendant.webp", handle: "sphatik-shree-yantra-pendant" },
     { title: "Calm — Amavasya Bracelet", desc: "Rainbow moonstone for water signs · Som Shanti.", img: "/products/moonstone-amavasya-bracelet.webp", handle: "moonstone-amavasya-bracelet" },
