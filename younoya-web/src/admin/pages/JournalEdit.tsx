@@ -46,7 +46,7 @@ export default function JournalEdit() {
     try {
       const form = new FormData()
       form.append("files", file)
-      const res = await fetch(`${API}/admin/files`, {
+      const res = await fetch(`${API}/admin/uploads`, {
         method: "POST",
         headers: { authorization: `Bearer ${getToken()}` },
         body: form,

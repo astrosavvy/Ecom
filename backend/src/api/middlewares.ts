@@ -90,13 +90,23 @@ export default defineMiddlewares([
     middlewares: [usersGuard],
   },
   {
+    matcher: "/admin/uploads*",
+    method: ["GET", "POST"],
+    middlewares: [adminAuth, fileGuard],
+  },
+  {
+    matcher: "/admin/uploads*",
+    method: ["DELETE"],
+    middlewares: [adminAuth, adminOnly],
+  },
+  {
     matcher: "/admin/files*",
     method: ["GET", "POST"],
-    middlewares: [fileGuard],
+    middlewares: [adminAuth, fileGuard],
   },
   {
     matcher: "/admin/files*",
     method: ["DELETE"],
-    middlewares: [adminOnly],
+    middlewares: [adminAuth, adminOnly],
   },
 ])
