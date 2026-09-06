@@ -36,8 +36,8 @@ export default function StoreHeader() {
 
   return (
     <>
-      <header className="store-header dash-header" ref={ref} data-hidden="false">
-        <Link to="/" className="store-header__brand dash-brand" aria-label="YOUNOYA — for every chapter">
+      <header className={`store-header dash-header ${pathname === '/' ? 'dash-header--atelier' : ''}`} ref={ref} data-hidden="false">
+        <Link to="/" className="store-header__brand dash-brand" aria-label="YOUNOYA: For every chapter">
           <img src="/younoya-gold.svg" alt="YOUNOYA for every chapter" className="store-header__logo" style={{ height: "36px", width: "auto" }} />
         </Link>
 

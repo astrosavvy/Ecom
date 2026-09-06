@@ -1,95 +1,528 @@
-import { Link } from "react-router"
+import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 
 export default function HomePage() {
+  const [activeStep, setActiveStep] = useState(0)
 
-  // Dash replica: define work cases from products + chapters — static assets, no API thumbnail
-  const workCases = [
-    { title: "Love — Pearl Sukh", desc: "Bespoke keepsake for harmony · Venus-led, moonstone calm.", img: "/products/pearl-chandra-sukh-bracelet.webp", handle: "pearl-chandra-sukh-bracelet" },
-    { title: "Becoming — Guru Blessing", desc: "Heritage gold for growth · Jupiter pukhraj, panchaloha weight.", img: "/products/yellow-sapphire-guru-blessing-ring.webp", handle: "yellow-sapphire-guru-blessing-ring" },
-    { title: "Shelter — Shree Yantra", desc: "Clear-quartz geometry · Lakshmi's Sphatik, consecrated 108×.", img: "/products/sphatik-shree-yantra-pendant.webp", handle: "sphatik-shree-yantra-pendant" },
-    { title: "Calm — Amavasya Bracelet", desc: "Rainbow moonstone for water signs · Som Shanti.", img: "/products/moonstone-amavasya-bracelet.webp", handle: "moonstone-amavasya-bracelet" },
-    { title: "Prosperity — Wealth Rakhi", desc: "Yellow citrine Sun-Jupiter · next-gen festive thread.", img: "/products/vedic-prosperity-wealth-attraction-rakhi.webp", handle: "vedic-prosperity-wealth-attraction-rakhi" },
-    { title: "Protection — Hanuman Gada", desc: "Silver gada locket · Mars-Saturn shield, Hanuman Chalisa.", img: "/products/hanuman-gada-protection-locket.webp", handle: "hanuman-gada-protection-locket" },
-  ]
+  useEffect(() => {
+    // Subtle interval to cycle personalization preview steps if reduced motion is not preferred
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    if (mediaQuery.matches) return
+
+    const timer = window.setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % 3)
+    }, 4500)
+    return () => window.clearInterval(timer)
+  }, [])
 
   return (
-    <div className="homepage" style={{ background: "#FFFBF0" }}>
-      {/* Dash hero — Magnetic */}
-      <section className="dash-hero">
-        <h1>
-          <em>Magnetic</em> gifting for every <em>chapter</em>
-        </h1>
-        <p className="dash-hero__sub">
-          Partnering with your stars — we deliver keepsakes curated by moon sign, nakshatra and 120-year dasha. Not by category, by what you want to invite. Your chart is the brief.
-        </p>
-      </section>
+    <div className="yn-atelier-home">
+      {/* =========================================================================
+          SECTION 1: ATELIER SPLIT HERO (Layout Family 1: Asymmetric Cinematic Split)
+          Discipline: H1 max 2 lines, subtext < 20 words, primary CTAs visible at 1280x800.
+          Max 4 text elements: Headline, Subtext, Dual CTAs.
+          ========================================================================= */}
+      <section className="yn-hero-section">
+        <div className="yn-container yn-hero-grid">
+          <div className="yn-hero-copy">
+            <h1 className="yn-hero-title">
+              Gifts shaped by intention, <br />
+              <span className="yn-italic-accent">chosen by your stars.</span>
+            </h1>
+            <p className="yn-hero-subtext">
+              Curated keepsakes consecrated for the moments that matter. Browse our collection or let our concierge personalize your gift.
+            </p>
+            <div className="yn-hero-actions">
+              <Link to="/shop" className="yn-btn-primary">
+                Shop the Collection
+              </Link>
+              <Link to="/personalise" className="yn-btn-secondary">
+                Find Their Gift
+              </Link>
+            </div>
+          </div>
 
-      {/* Dash work grid — exact replica structure */}
-      <section className="dash-work-grid">
-        {workCases.map((c) => (
-          <Link key={c.handle} to={`/product/${c.handle}`} className="dash-card">
-            <div className="dash-card__img">
-              <img src={c.img} alt={c.title} loading="lazy" />
+          <div className="yn-hero-visual" aria-hidden="true">
+            <div className="yn-hero-frame">
+              <div className="yn-hero-glow" />
+              <img
+                src="/products/sphatik-shree-yantra-pendant.webp"
+                alt="Sphatik Quartz Consecrated Keepsake"
+                className="yn-hero-product-img"
+              />
+              <div className="yn-hero-caption">
+                <span className="yn-caption-dot" />
+                <span>Sphatik Quartz Keepsake / Consecrated 108 Times</span>
+              </div>
             </div>
-            <div className="dash-card__title">
-              {c.title}
-              <span className="dash-card__arrow" aria-hidden>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ marginLeft: "-8px" }}><path d="M5 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </span>
-            </div>
-            <p className="dash-card__desc">{c.desc}</p>
-          </Link>
-        ))}
-      </section>
-
-      {/* Retain brand Bento below work grid for chapter navigation */}
-      <section className="section" style={{ background: '#FFFBF0', borderRadius: '24px', padding: '48px 24px', maxWidth: '1180px', margin: '32px auto 0' }}>
-        <div style={{ textAlign: 'center', maxWidth: '620px', margin: '0 auto' }}>
-          <span className="section__label" style={{ display: 'block', marginBottom: '10px' }}>Curated by meaning</span>
-          <h2 className="section__title" style={{ textAlign: "center", color: '#1a1a1e', fontFamily: 'var(--yn-font-display)', fontWeight: 600 }}>For every chapter</h2>
-          <p className="text-editorial" style={{ textAlign: 'center', marginTop: '10px', color: '#6b645c', fontSize: '14px' }}>One question, one chapter — your chart picks the objects that hold it.</p>
-        </div>
-        <div className="yn-bento" style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gridTemplateRows: "auto auto", gap: "16px", marginTop: "28px" }}>
-          {/* Love — 1.6fr spanning 2 rows */}
-          <Link to="/shop?chapter=love" style={{ gridRow: "1 / span 2", background: "#fff", border: "1px solid rgba(232,160,191,0.22)", borderRadius: "16px", padding: "22px 18px", display: "grid", gap: "12px", textDecoration: "none", boxShadow: "0 6px 18px -14px rgba(0,0,0,0.18)", transition: "transform 0.3s, border-color 0.3s", color: "inherit" }}>
-            <div style={{ width: "44px", height: "44px", borderRadius: "50%", display: "grid", placeItems: "center", background: "rgba(232,160,191,0.14)", border: "1px solid rgba(232,160,191,0.28)", fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "14px", color: "#8a4a6a" }}>♡</div>
-            <span style={{ fontFamily: "var(--yn-font-label)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--yn-gold-strong)" }}>Chapter 01</span>
-            <h3 style={{ fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "22px", color: "#1a1a1e", margin: 0 }}>Love</h3>
-            <p style={{ fontFamily: "var(--yn-font-body)", fontSize: "13px", color: "#6b645c", lineHeight: 1.6, margin: 0 }}>Attraction, harmony, repair — Venus-led picks.</p>
-            <div style={{ aspectRatio: "4/3", borderRadius: "12px", overflow: "hidden", background: "#FFFBF0", marginTop: "4px" }}>
-              <img src="/products/pearl-chandra-sukh-bracelet.webp" alt="Love" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
-            </div>
-            <span style={{ fontFamily: "var(--yn-font-label)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--yn-gold-strong)" }}>Explore Love →</span>
-          </Link>
-          {/* Becoming — top right */}
-          <Link to="/shop?chapter=becoming" style={{ background: "#fff", border: "1px solid rgba(212,175,55,0.18)", borderRadius: "16px", padding: "18px", display: "grid", gap: "8px", textDecoration: "none", boxShadow: "0 6px 18px -14px rgba(0,0,0,0.18)", color: "inherit" }}>
-            <div style={{ width: "36px", height: "36px", borderRadius: "50%", display: "grid", placeItems: "center", background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.22)", fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "13px", color: "var(--yn-gold-strong)" }}>↗</div>
-            <h3 style={{ fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "18px", color: "#1a1a1e", margin: 0 }}>Becoming</h3>
-            <p style={{ fontFamily: "var(--yn-font-body)", fontSize: "12px", color: "#6b645c", lineHeight: 1.5, margin: 0 }}>Grow, start, steady — Mercury & Saturn.</p>
-            <span style={{ fontFamily: "var(--yn-font-label)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--yn-gold-strong)" }}>Career · Confidence →</span>
-          </Link>
-          {/* Shelter — bottom right */}
-          <Link to="/shop?chapter=shelter" style={{ background: "#fff", border: "1px solid rgba(14,42,71,0.14)", borderRadius: "16px", padding: "18px", display: "grid", gap: "8px", textDecoration: "none", boxShadow: "0 6px 18px -14px rgba(0,0,0,0.18)", color: "inherit" }}>
-            <div style={{ width: "36px", height: "36px", borderRadius: "50%", display: "grid", placeItems: "center", background: "rgba(14,42,71,0.08)", border: "1px solid rgba(14,42,71,0.18)", fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "13px", color: "#0E2A47" }}>⌂</div>
-            <h3 style={{ fontFamily: "var(--yn-font-display)", fontWeight: 600, fontSize: "18px", color: "#1a1a1e", margin: 0 }}>Shelter</h3>
-            <p style={{ fontFamily: "var(--yn-font-body)", fontSize: "12px", color: "#6b645c", lineHeight: 1.5, margin: 0 }}>Calm, home, gifting — Moon & Jupiter.</p>
-            <span style={{ fontFamily: "var(--yn-font-label)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#0E2A47" }}>Calm · Home →</span>
-          </Link>
-        </div>
-        <div style={{ marginTop: "16px", textAlign: "center" }}>
-          <Link to="/shop" style={{ fontFamily: "var(--yn-font-label)", fontSize: "11px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--yn-gold-strong)", textDecoration: "none" }}>View all intentions →</Link>
+          </div>
         </div>
       </section>
 
-      {/* Proof marquee — trust (dash style) */}
-      <div className="yn-marquee" style={{ background: '#fff', borderTop: '1px solid rgba(26,26,30,0.06)', borderBottom: '1px solid rgba(26,26,30,0.06)', padding: '14px 0', margin: '16px 0 0' }}>
-        <div className="yn-marquee__track" style={{ display: 'inline-flex', gap: '28px', alignItems: 'center' }}>
-          {['14 keepsakes · 108 chants', '27 nakshatras · 120-year cycle', 'Vedic + intention curated', 'No generic · Only personal', 'Crafted to birth time'].concat(['14 keepsakes · 108 chants', '27 nakshatras · 120-year cycle', 'Vedic + intention curated', 'No generic · Only personal', 'Crafted to birth time']).map((t, i) => (
-            <span key={i} style={{ fontFamily: 'var(--yn-font-label)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(26,26,30,0.55)', whiteSpace: 'nowrap', display: 'inline-flex', gap: '8px', alignItems: 'center' }}><span style={{ color: 'var(--yn-gold)' }}>✦</span>{t}</span>
-          ))}
+      {/* =========================================================================
+          SECTION 2: DUAL-PATHWAY PORTAL (Layout Family 2: Balanced Architectural Dual-Pillar)
+          Purpose: Differentiates standard shopping from intelligent personalization.
+          Includes Eyebrow 1 of 2.
+          ========================================================================= */}
+      <section className="yn-portal-section">
+        <div className="yn-container">
+          <div className="yn-section-header yn-text-center">
+            <span className="yn-eyebrow">Two Paths to Discovery</span>
+            <h2 className="yn-section-title">Choose your way to gift</h2>
+            <p className="yn-section-sub">
+              Whether browsing freely or seeking guidance tailored to a recipient, every keepsake is crafted to honor personal chapters.
+            </p>
+          </div>
+
+          <div className="yn-portal-grid">
+            {/* Pillar 1: Shop the Collection */}
+            <div className="yn-portal-card">
+              <div className="yn-portal-badge">Normal Discovery</div>
+              <h3 className="yn-portal-title">Shop the Collection</h3>
+              <p className="yn-portal-desc">
+                Explore our catalog of crystal trees, hand-finished cufflinks, natural gemstone pendants, and prosperity hangings without providing personal details.
+              </p>
+              <div className="yn-portal-preview-row">
+                <div className="yn-portal-chip">Brooches & Cufflinks</div>
+                <div className="yn-portal-chip">Crystal Trees</div>
+                <div className="yn-portal-chip">Sacred Jewellery</div>
+              </div>
+              <div className="yn-portal-action">
+                <Link to="/shop" className="yn-btn-outline">
+                  Browse Collection
+                </Link>
+              </div>
+            </div>
+
+            {/* Pillar 2: Find Their Gift */}
+            <div className="yn-portal-card yn-portal-card--highlight">
+              <div className="yn-portal-badge yn-portal-badge--gold">Intelligent Concierge</div>
+              <h3 className="yn-portal-title">Find Their Gift</h3>
+              <p className="yn-portal-desc">
+                Share what you know about them. Our concierge matches their planetary energy and life chapter to unveil one ideal keepsake plus alternatives.
+              </p>
+              <div className="yn-portal-steps-mini">
+                <span className="yn-mini-step">Recipient</span>
+                <span className="yn-mini-sep">→</span>
+                <span className="yn-mini-step">Numerology / Astrology</span>
+                <span className="yn-mini-sep">→</span>
+                <span className="yn-mini-step">One Hero Match</span>
+              </div>
+              <div className="yn-portal-action">
+                <Link to="/personalise" className="yn-btn-gold">
+                  Begin Personalization
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 3: CURATED KEEPSAKES (Layout Family 3: Asymmetric Staggered Gallery)
+          Purpose: Curated real products with varying heights, offsets, and authentic prices.
+          No eyebrow.
+          ========================================================================= */}
+      <section className="yn-showcase-section">
+        <div className="yn-container">
+          <div className="yn-section-header">
+            <h2 className="yn-section-title">Keepsakes of enduring presence</h2>
+            <p className="yn-section-sub">
+              Each creation unites unheated gemstones, sacred metal alloys, and deliberate geometric proportion.
+            </p>
+          </div>
+
+          <div className="yn-staggered-grid">
+            {/* Card 1: Emerald Pendant (Aspect 3/4) */}
+            <div className="yn-stagger-item yn-stagger-item--1">
+              <Link to="/product/emerald-budha-vani-pendant" className="yn-product-card">
+                <div className="yn-product-media yn-ratio-3-4">
+                  <img
+                    src="/products/emerald-budha-vani-pendant.webp"
+                    alt="Budha Emerald Vani Pendant"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="yn-product-meta">
+                  <div className="yn-product-name">Budha Emerald Vani Pendant</div>
+                  <div className="yn-product-specs">Natural Zambian Emerald / 18K Gold Vermeil</div>
+                  <div className="yn-product-price">Rs. 14,800</div>
+                </div>
+              </Link>
+            </div>
+
+            {/* Card 2: Sphatik Shree Yantra (Aspect 1/1, offset down) */}
+            <div className="yn-stagger-item yn-stagger-item--2">
+              <Link to="/product/sphatik-shree-yantra-pendant" className="yn-product-card">
+                <div className="yn-product-media yn-ratio-1-1">
+                  <img
+                    src="/products/sphatik-shree-yantra-pendant.webp"
+                    alt="Sphatik Shree Yantra Keepsake"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="yn-product-meta">
+                  <div className="yn-product-name">Sphatik Shree Yantra Keepsake</div>
+                  <div className="yn-product-specs">Himalayan Clear Quartz / Silver Geometry</div>
+                  <div className="yn-product-price">Rs. 7,200</div>
+                </div>
+              </Link>
+            </div>
+
+            {/* Card 3: Pearl Bracelet (Aspect 4/5, offset up) */}
+            <div className="yn-stagger-item yn-stagger-item--3">
+              <Link to="/product/pearl-chandra-sukh-bracelet" className="yn-product-card">
+                <div className="yn-product-media yn-ratio-4-5">
+                  <img
+                    src="/products/pearl-chandra-sukh-bracelet.webp"
+                    alt="Pearl Chandra Sukh Bracelet"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="yn-product-meta">
+                  <div className="yn-product-name">Pearl Chandra Sukh Bracelet</div>
+                  <div className="yn-product-specs">South Sea Cultured Pearl / Silk Thread</div>
+                  <div className="yn-product-price">Rs. 4,800</div>
+                </div>
+              </Link>
+            </div>
+
+            {/* Card 4: Sapphire Ring (Aspect 1/1, offset down) */}
+            <div className="yn-stagger-item yn-stagger-item--4">
+              <Link to="/product/yellow-sapphire-guru-blessing-ring" className="yn-product-card">
+                <div className="yn-product-media yn-ratio-1-1">
+                  <img
+                    src="/products/yellow-sapphire-guru-blessing-ring.webp"
+                    alt="Guru Blessing Sapphire Ring"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="yn-product-meta">
+                  <div className="yn-product-name">Guru Blessing Sapphire Ring</div>
+                  <div className="yn-product-specs">Natural Ceylon Pukhraj / Panchaloha Band</div>
+                  <div className="yn-product-price">Rs. 16,500</div>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <div className="yn-showcase-footer">
+            <Link to="/shop" className="yn-text-link">
+              Explore all 14 curated keepsakes →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 4: PERSONALIZATION PROGRESSION (Layout Family 4: Sticky 2-Column Progressive Flow)
+          Purpose: Demonstrates the intelligence layer as an effortless concierge.
+          Includes Eyebrow 2 of 2.
+          ========================================================================= */}
+      <section className="yn-narrative-section">
+        <div className="yn-container yn-narrative-grid">
+          {/* Left Column: Sticky architectural summary */}
+          <div className="yn-sticky-panel">
+            <span className="yn-eyebrow">Intelligent Concierge</span>
+            <h2 className="yn-section-title">Gifting with quiet intelligence</h2>
+            <p className="yn-section-sub">
+              We do not believe in generic recommendations. Personalization progresses with the depth of knowledge you hold, crafting relevance without complexity.
+            </p>
+            <div className="yn-sticky-action">
+              <Link to="/personalise" className="yn-btn-primary">
+                Begin Gift Journey
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column: Progressive step reveals */}
+          <div className="yn-progression-track">
+            {/* Step 1 */}
+            <div
+              className={`yn-step-card ${activeStep === 0 ? "yn-step-card--active" : ""}`}
+              onClick={() => setActiveStep(0)}
+              role="button"
+              tabIndex={0}
+            >
+              <div className="yn-step-num">Step 01</div>
+              <h3 className="yn-step-title">The Recipient</h3>
+              <p className="yn-step-desc">
+                Select whether this keepsake is for yourself or someone meaningful: a partner, sibling, parent, mentor, or friend.
+              </p>
+              <div className="yn-pill-group">
+                <span className="yn-sample-pill">Self</span>
+                <span className="yn-sample-pill">Partner</span>
+                <span className="yn-sample-pill">Sibling</span>
+                <span className="yn-sample-pill">Friend</span>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div
+              className={`yn-step-card ${activeStep === 1 ? "yn-step-card--active" : ""}`}
+              onClick={() => setActiveStep(1)}
+              role="button"
+              tabIndex={0}
+            >
+              <div className="yn-step-num">Step 02</div>
+              <h3 className="yn-step-title">What You Know</h3>
+              <p className="yn-step-desc">
+                Name only opens the numerology path. Adding birth date, time, and city unlocks planetary alignment and dasha timing.
+              </p>
+              <div className="yn-data-mode-preview">
+                <div className="yn-mode-box">
+                  <div className="yn-mode-label">Name Only</div>
+                  <div className="yn-mode-value">Numerology Rhythm</div>
+                </div>
+                <div className="yn-mode-box yn-mode-box--pro">
+                  <div className="yn-mode-label">Name + Birth Time</div>
+                  <div className="yn-mode-value">Vedic Ephemeris</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div
+              className={`yn-step-card ${activeStep === 2 ? "yn-step-card--active" : ""}`}
+              onClick={() => setActiveStep(2)}
+              role="button"
+              tabIndex={0}
+            >
+              <div className="yn-step-num">Step 03</div>
+              <h3 className="yn-step-title">Occasion & Recommendation</h3>
+              <p className="yn-step-desc">
+                Mark a birthday, anniversary, wedding, or transition. You receive exactly one hero match paired with three refined alternatives.
+              </p>
+              <div className="yn-recommendation-sketch">
+                <div className="yn-rec-hero-pill">
+                  <span className="yn-rec-crown">✦</span>
+                  <span>1 Hero Recommendation (Primary Match)</span>
+                </div>
+                <div className="yn-rec-alt-row">
+                  <span>+ 3 Thoughtful Alternatives</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 5: CRAFT & CONSECRATION BREAKOUT (Layout Family 5: Full-Width Story Banner)
+          Purpose: Highlights authentic Indian luxury craftsmanship without religious clichés.
+          No eyebrow.
+          ========================================================================= */}
+      <section className="yn-breakout-section">
+        <div className="yn-breakout-backdrop" aria-hidden="true">
+          <img
+            src="/scenes/threshold-c.webp"
+            alt="YOUNOYA Atelier Atmosphere"
+            className="yn-breakout-bg-img"
+          />
+          <div className="yn-breakout-overlay" />
+        </div>
+
+        <div className="yn-container yn-breakout-content">
+          <h2 className="yn-breakout-title">
+            Consecrated by intention, <br />
+            <span className="yn-italic-accent">perfected by hand.</span>
+          </h2>
+          <p className="yn-breakout-sub">
+            Every piece is energized through 108 chants aligned with planetary frequencies. We source untreated minerals, noble metals, and archival presentation cases to turn each gift into a lasting personal token.
+          </p>
+
+          <div className="yn-metrics-strip">
+            <div className="yn-metric-cell">
+              <div className="yn-metric-val">108</div>
+              <div className="yn-metric-lbl">Vedic Consecrations</div>
+            </div>
+            <div className="yn-metric-cell">
+              <div className="yn-metric-val">100%</div>
+              <div className="yn-metric-lbl">Untreated Natural Minerals</div>
+            </div>
+            <div className="yn-metric-cell">
+              <div className="yn-metric-val">Express</div>
+              <div className="yn-metric-lbl">Insured Air Dispatch</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 6: CHAPTER INTENTION BENTO (Layout Family 6: Asymmetric 3-Cell Bento)
+          Purpose: Connects gifting to human intentions (Love, Becoming, Shelter).
+          No eyebrow.
+          ========================================================================= */}
+      <section className="yn-bento-section">
+        <div className="yn-container">
+          <div className="yn-section-header yn-text-center">
+            <h2 className="yn-section-title">Gifts curated for life chapters</h2>
+            <p className="yn-section-sub">
+              Select by the emotional chapter you wish to honor in their journey.
+            </p>
+          </div>
+
+          <div className="yn-asym-bento">
+            {/* Cell 1: Large Chapter of Love (8 cols) */}
+            <Link to="/shop?chapter=love" className="yn-bento-cell yn-bento-cell--lead">
+              <div className="yn-bento-bg">
+                <img
+                  src="/products/pearl-chandra-sukh-bracelet.webp"
+                  alt="Chapter of Love Keepsake"
+                  loading="lazy"
+                />
+                <div className="yn-bento-scrim" />
+              </div>
+              <div className="yn-bento-content">
+                <div className="yn-bento-tag">Chapter 01</div>
+                <h3 className="yn-bento-title">Love & Harmony</h3>
+                <p className="yn-bento-text">
+                  Venus-led keepsakes celebrating devotion, affection, and mutual respect. Crafted with cultured pearls, rose quartz, and delicate silver links.
+                </p>
+                <div className="yn-bento-cta">Explore Love Tokens →</div>
+              </div>
+            </Link>
+
+            {/* Cell 2: Chapter of Becoming (4 cols, top) */}
+            <Link to="/shop?chapter=becoming" className="yn-bento-cell yn-bento-cell--sub">
+              <div className="yn-bento-bg">
+                <img
+                  src="/products/yellow-sapphire-guru-blessing-ring.webp"
+                  alt="Chapter of Becoming Keepsake"
+                  loading="lazy"
+                />
+                <div className="yn-bento-scrim" />
+              </div>
+              <div className="yn-bento-content">
+                <div className="yn-bento-tag">Chapter 02</div>
+                <h3 className="yn-bento-title">Becoming</h3>
+                <p className="yn-bento-text">
+                  Jupiter and Mercury keepsakes for milestones, professional growth, and clear purpose.
+                </p>
+                <div className="yn-bento-cta">Career & Growth →</div>
+              </div>
+            </Link>
+
+            {/* Cell 3: Chapter of Shelter (4 cols, bottom) */}
+            <Link to="/shop?chapter=shelter" className="yn-bento-cell yn-bento-cell--sub">
+              <div className="yn-bento-bg">
+                <img
+                  src="/products/sphatik-shree-yantra-pendant.webp"
+                  alt="Chapter of Shelter Keepsake"
+                  loading="lazy"
+                />
+                <div className="yn-bento-scrim" />
+              </div>
+              <div className="yn-bento-content">
+                <div className="yn-bento-tag">Chapter 03</div>
+                <h3 className="yn-bento-title">Shelter</h3>
+                <p className="yn-bento-text">
+                  Lunar peace, vastu harmony, and protective stones for sanctuaries and families.
+                </p>
+                <div className="yn-bento-cta">Home & Calm →</div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 7: ATELIER CONCIERGE SANCTUARY (Layout Family 7: Inset Contained Banner)
+          Purpose: High-contrast framed sanctuary box inviting seekers to begin discovery.
+          No eyebrow.
+          ========================================================================= */}
+      <section className="yn-sanctuary-section">
+        <div className="yn-container">
+          <div className="yn-sanctuary-box">
+            <div className="yn-sanctuary-inner">
+              <h2 className="yn-sanctuary-title">
+                Ready to find a gift they will never forget?
+              </h2>
+              <p className="yn-sanctuary-sub">
+                Begin with birth details for an intelligent recommendation, or explore our handcrafted catalog at your own pace.
+              </p>
+              <div className="yn-sanctuary-actions">
+                <Link to="/personalise" className="yn-btn-primary">
+                  Start Personalization
+                </Link>
+                <Link to="/shop" className="yn-btn-secondary">
+                  View Full Collection
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 8: BRAND ATELIER FOOTER (Layout Family 8: Architectural Multi-Column Directory)
+          Purpose: Restrained luxury footer with zero em-dashes and authentic credentials.
+          No eyebrow.
+          ========================================================================= */}
+      <footer className="yn-atelier-footer">
+        <div className="yn-container">
+          <div className="yn-footer-grid">
+            {/* Brand column */}
+            <div className="yn-footer-brand-col">
+              <Link to="/" className="yn-footer-brand" aria-label="YOUNOYA Home">
+                <img src="/younoya-gold.svg" alt="YOUNOYA" className="yn-footer-logo" />
+              </Link>
+              <p className="yn-footer-desc">
+                Personalized Indian gifting atelier. Keepsakes curated by planetary rhythm and energized with intention.
+              </p>
+              <div className="yn-footer-origin">Jaipur, India</div>
+              <a href="mailto:hello@younoya.com" className="yn-footer-email">
+                hello@younoya.com
+              </a>
+            </div>
+
+            {/* Links column 1 */}
+            <div className="yn-footer-col">
+              <div className="yn-footer-heading">Collection</div>
+              <ul className="yn-footer-list">
+                <li><Link to="/shop">All Keepsakes</Link></li>
+                <li><Link to="/shop?category=pendants">Gemstone Pendants</Link></li>
+                <li><Link to="/shop?category=bracelets">Crystal Bracelets</Link></li>
+                <li><Link to="/shop?category=cufflinks">Brooches & Cufflinks</Link></li>
+                <li><Link to="/shop?category=decor">Prosperity Decor</Link></li>
+              </ul>
+            </div>
+
+            {/* Links column 2 */}
+            <div className="yn-footer-col">
+              <div className="yn-footer-heading">Chapters</div>
+              <ul className="yn-footer-list">
+                <li><Link to="/shop?chapter=love">Love & Devotion</Link></li>
+                <li><Link to="/shop?chapter=becoming">Career & Becoming</Link></li>
+                <li><Link to="/shop?chapter=shelter">Shelter & Home</Link></li>
+                <li><Link to="/personalise">Personalized Concierge</Link></li>
+              </ul>
+            </div>
+
+            {/* Links column 3 */}
+            <div className="yn-footer-col">
+              <div className="yn-footer-heading">Atelier</div>
+              <ul className="yn-footer-list">
+                <li><Link to="/about">Our Philosophy</Link></li>
+                <li><Link to="/journal">Journal & Insights</Link></li>
+                <li><Link to="/contact">Private Consultation</Link></li>
+                <li><span className="yn-footer-pill">Shiprocket Insured Air</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="yn-footer-bottom">
+            <div className="yn-footer-copy">
+              © {new Date().getFullYear()} YOUNOYA. All rights reserved.
+            </div>
+            <div className="yn-footer-legal">
+              <Link to="/privacy">Privacy</Link>
+              <Link to="/terms">Terms</Link>
+              <Link to="/contact">Concierge</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

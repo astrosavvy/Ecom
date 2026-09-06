@@ -31,9 +31,9 @@ export default function StoreFooter() {
             <img src="/younoya-gold.svg" alt="YOUNOYA for every chapter" style={{ height: '32px', width: 'auto', display: 'block', marginBottom: '14px' }} />
           </Link>
           <p className="store-footer__brand-desc" style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', lineHeight: 1.6, color: '#5a534a', maxWidth: '30ch' }}>
-            Magnetic gifting for every chapter. Keepsakes curated by moon sign, nakshatra and dasha — consecrated by intention.
+            Magnetic gifting for every chapter. Keepsakes curated by moon sign, nakshatra and dasha: consecrated by intention.
           </p>
-          <p style={{ marginTop: '14px', fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#0a0a0a' }}>Jaipur — For every chapter.</p>
+          <p style={{ marginTop: '14px', fontFamily: 'Inter, sans-serif', fontSize: '12px', color: '#0a0a0a' }}>Jaipur: For every chapter.</p>
           <a href="mailto:hello@younoya.com" style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: '#0a0a0a', textDecoration: 'underline', textUnderlineOffset: '3px' }}>hello@younoya.com</a>
         </div>
         <div>
