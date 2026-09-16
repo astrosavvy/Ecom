@@ -20,6 +20,7 @@ const PersonaliseFlow = lazy(() => import('./store/pages/PersonaliseFlow'))
 const Journal = lazy(() => import('./store/pages/Journal'))
 const JournalArticle = lazy(() => import('./store/pages/JournalArticle'))
 const About = lazy(() => import('./store/pages/About'))
+const LetsScrollWorld = lazy(() => import('./store/pages/LetsScrollWorld'))
 
 function FilmHome() {
   const filmState = useRef({ t: 0, vel: 0 })
@@ -80,6 +81,10 @@ export default function App() {
       <Routes>
         {/* Cinematic WebGL film experience (legacy) */}
         <Route path="/film" element={<FilmHome />} />
+
+        {/* Interactive lets-scroll 3D camera flight world */}
+        <Route path="/world" element={<Suspense fallback={SuspenseFallback}><LetsScrollWorld /></Suspense>} />
+        <Route path="/lets-scroll" element={<Suspense fallback={SuspenseFallback}><LetsScrollWorld /></Suspense>} />
 
         {/* Main storefront with header + footer */}
         <Route element={<StoreLayout />}>

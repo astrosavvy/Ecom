@@ -7,6 +7,7 @@ const SHOP_LINKS = [
 ]
 
 const EXPLORE_LINKS = [
+  { label: 'The 3D World (Scroll)', path: '/world' },
   { label: 'Relationships', path: '/journal/category/relationships' },
   { label: 'Career & Growth', path: '/journal/category/career' },
   { label: 'Finance', path: '/journal/category/finance' },

@@ -8,7 +8,7 @@
 
    USAGE
      mountLetsScroll(document.getElementById('world'), {
-       brand: { name: 'Pearl & Co.', href: '#top' },
+       brand: { name: 'YOUNOYA', href: '#top' },
        diveScroll: 1.3,   // viewport-heights of scroll per dive clip
        connScroll: 0.9,   // ...per connector clip
        hint: 'scroll to fly in',
@@ -16,58 +16,19 @@
        atmosphere: true,  // subtle gradient + drifting particles behind the clips
        sections: [
          { id, label, still, stillMobile, clip, clipMobile, accent,
-           scroll: 1.6,   // optional per-section override of diveScroll — more scroll
-                          // distance = a slower, longer dwell in this scene
-           linger: 0.5,   // optional 0..1 — remaps time so the camera settles mid-scene
-                          // (exactly where the copy peaks) and moves quicker at the
-                          // edges. 0 = linear (default). Keep ≤ 0.6; 1 = full pause.
+           scroll: 1.6,   // optional per-section override of diveScroll
+           linger: 0.5,   // optional 0..1 — remaps time so camera settles mid-scene
            eyebrow, title, body, tags:[…],
-           cta:{ primary:{label,href}, secondary:{label,href} } }, // last section only
+           cta:{ primary:{label,href}, secondary:{label,href} } },
          …
        ],
-       connectors: [clipUrl, …],          // length = sections.length - 1 (nulls allowed)
-       connectorsMobile: [clipUrl, …],    // optional lighter connectors for phones (same length)
-
-   MOBILE (the clipMobile/connectorsMobile variants are the opt-in mobile version;
-   the rest of the phone handling below is always on)
-     The engine is phone-aware out of the box: on a coarse-pointer / ≤860px viewport it
-       - loads `clipMobile` / `connectorsMobile` when provided (encode these smaller +
-         tighter-GOP — seek cost on a phone decoder is dominated by frames-from-keyframe,
-         so a 720p, -g 4 file scrubs far smoother than the 1080p desktop master; see
-         pipeline.md). Falls back to the desktop `clip` if no mobile variant is given.
-       - uses `stillMobile` as the scene poster when provided (pair it with native 9:16
-         clipMobile renders so the poster matches the portrait video's first frame instead
-         of flashing from a landscape crop). Chosen once at mount; a desktop resize into
-         phone width keeps the desktop poster (clips still switch via isMobile()).
-       - coalesces seeks (never issues a new currentTime while the decoder is still
-         `seeking`) so fast flicks can't pile up and freeze the video.
-       - keeps the still as a live poster until the clip actually paints its first frame,
-         and primes each video (muted play→pause) on first touch — this is what stops iOS
-         from showing a blank scene before the first seek.
-       - drops the drifting particles and ignores URL-bar-only resizes (no scroll jump).
-     Nothing here is required — a config with only `clip`/`connectors` still works on
-     phones; the mobile variants just make it lighter and smoother.
-
-   THEME (CSS custom properties; set on the container or :root to override)
-     --sw-bg         page background (match your scene bg for seamless posters)
-     --sw-ink        primary text
-     --sw-ink-soft   secondary text
-     --sw-accent     default accent (each section overrides via its `accent`)
-     --sw-font-display / --sw-font-body
-
-   REQUIREMENTS ON YOUR ASSETS
-     - clips encoded native-res, crf~20, -g 8, +faststart, no audio (see pipeline.md)
-     - connectors' endpoints are the neighbouring dives' ACTUAL frames (see SKILL Step 5)
-     - (optional) mobile variants at ~720p, -g 4 for smoother phone scrubbing
-   The engine loads each clip as a Blob (always seekable) and scrubs currentTime; it does
-   NOT depend on HTTP byte-range support.
+       connectors: [clipUrl, …],
+       connectorsMobile: [clipUrl, …],
+     });
    ========================================================================== */
 
 function mountLetsScroll(container, config) {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Phone detection. `coarse` is captured once (input type doesn't change mid-session);
-  // the ≤860px query is read live via isMobile() so a desktop resize/DevTools toggle
-  // switches sources and seek behaviour without a reload.
   const coarse = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
   const smallMQ = window.matchMedia('(max-width: 860px)');
   const isMobile = () => coarse || smallMQ.matches;
@@ -76,23 +37,20 @@ function mountLetsScroll(container, config) {
   const CONNECTORS_M = config.connectorsMobile || [];
   const DIVE_W = config.diveScroll || 1.3;
   const CONN_W = config.connScroll || 0.9;
-  const CROSSFADE = (config.crossfade != null) ? config.crossfade : 0.12;  // seam dissolve width (vh)
+  const CROSSFADE = (config.crossfade != null) ? config.crossfade : 0.12;
   const N = SECTIONS.length;
   if (!N) return;
 
   injectCSS();
   container.classList.add('sw-root');
 
-  // ---- build the interleaved segment chain: dive0, conn0, dive1, … diveN-1 ----
+  // ---- build the interleaved segment chain ----
   const SEGMENTS = [];
   SECTIONS.forEach((s, i) => {
     const dive = { kind: 'dive', si: i, clip: s.clip, clipM: s.clipMobile, still: s.still, stillM: s.stillMobile,
                    accent: s.accent, w: s.scroll || DIVE_W, linger: s.linger || 0 };
     SEGMENTS.push(dive);
     s._seg = dive;
-    // A connector is optional: if connectors[i] is falsy, the two dives simply
-    // crossfade directly (no fly-over). Lets a page complete even when a
-    // connector can't be generated (e.g. a content-filter false-positive).
     if (i < N - 1 && CONNECTORS[i]) {
       SEGMENTS.push({ kind: 'conn', si: i, clip: CONNECTORS[i], clipM: CONNECTORS_M[i],
                       still: SECTIONS[i + 1].still, stillM: SECTIONS[i + 1].stillMobile,
@@ -172,12 +130,9 @@ function mountLetsScroll(container, config) {
   // ---- math ----
   const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
   const smooth = x => { x = clamp(x); return x * x * (3 - 2 * x); };
-  // Per-section dwell: monotone remap of scroll→time so the camera settles mid-scene
-  // (where the copy peaks) and moves quicker near the seams. L=0 linear, L=1 full
-  // mid-scene pause. f(0)=0, f(1)=1 always, so seam frames are untouched.
   const lingerEase = (x, L) => { L = clamp(L); const c = x - 0.5; return (1 - L) * x + L * (4 * c * c * c + 0.5); };
   let vh = window.innerHeight, stageX = 0, totalW = 0, activeIndex = -1, ticking = false;
-  let laidOutW = window.innerWidth;   // width the current layout was computed at (see onResize)
+  let laidOutW = window.innerWidth;
 
   function layout() {
     vh = window.innerHeight;
@@ -186,7 +141,7 @@ function mountLetsScroll(container, config) {
     let off = 0;
     SEGMENTS.forEach(s => { s.start = off * vh; off += s.w; s.end = off * vh; });
     totalW = off;
-    track.style.height = (totalW * vh + vh) + 'px';   // +1vh so the last flight completes
+    track.style.height = (totalW * vh + vh) + 'px';
     read();
   }
 
@@ -198,11 +153,8 @@ function mountLetsScroll(container, config) {
   const abortControllers = [];
 
   function loadClip(s) {
-    // Under prefers-reduced-motion we never load the clips at all — the stills stay up
-    // and simply cross-dissolve as you scroll. No scrubbed video motion, no decode cost.
     if (reduce || s.loading || !s.clip || !running) return;
     s.loading = true;
-    // Serve the lighter mobile encode on phones when one was provided.
     const url = (isMobile() && s.clipM) ? s.clipM : s.clip;
     const ac = (typeof AbortController !== 'undefined') ? new AbortController() : null;
     if (ac) abortControllers.push(ac);
@@ -218,9 +170,6 @@ function mountLetsScroll(container, config) {
         s.objectUrl = objUrl;
         v.src = objUrl;
         v.addEventListener('loadedmetadata', () => { if (running) { s.ready = true; read(); } });
-        // Reveal the video (hide the still poster) only once a real frame has
-        // painted — on iOS a seeked-but-never-played muted video stays blank, so
-        // hiding the still on metadata alone would flash an empty scene.
         v.addEventListener('seeked', () => { if (running) { s.el.classList.add('has-clip'); } }, { once: true });
         v.addEventListener('loadeddata', () => {
           if (!running) return;
@@ -258,8 +207,8 @@ function mountLetsScroll(container, config) {
       const pr = clamp((y - seg.start) / (seg.end - seg.start), 0, 1);
       const before = y < seg.start, after = y > seg.end;
       let cop;
-      if (i === 0) cop = after ? 0 : smooth(1 - pr / 0.62);            // greets on landing
-      else if (i === N - 1) cop = before ? 0 : smooth(pr / 0.4);       // holds CTA at the end
+      if (i === 0) cop = after ? 0 : smooth(1 - pr / 0.62);
+      else if (i === N - 1) cop = before ? 0 : smooth(pr / 0.4);
       else cop = (before || after) ? 0 : smooth(1 - Math.abs(pr - 0.5) / 0.5);
       const c = copies[i];
       c.style.opacity = cop;
@@ -286,13 +235,10 @@ function mountLetsScroll(container, config) {
   let rafId = null;
   function raf() {
     if (!running) return;
-    const eps = isMobile() ? 0.02 : 0.008;   // coarser seek step on phones = fewer decodes
+    const eps = isMobile() ? 0.02 : 0.008;
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];
       if (!s.hasClip || !s.ready || !s.video) continue;
-      // Never queue a seek while the decoder is still resolving the last one.
-      // On phones a fast flick would otherwise pile up seeks and freeze the clip;
-      // cur keeps lerping, so we snap to the latest target the moment it's free.
       if (s.video.seeking) continue;
       if (!s.visible && Math.abs(s.cur - s.target) < 0.002) continue;
       s.cur += (s.target - s.cur) * (reduce ? 1 : 0.18);
@@ -303,10 +249,6 @@ function mountLetsScroll(container, config) {
     rafId = requestAnimationFrame(raf);
   }
 
-  // iOS needs a user gesture before a muted video will decode/paint reliably. On the
-  // first touch we prime every loaded clip (muted play→pause) so the first seek is
-  // instant instead of showing a blank frame. `userReady` also makes freshly-loaded
-  // clips prime themselves (see loadClip).
   let userReady = false;
   function primeVideo(v) {
     if (!isMobile() || !v) return;
@@ -321,15 +263,10 @@ function mountLetsScroll(container, config) {
   window.addEventListener('pointerdown', onFirstGesture, { once: true, passive: true });
   window.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
 
-  // Particles are a per-frame cost we can't afford alongside video scrubbing on a phone.
   seedParticles(particles, reduce || coarse);
   const onScroll = () => { if (!ticking && running) { ticking = true; requestAnimationFrame(read); } };
   window.addEventListener('scroll', onScroll, { passive: true });
-  // Mobile browsers fire `resize` every time the URL bar slides in/out. Re-running
-  // layout() there rebuilds the track height and yanks the scroll position, so on
-  // touch we ignore height-only changes and only relayout when the width actually
-  // changes (rotation still comes through orientationchange). layout() records the
-  // width it laid out at.
+
   function onResize() {
     if (coarse && window.innerWidth === laidOutW) return;
     layout();
@@ -468,18 +405,16 @@ function injectCSS() {
   .sw-route__dot i{width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,var(--sw-accent) 40%,transparent);transition:transform .3s,background .3s,box-shadow .3s;}
   .sw-route__dot:hover i{transform:scale(1.25);background:var(--sw-accent);}
   .sw-route__dot.is-active i{background:var(--sw-accent);transform:scale(1.4);box-shadow:0 0 0 5px color-mix(in srgb,var(--sw-accent) 30%,transparent);}
-  .sw-route__label{position:absolute;right:24px;top:50%;transform:translateY(-50%) translateX(6px);white-space:nowrap;font-size:.78rem;font-weight:600;color:var(--sw-ink);background:rgba(26,26,30,0.85);backdrop-filter:blur(6px);padding:5px 11px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;border:1px solid color-mix(in srgb,var(--sw-accent) 26%,transparent);}
+  .sw-route__label{position:absolute;right:24px;top:50%;transform:translateY(-50%) translateX(6px);white-space:nowrap;font-size:.78rem;font-weight:600;color:var(--sw-ink);background:rgba(11,14,24,0.88);backdrop-filter:blur(6px);padding:5px 11px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;border:1px solid rgba(212,175,55,0.3);}
   .sw-route__dot:hover .sw-route__label,.sw-route__dot.is-active .sw-route__label{opacity:1;transform:translateY(-50%) translateX(0);}
   .sw-hint{position:fixed;left:50%;bottom:26px;z-index:30;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sw-ink-soft);transition:opacity .3s;}
-  .sw-hint i{width:22px;height:34px;border-radius:12px;border:2px solid color-mix(in srgb,var(--sw-ink) 28%,transparent);position:relative;}
+  .sw-hint i{width:22px;height:34px;border-radius:12px;border:2px solid rgba(255,251,240,0.35);position:relative;}
   .sw-hint i::after{content:"";position:absolute;left:50%;top:7px;width:4px;height:7px;border-radius:2px;background:var(--sw-accent);transform:translateX(-50%);animation:sw-wheel 1.7s ease-in-out infinite;}
   @keyframes sw-wheel{0%{opacity:0;top:6px}40%{opacity:1}100%{opacity:0;top:17px}}
   .sw-track{position:relative;z-index:1;width:100%;pointer-events:none;}
   @media (max-width:860px){
     .sw-nav{display:none;}
     .sw-copylayer::before{width:100%;height:60%;top:auto;bottom:0;background:linear-gradient(0deg,var(--sw-bg) 8%,color-mix(in srgb,var(--sw-bg) 70%,transparent) 46%,transparent 100%);}
-    /* Anchor copy to the bottom, clear of the home indicator / collapsing URL bar.
-       dvh + env() are progressive: browsers that lack them keep the vh fallback line. */
     .sw-copy{left:clamp(18px,5vw,64px);right:clamp(18px,5vw,64px);top:auto;bottom:clamp(64px,14vh,120px);transform:none;width:auto;max-width:560px;}
     .sw-copy{bottom:calc(clamp(56px,12dvh,110px) + env(safe-area-inset-bottom));}
     .sw-copy__title{font-size:clamp(1.9rem,7.5vw,2.7rem);}
@@ -487,12 +422,9 @@ function injectCSS() {
     .sw-hint{bottom:calc(20px + env(safe-area-inset-bottom));}
     .sw-route{gap:16px;right:6px;} .sw-route__label{display:none;}
   }
-  /* Portrait phones crop a 16:9 clip hard; keep the framing centred so the focal
-     subject (which the camera dives toward) stays in view. */
   @media (max-width:860px) and (orientation:portrait){
     .sw-scene__video,.sw-scene__still{object-position:center 44%;}
   }
-  /* Touch: give the route dots a finger-sized hit area without growing the visible dot. */
   @media (hover:none) and (pointer:coarse){
     .sw-route{padding:14px 6px;}
     .sw-route__dot{width:28px;height:28px;}
@@ -500,18 +432,10 @@ function injectCSS() {
   }
   @media (prefers-reduced-motion:reduce){ .sw-hint i::after{animation:none;} .sw-pt{display:none;} }
   `;
-  // Wrap in a cascade layer so the page's own theme tokens (unlayered
-  // :root / .sw-root { --sw-bg / --sw-ink / --sw-accent … }) always win over
-  // these defaults, regardless of injection order. Enables clean dark themes.
   const style = document.createElement('style'); style.id = 'sw-css';
   style.textContent = '@layer sw {\n' + css + '\n}';
   document.head.appendChild(style);
 }
 
-// Expose for module + global use.
 if (typeof module !== 'undefined' && module.exports) module.exports = { mountLetsScroll };
 if (typeof window !== 'undefined') window.mountLetsScroll = mountLetsScroll;
-
-// ESM export for Vite dynamic import
-export { mountLetsScroll };
-export default mountLetsScroll;

@@ -38,11 +38,21 @@ Brand brief demands editorial "for every chapter" atelier, not crystal shop. `yo
 
 | Item | Status | Note |
 |---|---|---|
+| lets-scroll 3D Interactive World | SHIPPED | Standalone `lets-scroll-site/` + Storefront `/world` & `/lets-scroll` |
 | Razorpay webhook live | OPEN | Module dormant, checkout pending payment |
 | Real SMS OTP | OPEN | `OTP_MODE=mock 1234` on VPS |
 | Real product photography | OPEN | Replace `gen-product-images.py` placeholders |
 | edge-bff `/api/v1/*` vs `/store/*` | OPEN | Fix paths before enabling |
 | `younoya.com` custom domain attached to Pages | VERIFY | Seeded `STOREFRONT_URL` requires it |
+
+---
+
+### lets-scroll Engine & World — SHIPPED
+- `lets-scroll-site/`: Standalone, zero-dependency scroll-scrubbed website (`index.html`, `scrub-engine.js`, `README.md`) runnable via `python -m http.server 3000`.
+- `younoya-web/src/lib/scrub-engine.js`: Upgraded `mountLetsScroll` with lifecycle destroy handler to prevent memory leaks and dangling rAF/scroll listeners during client-side route transitions. Added `scrub-engine.d.ts` type definitions.
+- `younoya-web/src/store/pages/LetsScrollWorld.tsx`: Dedicated React component implementing 6 scroll-scrubbed chapters (Prologue thriller video scrub, Threshold, Cosmos, Intention, Consecration, Reveal) with luxury tokens (`#07080E`, `#D4AF37`, `#FFFBF0`) and return-to-atelier navigation.
+- `younoya-web/src/App.tsx`: Registered `/world` and `/lets-scroll` routes.
+- `younoya-web/src/store/components/StoreFooter.tsx`: Added link to "The 3D World (Scroll)".
 
 ---
 
