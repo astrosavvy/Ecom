@@ -161,4 +161,329 @@ Please change the parent <Route path="${D}"> to <Route path="${D==="/"?"*":`${D}
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */const pS={name:"x",size:24,node:[["path",{d:"M18 6 6 18",key:"1bl5f8"}],["path",{d:"m6 6 12 12",key:"d8bk6v"}]]};pS.node;const vS=$n(pS);function sw(){const[i,l]=x.useState(!1),[s,o]=x.useState(!1),{totalItems:c,setIsOpen:f}=O0();x.useEffect(()=>{const m=()=>l(window.scrollY>50);return m(),window.addEventListener("scroll",m,{passive:!0}),()=>window.removeEventListener("scroll",m)},[]);const h=()=>o(!1);return L.jsxs("header",{className:`navbar ${i?"navbar--scrolled":""}`,children:[L.jsxs("div",{className:"navbar__inner",children:[L.jsx("a",{className:"navbar__brand",href:"#story","aria-label":"Younoya home",children:L.jsx("img",{src:"/favicon.png",alt:"Younoya"})}),L.jsx("span",{className:"navbar__descriptor",children:"OBJECTS OF AFFECTION"}),L.jsxs("nav",{className:"navbar__nav","aria-label":"Primary navigation",children:[L.jsx("a",{href:"#story",children:"Intentions"}),L.jsx("a",{href:"#finale",children:"Younoya"})]}),L.jsxs("div",{className:"navbar__actions",children:[L.jsxs("button",{className:"navbar__cart",onClick:()=>f(!0),"aria-label":`Open shopping bag with ${c} items`,children:[L.jsx(aw,{size:18}),L.jsx("span",{children:"Bag"}),c>0&&L.jsx("b",{children:c})]}),L.jsx("button",{className:"navbar__menu",onClick:()=>o(m=>!m),"aria-expanded":s,"aria-label":"Toggle menu",children:s?L.jsx(vS,{size:21}):L.jsx(tw,{size:21})})]})]}),L.jsx(Sh,{children:s&&L.jsxs(xs.div,{className:"navbar__mobile",initial:{opacity:0,height:0},animate:{opacity:1,height:"auto"},exit:{opacity:0,height:0},children:[L.jsx("a",{href:"#story",onClick:h,children:"Gift intentions"}),L.jsx("a",{href:"#finale",onClick:h,children:"Younoya"})]})})]})}var Ih={};(function i(l,s,o,c){var f=!!(l.Worker&&l.Blob&&l.Promise&&l.OffscreenCanvas&&l.OffscreenCanvasRenderingContext2D&&l.HTMLCanvasElement&&l.HTMLCanvasElement.prototype.transferControlToOffscreen&&l.URL&&l.URL.createObjectURL),h=typeof Path2D=="function"&&typeof DOMMatrix=="function",m=(function(){if(!l.OffscreenCanvas)return!1;try{var U=new OffscreenCanvas(1,1),w=U.getContext("2d");w.fillRect(0,0,1,1);var lt=U.transferToImageBitmap();w.createPattern(lt,"no-repeat")}catch{return!1}return!0})();function p(){}function y(U){var w=s.exports.Promise,lt=w!==void 0?w:l.Promise;return typeof lt=="function"?new lt(U):(U(p,p),null)}var g=(function(U,w){return{transform:function(lt){if(U)return lt;if(w.has(lt))return w.get(lt);var ft=new OffscreenCanvas(lt.width,lt.height),E=ft.getContext("2d");return E.drawImage(lt,0,0),w.set(lt,ft),ft},clear:function(){w.clear()}}})(m,new Map),v=(function(){var U=Math.floor(16.666666666666668),w,lt,ft={},E=0;return typeof requestAnimationFrame=="function"&&typeof cancelAnimationFrame=="function"?(w=function(q){var K=Math.random();return ft[K]=requestAnimationFrame(function Z(tt){E===tt||E+U-1<tt?(E=tt,delete ft[K],q()):ft[K]=requestAnimationFrame(Z)}),K},lt=function(q){ft[q]&&cancelAnimationFrame(ft[q])}):(w=function(q){return setTimeout(q,U)},lt=function(q){return clearTimeout(q)}),{frame:w,cancel:lt}})(),T=(function(){var U,w,lt={};function ft(E){function q(K,Z){E.postMessage({options:K||{},callback:Z})}E.init=function(Z){var tt=Z.transferControlToOffscreen();E.postMessage({canvas:tt},[tt])},E.fire=function(Z,tt,ot){if(w)return q(Z,null),w;var ct=Math.random().toString(36).slice(2);return w=y(function(J){function et(jt){jt.data.callback===ct&&(delete lt[ct],E.removeEventListener("message",et),w=null,g.clear(),ot(),J())}E.addEventListener("message",et),q(Z,ct),lt[ct]=et.bind(null,{data:{callback:ct}})}),w},E.reset=function(){E.postMessage({reset:!0});for(var Z in lt)lt[Z](),delete lt[Z]}}return function(){if(U)return U;if(!o&&f){var E=["var CONFETTI, SIZE = {}, module = {};","("+i.toString()+")(this, module, true, SIZE);","onmessage = function(msg) {","  if (msg.data.options) {","    CONFETTI(msg.data.options).then(function () {","      if (msg.data.callback) {","        postMessage({ callback: msg.data.callback });","      }","    });","  } else if (msg.data.reset) {","    CONFETTI && CONFETTI.reset();","  } else if (msg.data.resize) {","    SIZE.width = msg.data.resize.width;","    SIZE.height = msg.data.resize.height;","  } else if (msg.data.canvas) {","    SIZE.width = msg.data.canvas.width;","    SIZE.height = msg.data.canvas.height;","    CONFETTI = module.exports.create(msg.data.canvas);","  }","}"].join(`
-`);try{U=new Worker(URL.createObjectURL(new Blob([E])))}catch(q){return typeof console<"u"&&typeof console.warn=="function"&&console.warn("🎊 Could not load worker",q),null}ft(U)}return U}})(),A={particleCount:50,angle:90,spread:45,startVelocity:45,decay:.9,gravity:1,drift:0,ticks:200,x:.5,y:.5,shapes:["square","circle"],zIndex:100,colors:["#26ccff","#a25afd","#ff5e7e","#88ff5a","#fcff42","#ffa62d","#ff36ff"],disableForReducedMotion:!1,scalar:1};function R(U,w){return w?w(U):U}function z(U){return U!=null}function M(U,w,lt){return R(U&&z(U[w])?U[w]:A[w],lt)}function D(U){return U<0?0:Math.floor(U)}function H(U,w){return Math.floor(Math.random()*(w-U))+U}function Y(U){return parseInt(U,16)}function P(U){return U.map(Q)}function Q(U){var w=String(U).replace(/[^0-9a-f]/gi,"");return w.length<6&&(w=w[0]+w[0]+w[1]+w[1]+w[2]+w[2]),{r:Y(w.substring(0,2)),g:Y(w.substring(2,4)),b:Y(w.substring(4,6))}}function $(U){var w=M(U,"origin",Object);return w.x=M(w,"x",Number),w.y=M(w,"y",Number),w}function W(U){U.width=document.documentElement.clientWidth,U.height=document.documentElement.clientHeight}function F(U){var w=U.getBoundingClientRect();U.width=w.width,U.height=w.height}function gt(U){var w=document.createElement("canvas");return w.style.position="fixed",w.style.top="0px",w.style.left="0px",w.style.pointerEvents="none",w.style.zIndex=U,w}function Rt(U,w,lt,ft,E,q,K,Z,tt){U.save(),U.translate(w,lt),U.rotate(q),U.scale(ft,E),U.arc(0,0,1,K,Z,tt),U.restore()}function Xt(U){var w=U.angle*(Math.PI/180),lt=U.spread*(Math.PI/180);return{x:U.x,y:U.y,wobble:Math.random()*10,wobbleSpeed:Math.min(.11,Math.random()*.1+.05),velocity:U.startVelocity*.5+Math.random()*U.startVelocity,angle2D:-w+(.5*lt-Math.random()*lt),tiltAngle:(Math.random()*(.75-.25)+.25)*Math.PI,color:U.color,shape:U.shape,tick:0,totalTicks:U.ticks,decay:U.decay,drift:U.drift,random:Math.random()+2,tiltSin:0,tiltCos:0,wobbleX:0,wobbleY:0,gravity:U.gravity*3,ovalScalar:.6,scalar:U.scalar,flat:U.flat}}function te(U,w){w.x+=Math.cos(w.angle2D)*w.velocity+w.drift,w.y+=Math.sin(w.angle2D)*w.velocity+w.gravity,w.velocity*=w.decay,w.flat?(w.wobble=0,w.wobbleX=w.x+10*w.scalar,w.wobbleY=w.y+10*w.scalar,w.tiltSin=0,w.tiltCos=0,w.random=1):(w.wobble+=w.wobbleSpeed,w.wobbleX=w.x+10*w.scalar*Math.cos(w.wobble),w.wobbleY=w.y+10*w.scalar*Math.sin(w.wobble),w.tiltAngle+=.1,w.tiltSin=Math.sin(w.tiltAngle),w.tiltCos=Math.cos(w.tiltAngle),w.random=Math.random()+2);var lt=w.tick++/w.totalTicks,ft=w.x+w.random*w.tiltCos,E=w.y+w.random*w.tiltSin,q=w.wobbleX+w.random*w.tiltCos,K=w.wobbleY+w.random*w.tiltSin;if(U.fillStyle="rgba("+w.color.r+", "+w.color.g+", "+w.color.b+", "+(1-lt)+")",U.beginPath(),h&&w.shape.type==="path"&&typeof w.shape.path=="string"&&Array.isArray(w.shape.matrix))U.fill(it(w.shape.path,w.shape.matrix,w.x,w.y,Math.abs(q-ft)*.1,Math.abs(K-E)*.1,Math.PI/10*w.wobble));else if(w.shape.type==="bitmap"){var Z=Math.PI/10*w.wobble,tt=Math.abs(q-ft)*.1,ot=Math.abs(K-E)*.1,ct=w.shape.bitmap.width*w.scalar,J=w.shape.bitmap.height*w.scalar,et=new DOMMatrix([Math.cos(Z)*tt,Math.sin(Z)*tt,-Math.sin(Z)*ot,Math.cos(Z)*ot,w.x,w.y]);et.multiplySelf(new DOMMatrix(w.shape.matrix));var jt=U.createPattern(g.transform(w.shape.bitmap),"no-repeat");jt.setTransform(et),U.globalAlpha=1-lt,U.fillStyle=jt,U.fillRect(w.x-ct/2,w.y-J/2,ct,J),U.globalAlpha=1}else if(w.shape==="circle")U.ellipse?U.ellipse(w.x,w.y,Math.abs(q-ft)*w.ovalScalar,Math.abs(K-E)*w.ovalScalar,Math.PI/10*w.wobble,0,2*Math.PI):Rt(U,w.x,w.y,Math.abs(q-ft)*w.ovalScalar,Math.abs(K-E)*w.ovalScalar,Math.PI/10*w.wobble,0,2*Math.PI);else if(w.shape==="star")for(var St=Math.PI/2*3,It=4*w.scalar,Pt=8*w.scalar,_t=w.x,Et=w.y,se=5,Te=Math.PI/se;se--;)_t=w.x+Math.cos(St)*Pt,Et=w.y+Math.sin(St)*Pt,U.lineTo(_t,Et),St+=Te,_t=w.x+Math.cos(St)*It,Et=w.y+Math.sin(St)*It,U.lineTo(_t,Et),St+=Te;else U.moveTo(Math.floor(w.x),Math.floor(w.y)),U.lineTo(Math.floor(w.wobbleX),Math.floor(E)),U.lineTo(Math.floor(q),Math.floor(K)),U.lineTo(Math.floor(ft),Math.floor(w.wobbleY));return U.closePath(),U.fill(),w.tick<w.totalTicks}function Ae(U,w,lt,ft,E){var q=w.slice(),K=U.getContext("2d"),Z,tt,ot=y(function(ct){function J(){Z=tt=null,K.clearRect(0,0,ft.width,ft.height),g.clear(),E(),ct()}function et(){o&&!(ft.width===c.width&&ft.height===c.height)&&(ft.width=U.width=c.width,ft.height=U.height=c.height),!ft.width&&!ft.height&&(lt(U),ft.width=U.width,ft.height=U.height),K.clearRect(0,0,ft.width,ft.height),q=q.filter(function(jt){return te(K,jt)}),q.length?Z=v.frame(et):J()}Z=v.frame(et),tt=J});return{addFettis:function(ct){return q=q.concat(ct),ot},canvas:U,promise:ot,reset:function(){Z&&v.cancel(Z),tt&&tt()}}}function Se(U,w){var lt=!U,ft=!!M(w||{},"resize"),E=!1,q=M(w,"disableForReducedMotion",Boolean),K=f&&!!M(w||{},"useWorker"),Z=K?T():null,tt=lt?W:F,ot=U&&Z?!!U.__confetti_initialized:!1,ct=typeof matchMedia=="function"&&matchMedia("(prefers-reduced-motion)").matches,J;function et(St,It,Pt){for(var _t=M(St,"particleCount",D),Et=M(St,"angle",Number),se=M(St,"spread",Number),Te=M(St,"startVelocity",Number),vn=M(St,"decay",Number),fa=M(St,"gravity",Number),ha=M(St,"drift",Number),Nn=M(St,"colors",P),yl=M(St,"ticks",Number),_i=M(St,"shapes"),gl=M(St,"scalar"),Vs=!!M(St,"flat"),rn=$(St),da=_t,zi=[],Ho=U.width*rn.x,js=U.height*rn.y;da--;)zi.push(Xt({x:Ho,y:js,angle:Et,spread:se,startVelocity:Te,color:Nn[da%Nn.length],shape:_i[H(0,_i.length)],ticks:yl,decay:vn,gravity:fa,drift:ha,scalar:gl,flat:Vs}));return J?J.addFettis(zi):(J=Ae(U,zi,tt,It,Pt),J.promise)}function jt(St){var It=q||M(St,"disableForReducedMotion",Boolean),Pt=M(St,"zIndex",Number);if(It&&ct)return y(function(Te){Te()});lt&&J?U=J.canvas:lt&&!U&&(U=gt(Pt),document.body.appendChild(U)),ft&&!ot&&tt(U);var _t={width:U.width,height:U.height};Z&&!ot&&Z.init(U),ot=!0,Z&&(U.__confetti_initialized=!0);function Et(){if(Z){var Te={getBoundingClientRect:function(){if(!lt)return U.getBoundingClientRect()}};tt(Te),Z.postMessage({resize:{width:Te.width,height:Te.height}});return}_t.width=_t.height=null}function se(){J=null,ft&&(E=!1,l.removeEventListener("resize",Et)),lt&&U&&(document.body.contains(U)&&document.body.removeChild(U),U=null,ot=!1)}return ft&&!E&&(E=!0,l.addEventListener("resize",Et,!1)),Z?Z.fire(St,_t,se):et(St,_t,se)}return jt.reset=function(){Z&&Z.reset(),J&&J.reset()},jt}var wt;function I(){return wt||(wt=Se(null,{useWorker:!0,resize:!0})),wt}function it(U,w,lt,ft,E,q,K){var Z=new Path2D(U),tt=new Path2D;tt.addPath(Z,new DOMMatrix(w));var ot=new Path2D;return ot.addPath(tt,new DOMMatrix([Math.cos(K)*E,Math.sin(K)*E,-Math.sin(K)*q,Math.cos(K)*q,lt,ft])),ot}function rt(U){if(!h)throw new Error("path confetti are not supported in this browser");var w,lt;typeof U=="string"?w=U:(w=U.path,lt=U.matrix);var ft=new Path2D(w),E=document.createElement("canvas"),q=E.getContext("2d");if(!lt){for(var K=1e3,Z=K,tt=K,ot=0,ct=0,J,et,jt=0;jt<K;jt+=2)for(var St=0;St<K;St+=2)q.isPointInPath(ft,jt,St,"nonzero")&&(Z=Math.min(Z,jt),tt=Math.min(tt,St),ot=Math.max(ot,jt),ct=Math.max(ct,St));J=ot-Z,et=ct-tt;var It=10,Pt=Math.min(It/J,It/et);lt=[Pt,0,0,Pt,-Math.round(J/2+Z)*Pt,-Math.round(et/2+tt)*Pt]}return{type:"path",path:w,matrix:lt}}function Mt(U){var w,lt=1,ft="#000000",E='"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "EmojiOne Color", "Android Emoji", "Twemoji Mozilla", "system emoji", sans-serif';typeof U=="string"?w=U:(w=U.text,lt="scalar"in U?U.scalar:lt,E="fontFamily"in U?U.fontFamily:E,ft="color"in U?U.color:ft);var q=10*lt,K=""+q+"px "+E,Z=new OffscreenCanvas(q,q),tt=Z.getContext("2d");tt.font=K;var ot=tt.measureText(w),ct=Math.ceil(ot.actualBoundingBoxRight+ot.actualBoundingBoxLeft),J=Math.ceil(ot.actualBoundingBoxAscent+ot.actualBoundingBoxDescent),et=2,jt=ot.actualBoundingBoxLeft+et,St=ot.actualBoundingBoxAscent+et;ct+=et+et,J+=et+et,Z=new OffscreenCanvas(ct,J),tt=Z.getContext("2d"),tt.font=K,tt.fillStyle=ft,tt.fillText(w,jt,St);var It=1/lt;return{type:"bitmap",bitmap:Z.transferToImageBitmap(),matrix:[It,0,0,It,-ct*It/2,-J*It/2]}}s.exports=function(){return I().apply(this,arguments)},s.exports.reset=function(){I().reset()},s.exports.create=Se,s.exports.shapeFromPath=rt,s.exports.shapeFromText=Mt})((function(){return typeof window<"u"?window:typeof self<"u"?self:this||{}})(),Ih,!1);const rw=Ih.exports;Ih.exports.create;function ow(){const{cart:i,isOpen:l,setIsOpen:s,removeFromCart:o,updateQuantity:c,totalPrice:f,totalItems:h,giftNote:m,setGiftNote:p,waxSealColor:y,setWaxSealColor:g,clearCart:v}=O0(),[T,A]=x.useState("cart"),R=5e3,z=Math.min(100,f/R*100),M=Math.max(0,R-f),D=()=>{rw({particleCount:80,spread:70,origin:{y:.6},colors:["#F9E498","#D4AF37","#B8860B","#FFFFFF"]}),A("success")},H=()=>{s(!1),setTimeout(()=>A("cart"),400)};return L.jsx(Sh,{children:l&&L.jsxs("div",{className:"cart-overlay",children:[L.jsx(xs.div,{className:"cart-backdrop",initial:{opacity:0},animate:{opacity:1},exit:{opacity:0},onClick:H}),L.jsxs(xs.div,{className:"cart-drawer",initial:{x:"100%"},animate:{x:0},exit:{x:"100%"},transition:{type:"spring",damping:28,stiffness:220},children:[L.jsxs("div",{className:"cart-drawer__header",children:[L.jsxs("div",{className:"header-title",children:[L.jsx("span",{className:"eyebrow-mini",children:"YOUNOYA ATELIER"}),L.jsxs("h3",{children:["Your Gifting Suite (",h,")"]})]}),L.jsx("button",{className:"cart-close-btn",onClick:H,"aria-label":"Close shopping bag",children:L.jsx(vS,{size:20})})]}),T==="cart"?L.jsxs(L.Fragment,{children:[L.jsxs("div",{className:"shipping-meter",children:[L.jsx("div",{className:"shipping-meter__text",children:M===0?L.jsx("span",{className:"text-gold",children:"✦ Complimentary Worldwide White-Glove Shipping Unlocked"}):L.jsxs("span",{children:["Add ",L.jsxs("strong",{className:"text-gold",children:["₹",M.toLocaleString("en-IN")]})," more for complimentary delivery"]})}),L.jsx("div",{className:"shipping-meter__bar",children:L.jsx("div",{className:"shipping-meter__fill",style:{width:`${z}%`}})})]}),L.jsx("div",{className:"cart-drawer__body",children:i.length===0?L.jsxs("div",{className:"cart-empty",children:[L.jsx("div",{className:"empty-emblem",children:"✦"}),L.jsx("h4",{children:"Your Suite is Awaiting Its First Chapter"}),L.jsx("p",{children:"Explore our curated gift vaults or consult the Zodiac Compass to discover bespoke alignments."}),L.jsx("button",{className:"btn-gold",onClick:H,children:"Explore The Vault"})]}):L.jsxs("div",{className:"cart-items",children:[i.map(Y=>L.jsxs("div",{className:"cart-item",children:[L.jsx("div",{className:"cart-item__img-box",children:Y.image?L.jsx("img",{src:Y.image,alt:""}):L.jsx("span",{className:"cart-item__emoji",children:Y.emoji||"✦"})}),L.jsxs("div",{className:"cart-item__details",children:[L.jsxs("div",{className:"cart-item__top",children:[L.jsx("span",{className:"cart-item__sign",children:Y.sign||Y.tag}),L.jsx("button",{className:"cart-item__remove",onClick:()=>o(Y.id),title:"Remove item",children:L.jsx(lw,{size:15})})]}),L.jsx("h4",{className:"cart-item__title",children:Y.name}),L.jsxs("p",{className:"cart-item__chapter",children:["Chapter: ",Y.chapter||"Bespoke Alignment"]}),L.jsxs("div",{className:"cart-item__bottom",children:[L.jsxs("div",{className:"cart-item__qty",children:[L.jsx("button",{onClick:()=>c(Y.id,-1),disabled:Y.quantity<=1,children:L.jsx(ew,{size:12})}),L.jsx("span",{children:Y.quantity}),L.jsx("button",{onClick:()=>c(Y.id,1),children:L.jsx(nw,{size:12})})]}),L.jsxs("span",{className:"cart-item__price",children:["₹",(Y.priceNum*Y.quantity).toLocaleString("en-IN")]})]})]})]},Y.id)),L.jsxs("div",{className:"personalization-box",children:[L.jsxs("div",{className:"personalization-box__header",children:[L.jsx($M,{size:16,className:"text-gold"}),L.jsx("span",{children:"Bespoke Wax-Sealed Celestial Inscription"})]}),L.jsx("p",{className:"personalization-box__sub",children:"Each gift includes a hand-pressed gold foil scroll inscribed for your recipient's chapter."}),L.jsx("textarea",{className:"personalization-input",placeholder:"Compose your heartfelt message or let our astrologer scribe a blessing...",rows:2,value:m,onChange:Y=>p(Y.target.value)}),L.jsxs("div",{className:"wax-seal-selector",children:[L.jsx("span",{className:"selector-label",children:"Atelier Wax Seal:"}),L.jsx("div",{className:"seal-options",children:["gold","obsidian","burgundy","emerald"].map(Y=>L.jsx("button",{className:`seal-opt seal-opt--${Y} ${y===Y?"active":""}`,onClick:()=>g(Y),title:`${Y} wax seal`},Y))})]})]})]})}),i.length>0&&L.jsxs("div",{className:"cart-drawer__footer",children:[L.jsxs("div",{className:"cart-summary",children:[L.jsxs("div",{className:"summary-row",children:[L.jsx("span",{children:"Atelier Subtotal"}),L.jsxs("span",{children:["₹",f.toLocaleString("en-IN")]})]}),L.jsxs("div",{className:"summary-row",children:[L.jsx("span",{children:"Cosmic Inscription & Packaging"}),L.jsx("span",{className:"text-gold",children:"Complimentary"})]}),L.jsxs("div",{className:"summary-row summary-row--total",children:[L.jsx("span",{children:"Total Investment"}),L.jsxs("span",{className:"total-val",children:["₹",f.toLocaleString("en-IN")]})]})]}),L.jsxs("button",{className:"btn-gold checkout-btn",onClick:D,children:[L.jsx("span",{children:"Proceed to checkout"}),L.jsx(kh,{size:16})]}),L.jsxs("div",{className:"checkout-guarantee",children:[L.jsx(iw,{size:14,className:"text-gold"}),L.jsx("span",{children:"Insured Celestial Courier · Authentic Gemological Certification"})]})]})]}):L.jsxs("div",{className:"cart-success",children:[L.jsx(xs.div,{className:"success-emblem",initial:{scale:0},animate:{scale:1},transition:{type:"spring",damping:15},children:"✦"}),L.jsx("h3",{children:"Your Chapter Begins"}),L.jsx("p",{className:"success-desc",children:"Thank you for entrusting YOUNOYA with this sacred gifting ritual. Our celestial atelier has received your curation."}),L.jsxs("div",{className:"success-details",children:[L.jsxs("div",{className:"detail-item",children:[L.jsx("span",{children:"Order Inscription:"}),L.jsxs("strong",{children:["#YN-",Math.floor(1e5+Math.random()*9e5)]})]}),L.jsxs("div",{className:"detail-item",children:[L.jsx("span",{children:"Delivery Timing:"}),L.jsx("strong",{children:"Aligned with the Upcoming Solar Cycle"})]})]}),L.jsx("button",{className:"btn-gold",onClick:()=>{v(),H()},children:"Return to the Cosmos"})]})]})]})})}const la=[{id:"love-connection",name:"Love & Connection",line:"Connection • Affection • Emotional Presence",image:"/media/hero-apple.webp",number:"01"},{id:"confidence-personal-power",name:"Confidence & Personal Power",line:"Confidence • Courage • Self-Expression",image:"/media/leopard-keepsake.webp",number:"02"},{id:"vitality-inner-balance",name:"Vitality & Inner Balance",line:"Energy • Calm • Clarity • Grounding",image:"/media/constellation-set.webp",number:"03"},{id:"wealth-prosperity",name:"Wealth & Prosperity",line:"Financial Intention • Stability • Growth Mindset",image:"/media/oracle-eye.webp",number:"04"}];function uw(){const i=x.useRef(null),l=x.useRef(null);return x.useEffect(()=>{let s=0,o=-100,c=-100,f=-100,h=-100;const m=y=>{var v,T;o=y.clientX,c=y.clientY,(v=i.current)==null||v.style.setProperty("transform",`translate3d(${o}px,${c}px,0)`);const g=y.target.closest("a, button, input, [data-cursor]");(T=l.current)==null||T.classList.toggle("is-active",!!g)},p=()=>{var y;f+=(o-f)*.17,h+=(c-h)*.17,(y=l.current)==null||y.style.setProperty("transform",`translate3d(${f}px,${h}px,0)`),s=requestAnimationFrame(p)};return window.addEventListener("pointermove",m,{passive:!0}),p(),()=>{cancelAnimationFrame(s),window.removeEventListener("pointermove",m)}},[]),L.jsxs(L.Fragment,{children:[L.jsx("span",{ref:i,className:"cursor-dot"}),L.jsx("span",{ref:l,className:"cursor-ring"})]})}function cw(){const i="/media/younoya-category-film-mobile.mp4",l=x.useRef(null),s=x.useRef(null),o=x.useRef(null),c=x.useRef(null),[f,h]=x.useState(0),[m,p]=x.useState(i);return x.useEffect(()=>{let y,g=!1;return fetch(i).then(v=>v.blob()).then(v=>{g||(y=URL.createObjectURL(v),p(y))}).catch(()=>{}),()=>{g=!0,y&&URL.revokeObjectURL(y)}},[i]),x.useEffect(()=>{const y=l.current,g=s.current;if(!y||!g)return;let v=0,T=0,A=-1;const R=window.matchMedia("(prefers-reduced-motion: reduce)"),z=()=>{const H=y.getBoundingClientRect(),Y=Math.max(1,y.offsetHeight-window.innerHeight),P=Math.min(1,Math.max(0,-H.top/Y)),Q=Math.min(la.length-1,Math.floor(P*la.length));Q!==A&&(A=Q,h(Q)),g.duration&&Number.isFinite(g.duration)&&!R.matches&&(T=P*Math.max(0,g.duration-.08)),o.current&&(o.current.style.opacity=`${Math.max(0,1-P*8)}`),c.current&&(c.current.style.opacity=`${Math.min(1,Math.max(0,(P-.045)*9))}`),y.style.setProperty("--film-progress",P.toFixed(4))},M=()=>{g.readyState>=2&&!g.seeking&&Math.abs(g.currentTime-T)>.025&&(g.currentTime+=(T-g.currentTime)*.22),v=requestAnimationFrame(M)},D=()=>{const H=g.play();H&&H.then(()=>g.pause()).catch(()=>{}),window.removeEventListener("pointerdown",D)};return window.addEventListener("scroll",z,{passive:!0}),window.addEventListener("resize",z,{passive:!0}),window.addEventListener("pointerdown",D,{passive:!0}),g.addEventListener("loadedmetadata",z),z(),M(),()=>{cancelAnimationFrame(v),window.removeEventListener("scroll",z),window.removeEventListener("resize",z),window.removeEventListener("pointerdown",D),g.removeEventListener("loadedmetadata",z)}},[m]),L.jsx("section",{className:"film",id:"story",ref:l,children:L.jsxs("div",{className:"film__sticky",children:[L.jsx("video",{ref:s,className:"film__video",src:m,poster:"/media/hero-apple.webp",muted:!0,playsInline:!0,preload:"auto","aria-hidden":"true"}),L.jsx("div",{className:"film__shade"}),L.jsxs("div",{className:"film__opening",ref:o,children:[L.jsxs("div",{className:"film__hero-copy",children:[L.jsx("span",{children:"YOUNOYA / OBJECTS OF AFFECTION"}),L.jsxs("h1",{children:["A gift should feel",L.jsx("br",{}),L.jsx("em",{children:"inevitable."})]}),L.jsx("p",{children:"Four intentions. One continuous journey."}),L.jsxs("a",{className:"film__hero-cta",href:"#finale",children:["Discover Younoya ",L.jsx(kh,{size:14})]})]}),L.jsx("span",{className:"film__opening-cue",children:"SCROLL TO ENTER"})]}),L.jsxs("div",{className:"film__categories",ref:c,children:[L.jsxs("div",{className:"film__chapter",children:[L.jsxs("span",{children:["CHAPTER ",la[f].number," / GIFT INTENTIONS"]}),L.jsx(Sh,{mode:"wait",children:L.jsxs(xs.div,{initial:{opacity:0,y:14},animate:{opacity:1,y:0},exit:{opacity:0,y:-12},transition:{duration:.35},children:[L.jsx("h2",{children:la[f].name}),L.jsx("p",{children:la[f].line})]},la[f].id)})]}),L.jsx("div",{className:"film__progress","aria-hidden":"true",children:L.jsx("i",{style:{width:`${(f+1)/la.length*100}%`}})}),L.jsx("span",{className:"film__instruction",children:"SCROLL / MOVE THROUGH THE COLLECTION"})]})]})})}function fw(){return L.jsxs("section",{className:"quiet-finale",id:"finale",children:[L.jsx("img",{src:"/media/ritual-portrait.webp",alt:"Younoya sculptural gifting world"}),L.jsx("div",{}),L.jsxs("article",{children:[L.jsx("span",{children:"YOUNOYA / FOR EVERY CHAPTER"}),L.jsxs("h2",{children:["The object is beautiful.",L.jsx("br",{}),L.jsx("em",{children:"The meaning is yours."})]}),L.jsxs("a",{className:"glow-button",href:"#story",children:["Replay the story ",L.jsx(kh,{size:16})]})]}),L.jsxs("footer",{children:[L.jsx("img",{src:"/favicon.png",alt:"Younoya"}),L.jsx("span",{children:"© 2026 Younoya"}),L.jsx("a",{href:"#story",children:"Gift intentions"})]})]})}function hw(){return L.jsxs("div",{className:"cinematic-home",children:[L.jsx(uw,{}),L.jsx(cw,{}),L.jsx(fw,{})]})}function dw(){return L.jsx(kx,{children:L.jsx(sA,{children:L.jsxs(vA,{children:[L.jsx(sw,{}),L.jsx(ow,{}),L.jsx("main",{children:L.jsx(Rx,{children:L.jsx(A0,{path:"/",element:L.jsx(hw,{})})})})]})})})}CE.createRoot(document.getElementById("root")).render(L.jsx(yE.StrictMode,{children:L.jsx(dw,{})}));
+`);try{U=new Worker(URL.createObjectURL(new Blob([E])))}catch(q){return typeof console<"u"&&typeof console.warn=="function"&&console.warn("🎊 Could not load worker",q),null}ft(U)}return U}})(),A={particleCount:50,angle:90,spread:45,startVelocity:45,decay:.9,gravity:1,drift:0,ticks:200,x:.5,y:.5,shapes:["square","circle"],zIndex:100,colors:["#26ccff","#a25afd","#ff5e7e","#88ff5a","#fcff42","#ffa62d","#ff36ff"],disableForReducedMotion:!1,scalar:1};function R(U,w){return w?w(U):U}function z(U){return U!=null}function M(U,w,lt){return R(U&&z(U[w])?U[w]:A[w],lt)}function D(U){return U<0?0:Math.floor(U)}function H(U,w){return Math.floor(Math.random()*(w-U))+U}function Y(U){return parseInt(U,16)}function P(U){return U.map(Q)}function Q(U){var w=String(U).replace(/[^0-9a-f]/gi,"");return w.length<6&&(w=w[0]+w[0]+w[1]+w[1]+w[2]+w[2]),{r:Y(w.substring(0,2)),g:Y(w.substring(2,4)),b:Y(w.substring(4,6))}}function $(U){var w=M(U,"origin",Object);return w.x=M(w,"x",Number),w.y=M(w,"y",Number),w}function W(U){U.width=document.documentElement.clientWidth,U.height=document.documentElement.clientHeight}function F(U){var w=U.getBoundingClientRect();U.width=w.width,U.height=w.height}function gt(U){var w=document.createElement("canvas");return w.style.position="fixed",w.style.top="0px",w.style.left="0px",w.style.pointerEvents="none",w.style.zIndex=U,w}function Rt(U,w,lt,ft,E,q,K,Z,tt){U.save(),U.translate(w,lt),U.rotate(q),U.scale(ft,E),U.arc(0,0,1,K,Z,tt),U.restore()}function Xt(U){var w=U.angle*(Math.PI/180),lt=U.spread*(Math.PI/180);return{x:U.x,y:U.y,wobble:Math.random()*10,wobbleSpeed:Math.min(.11,Math.random()*.1+.05),velocity:U.startVelocity*.5+Math.random()*U.startVelocity,angle2D:-w+(.5*lt-Math.random()*lt),tiltAngle:(Math.random()*(.75-.25)+.25)*Math.PI,color:U.color,shape:U.shape,tick:0,totalTicks:U.ticks,decay:U.decay,drift:U.drift,random:Math.random()+2,tiltSin:0,tiltCos:0,wobbleX:0,wobbleY:0,gravity:U.gravity*3,ovalScalar:.6,scalar:U.scalar,flat:U.flat}}function te(U,w){w.x+=Math.cos(w.angle2D)*w.velocity+w.drift,w.y+=Math.sin(w.angle2D)*w.velocity+w.gravity,w.velocity*=w.decay,w.flat?(w.wobble=0,w.wobbleX=w.x+10*w.scalar,w.wobbleY=w.y+10*w.scalar,w.tiltSin=0,w.tiltCos=0,w.random=1):(w.wobble+=w.wobbleSpeed,w.wobbleX=w.x+10*w.scalar*Math.cos(w.wobble),w.wobbleY=w.y+10*w.scalar*Math.sin(w.wobble),w.tiltAngle+=.1,w.tiltSin=Math.sin(w.tiltAngle),w.tiltCos=Math.cos(w.tiltAngle),w.random=Math.random()+2);var lt=w.tick++/w.totalTicks,ft=w.x+w.random*w.tiltCos,E=w.y+w.random*w.tiltSin,q=w.wobbleX+w.random*w.tiltCos,K=w.wobbleY+w.random*w.tiltSin;if(U.fillStyle="rgba("+w.color.r+", "+w.color.g+", "+w.color.b+", "+(1-lt)+")",U.beginPath(),h&&w.shape.type==="path"&&typeof w.shape.path=="string"&&Array.isArray(w.shape.matrix))U.fill(it(w.shape.path,w.shape.matrix,w.x,w.y,Math.abs(q-ft)*.1,Math.abs(K-E)*.1,Math.PI/10*w.wobble));else if(w.shape.type==="bitmap"){var Z=Math.PI/10*w.wobble,tt=Math.abs(q-ft)*.1,ot=Math.abs(K-E)*.1,ct=w.shape.bitmap.width*w.scalar,J=w.shape.bitmap.height*w.scalar,et=new DOMMatrix([Math.cos(Z)*tt,Math.sin(Z)*tt,-Math.sin(Z)*ot,Math.cos(Z)*ot,w.x,w.y]);et.multiplySelf(new DOMMatrix(w.shape.matrix));var jt=U.createPattern(g.transform(w.shape.bitmap),"no-repeat");jt.setTransform(et),U.globalAlpha=1-lt,U.fillStyle=jt,U.fillRect(w.x-ct/2,w.y-J/2,ct,J),U.globalAlpha=1}else if(w.shape==="circle")U.ellipse?U.ellipse(w.x,w.y,Math.abs(q-ft)*w.ovalScalar,Math.abs(K-E)*w.ovalScalar,Math.PI/10*w.wobble,0,2*Math.PI):Rt(U,w.x,w.y,Math.abs(q-ft)*w.ovalScalar,Math.abs(K-E)*w.ovalScalar,Math.PI/10*w.wobble,0,2*Math.PI);else if(w.shape==="star")for(var St=Math.PI/2*3,It=4*w.scalar,Pt=8*w.scalar,_t=w.x,Et=w.y,se=5,Te=Math.PI/se;se--;)_t=w.x+Math.cos(St)*Pt,Et=w.y+Math.sin(St)*Pt,U.lineTo(_t,Et),St+=Te,_t=w.x+Math.cos(St)*It,Et=w.y+Math.sin(St)*It,U.lineTo(_t,Et),St+=Te;else U.moveTo(Math.floor(w.x),Math.floor(w.y)),U.lineTo(Math.floor(w.wobbleX),Math.floor(E)),U.lineTo(Math.floor(q),Math.floor(K)),U.lineTo(Math.floor(ft),Math.floor(w.wobbleY));return U.closePath(),U.fill(),w.tick<w.totalTicks}function Ae(U,w,lt,ft,E){var q=w.slice(),K=U.getContext("2d"),Z,tt,ot=y(function(ct){function J(){Z=tt=null,K.clearRect(0,0,ft.width,ft.height),g.clear(),E(),ct()}function et(){o&&!(ft.width===c.width&&ft.height===c.height)&&(ft.width=U.width=c.width,ft.height=U.height=c.height),!ft.width&&!ft.height&&(lt(U),ft.width=U.width,ft.height=U.height),K.clearRect(0,0,ft.width,ft.height),q=q.filter(function(jt){return te(K,jt)}),q.length?Z=v.frame(et):J()}Z=v.frame(et),tt=J});return{addFettis:function(ct){return q=q.concat(ct),ot},canvas:U,promise:ot,reset:function(){Z&&v.cancel(Z),tt&&tt()}}}function Se(U,w){var lt=!U,ft=!!M(w||{},"resize"),E=!1,q=M(w,"disableForReducedMotion",Boolean),K=f&&!!M(w||{},"useWorker"),Z=K?T():null,tt=lt?W:F,ot=U&&Z?!!U.__confetti_initialized:!1,ct=typeof matchMedia=="function"&&matchMedia("(prefers-reduced-motion)").matches,J;function et(St,It,Pt){for(var _t=M(St,"particleCount",D),Et=M(St,"angle",Number),se=M(St,"spread",Number),Te=M(St,"startVelocity",Number),vn=M(St,"decay",Number),fa=M(St,"gravity",Number),ha=M(St,"drift",Number),Nn=M(St,"colors",P),yl=M(St,"ticks",Number),_i=M(St,"shapes"),gl=M(St,"scalar"),Vs=!!M(St,"flat"),rn=$(St),da=_t,zi=[],Ho=U.width*rn.x,js=U.height*rn.y;da--;)zi.push(Xt({x:Ho,y:js,angle:Et,spread:se,startVelocity:Te,color:Nn[da%Nn.length],shape:_i[H(0,_i.length)],ticks:yl,decay:vn,gravity:fa,drift:ha,scalar:gl,flat:Vs}));return J?J.addFettis(zi):(J=Ae(U,zi,tt,It,Pt),J.promise)}function jt(St){var It=q||M(St,"disableForReducedMotion",Boolean),Pt=M(St,"zIndex",Number);if(It&&ct)return y(function(Te){Te()});lt&&J?U=J.canvas:lt&&!U&&(U=gt(Pt),document.body.appendChild(U)),ft&&!ot&&tt(U);var _t={width:U.width,height:U.height};Z&&!ot&&Z.init(U),ot=!0,Z&&(U.__confetti_initialized=!0);function Et(){if(Z){var Te={getBoundingClientRect:function(){if(!lt)return U.getBoundingClientRect()}};tt(Te),Z.postMessage({resize:{width:Te.width,height:Te.height}});return}_t.width=_t.height=null}function se(){J=null,ft&&(E=!1,l.removeEventListener("resize",Et)),lt&&U&&(document.body.contains(U)&&document.body.removeChild(U),U=null,ot=!1)}return ft&&!E&&(E=!0,l.addEventListener("resize",Et,!1)),Z?Z.fire(St,_t,se):et(St,_t,se)}return jt.reset=function(){Z&&Z.reset(),J&&J.reset()},jt}var wt;function I(){return wt||(wt=Se(null,{useWorker:!0,resize:!0})),wt}function it(U,w,lt,ft,E,q,K){var Z=new Path2D(U),tt=new Path2D;tt.addPath(Z,new DOMMatrix(w));var ot=new Path2D;return ot.addPath(tt,new DOMMatrix([Math.cos(K)*E,Math.sin(K)*E,-Math.sin(K)*q,Math.cos(K)*q,lt,ft])),ot}function rt(U){if(!h)throw new Error("path confetti are not supported in this browser");var w,lt;typeof U=="string"?w=U:(w=U.path,lt=U.matrix);var ft=new Path2D(w),E=document.createElement("canvas"),q=E.getContext("2d");if(!lt){for(var K=1e3,Z=K,tt=K,ot=0,ct=0,J,et,jt=0;jt<K;jt+=2)for(var St=0;St<K;St+=2)q.isPointInPath(ft,jt,St,"nonzero")&&(Z=Math.min(Z,jt),tt=Math.min(tt,St),ot=Math.max(ot,jt),ct=Math.max(ct,St));J=ot-Z,et=ct-tt;var It=10,Pt=Math.min(It/J,It/et);lt=[Pt,0,0,Pt,-Math.round(J/2+Z)*Pt,-Math.round(et/2+tt)*Pt]}return{type:"path",path:w,matrix:lt}}function Mt(U){var w,lt=1,ft="#000000",E='"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "EmojiOne Color", "Android Emoji", "Twemoji Mozilla", "system emoji", sans-serif';typeof U=="string"?w=U:(w=U.text,lt="scalar"in U?U.scalar:lt,E="fontFamily"in U?U.fontFamily:E,ft="color"in U?U.color:ft);var q=10*lt,K=""+q+"px "+E,Z=new OffscreenCanvas(q,q),tt=Z.getContext("2d");tt.font=K;var ot=tt.measureText(w),ct=Math.ceil(ot.actualBoundingBoxRight+ot.actualBoundingBoxLeft),J=Math.ceil(ot.actualBoundingBoxAscent+ot.actualBoundingBoxDescent),et=2,jt=ot.actualBoundingBoxLeft+et,St=ot.actualBoundingBoxAscent+et;ct+=et+et,J+=et+et,Z=new OffscreenCanvas(ct,J),tt=Z.getContext("2d"),tt.font=K,tt.fillStyle=ft,tt.fillText(w,jt,St);var It=1/lt;return{type:"bitmap",bitmap:Z.transferToImageBitmap(),matrix:[It,0,0,It,-ct*It/2,-J*It/2]}}s.exports=function(){return I().apply(this,arguments)},s.exports.reset=function(){I().reset()},s.exports.create=Se,s.exports.shapeFromPath=rt,s.exports.shapeFromText=Mt})((function(){return typeof window<"u"?window:typeof self<"u"?self:this||{}})(),Ih,!1);const rw=Ih.exports;Ih.exports.create;function ow(){const{cart:i,isOpen:l,setIsOpen:s,removeFromCart:o,updateQuantity:c,totalPrice:f,totalItems:h,giftNote:m,setGiftNote:p,waxSealColor:y,setWaxSealColor:g,clearCart:v}=O0(),[T,A]=x.useState("cart"),R=5e3,z=Math.min(100,f/R*100),M=Math.max(0,R-f),D=()=>{rw({particleCount:80,spread:70,origin:{y:.6},colors:["#F9E498","#D4AF37","#B8860B","#FFFFFF"]}),A("success")},H=()=>{s(!1),setTimeout(()=>A("cart"),400)};return L.jsx(Sh,{children:l&&L.jsxs("div",{className:"cart-overlay",children:[L.jsx(xs.div,{className:"cart-backdrop",initial:{opacity:0},animate:{opacity:1},exit:{opacity:0},onClick:H}),L.jsxs(xs.div,{className:"cart-drawer",initial:{x:"100%"},animate:{x:0},exit:{x:"100%"},transition:{type:"spring",damping:28,stiffness:220},children:[L.jsxs("div",{className:"cart-drawer__header",children:[L.jsxs("div",{className:"header-title",children:[L.jsx("span",{className:"eyebrow-mini",children:"YOUNOYA ATELIER"}),L.jsxs("h3",{children:["Your Gifting Suite (",h,")"]})]}),L.jsx("button",{className:"cart-close-btn",onClick:H,"aria-label":"Close shopping bag",children:L.jsx(vS,{size:20})})]}),T==="cart"?L.jsxs(L.Fragment,{children:[L.jsxs("div",{className:"shipping-meter",children:[L.jsx("div",{className:"shipping-meter__text",children:M===0?L.jsx("span",{className:"text-gold",children:"✦ Complimentary Worldwide White-Glove Shipping Unlocked"}):L.jsxs("span",{children:["Add ",L.jsxs("strong",{className:"text-gold",children:["₹",M.toLocaleString("en-IN")]})," more for complimentary delivery"]})}),L.jsx("div",{className:"shipping-meter__bar",children:L.jsx("div",{className:"shipping-meter__fill",style:{width:`${z}%`}})})]}),L.jsx("div",{className:"cart-drawer__body",children:i.length===0?L.jsxs("div",{className:"cart-empty",children:[L.jsx("div",{className:"empty-emblem",children:"✦"}),L.jsx("h4",{children:"Your Suite is Awaiting Its First Chapter"}),L.jsx("p",{children:"Explore our curated gift vaults or consult the Zodiac Compass to discover bespoke alignments."}),L.jsx("button",{className:"btn-gold",onClick:H,children:"Explore The Vault"})]}):L.jsxs("div",{className:"cart-items",children:[i.map(Y=>L.jsxs("div",{className:"cart-item",children:[L.jsx("div",{className:"cart-item__img-box",children:Y.image?L.jsx("img",{src:Y.image,alt:""}):L.jsx("span",{className:"cart-item__emoji",children:Y.emoji||"✦"})}),L.jsxs("div",{className:"cart-item__details",children:[L.jsxs("div",{className:"cart-item__top",children:[L.jsx("span",{className:"cart-item__sign",children:Y.sign||Y.tag}),L.jsx("button",{className:"cart-item__remove",onClick:()=>o(Y.id),title:"Remove item",children:L.jsx(lw,{size:15})})]}),L.jsx("h4",{className:"cart-item__title",children:Y.name}),L.jsxs("p",{className:"cart-item__chapter",children:["Chapter: ",Y.chapter||"Bespoke Alignment"]}),L.jsxs("div",{className:"cart-item__bottom",children:[L.jsxs("div",{className:"cart-item__qty",children:[L.jsx("button",{onClick:()=>c(Y.id,-1),disabled:Y.quantity<=1,children:L.jsx(ew,{size:12})}),L.jsx("span",{children:Y.quantity}),L.jsx("button",{onClick:()=>c(Y.id,1),children:L.jsx(nw,{size:12})})]}),L.jsxs("span",{className:"cart-item__price",children:["₹",(Y.priceNum*Y.quantity).toLocaleString("en-IN")]})]})]})]},Y.id)),L.jsxs("div",{className:"personalization-box",children:[L.jsxs("div",{className:"personalization-box__header",children:[L.jsx($M,{size:16,className:"text-gold"}),L.jsx("span",{children:"Bespoke Wax-Sealed Celestial Inscription"})]}),L.jsx("p",{className:"personalization-box__sub",children:"Each gift includes a hand-pressed gold foil scroll inscribed for your recipient's chapter."}),L.jsx("textarea",{className:"personalization-input",placeholder:"Compose your heartfelt message or let our astrologer scribe a blessing...",rows:2,value:m,onChange:Y=>p(Y.target.value)}),L.jsxs("div",{className:"wax-seal-selector",children:[L.jsx("span",{className:"selector-label",children:"Atelier Wax Seal:"}),L.jsx("div",{className:"seal-options",children:["gold","obsidian","burgundy","emerald"].map(Y=>L.jsx("button",{className:`seal-opt seal-opt--${Y} ${y===Y?"active":""}`,onClick:()=>g(Y),title:`${Y} wax seal`},Y))})]})]})]})}),i.length>0&&L.jsxs("div",{className:"cart-drawer__footer",children:[L.jsxs("div",{className:"cart-summary",children:[L.jsxs("div",{className:"summary-row",children:[L.jsx("span",{children:"Atelier Subtotal"}),L.jsxs("span",{children:["₹",f.toLocaleString("en-IN")]})]}),L.jsxs("div",{className:"summary-row",children:[L.jsx("span",{children:"Cosmic Inscription & Packaging"}),L.jsx("span",{className:"text-gold",children:"Complimentary"})]}),L.jsxs("div",{className:"summary-row summary-row--total",children:[L.jsx("span",{children:"Total Investment"}),L.jsxs("span",{className:"total-val",children:["₹",f.toLocaleString("en-IN")]})]})]}),L.jsxs("button",{className:"btn-gold checkout-btn",onClick:D,children:[L.jsx("span",{children:"Proceed to checkout"}),L.jsx(kh,{size:16})]}),L.jsxs("div",{className:"checkout-guarantee",children:[L.jsx(iw,{size:14,className:"text-gold"}),L.jsx("span",{children:"Insured Celestial Courier · Authentic Gemological Certification"})]})]})]}):L.jsxs("div",{className:"cart-success",children:[L.jsx(xs.div,{className:"success-emblem",initial:{scale:0},animate:{scale:1},transition:{type:"spring",damping:15},children:"✦"}),L.jsx("h3",{children:"Your Chapter Begins"}),L.jsx("p",{className:"success-desc",children:"Thank you for entrusting YOUNOYA with this sacred gifting ritual. Our celestial atelier has received your curation."}),L.jsxs("div",{className:"success-details",children:[L.jsxs("div",{className:"detail-item",children:[L.jsx("span",{children:"Order Inscription:"}),L.jsxs("strong",{children:["#YN-",Math.floor(1e5+Math.random()*9e5)]})]}),L.jsxs("div",{className:"detail-item",children:[L.jsx("span",{children:"Delivery Timing:"}),L.jsx("strong",{children:"Aligned with the Upcoming Solar Cycle"})]})]}),L.jsx("button",{className:"btn-gold",onClick:()=>{v(),H()},children:"Return to the Cosmos"})]})]})]})})}const la=[{id:"love-connection",name:"Love & Connection",line:"Connection • Affection • Emotional Presence",image:"/media/hero-apple.webp",number:"01"},{id:"confidence-personal-power",name:"Confidence & Personal Power",line:"Confidence • Courage • Self-Expression",image:"/media/leopard-keepsake.webp",number:"02"},{id:"vitality-inner-balance",name:"Vitality & Inner Balance",line:"Energy • Calm • Clarity • Grounding",image:"/media/constellation-set.webp",number:"03"},{id:"wealth-prosperity",name:"Wealth & Prosperity",line:"Financial Intention • Stability • Growth Mindset",image:"/media/oracle-eye.webp",number:"04"}];function uw(){const i=x.useRef(null),l=x.useRef(null);return x.useEffect(()=>{let s=0,o=-100,c=-100,f=-100,h=-100;const m=y=>{var v,T;o=y.clientX,c=y.clientY,(v=i.current)==null||v.style.setProperty("transform",`translate3d(${o}px,${c}px,0)`);const g=y.target.closest("a, button, input, [data-cursor]");(T=l.current)==null||T.classList.toggle("is-active",!!g)},p=()=>{var y;f+=(o-f)*.17,h+=(c-h)*.17,(y=l.current)==null||y.style.setProperty("transform",`translate3d(${f}px,${h}px,0)`),s=requestAnimationFrame(p)};return window.addEventListener("pointermove",m,{passive:!0}),p(),()=>{cancelAnimationFrame(s),window.removeEventListener("pointermove",m)}},[]),L.jsxs(L.Fragment,{children:[L.jsx("span",{ref:i,className:"cursor-dot"}),L.jsx("span",{ref:l,className:"cursor-ring"})]})}function cw(){const i="/media/younoya-category-film-mobile.mp4",l=x.useRef(null),s=x.useRef(null),o=x.useRef(null),c=x.useRef(null),[f,h]=x.useState(0),[m,p]=x.useState(i);return x.useEffect(()=>{let y,g=!1;return fetch(i).then(v=>v.blob()).then(v=>{g||(y=URL.createObjectURL(v),p(y))}).catch(()=>{}),()=>{g=!0,y&&URL.revokeObjectURL(y)}},[i]),x.useEffect(()=>{const y=l.current,g=s.current;if(!y||!g)return;let v=0,T=0,A=-1;const R=window.matchMedia("(prefers-reduced-motion: reduce)"),z=()=>{const H=y.getBoundingClientRect(),Y=Math.max(1,y.offsetHeight-window.innerHeight),P=Math.min(1,Math.max(0,-H.top/Y)),Q=Math.min(la.length-1,Math.floor(P*la.length));Q!==A&&(A=Q,h(Q)),g.duration&&Number.isFinite(g.duration)&&!R.matches&&(T=P*Math.max(0,g.duration-.08)),o.current&&(o.current.style.opacity=`${Math.max(0,1-P*8)}`),c.current&&(c.current.style.opacity=`${Math.min(1,Math.max(0,(P-.045)*9))}`),y.style.setProperty("--film-progress",P.toFixed(4))},M=()=>{g.readyState>=2&&!g.seeking&&Math.abs(g.currentTime-T)>.025&&(g.currentTime+=(T-g.currentTime)*.22),v=requestAnimationFrame(M)},D=()=>{const H=g.play();H&&H.then(()=>g.pause()).catch(()=>{}),window.removeEventListener("pointerdown",D)};return window.addEventListener("scroll",z,{passive:!0}),window.addEventListener("resize",z,{passive:!0}),window.addEventListener("pointerdown",D,{passive:!0}),g.addEventListener("loadedmetadata",z),z(),M(),()=>{cancelAnimationFrame(v),window.removeEventListener("scroll",z),window.removeEventListener("resize",z),window.removeEventListener("pointerdown",D),g.removeEventListener("loadedmetadata",z)}},[m]),L.jsx("section",{className:"film",id:"story",ref:l,children:L.jsxs("div",{className:"film__sticky",children:[L.jsx("video",{ref:s,className:"film__video",src:m,poster:"/media/hero-apple.webp",muted:!0,playsInline:!0,preload:"auto","aria-hidden":"true"}),L.jsx("div",{className:"film__shade"}),L.jsxs("div",{className:"film__opening",ref:o,children:[L.jsxs("div",{className:"film__hero-copy",children:[L.jsx("span",{children:"YOUNOYA / OBJECTS OF AFFECTION"}),L.jsxs("h1",{children:["A gift should feel",L.jsx("br",{}),L.jsx("em",{children:"inevitable."})]}),L.jsx("p",{children:"Four intentions. One continuous journey."}),L.jsxs("a",{className:"film__hero-cta",href:"#finale",children:["Discover Younoya ",L.jsx(kh,{size:14})]})]}),L.jsx("span",{className:"film__opening-cue",children:"SCROLL TO ENTER"})]}),L.jsxs("div",{className:"film__categories",ref:c,children:[L.jsxs("div",{className:"film__chapter",children:[L.jsxs("span",{children:["CHAPTER ",la[f].number," / GIFT INTENTIONS"]}),L.jsx(Sh,{mode:"wait",children:L.jsxs(xs.div,{initial:{opacity:0,y:14},animate:{opacity:1,y:0},exit:{opacity:0,y:-12},transition:{duration:.35},children:[L.jsx("h2",{children:la[f].name}),L.jsx("p",{children:la[f].line})]},la[f].id)})]}),L.jsx("div",{className:"film__progress","aria-hidden":"true",children:L.jsx("i",{style:{width:`${(f+1)/la.length*100}%`}})}),L.jsx("span",{className:"film__instruction",children:"SCROLL / MOVE THROUGH THE COLLECTION"})]})]})})}function fw(){return L.jsxs("section",{className:"quiet-finale",id:"finale",children:[L.jsx("img",{src:"/media/ritual-portrait.webp",alt:"Younoya sculptural gifting world"}),L.jsx("div",{}),L.jsxs("article",{children:[L.jsx("span",{children:"YOUNOYA / FOR EVERY CHAPTER"}),L.jsxs("h2",{children:["The object is beautiful.",L.jsx("br",{}),L.jsx("em",{children:"The meaning is yours."})]}),L.jsxs("a",{className:"glow-button",href:"#story",children:["Replay the story ",L.jsx(kh,{size:16})]})]}),L.jsxs("footer",{children:[L.jsx("img",{src:"/favicon.png",alt:"Younoya"}),L.jsx("span",{children:"© 2026 Younoya"}),L.jsx("a",{href:"#story",children:"Gift intentions"})]})]})}
+var flowItemsData = [
+  {
+    id: "chapter-01-love",
+    chapter: "01",
+    badge: "SANKALPA I",
+    name: "Love & Connection",
+    subtitle: "Sacred Crimson • Consecrated Brass",
+    desc: "An offering to timeless bonds, consecration of affection, and unyielding emotional presence.",
+    price: "₹ 4,800",
+    priceNum: 4800,
+    image: "/media/love-connection.webp"
+  },
+  {
+    id: "chapter-02-power",
+    chapter: "02",
+    badge: "SANKALPA II",
+    name: "Confidence & Power",
+    subtitle: "Solar Radiance • Hand-Carved Brass",
+    desc: "Invoking the majestic courage of Surya and sovereign will. Consecrated with 108 Gayatri recitations.",
+    price: "₹ 5,400",
+    priceNum: 5400,
+    image: "/media/confidence-personal-power.webp"
+  },
+  {
+    id: "chapter-03-vitality",
+    chapter: "03",
+    badge: "SANKALPA III",
+    name: "Vitality & Balance",
+    subtitle: "Vedic Prana • Herbarium Keepsake",
+    desc: "Harmonizing mind and spirit through consecrated botanical geometries and serene inner equilibrium.",
+    price: "₹ 4,200",
+    priceNum: 4200,
+    image: "/media/vitality-inner-balance.webp"
+  },
+  {
+    id: "chapter-04-wealth",
+    chapter: "04",
+    badge: "SANKALPA IV",
+    name: "Wealth & Prosperity",
+    subtitle: "Kubera Yantra • Burnished Gold",
+    desc: "Channeling auspicious abundance, financial clarity, and grounded material elevation.",
+    price: "₹ 6,200",
+    priceNum: 6200,
+    image: "/media/wealth-prosperity.webp"
+  },
+  {
+    id: "chapter-05-threshold",
+    chapter: "05",
+    badge: "SANCTUARY",
+    name: "Sacred Threshold",
+    subtitle: "108× Consecration • Vedic Dasha",
+    desc: "The consecrated gateway where sacred intentions are sealed with golden lacquer and bespoke sankalpa.",
+    price: "₹ 7,500",
+    priceNum: 7500,
+    image: "/media/hero-threshold.webp"
+  }
+];
+
+function FlowShowcase() {
+  var cartCtx = O0();
+  var state = x.useState(0);
+  var activeIndex = state[0];
+  var setActiveIndex = state[1];
+  
+  var dragRef = x.useState(!1);
+  var isDragging = dragRef[0];
+  var setIsDragging = dragRef[1];
+
+  var viewportRef = x.useRef(null);
+  var cardRefs = x.useRef([]);
+  
+  var targetPosRef = x.useRef(0);
+  var currentPosRef = x.useRef(0);
+  var isDraggingRef = x.useRef(!1);
+  var startXRef = x.useRef(0);
+  var startPosRef = x.useRef(0);
+  var lastSnapRef = x.useRef(0);
+  var animFrameRef = x.useRef(null);
+
+  x.useEffect(function() {
+    var update = function() {
+      var target = targetPosRef.current;
+      var current = currentPosRef.current;
+      var diff = target - current;
+      currentPosRef.current += diff * 0.088;
+      var pos = currentPosRef.current;
+      var velocity = diff;
+      var isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+      var spacing = isMobile ? 300 : 380;
+
+      for (var i = 0; i < flowItemsData.length; i++) {
+        var el = cardRefs.current[i];
+        if (!el) continue;
+        var offset = i - pos;
+        var absOffset = Math.abs(offset);
+        var tx = offset * spacing;
+        var tz = -Math.min(620, absOffset * 175) + (absOffset < 0.5 ? (1 - absOffset * 2) * 45 : 0);
+        var ry = Math.max(-65, Math.min(65, offset * -22));
+        var rz = Math.max(-8, Math.min(8, velocity * -3.2));
+        var scale = Math.max(0.68, 1 - absOffset * 0.12);
+        var opacity = Math.max(0.18, 1 - absOffset * 0.32);
+        var zIndex = Math.round(100 - absOffset * 10);
+
+        el.style.transform = "translate3d(" + tx + "px, 0px, " + tz + "px) rotateY(" + ry + "deg) rotateZ(" + rz + "deg) scale(" + scale + ")";
+        el.style.opacity = opacity.toFixed(3);
+        el.style.zIndex = zIndex;
+      }
+
+      var rounded = Math.max(0, Math.min(flowItemsData.length - 1, Math.round(pos)));
+      setActiveIndex(rounded);
+      animFrameRef.current = requestAnimationFrame(update);
+    };
+
+    animFrameRef.current = requestAnimationFrame(update);
+    return function() {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
+  }, []);
+
+  var onPointerDown = function(e) {
+    isDraggingRef.current = !0;
+    setIsDragging(!0);
+    startXRef.current = e.clientX;
+    startPosRef.current = targetPosRef.current;
+    if (viewportRef.current && viewportRef.current.setPointerCapture) {
+      try { viewportRef.current.setPointerCapture(e.pointerId); } catch(err) {}
+    }
+  };
+
+  var onPointerMove = function(e) {
+    if (!isDraggingRef.current) return;
+    var deltaX = e.clientX - startXRef.current;
+    var isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+    var sens = isMobile ? 240 : 340;
+    targetPosRef.current = Math.max(-0.35, Math.min(flowItemsData.length - 0.65, startPosRef.current - deltaX / sens));
+  };
+
+  var onPointerUp = function(e) {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = !1;
+    setIsDragging(!1);
+    var snap = Math.max(0, Math.min(flowItemsData.length - 1, Math.round(targetPosRef.current)));
+    targetPosRef.current = snap;
+  };
+
+  var onWheel = function(e) {
+    var delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (Math.abs(delta) > 5) {
+      targetPosRef.current += delta * 0.0016;
+      targetPosRef.current = Math.max(-0.35, Math.min(flowItemsData.length - 0.65, targetPosRef.current));
+      clearTimeout(lastSnapRef.current);
+      lastSnapRef.current = setTimeout(function() {
+        var snap = Math.max(0, Math.min(flowItemsData.length - 1, Math.round(targetPosRef.current)));
+        targetPosRef.current = snap;
+      }, 130);
+    }
+  };
+
+  var goTo = function(idx) {
+    targetPosRef.current = Math.max(0, Math.min(flowItemsData.length - 1, idx));
+  };
+
+  var onCardClick = function(idx) {
+    var diff = Math.abs(idx - currentPosRef.current);
+    if (diff > 0.4) {
+      goTo(idx);
+    }
+  };
+
+  var onReserve = function(item, e) {
+    e.stopPropagation();
+    if (cartCtx && cartCtx.addToCart) {
+      cartCtx.addToCart({
+        id: item.id,
+        title: item.name + " (" + item.badge + ")",
+        subtitle: item.subtitle,
+        price: item.price,
+        priceNum: item.priceNum,
+        image: item.image,
+        chapter: item.chapter
+      });
+    }
+  };
+
+  var cards = flowItemsData.map(function(item, idx) {
+    return L.jsx("div", {
+      className: "flow-card-container",
+      ref: function(el) { cardRefs.current[idx] = el; },
+      onClick: function() { onCardClick(idx); },
+      children: L.jsxs("div", {
+        className: "flow-card-inner",
+        children: [
+          L.jsxs("div", {
+            className: "flow-card__image-box",
+            children: [
+              L.jsx("img", {
+                className: "flow-card__image",
+                src: item.image,
+                alt: item.name,
+                loading: "lazy"
+              }),
+              L.jsx("div", { className: "flow-card__gradient" }),
+              L.jsxs("div", {
+                className: "flow-card__top-bar",
+                children: [
+                  L.jsx("span", { className: "flow-card__badge", children: item.badge }),
+                  L.jsxs("span", { className: "flow-card__num", children: [item.chapter, " / 05"] })
+                ]
+              })
+            ]
+          }),
+          L.jsxs("div", {
+            className: "flow-card__body",
+            children: [
+              L.jsxs("div", {
+                children: [
+                  L.jsx("h3", { className: "flow-card__title", children: item.name }),
+                  L.jsx("p", { className: "flow-card__subtitle", children: item.subtitle }),
+                  L.jsx("p", { className: "flow-card__desc", children: item.desc })
+                ]
+              }),
+              L.jsxs("div", {
+                className: "flow-card__footer",
+                children: [
+                  L.jsxs("div", {
+                    className: "flow-card__price-box",
+                    children: [
+                      L.jsx("span", { className: "flow-card__price-label", children: "Consecration Tier" }),
+                      L.jsx("span", { className: "flow-card__price", children: item.price })
+                    ]
+                  }),
+                  L.jsx("button", {
+                    type: "button",
+                    className: "flow-card__btn",
+                    onClick: function(e) { onReserve(item, e); },
+                    children: "Reserve Keepsake ↗"
+                  })
+                ]
+              })
+            ]
+          })
+        ]
+      })
+    }, item.id);
+  });
+
+  return L.jsxs("section", {
+    className: "leoparpeix-flow",
+    id: "intentions",
+    children: [
+      L.jsxs("div", {
+        className: "flow-header",
+        children: [
+          L.jsxs("div", {
+            className: "flow-header__eyebrow",
+            children: [
+              L.jsx("span", { className: "flow-dot" }),
+              "YOUNOYA / SACRED SPATIAL CAROUSEL"
+            ]
+          }),
+          L.jsxs("h2", {
+            className: "flow-header__title",
+            children: [
+              "Consecrated Flow of ",
+              L.jsx("em", { children: "Intentions." })
+            ]
+          }),
+          L.jsx("p", {
+            className: "flow-header__subtitle",
+            children: "Drag, scroll or glide across the five sacred sanctums. Each keepsake is purified through 108× mantras and personalized Vedic astrological dasha."
+          })
+        ]
+      }),
+      L.jsx("div", {
+        ref: viewportRef,
+        className: "flow-viewport " + (isDragging ? "is-dragging" : ""),
+        onPointerDown: onPointerDown,
+        onPointerMove: onPointerMove,
+        onPointerUp: onPointerUp,
+        onPointerCancel: onPointerUp,
+        onWheel: onWheel,
+        children: L.jsx("div", {
+          className: "flow-track",
+          children: cards
+        })
+      }),
+      L.jsxs("div", {
+        className: "flow-controls",
+        children: [
+          L.jsx("button", {
+            type: "button",
+            className: "flow-arrow-btn",
+            onClick: function() { goTo(activeIndex - 1); },
+            "aria-label": "Previous Chapter",
+            children: "←"
+          }),
+          L.jsx("div", {
+            className: "flow-dots",
+            children: flowItemsData.map(function(item, idx) {
+              return L.jsx("button", {
+                type: "button",
+                className: "flow-dot-btn " + (idx === activeIndex ? "is-active" : ""),
+                onClick: function() { goTo(idx); },
+                children: item.chapter
+              }, item.id);
+            })
+          }),
+          L.jsx("button", {
+            type: "button",
+            className: "flow-arrow-btn",
+            onClick: function() { goTo(activeIndex + 1); },
+            "aria-label": "Next Chapter",
+            children: "→"
+          })
+        ]
+      }),
+      L.jsx("div", {
+        className: "flow-instruction",
+        children: "DRAG • SCROLL • GLIDE THROUGH THE SANCTUMS"
+      })
+    ]
+  });
+}
+
+function hw(){return L.jsxs("div",{className:"cinematic-home",children:[L.jsx(uw,{}),L.jsx(cw,{}),L.jsx(FlowShowcase,{}),L.jsx(fw,{})]})}function dw(){return L.jsx(kx,{children:L.jsx(sA,{children:L.jsxs(vA,{children:[L.jsx(sw,{}),L.jsx(ow,{}),L.jsx("main",{children:L.jsx(Rx,{children:L.jsx(A0,{path:"/",element:L.jsx(hw,{})})})})]})})})}CE.createRoot(document.getElementById("root")).render(L.jsx(yE.StrictMode,{children:L.jsx(dw,{})}));
