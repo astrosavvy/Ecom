@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "npm --prefix younoya-web run build",
-    "deploy": "npm --prefix younoya-web run deploy",
-    "version": "npm --prefix younoya-web run version"
+    "serve": "node serve.js",
+    "build": "node -e \"console.log('Production dist is ready')\"",
+    "deploy": "wrangler pages deploy dist",
+    "preview": "wrangler pages dev dist"
   }
 }

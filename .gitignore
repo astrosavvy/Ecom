@@ -5,7 +5,11 @@ node_modules/
 
 # Build and Cache
 .evershop/
-dist/
+# dist is tracked as the production frontend for Cloudflare Pages
+!dist/
+!dist/**
+!younoya-web/dist/
+!younoya-web/dist/**
 build/
 .next/
 out/
@@ -33,7 +37,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Media and User Uploads
-media/
+/media/
+2026_09_09/
 
 # OS / Editor Files
 .DS_Store
