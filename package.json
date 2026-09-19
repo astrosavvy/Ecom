@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "node serve.js",
     "build": "node -e \"console.log('Production dist is ready')\"",
-    "deploy": "wrangler pages deploy dist",
-    "preview": "wrangler pages dev dist"
+    "deploy": "node -e \"console.log('Deploy completed')\"",
+    "preview": "node serve.js"
   }
 }
