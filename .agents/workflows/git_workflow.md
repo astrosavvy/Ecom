@@ -29,7 +29,10 @@ dist/assets/index-...js ...
 ✓ built in ~4s
 ```
 
-### 2. Inspect Changes
+### 2. Update Checkpoint in Working Tree
+Before staging, update [`.agents/CHECKPOINT.md`](file:///F:/Savvy_Ecom/.agents/CHECKPOINT.md) with details of completed work, test results, and next immediate tasks.
+
+### 3. Inspect Changes
 ```bash
 git status
 ```
@@ -38,18 +41,19 @@ Confirm:
 - `2026_09_09/` is NOT staged.
 - No temporary `.zip`, `.mp4` scratch files, or `.tools` folders are present.
 
-### 3. Stage & Commit
+### 4. Stage & Commit Everything in ONE Semantic Commit
 ```bash
+# Stage all changes (code + configs + dist + .agents/CHECKPOINT.md)
 git add -A
-git commit -m "feat: your concise commit message"
+git commit -m "feat(scope): your concise commit message"
 ```
 
-### 4. Push to Origin
+### 5. Push Once to Origin
 ```bash
 git push origin main
 ```
 
-### 5. Fallback if 403 Forbidden
+### 6. Fallback if 403 Forbidden
 If git outputs:
 `remote: Permission to astrosavvy/Ecom.git denied to ... fatal: unable to access ... 403`
 Run:
@@ -57,8 +61,3 @@ Run:
 git -c credential.helper= push https://x-access-token:<GITHUB_PAT_TOKEN>@github.com/astrosavvy/Ecom.git main
 ```
 
-### 6. Sync Checkpoint
-Record the commit in [`.agents/CHECKPOINT.md`](file:///F:/Savvy_Ecom/.agents/CHECKPOINT.md):
-```markdown
-- **Git Commit**: `<hash>` (`main -> origin/main` pushed successfully)
-```

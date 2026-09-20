@@ -37,3 +37,4 @@ Whenever you complete a task, milestone, or conversational turn:
 1. **No Phantom Tasks**: Never execute tasks that contradict the active roadmap in `.agents/CHECKPOINT.md` without explicit user request.
 2. **Never Overwrite Without Reading**: Always view `.agents/CHECKPOINT.md` first; never blind-overwrite or truncate past milestone history.
 3. **Cross-IDE Handoff Guarantee**: If Cursor was used on Turn N, Antigravity on Turn N+1 MUST read the exact checkpoint left by Cursor.
+4. **Atomic Single Commit Law (No Micro-Commits)**: NEVER make intermediate commits for individual file edits or separate follow-up commits just to record commit hashes. Update `CHECKPOINT.md` in the working tree and bundle all code, config, and checkpoint updates into ONE single final commit and push.

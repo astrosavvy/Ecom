@@ -18,9 +18,10 @@ alwaysApply: true
 4. **Step 4: Update Checkpoint**:
    Before ending any turn, update `.agents/CHECKPOINT.md` with completed work, build verification, and next tasks for the next agent.
 
-5. **Step 5: Git Commit & Push from Monorepo Root (`F:\Savvy_Ecom`)**:
+5. **Step 5: Single Final Git Commit & Push from Monorepo Root (`F:\Savvy_Ecom`)**:
+   - Single Final Commit Only: Do NOT commit incrementally for individual edits or hash updates.
+   - Update `CHECKPOINT.md` in the working tree before committing.
    - Verify build: `npm run build` (code 0).
-   - Stage: `git add -A` (verify `2026_09_09/` is never committed).
-   - Commit: `git commit -m "<feat|fix|chore|docs>: concise message"`.
-   - Push: `git push origin main` (or fallback with PAT if 403).
-   - Sync commit hash to `.agents/CHECKPOINT.md`.
+   - Stage everything together: `git add -A` (verify `2026_09_09/` is never committed).
+   - Single semantic commit: `git commit -m "<feat|fix|chore|docs>: concise message"`.
+   - Push once to remote: `git push origin main` (or fallback with PAT if 403).

@@ -109,21 +109,25 @@ Whenever you modify application code, data models, or assets:
 
 ## 6. 🚀 Universal Git Commit & Push Protocol (Root `F:\Savvy_Ecom`)
 
+> [!CAUTION]
+> **SINGLE FINAL COMMIT ONLY — NO MICRO-COMMITS**:
+> Never commit intermediate changes or make a separate commit just to record a commit hash. Update `.agents/CHECKPOINT.md` in the working tree, verify `npm run build` exits 0, and commit all changes (code, config, docs, checkpoint) together in ONE single final commit when the turn/task is complete.
+
 Always execute from **repository root (`F:\Savvy_Ecom`)**:
 ```bash
-# 1. Build Verification (MUST exit 0)
+# 1. Update Checkpoint in working tree FIRST (.agents/CHECKPOINT.md)
+
+# 2. Build Verification (MUST exit 0)
 npm run build
 
-# 2. Stage Changes (2026_09_09/ is always ignored)
+# 3. Stage All Changes Together (code + configs + dist + .agents/)
 git add -A
 
-# 3. Semantic Commit
+# 4. Single Final Semantic Commit
 git commit -m "<feat|fix|chore|docs>(<scope>): concise message"
 
-# 4. Push to Origin Main
+# 5. Push to Origin Main (triggers single Cloudflare CI deployment)
 git push origin main
 # If 403 Forbidden: git -c credential.helper= push https://x-access-token:<PAT>@github.com/astrosavvy/Ecom.git main
-
-# 5. Checkpoint Sync
-# Record commit hash and push status in .agents/CHECKPOINT.md in the exact same turn
 ```
+

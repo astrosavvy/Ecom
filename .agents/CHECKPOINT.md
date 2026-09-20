@@ -8,18 +8,27 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 2 — Codebase Unification & Cloudflare Pages CI Pipeline Fixed
-- **Status**: 🟢 Healthy (Zero build errors, Cloudflare Pages CI fixed)
+- **Current Phase**: Phase 2 — Cloudflare Worker Static Assets Configured & Single Commit Law Enforced
+- **Status**: 🟢 Healthy (Zero build errors, single-commit rule enforced)
 - **Active Task**: Ready for Phase 3: Medusa Backend Integration & Storefront Route Expansion
-- **Last Updated**: 2026-09-20T11:00:00+05:30
+- **Last Updated**: 2026-09-20T11:07:00+05:30
 - **Last Agent**: Antigravity
-- **Git Commit**: `326c48b` (`main -> origin/main` pushed successfully)
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
 - **Primary Production Build**: `younoya-web/dist` (verified: 2,271 modules built in 4.55s, zero errors)
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-20] Enforced Single Final Commit Law (No Micro-Commits) Across All Agent Rules
+- **Rule Codified**: Prohibited incremental micro-commits for individual file edits and separate follow-up commits for commit hash updates.
+- **Root Rationale**: Every commit pushed to `origin main` triggers a Cloudflare Workers CI build and attempts a production deployment. Multiple micro-commits waste CI build slots and risk deploying incomplete states.
+- **Updated Specifications**:
+  1. Updated `.agents/rules/git.md`: Added mandatory Single Final Commit Law section and consolidated 5-step commit/push sequence.
+  2. Updated `.agents/rules/checkpoint-protocol.md`: Added Rule 4 requiring atomic bundle commits.
+  3. Updated `.agents/AGENTS.md`: Updated Section 6 with Single Final Commit Law.
+  4. Updated `.cursorrules` and `.cursor/rules/agentic-scaffold.mdc`: Aligned Cursor rules so Cursor and Antigravity follow the exact same single-commit discipline.
+  5. Updated `.agents/workflows/git_workflow.md`: Standardized step-by-step instructions.
 
 ### [2026-09-20] Configured Cloudflare Worker Static Assets (`npx wrangler deploy`)
 - **Dashboard Analysis**: User shared Cloudflare dashboard showing project `ecom` is a **Cloudflare Worker with Static Assets** (using Version History & Traffic Splitting), NOT legacy Pages.

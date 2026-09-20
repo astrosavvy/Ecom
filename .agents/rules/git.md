@@ -6,9 +6,25 @@
 
 ---
 
-## 1. The Standard 5-Step Commit & Push Sequence
+## 1. 🛑 MANDATORY LAW: SINGLE FINAL COMMIT ONLY (NO MICRO-COMMITS)
 
-Always run these commands from `F:\Savvy_Ecom`:
+> [!CAUTION]
+> **STRICTLY FORBIDDEN**:
+> - NEVER commit for individual intermediate edits, scratch files, or partial fixes.
+> - NEVER create a separate follow-up commit just to update a commit hash in `CHECKPOINT.md`.
+> - Every push triggers Cloudflare Workers CI and builds a new production release. Committing incrementally floods CI builds, wastes resources, and deploys unverified intermediate states.
+
+### The Single-Commit Protocol:
+1. **Batch All Changes**: Perform all code edits, config tweaks, asset placements, and documentation updates in the working tree.
+2. **Verify Locally First**: Run `npm run build` and ensure exit code `0`.
+3. **Update Checkpoint in the Working Tree**: Edit [`.agents/CHECKPOINT.md`](file:///F:/Savvy_Ecom/.agents/CHECKPOINT.md) with details of completed work, test results, and next steps BEFORE staging.
+4. **Single Unified Commit**: Stage everything together (`git add -A`), create ONE semantic commit, and push once.
+
+---
+
+## 2. The Standard Commit & Push Sequence
+
+Always run these commands from `F:\Savvy_Ecom` ONLY at the conclusion of your turn:
 
 ### Step 1: Pre-Commit Build Verification
 ```bash
@@ -21,7 +37,7 @@ Confirm build exits with code `0`. Do NOT commit if build fails.
 ```bash
 git status
 ```
-- **Files to Stage**: Source code in `younoya-web/`, build output in `younoya-web/dist/` and `dist/`, memory/rules in `.agents/`, root configs (`package.json`, `serve.js`, `.cursorrules`).
+- **Files to Stage**: Source code in `younoya-web/`, build output in `younoya-web/dist/` and `dist/`, memory/rules/checkpoint in `.agents/`, root configs (`package.json`, `serve.js`, `.cursorrules`, `wrangler.jsonc`).
 - **Files NEVER to Stage**:
   - `2026_09_09/` (283 raw camera photoshoot JPGs, ~2.4 GB) — must remain ignored.
   - Temporary test scratch files or `.zip` files.
@@ -30,15 +46,15 @@ git status
   git add -f backend/src/...
   ```
 
-### Step 3: Stage Changes
+### Step 3: Stage Everything Together
 ```bash
 git add -A
 ```
-Verify `git status` shows intended files staged in green.
+Verify `git status` shows intended files staged in green (including `.agents/CHECKPOINT.md`).
 
-### Step 4: Semantic Commit
+### Step 4: Single Semantic Commit
 ```bash
-git commit -m "<type>(<scope>): <concise description of what changed>"
+git commit -m "<type>(<scope>): <concise description of complete task>"
 ```
 **Allowed Types**:
 - `feat`: New customer features, components, or pages (e.g. `feat(flow): add 3d spatial flow animation`)
@@ -46,14 +62,14 @@ git commit -m "<type>(<scope>): <concise description of what changed>"
 - `docs`: Documentation, memory updates, or checkpoint updates (e.g. `docs(checkpoint): update active milestone`)
 - `chore`: Dependency updates, config adjustments (e.g. `chore: unify build scripts`)
 
-### Step 5: Push to Remote
+### Step 5: Push Once to Remote
 ```bash
 git push origin main
 ```
 
 ---
 
-## 2. Remote Authentication & Fallback Protocol
+## 3. Remote Authentication & Fallback Protocol
 
 - **Primary Remote**: `git@github.com:astrosavvy/Ecom.git` (branch `main`).
 - **Standard Push**: `git push origin main`.
@@ -63,10 +79,3 @@ git push origin main
   git -c credential.helper= push https://x-access-token:<GITHUB_PAT_TOKEN>@github.com/astrosavvy/Ecom.git main
   ```
   *(PAT permissions: `Contents: Read & write` on `astrosavvy/Ecom`).*
-
----
-
-## 3. Mandatory Same-Turn Checkpoint Sync
-Immediately after pushing:
-1. Note the commit hash (e.g. `git log -n 1 --oneline`).
-2. Update [`.agents/CHECKPOINT.md`](file:///F:/Savvy_Ecom/.agents/CHECKPOINT.md) with the new commit hash and push status in the same turn.

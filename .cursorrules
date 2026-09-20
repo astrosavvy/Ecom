@@ -49,12 +49,17 @@ You are an expert fullstack AI engineer working in the YOUNOYA repository.
 
 ## 🚀 EXACT GIT COMMIT & PUSH INSTRUCTIONS
 
+> [!CAUTION]
+> **SINGLE FINAL COMMIT ONLY (NO MICRO-COMMITS)**:
+> Never commit incremental changes or make separate commits for checkpoint hash updates. Update `.agents/CHECKPOINT.md` in the working tree, verify the build, and commit everything together once at the end of the turn.
+
 Always execute from **repository root (`F:\Savvy_Ecom`)**:
 
-1. **Build First**: `npm run build` (MUST exit with code 0).
-2. **Inspect**: `git status` (verify `2026_09_09/` and scratch files are NOT staged).
-3. **Stage**: `git add -A` (or `git add -f backend/src/...` for custom backend files).
-4. **Commit**: `git commit -m "feat(scope): concise description"` (use `feat`, `fix`, `chore`, `docs`).
-5. **Push**: `git push origin main`.
+1. **Update Checkpoint First**: Update `.agents/CHECKPOINT.md` with completed tasks, test results, and next steps before staging.
+2. **Build Verification**: `npm run build` (MUST exit with code 0).
+3. **Inspect**: `git status` (verify `2026_09_09/` and scratch files are NOT staged).
+4. **Stage Everything Together**: `git add -A` (or `git add -f backend/src/...` for custom backend files).
+5. **Single Semantic Commit**: `git commit -m "feat(scope): concise description"` (use `feat`, `fix`, `chore`, `docs`).
+6. **Push Once**: `git push origin main`.
    - *If 403 Forbidden*: Run `git -c credential.helper= push https://x-access-token:<GITHUB_PAT_TOKEN>@github.com/astrosavvy/Ecom.git main`.
-6. **Update Checkpoint**: Write the commit hash to `.agents/CHECKPOINT.md` in the exact same turn.
+
