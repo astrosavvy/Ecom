@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, ShoppingBag, X } from 'lucide-react'
 import { useCart } from '../context/CartContext'
@@ -21,16 +22,28 @@ export default function Navbar() {
   return (
     <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
       <div className="navbar__inner">
-        <a className="navbar__brand" href="#story" aria-label="Younoya home"><img src="/favicon.png" alt="Younoya" /></a>
+        <Link className="navbar__brand" to="/" aria-label="Younoya home">
+          <img src="/favicon.png" alt="Younoya" />
+        </Link>
         <span className="navbar__descriptor">OBJECTS OF AFFECTION</span>
-        <nav className="navbar__nav" aria-label="Primary navigation"><a href="#story">Intentions</a><a href="#finale">Younoya</a></nav>
+        <nav className="navbar__nav" aria-label="Primary navigation">
+          <a href="/#intentions">Intentions</a>
+          <a href="/#story">Story</a>
+          <a href="/#finale">Younoya</a>
+        </nav>
         <div className="navbar__actions">
           <button className="navbar__cart" onClick={() => setIsOpen(true)} aria-label={`Open shopping bag with ${totalItems} items`}><ShoppingBag size={18} /><span>Bag</span>{totalItems > 0 && <b>{totalItems}</b>}</button>
           <button className="navbar__menu" onClick={() => setMobileOpen((value) => !value)} aria-expanded={mobileOpen} aria-label="Toggle menu">{mobileOpen ? <X size={21} /> : <Menu size={21} />}</button>
         </div>
       </div>
       <AnimatePresence>
-        {mobileOpen && <motion.div className="navbar__mobile" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}><a href="#story" onClick={close}>Gift intentions</a><a href="#finale" onClick={close}>Younoya</a></motion.div>}
+        {mobileOpen && (
+          <motion.div className="navbar__mobile" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
+            <a href="/#intentions" onClick={close}>Gift intentions</a>
+            <a href="/#story" onClick={close}>The Story</a>
+            <a href="/#finale" onClick={close}>Younoya</a>
+          </motion.div>
+        )}
       </AnimatePresence>
     </header>
   )

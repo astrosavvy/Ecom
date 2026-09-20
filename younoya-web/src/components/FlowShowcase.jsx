@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import '../styles/FlowShowcase.css'
 
 export const FLOW_ITEMS_DATA = [
   {
     id: 'chapter-01-love',
+    handle: 'love-connection',
     chapter: '01',
     badge: 'SANKALPA I',
     name: 'Love & Connection',
@@ -16,6 +18,7 @@ export const FLOW_ITEMS_DATA = [
   },
   {
     id: 'chapter-02-power',
+    handle: 'confidence-personal-power',
     chapter: '02',
     badge: 'SANKALPA II',
     name: 'Confidence & Power',
@@ -27,6 +30,7 @@ export const FLOW_ITEMS_DATA = [
   },
   {
     id: 'chapter-03-vitality',
+    handle: 'vitality-inner-balance',
     chapter: '03',
     badge: 'SANKALPA III',
     name: 'Vitality & Balance',
@@ -38,6 +42,7 @@ export const FLOW_ITEMS_DATA = [
   },
   {
     id: 'chapter-04-wealth',
+    handle: 'wealth-prosperity',
     chapter: '04',
     badge: 'SANKALPA IV',
     name: 'Wealth & Prosperity',
@@ -49,6 +54,7 @@ export const FLOW_ITEMS_DATA = [
   },
   {
     id: 'chapter-05-threshold',
+    handle: 'hero-threshold',
     chapter: '05',
     badge: 'SANCTUARY',
     name: 'Sacred Threshold',
@@ -178,7 +184,7 @@ export default function FlowShowcase() {
     e.stopPropagation()
     addToCart({
       id: item.id,
-      title: `${item.name} (${item.badge})`,
+      name: `${item.name} (${item.badge})`,
       subtitle: item.subtitle,
       price: item.price,
       priceNum: item.priceNum,
@@ -247,13 +253,22 @@ export default function FlowShowcase() {
                       <span className="flow-card__price-label">Consecration Tier</span>
                       <span className="flow-card__price">{item.price}</span>
                     </div>
-                    <button
-                      type="button"
-                      className="flow-card__btn"
-                      onClick={(e) => onReserve(item, e)}
-                    >
-                      Reserve Keepsake ↗
-                    </button>
+                    <div className="flow-card__actions">
+                      <Link
+                        to={`/product/${item.handle}`}
+                        className="flow-card__link"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Discover Sanctum ↗
+                      </Link>
+                      <button
+                        type="button"
+                        className="flow-card__btn"
+                        onClick={(e) => onReserve(item, e)}
+                      >
+                        Reserve ↗
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -261,39 +276,6 @@ export default function FlowShowcase() {
           ))}
         </div>
       </div>
-
-      <div className="flow-controls">
-        <button
-          type="button"
-          className="flow-arrow-btn"
-          onClick={() => goTo(activeIndex - 1)}
-          aria-label="Previous Chapter"
-        >
-          ←
-        </button>
-        <div className="flow-dots">
-          {FLOW_ITEMS_DATA.map((item, idx) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`flow-dot-btn ${idx === activeIndex ? 'is-active' : ''}`}
-              onClick={() => goTo(idx)}
-            >
-              {item.chapter}
-            </button>
-          ))}
-        </div>
-        <button
-          type="button"
-          className="flow-arrow-btn"
-          onClick={() => goTo(activeIndex + 1)}
-          aria-label="Next Chapter"
-        >
-          →
-        </button>
-      </div>
-
-      <div className="flow-instruction">DRAG • SCROLL • GLIDE THROUGH THE SANCTUMS</div>
     </section>
   )
 }

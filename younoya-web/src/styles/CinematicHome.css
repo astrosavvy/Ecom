@@ -7,7 +7,7 @@
 .cursor-ring.is-active { width: 52px; height: 52px; margin: -26px 0 0 -26px; background: rgba(211,172,96,.1); }
 
 .film { position: relative; height: 430vh; min-height: 2500px; background: #030302; }
-.film__sticky { position: sticky; top: 0; height: 100svh; min-height: 640px; overflow: hidden; isolation: isolate; background: radial-gradient(circle at 50% 50%, #17100a 0, #080604 42%, #030302 78%); }
+.film__sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; min-height: 100dvh; overflow: hidden; isolation: isolate; background: radial-gradient(circle at 50% 50%, #17100a 0, #080604 42%, #030302 78%); }
 .film__sticky::before { content: ''; position: absolute; z-index: -5; inset: -15%; background: radial-gradient(ellipse at 50% 53%, rgba(168,38,25,.14), transparent 38%), radial-gradient(ellipse at 50% 78%, rgba(210,162,80,.08), transparent 31%); filter: blur(28px); }
 .film__video { position: absolute; z-index: -4; top: -21.1%; right: 0; bottom: 0; left: 0; width: 100%; height: 142.2%; object-fit: cover; object-position: 50% 50%; filter: saturate(.88) contrast(1.06) brightness(.88); }
 .film__shade { position: absolute; z-index: -3; top: 0; right: 0; bottom: 0; left: 0; pointer-events: none; background: linear-gradient(180deg, rgba(3,3,2,.32) 0%, transparent 18%, transparent 75%, rgba(3,3,2,.45) 100%); }
@@ -135,8 +135,8 @@
 @media (max-width: 700px) {
   .cursor-dot, .cursor-ring { display: none; }
   .film { height: 390vh; }
-  .film__sticky { min-height: 560px; }
-  .film__video { object-fit: cover; object-position: 50% 50%; filter: saturate(.84) contrast(1.04) brightness(.72); }
+  .film__sticky { height: 100vh; height: 100dvh; min-height: 100dvh; }
+  .film__video { top: -24%; left: 0; width: 100%; height: 148%; object-fit: cover; object-position: 50% 50%; filter: saturate(.84) contrast(1.04) brightness(.72); }
   .film__shade { background: linear-gradient(180deg, rgba(3,3,2,.65) 0, rgba(3,3,2,.05) 30%, rgba(3,3,2,.08) 55%, rgba(3,3,2,.84) 100%); }
   .film__opening { padding: 74px 16px 25px; }
   .film__hero-copy { width: 100%; padding: 101px 2px 0; align-items: center; justify-content: flex-start; text-align: center; }
@@ -150,7 +150,7 @@
   .film__storefront { bottom: -39px; width: calc(100vw - 32px); height: 127px; border-radius: 19px 19px 0 0; }
   .film__storefront-bar { height: 34px; padding: 0 12px; font-size: 6px; }
   .film__storefront-products { height: 93px; }
-  .film__chapter { left: 20px; right: 20px; top: auto; bottom: 12%; width: auto; text-align: left; }
+  .film__chapter { left: 20px; right: 20px; top: auto; bottom: clamp(75px, 14vh, 120px); width: auto; text-align: left; }
   .film__chapter h2 { margin: 13px 0 8px; font-size: 43px; }
   .film__chapter p { margin-inline: auto; font-size: 13px; }
   .film-ring { --ring-depth: 286px; right: 50%; bottom: -80px; width: 100vw; height: 440px; transform: translateX(50%); }
@@ -158,7 +158,7 @@
   .film-card > strong { font-size: 18px; left: 12px; bottom: 14px; }
   .film-card > span { left: 12px; top: 12px; font-size: 12px; }
   .film-card > svg { right: 11px; bottom: 14px; }
-  .film__progress { left: 18px; bottom: 40px; width: calc(100vw - 36px); }
+  .film__progress { left: 18px; bottom: clamp(45px, 8vh, 70px); width: calc(100vw - 36px); }
   .film__instruction { display: none; }
   .gift-worlds { padding: 105px 16px 125px; }
   .gift-worlds__header { margin-bottom: 52px; }

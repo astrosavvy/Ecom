@@ -35,40 +35,6 @@ const CATEGORIES = [
   },
 ]
 
-function CursorAura() {
-  const dotRef = useRef(null)
-  const ringRef = useRef(null)
-
-  useEffect(() => {
-    let frame = 0
-    let x = -100
-    let y = -100
-    let rx = -100
-    let ry = -100
-    const move = (event) => {
-      x = event.clientX
-      y = event.clientY
-      dotRef.current?.style.setProperty('transform', `translate3d(${x}px,${y}px,0)`)
-      const interactive = event.target.closest('a, button, input, [data-cursor]')
-      ringRef.current?.classList.toggle('is-active', Boolean(interactive))
-    }
-    const tick = () => {
-      rx += (x - rx) * 0.17
-      ry += (y - ry) * 0.17
-      ringRef.current?.style.setProperty('transform', `translate3d(${rx}px,${ry}px,0)`)
-      frame = requestAnimationFrame(tick)
-    }
-    window.addEventListener('pointermove', move, { passive: true })
-    tick()
-    return () => {
-      cancelAnimationFrame(frame)
-      window.removeEventListener('pointermove', move)
-    }
-  }, [])
-
-  return <><span ref={dotRef} className="cursor-dot" /><span ref={ringRef} className="cursor-ring" /></>
-}
-
 function ScrollFilm() {
   // This is the approved four-leg lets-scroll chain. It is intentionally used
   // at every viewport until a matching landscape chain is rendered.
@@ -203,7 +169,6 @@ function Finale() {
 export default function Home() {
   return (
     <div className="cinematic-home">
-      <CursorAura />
       <ScrollFilm />
       <FlowShowcase />
       <Finale />

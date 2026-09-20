@@ -8,17 +8,34 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 2 — OpenAI Codex Architecture Deployed & Push Permission Hard Rule Enforced
-- **Status**: 🟢 Healthy (Zero build errors, Codex rules deployed, push permission enforced)
-- **Active Task**: Ready for Phase 3: Medusa Backend Integration & Storefront Route Expansion
-- **Last Updated**: 2026-09-20T11:10:00+05:30
+- **Current Phase**: Phase 2 — Dedicated PDP System & Storefront Visual Polish Complete
+- **Status**: 🟢 Healthy (Zero build errors, PDP routes live, visual bugs resolved)
+- **Active Task**: Local changes verified and committed; awaiting user push permission
+- **Last Updated**: 2026-09-20T11:25:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: `younoya-web/dist` (verified: 2,271 modules built in 4.55s, zero errors)
+- **Primary Production Build**: `younoya-web/dist` (verified: 2,274 modules built in 5.90s, zero errors)
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-20] Dedicated Cartier-Grade PDPs Deployed & Mobile/Spatial Flow Issues Fixed
+- **FlowShowcase Polish (Screenshot 1 Fix)**:
+  - Removed bottom controls (`← 01 02 03 04 05 →`) and instruction text (`DRAG • SCROLL • GLIDE...`) in [`FlowShowcase.jsx`](file:///F:/Savvy_Ecom/younoya-web/src/components/FlowShowcase.jsx) and [`FlowShowcase.css`](file:///F:/Savvy_Ecom/younoya-web/src/styles/FlowShowcase.css).
+  - Removed stray `CursorAura` component and its span elements from [`Home.jsx`](file:///F:/Savvy_Ecom/younoya-web/src/pages/Home.jsx), completely eliminating the frozen gold ring and dot.
+  - Added "Discover Sanctum ↗" link on each 3D card navigating to `/product/:handle`.
+- **First Tile Mobile Scroll Black Void Fix (Screenshot 2 Fix)**:
+  - Updated `.film__sticky` in [`CinematicHome.css`](file:///F:/Savvy_Ecom/younoya-web/src/styles/CinematicHome.css) from `100svh` to `height: 100vh; height: 100dvh; min-height: 100dvh;` so expanding mobile viewports on scroll never reveal a void.
+  - Recalibrated mobile `.film__video` to `top: -24%; height: 148%; width: 100%; object-fit: cover; object-position: 50% 50%;` to push baked-in video letterboxes off-screen on tall 19.5:9 and 20:9 mobile displays.
+  - Adjusted `.film__chapter` and `.film__progress` bottom positioning with `clamp()` for safe gesture-bar clearance.
+- **Dedicated Luxury Product Detail Page (PDP) System**:
+  - Created canonical dataset [`younoya-web/src/data/products.js`](file:///F:/Savvy_Ecom/younoya-web/src/data/products.js) containing all 8 keepsakes (`love-connection`, `confidence-personal-power`, `vitality-inner-balance`, `wealth-prosperity`, `hero-threshold`, `beetle-keepsake`, `toucan-keepsake`, `dream-jar`) with Vedic consecration specs, materials, unboxing details, and INR pricing.
+  - Created [`younoya-web/src/pages/ProductDetail.jsx`](file:///F:/Savvy_Ecom/younoya-web/src/pages/ProductDetail.jsx) with Cartier-grade interactive gallery, astrological resonance pill, custom scroll inscription intake, 4 wax seal choices, and 4 expandable accordions.
+  - Created [`younoya-web/src/styles/ProductDetail.css`](file:///F:/Savvy_Ecom/younoya-web/src/styles/ProductDetail.css) with responsive mobile & desktop styles.
+  - Registered `/product/:handle` in [`younoya-web/src/App.jsx`](file:///F:/Savvy_Ecom/younoya-web/src/App.jsx) with a `ScrollToTop` listener.
+  - Updated [`Navbar.jsx`](file:///F:/Savvy_Ecom/younoya-web/src/components/Navbar.jsx) to link brand mark cleanly to `/`.
+- **Build Verification**: Ran `npm --prefix younoya-web run build` and root `npm run build`; 2,274 modules compiled cleanly in 5.90s with zero errors.
 
 ### [2026-09-20] Transitioned to OpenAI Codex & Enforced Push Permission Hard Rule
 - **Cursor Files Removed**: Deleted `.cursorrules` and `.cursor/` directory.
