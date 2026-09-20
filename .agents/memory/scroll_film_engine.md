@@ -5,7 +5,7 @@
 ## 1. Active homepage
 
 `younoya-web/src/pages/Home.jsx` renders `StoryFilm` -> `FlowShowcase` -> `Finale`.
-`src/components/StoryFilm.jsx` and `src/styles/StoryFilm.css` own the cinematic first tile.
+`src/components/StoryFilm.jsx` and `src/styles/StoryFilm.css` own the cinematic first tile. The finale CTA opens `/shop`, implemented by `src/pages/Shop.jsx` and `src/styles/Shop.css`, listing all eight canonical PRODUCTS with links to their product detail pages. Shop navigation and the product-page All products breadcrumb also lead to `/shop`.
 The previous `VertexHero` remains available in source but is not mounted on the homepage.
 
 - Opener: authentic hamper reference, desktop landscape and native portrait pictures, sparse editorial headline, and an Enter the story control.

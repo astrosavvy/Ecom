@@ -9,9 +9,9 @@
 ## 1. 📍 Executive Project Status
 
 - **Current Phase**: Phase 4 — Scroll-driven Younoya story implemented and verified locally
-- **Status**: Healthy — build and desktop/mobile browser checks passed; pending user review and push permission
-- **Active Task**: Clickable product cards, mobile Reserve layout, and refined chapter navigation completed; awaiting push approval
-- **Last Updated**: 2026-09-20T17:34:32.6602321+05:30
+- **Status**: Healthy — production build and all eight product routes verified on desktop/mobile; push authorized
+- **Active Task**: All-products shop route and finale navigation verified; user explicitly authorized pushing the completed changes
+- **Last Updated**: 2026-09-20T17:41:49.3266764+05:30
 - **Last Agent**: Codex
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
 - **Primary Production Build**: `younoya-web/dist` and root `dist/` (verified: 2,276 modules built in 6.84s, zero errors)
@@ -20,6 +20,13 @@
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
 
+### [2026-09-20] All-Products Page & Finale Routing
+- Added `/shop` using the canonical eight-product dataset, with responsive product cards linking to `/product/:handle`.
+- The finale Explore the Sanctums button now opens `/shop`; added Shop/All products navigation and changed the product breadcrumb to return to the complete collection.
+- Verification: root build exit 0 (2,278 modules); browser checks at 430px, 320px, and 1440px cover the finale link, all eight product names/routes, return breadcrumbs, direct reload, no overflow, and zero page errors.
+- User explicitly requested apply and push; GitHub origin/main was checked before the final commit and push. Previous local story/navigation commits are included in the authorized push.
+- Removed an embedded access token from the legacy deployment guide without using it. Token rotation remains a user action because historical commits retain it.
+- Next: verify the GitHub push result and allow the existing Cloudflare CI deployment to complete. No direct production deployment or checkout transaction performed.
 ### [2026-09-20] Collection Click Targets, Mobile Footer & Chapter Navigation
 - Second-section cards now link to their product pages across photo, title, and body. Reserve and Discover remain separate controls. Delayed pointer capture and drag suppression distinguish browsing from tapping.
 - Mobile price and buttons use separate rows, with fully visible 40px-tall actions; verified at 430px and 320px as well as desktop.

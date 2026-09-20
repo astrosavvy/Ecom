@@ -22,7 +22,7 @@ This document outlines the standard operational workflows for building, testing,
    ```bash
    git add .
    git commit -m "feat(scope): descriptive commit message"
-   git push https://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@github.com/astrosavvy/Ecom.git main
+   git push origin main
    ```
 3. **Cloudflare Automated Edge Deployment**:
    - Cloudflare Pages listens to commits on `main` and automatically builds and deploys to `younoya.com` within ~60 seconds.

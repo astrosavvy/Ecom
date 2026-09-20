@@ -81,7 +81,7 @@ export default function ProductDetail() {
       <nav className="product-breadcrumb" aria-label="Breadcrumb">
         <Link to="/" className="breadcrumb-link">Atelier</Link>
         <span className="breadcrumb-sep">/</span>
-        <Link to="/#intentions" className="breadcrumb-link">Sanctum Flow</Link>
+        <Link to="/shop" className="breadcrumb-link">All products</Link>
         <span className="breadcrumb-sep">/</span>
         <span className="breadcrumb-current">Chapter {product.chapter} • {product.badge}</span>
       </nav>

@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import StoryFilm from '../components/StoryFilm'
 import FlowShowcase from '../components/FlowShowcase'
 import '../styles/CinematicHome.css'
@@ -14,9 +15,9 @@ function Finale() {
           The object is beautiful.<br />
           <em>The meaning is yours.</em>
         </h2>
-        <a className="glow-button" href="#intentions">
+        <Link className="glow-button" to="/shop">
           Explore the Sanctums <ArrowRight size={16} />
-        </a>
+        </Link>
       </article>
       <footer>
         <img src="/favicon.png" alt="Younoya" />

@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import CartDrawer from './components/CartDrawer'
 import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
+import Shop from './pages/Shop'
 import './styles/global.css'
 
 function ScrollToTop() {
@@ -33,6 +34,7 @@ export default function App() {
           <main>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
               <Route path="/product/:handle" element={<ProductDetail />} />
             </Routes>
           </main>

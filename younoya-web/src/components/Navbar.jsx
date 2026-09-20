@@ -29,6 +29,7 @@ export default function Navbar() {
         </Link>
         <span className="navbar__descriptor">OBJECTS OF AFFECTION</span>
         <nav className="navbar__nav" aria-label="Primary navigation">
+          <Link to="/shop">Shop</Link>
           <a href="/#intentions">Intentions</a>
           <a href="/#story">Story</a>
           <a href="/#finale">Younoya</a>
@@ -41,6 +42,7 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div className="navbar__mobile" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
+            <Link to="/shop" onClick={close}>All products</Link>
             <a href="/#intentions" onClick={close}>Gift intentions</a>
             <a href="/#story" onClick={close}>The Story</a>
             <a href="/#finale" onClick={close}>Younoya</a>
