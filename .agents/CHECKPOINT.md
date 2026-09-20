@@ -8,17 +8,43 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 2 — Dedicated PDP System & Storefront Visual Polish Complete
-- **Status**: 🟢 Healthy (Zero build errors, PDP routes live, visual bugs resolved)
+- **Current Phase**: Phase 3 — 3D Spatial Perspective Hero & Scroll-to-Expand Storefront Window Complete
+- **Status**: 🟢 Healthy (Zero build errors, 3D cylinder ring active, scroll-to-expand window live)
 - **Active Task**: Local changes verified and committed; awaiting user push permission
-- **Last Updated**: 2026-09-20T11:25:00+05:30
+- **Last Updated**: 2026-09-20T12:05:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: `younoya-web/dist` (verified: 2,274 modules built in 5.90s, zero errors)
+- **Primary Production Build**: `younoya-web/dist` and root `dist/` (verified: 2,276 modules built in 6.27s, zero errors)
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-20] 3D Perspective Cylinder Hero & Scroll-to-Expand Storefront Window Deployed
+- **Architectural Transformation**:
+  - Implemented the 3D perspective spatial cylinder stage authored at fixed `1172×657px` canvas scaled via `k = min(vw / W, vh / 560)`:
+    - **Top Atelier Nav Pill**: Celestial gold orbit mark, `YOUNOYA / OBJECTS OF AFFECTION`, navigation links, and signature foot-glow CTA button.
+    - **Pixel Contract A (Sacred Badge)**: Exact 250×39px dark glass tile (`12px` radius) with gold icon tile and left-aligned `✦ Consecrated Vedic Keepsakes` label (starting at x=45px, zero overlap).
+    - **Pixel Contract B (Signature Foot-Glow Button)**: Multi-stop gold/amber gradient pooled at button foot, clipped by button's rounded corners, side-light mask, and top highlight streak on nav button.
+    - **3D Cylinder Card Ring**: True 3D perspective cylinder ($R = 891\text{px}$, perspective $891\text{px}$, 37 cards) rotating at $1.9^\circ/\text{s}$ with angular culling at $|a| > 42^\circ$ for 60fps performance.
+    - **Local Photoshoot Integration**: Loaded all 10 card creatives from project photoshoot archives (`/media/*.webp`), completely bypassing external CloudFront URLs.
+- **Scroll-to-Expand Kinematics ("Window Comes Out As The Website Window")**:
+  - Housed hero inside a sticky scroll track (`height: 230vh`).
+  - As user scrolls (`progress: 0.0 -> 1.0`):
+    - Headline, badge, and 3D background cards gently dissolve into z-depth (`opacity: 1 -> 0`, `translateY: 0 -> -45px`).
+    - Floating macOS browser window mockup (`younoya.com / sacred-sanctums`) sitting in front of the ring scales up, translates from `top: 558px -> 0px`, flattens its border radius (`28px -> 0px`), and expands to $100\text{vw} \times 100\text{vh}$ full viewport!
+    - Internal storefront preview becomes the live, full-screen website storefront, seamlessly flowing into `FlowShowcase` and `Finale`.
+- **Global Navbar Coordination**:
+  - Configured `Navbar.jsx` with `navbar--hero-hidden` state: hidden while at rest at the top of the homepage to showcase the 3D canvas pill, then smoothly fades into view once scrolled past the hero threshold. Always visible on dedicated PDPs (`/product/:handle`).
+- **Files Created & Modified**:
+  - `younoya-web/src/components/VertexHero.jsx` (React 19 spatial hero component).
+  - `younoya-web/src/styles/VertexHero.css` (Exact coordinate table, 3D perspective styles, foot-glow buttons, tablet ramp, mobile flow layout).
+  - `younoya-web/src/pages/Home.jsx` (Integrated `VertexHero` as 1st tile).
+  - `younoya-web/src/components/Navbar.jsx` & `younoya-web/src/styles/Navbar.css` (Hero scroll-fade transition).
+  - `vertex-hero.html` (Standalone, self-contained single-file prototype in repository root).
+- **Build Verification**:
+  - `npm --prefix younoya-web run build` and root `npm run build` exited with code 0 (2,276 modules built in 6.27s).
+
 
 ### [2026-09-20] Dedicated Cartier-Grade PDPs Deployed & Mobile/Spatial Flow Issues Fixed
 - **FlowShowcase Polish (Screenshot 1 Fix)**:

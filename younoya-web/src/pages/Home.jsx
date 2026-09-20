@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import VertexHero from '../components/VertexHero'
 import FlowShowcase from '../components/FlowShowcase'
 import '../styles/CinematicHome.css'
 
@@ -155,13 +156,27 @@ function ScrollFilm() {
   )
 }
 
+
 function Finale() {
   return (
     <section className="quiet-finale" id="finale">
       <img src="/media/ritual-portrait.webp" alt="Younoya sculptural gifting world" />
       <div />
-      <article><span>YOUNOYA / FOR EVERY CHAPTER</span><h2>The object is beautiful.<br /><em>The meaning is yours.</em></h2><a className="glow-button" href="#story">Replay the story <ArrowRight size={16} /></a></article>
-      <footer><img src="/favicon.png" alt="Younoya" /><span>© 2026 Younoya</span><a href="#story">Gift intentions</a></footer>
+      <article>
+        <span>YOUNOYA / FOR EVERY CHAPTER</span>
+        <h2>
+          The object is beautiful.<br />
+          <em>The meaning is yours.</em>
+        </h2>
+        <a className="glow-button" href="#intentions">
+          Explore the Sanctums <ArrowRight size={16} />
+        </a>
+      </article>
+      <footer>
+        <img src="/favicon.png" alt="Younoya" />
+        <span>© 2026 Younoya Atelier</span>
+        <a href="#intentions">Gift intentions</a>
+      </footer>
     </section>
   )
 }
@@ -169,7 +184,7 @@ function Finale() {
 export default function Home() {
   return (
     <div className="cinematic-home">
-      <ScrollFilm />
+      <VertexHero />
       <FlowShowcase />
       <Finale />
     </div>
