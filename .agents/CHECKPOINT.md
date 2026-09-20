@@ -8,11 +8,11 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 4 — Brand Identity Alignment, Lets-Scroll Prompts & 48 FPS Video Pipeline Architecture
-- **Status**: 🟢 Healthy (Zero build errors, 48 FPS vs GIF evaluated, Macro & Radiance keyframes generated, Full prompt packages built)
-- **Active Task**: Lets-scroll video conditioning stills generated (Macro & Climax); 48 FPS interpolation & encoding workflow specified; awaiting user review
-- **Last Updated**: 2026-09-20T16:50:00+05:30
-- **Last Agent**: Antigravity
+- **Current Phase**: Phase 4 — Scroll-driven Younoya story implemented and verified locally
+- **Status**: Healthy — build and desktop/mobile browser checks passed; pending user review and push permission
+- **Active Task**: Completed the scroll-controlled homepage with the approved 32-second film; ready for user review and explicit push approval
+- **Last Updated**: 2026-09-20T17:24:37.6392327+05:30
+- **Last Agent**: Codex
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
 - **Primary Production Build**: `younoya-web/dist` and root `dist/` (verified: 2,276 modules built in 6.84s, zero errors)
 
@@ -20,6 +20,17 @@
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
 
+### [2026-09-20] Scroll-Controlled Story Homepage Implemented (Codex)
+- User confirmed mouse-wheel/trackpad scrolling controls the story, with subtle pointer depth.
+- Replaced the mounted VertexHero with StoryFilm; preserved the existing approved 32-second portrait master, product routes, collection, and bag.
+- Added an authentic hamper opener, four editorial chapters timed to actual product arrivals, keyboard-accessible chapter navigation, collection exit, and native cursor visibility.
+- Hardened Blob seeking, touch priming, media failure handling, URL-bar resize geometry, reduced-motion and data-saving still experiences; fixed Lenis animation cleanup and homepage hash entry.
+- Added keyboard collection browsing and protected product/button clicks from drag capture. No production checkout or backend writes.
+- Verification: root build exit 0; full 32-second seek range and no overflow/page errors at 1440x900, 390x844, 320x568, and 844x390; forward/backward seek, 4x CPU rapid-scroll, media failure, reduced-motion/data-saver, product link, local bag add, and hash navigation passed. Three original clip seams visually inspected.
+- Updated `.agents/memory/scroll_film_engine.md` with the actual active engine and separated the future hamper-film brief from production media.
+- Limitations: same approved portrait source is framed on desktop; real iOS device QA remains outstanding; existing checkout is a frontend demo. No new video generation, push, or deployment performed.
+- Previous handoff recorded `f9f84ff` pushed by Antigravity; this note preserves that prior milestone and does not imply these new changes were pushed.
+- Next: user review of the local preview, explicit push permission, then deployment verification if authorized. Existing commerce/backend roadmap remains below.
 ### [2026-09-20] `/lets-scroll` Architecture, 48 FPS Analysis, Macro/Climax Keyframes & Video Prompts Deployed
 - **48 FPS vs 24 FPS vs GIF Architectural Decision**:
   - **GIFs Rejected**: Completely unusable for scroll scrubbing. HTML `<img>` elements playing GIFs cannot be scrubbed to arbitrary timestamps via JS; file size balloons to 120–300 MB; 256-color limit causes catastrophic banding on dark celestial gradients.
@@ -233,7 +244,7 @@ When starting the next turn or feature, proceed in this exact sequence:
 > DO NOT violate these rules without explicit user instructions:
 > 1. **No Catalog Slop on First Screen**: The first screen must stay sparse: brand mark, one thought ("A gift should feel inevitable"), and the cinematic film. Do not re-add large product carousels or form inputs to the hero.
 > 2. **Never Swap Out the 32-Second Portrait Master Silently**: The active video master is `younoya-category-film-mobile.mp4`. Do not revert to the obsolete 12s landscape prototype (`younoya-category-film.mp4`).
-> 3. **Preserve Blob Video Seeking**: Always load the film as a `Blob` in `Home.jsx` to prevent seek-range lockups on static servers.
+> 3. **Preserve Blob Video Seeking**: Always load the film as a `Blob` in `StoryFilm.jsx` (mounted by `Home.jsx`) to prevent seek-range lockups on static servers.
 > 4. **No Mascot PNG in UI**: `aster-mascot.png` is rejected as a 3D solution. Keep it out of the UI until a real 3D animated model is approved.
 > 5. **No Build on VPS**: Never run `npm run build` on the VPS (956MB RAM OOM).
 

@@ -83,11 +83,12 @@ export default function FlowShowcase() {
   const animFrameRef = useRef(null)
 
   useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
     const update = () => {
       const target = targetPosRef.current
       const current = currentPosRef.current
       const diff = target - current
-      currentPosRef.current += diff * 0.088
+      currentPosRef.current = reduced.matches ? target : current + diff * 0.088
       const pos = currentPosRef.current
       const velocity = diff
       const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
@@ -119,10 +120,12 @@ export default function FlowShowcase() {
     animFrameRef.current = requestAnimationFrame(update)
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current)
+      clearTimeout(lastSnapRef.current)
     }
   }, [])
 
   const onPointerDown = (e) => {
+    if (e.target.closest('a, button')) return
     isDraggingRef.current = true
     setIsDragging(true)
     startXRef.current = e.clientX
@@ -198,14 +201,14 @@ export default function FlowShowcase() {
       <div className="flow-header">
         <div className="flow-header__eyebrow">
           <span className="flow-dot" />
-          YOUNOYA / SACRED SPATIAL CAROUSEL
+          YOUNOYA / THE COLLECTION
         </div>
         <h2 className="flow-header__title">
-          Consecrated Flow of <em>Intentions.</em>
+          Find a gift for <em>their chapter.</em>
         </h2>
         <p className="flow-header__subtitle">
-          Drag, scroll or glide across the five sacred sanctums. Each keepsake is purified through
-          108× mantras and personalized Vedic astrological dasha.
+          Explore five intentions, each with a story to tell. Our keepsakes are prepared with
+          care and guided by Vedic astrological insight.
         </p>
       </div>
 
@@ -217,6 +220,15 @@ export default function FlowShowcase() {
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         onWheel={onWheel}
+        tabIndex={0}
+        role="group"
+        aria-label="Gift collection. Use left and right arrow keys to browse."
+        onKeyDown={event => {
+          if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+            event.preventDefault()
+            goTo(activeIndex + (event.key === 'ArrowRight' ? 1 : -1))
+          }
+        }}
       >
         <div className="flow-track">
           {FLOW_ITEMS_DATA.map((item, idx) => (
@@ -257,6 +269,7 @@ export default function FlowShowcase() {
                       <Link
                         to={`/product/${item.handle}`}
                         className="flow-card__link"
+                        tabIndex={idx === activeIndex ? 0 : -1}
                         onClick={(e) => e.stopPropagation()}
                       >
                         Discover Sanctum ↗
@@ -264,6 +277,7 @@ export default function FlowShowcase() {
                       <button
                         type="button"
                         className="flow-card__btn"
+                        tabIndex={idx === activeIndex ? 0 : -1}
                         onClick={(e) => onReserve(item, e)}
                       >
                         Reserve ↗

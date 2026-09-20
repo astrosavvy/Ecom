@@ -305,3 +305,10 @@
     font-size: 7.5px;
   }
 }
+
+/* Continue the story canvas into the collection; retain the existing 3D browse. */
+.leoparpeix-flow { background: linear-gradient(180deg, #080b14, #120712 50%, #050403); }
+@media (prefers-reduced-motion: reduce) {
+  .flow-dot { animation: none; }
+  .flow-card-container, .flow-card-inner, .flow-card__image { transition: none; }
+}

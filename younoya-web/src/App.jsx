@@ -9,17 +9,19 @@ import ProductDetail from './pages/ProductDetail'
 import './styles/global.css'
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   useEffect(() => {
-    if (window.__lenis) {
-      window.__lenis.scrollTo(0, { immediate: true })
-    } else {
-      window.scrollTo(0, 0)
-    }
-  }, [pathname])
+    const frame = requestAnimationFrame(() => {
+      let id = ''
+      try { id = decodeURIComponent(hash.slice(1)) } catch { /* Ignore malformed external hashes. */ }
+      const element = id ? document.getElementById(id) : null
+      if (window.__lenis) window.__lenis.scrollTo(element || 0, { immediate: true, offset: element ? -80 : 0 })
+      else window.scrollTo(0, element ? window.scrollY + element.getBoundingClientRect().top - 80 : 0)
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [pathname, hash])
   return null
 }
-
 export default function App() {
   return (
     <BrowserRouter>
