@@ -78,6 +78,8 @@ export default function FlowShowcase() {
   const currentPosRef = useRef(0)
   const isDraggingRef = useRef(false)
   const startXRef = useRef(0)
+  const startYRef = useRef(0)
+  const didDragRef = useRef(false)
   const startPosRef = useRef(0)
   const lastSnapRef = useRef(0)
   const animFrameRef = useRef(null)
@@ -125,21 +127,29 @@ export default function FlowShowcase() {
   }, [])
 
   const onPointerDown = (e) => {
-    if (e.target.closest('a, button')) return
+    didDragRef.current = false
+    if (e.button !== 0 || e.target.closest('button, .flow-card__link')) return
     isDraggingRef.current = true
-    setIsDragging(true)
     startXRef.current = e.clientX
+    startYRef.current = e.clientY
     startPosRef.current = targetPosRef.current
-    if (viewportRef.current && viewportRef.current.setPointerCapture) {
-      try {
-        viewportRef.current.setPointerCapture(e.pointerId)
-      } catch (_) {}
-    }
   }
 
   const onPointerMove = (e) => {
     if (!isDraggingRef.current) return
+    if (e.buttons === 0) {
+      onPointerUp()
+      return
+    }
     const deltaX = e.clientX - startXRef.current
+    const deltaY = e.clientY - startYRef.current
+    if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) <= 6) return
+    didDragRef.current = true
+    if (!viewportRef.current.hasPointerCapture(e.pointerId)) {
+      if (Math.abs(deltaY) > Math.abs(deltaX)) return
+      viewportRef.current.setPointerCapture(e.pointerId)
+      setIsDragging(true)
+    }
     const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
     const sens = isMobile ? 240 : 340
     targetPosRef.current = Math.max(
@@ -174,13 +184,6 @@ export default function FlowShowcase() {
 
   const goTo = (idx) => {
     targetPosRef.current = Math.max(0, Math.min(FLOW_ITEMS_DATA.length - 1, idx))
-  }
-
-  const onCardClick = (idx) => {
-    const diff = Math.abs(idx - currentPosRef.current)
-    if (diff > 0.4) {
-      goTo(idx)
-    }
   }
 
   const onReserve = (item, e) => {
@@ -219,6 +222,12 @@ export default function FlowShowcase() {
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
+        onClickCapture={event => {
+          if (didDragRef.current && event.detail !== 0) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+        }}
         onWheel={onWheel}
         tabIndex={0}
         role="group"
@@ -238,9 +247,15 @@ export default function FlowShowcase() {
               ref={(el) => {
                 cardRefs.current[idx] = el
               }}
-              onClick={() => onCardClick(idx)}
             >
               <div className="flow-card-inner">
+                <Link
+                  className="flow-card__product-link"
+                  to={`/product/${item.handle}`}
+                  aria-label={`View ${item.name}`}
+                  tabIndex={idx === activeIndex ? 0 : -1}
+                  onDragStart={event => event.preventDefault()}
+                />
                 <div className="flow-card__image-box">
                   <img
                     className="flow-card__image"

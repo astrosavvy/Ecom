@@ -27,7 +27,7 @@ Copy follows the actual product arrivals, distinct from the source clip seams:
 | 20-27 seconds | Balance | `/product/vitality-inner-balance` |
 | 27-32 seconds | Prosperity | `/product/wealth-prosperity` |
 
-The chapter rail supports native button keyboard interaction and jumps slightly inside each chapter. The collection link exits the pinned story to `#intentions`. Hidden chapter text uses the native hidden attribute; the faded intro becomes inert. Route-entry hash handling in `App.jsx` supports returning from product pages to homepage sections.
+The chapter navigation uses a translucent panel with current-chapter typography, direct-jump markers, and previous/next buttons. On narrow phones markers are hidden while arrows retain access to every chapter. The final forward control links to the collection. All controls support keyboard interaction; chapter jumps land slightly inside each chapter. The collection link exits the pinned story to `#intentions`. Hidden chapter text uses the native hidden attribute; the faded intro becomes inert. Route-entry hash handling in `App.jsx` supports returning from product pages to homepage sections.
 
 ## 3. Seeking and fallback contract
 
@@ -37,7 +37,7 @@ The chapter rail supports native button keyboard interaction and jumps slightly 
 - Touch devices preserve initial scroll geometry on height-only URL-bar resize; width/orientation changes recompute it.
 - Reduced motion and data-saving mode use ordinary static chapter sections and do not fetch the film. Motion preference changes are observed.
 - `SmoothScroll.jsx` owns Lenis, cancels its latest animation frame, tears it down for reduced motion, and intercepts only valid same-page anchors.
-- `FlowShowcase` retains the existing 3D collection, with arrow-key browsing and interactive links excluded from drag capture. Reduced motion uses immediate card positioning.
+- `FlowShowcase` retains the 3D collection with arrow-key browsing. Full-card links open each product page; Reserve stays independent. Capture starts after a horizontal drag threshold and suppresses accidental navigation after dragging. Mobile footers put price above a full-width button row to prevent clipping. Reduced motion uses immediate card positioning.
 
 ## 4. Brand and future media
 

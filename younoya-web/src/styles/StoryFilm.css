@@ -24,21 +24,28 @@
 .story-film__topline span:last-child { writing-mode: vertical-rl; }
 .story-film__bottom { position: absolute; left: 6.4%; right: 6.4%; bottom: max(28px, env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .story-film__scroll, .story-film__skip { display: inline-flex; gap: 11px; align-items: center; font-size: 10px; color: #d1cbc4; letter-spacing: .055em; white-space: nowrap; }
-.story-film__rail { display: flex; gap: 4px; }
-.story-film__rail button { position: relative; display: flex; gap: 9px; align-items: center; min-height: 44px; padding: 0 11px; border: 0; background: none; color: #b4aaa1; cursor: pointer; }
-.story-film__rail button::after { content: ''; position: absolute; bottom: 0; left: 11px; right: 11px; height: 1px; background: #d6b06a; transform: scaleX(0); transition: transform .3s; }
-.story-film__rail button[aria-current] { color: #f0d08f; }
-.story-film__rail button[aria-current]::after, .story-film__rail button:hover::after { transform: scaleX(1); }
-.story-film__rail-number { font-family: var(--font-serif); font-size: 18px; }
-.story-film__rail-label { font-size: 10px; }
-.story-film__progress { position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: #d6b06a; transform-origin: left; transform: scaleX(var(--story-progress)); }
+.story-film__rail { display: flex; align-items: center; gap: 28px; padding: 12px 14px 12px 22px; min-width: 420px; border: 1px solid rgba(222,202,166,.14); border-radius: 18px; background: rgba(20,21,28,.72); backdrop-filter: blur(24px); box-shadow: inset 0 1px 0 rgba(255,244,223,.06), 0 10px 30px rgba(3,5,10,.18); }
+.story-film__current { flex: 1; min-width: 0; }
+.story-film__current > span { display: block; font-size: 7px; letter-spacing: .15em; color: #b9ac96; white-space: nowrap; }
+.story-film__current strong { display: block; margin-top: 3px; font-family: var(--font-serif); font-size: 25px; line-height: 1.05; font-weight: 400; letter-spacing: -.015em; color: #f5eee2; }
+.story-film__stops { display: flex; align-items: center; }
+.story-film__stops button { display: grid; place-items: center; width: 24px; height: 44px; padding: 0; border: 0; border-radius: 8px; background: transparent; cursor: pointer; }
+.story-film__stops i { width: 4px; height: 4px; border-radius: 4px; background: #c5b38c66; transition: width .3s, background .3s, box-shadow .3s; }
+.story-film__stops button[aria-current] i { width: 18px; background: #e7c78d; box-shadow: 0 0 12px #d6b06a30; }
+.story-film__stops button:hover i { background: #faf6ee; }
+.story-film__arrows { display: flex; gap: 4px; }
+.story-film__arrows button, .story-film__arrows a { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid #dfc89d24; border-radius: 50%; color: #e7d7bc; background: transparent; transition: background .2s, border-color .2s; cursor: pointer; }
+.story-film__arrows button:hover:not(:disabled), .story-film__arrows a:hover { background: #dfc89d12; border-color: #dfc89d66; }
+.story-film__arrows button:disabled { opacity: .25; cursor: default; }
+.story-film__arrows button:active:not(:disabled), .story-film__arrows a:active { transform: scale(.96); }
+.story-film__progress { position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; opacity: .45; background: #d6b06a; transform-origin: left; transform: scaleX(var(--story-progress)); }
 .story-film--still { height: auto; }
 .story-film--still .story-film__stage { position: relative; height: 100svh; }
 .story-film__static-chapter { display: grid; grid-template-columns: 1fr 1fr; gap: 7vw; align-items: center; padding: 90px 6.4%; scroll-margin-top: 90px; }
 .story-film__static-chapter > img { width: 100%; max-height: 650px; object-fit: contain; }
 .story-film__static-chapter h2 { font-size: clamp(45px, 5vw, 76px); }
 @keyframes story-copy-in { from { opacity: 0; translate: 0 15px; } to { opacity: 1; translate: 0 0; } }
-@media (min-width: 701px) and (max-width: 1100px) { .story-film__rail-label { display: none; } .story-film__intro, .story-film__chapter { width: 56%; } }
+@media (min-width: 701px) and (max-width: 1100px) { .story-film__intro, .story-film__chapter { width: 56%; } }
 @media (max-width: 700px) {
   .story-film__stage { min-height: 480px; }
   .story-film__topline { top: 103px; left: 24px; right: 24px; font-size: 8px; }
@@ -58,13 +65,19 @@
   .story-film h2 { font-size: clamp(44px, 11.7vw, 70px); margin: 14px 0 15px; }
   .story-film__chapter .story-film__link { margin-top: 13px; }
   .story-film__bottom { left: 20px; right: 20px; bottom: max(17px, env(safe-area-inset-bottom)); flex-wrap: wrap; gap: 10px; }
-  .story-film__rail { order: 3; width: 100%; justify-content: space-between; }
-  .story-film__rail button { padding: 0 10px; min-width: 44px; }
-  .story-film__rail-label { display: none; }
-  .story-film__rail button[aria-current] .story-film__rail-label { display: inline; font-size: 9px; }
+  .story-film__rail { order: 3; width: 100%; min-width: 0; gap: 8px; padding: 11px 10px 11px 16px; border-radius: 16px; }
+  .story-film__current strong { font-size: 22px; }
+  .story-film__current > span { font-size: 6px; letter-spacing: .1em; }
+  .story-film__stops button { width: 24px; }
+  .story-film__stops button[aria-current] i { width: 12px; }
+  .story-film__arrows button, .story-film__arrows a { width: 34px; height: 38px; }
+  .story-film__chapter { bottom: 147px; }
   .story-film__scroll, .story-film__skip { font-size: 9px; }
   .story-film__static-chapter { grid-template-columns: 1fr; gap: 28px; padding: 55px 24px; }
   .story-film__static-chapter > img { max-height: 430px; }
+}
+@media (max-width: 380px) {
+  .story-film__stops { display: none; }
 }
 @media (max-height: 620px) and (min-width: 701px) {
   .story-film__stage { min-height: 380px; }
@@ -79,7 +92,7 @@
 @media (prefers-reduced-motion: reduce) {
   .story-film__opening-image img { transform: none; }
   .story-film__chapter:not([hidden]) { animation: none; }
-  .story-film__link svg, .story-film__rail button::after { transition: none; }
+  .story-film__link svg, .story-film__stops i, .story-film__arrows button, .story-film__arrows a { transition: none; }
 }
 
 @media (max-height: 620px) and (min-width: 701px) {

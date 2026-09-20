@@ -124,6 +124,23 @@
   border-color: rgba(240, 207, 144, 0.65);
   box-shadow: 0 45px 100px rgba(0, 0, 0, 0.95), 0 0 35px rgba(212, 175, 55, 0.25);
 }
+.flow-card__product-link {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  cursor: pointer;
+}
+.flow-card__product-link:focus-visible {
+  outline: 2px solid #f0d08f;
+  outline-offset: -4px;
+}
+.flow-card__body { pointer-events: none; }
+.flow-card__actions { pointer-events: auto; }
+.flow-card__actions a, .flow-card__actions button {
+  position: relative;
+  z-index: 4;
+}
 .flow-card__image-box {
   position: relative;
   width: 100%;
@@ -185,7 +202,7 @@
   flex-direction: column;
   justify-content: space-between;
   background: #0d0a07;
-  z-index: 2;
+  z-index: auto;
 }
 .flow-card__title {
   font-family: var(--font-serif, "Cormorant Garamond", serif);
@@ -298,11 +315,33 @@
   }
   .flow-card__actions {
     gap: 6px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    width: 100%;
+  }
+  .flow-card__footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .flow-card__price-box {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .flow-card__price-label {
+    font-size: 7px;
   }
   .flow-card__link,
   .flow-card__btn {
     padding: 6px 9px;
     font-size: 7.5px;
+    min-width: 0;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

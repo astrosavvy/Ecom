@@ -10,8 +10,8 @@
 
 - **Current Phase**: Phase 4 — Scroll-driven Younoya story implemented and verified locally
 - **Status**: Healthy — build and desktop/mobile browser checks passed; pending user review and push permission
-- **Active Task**: Completed the scroll-controlled homepage with the approved 32-second film; ready for user review and explicit push approval
-- **Last Updated**: 2026-09-20T17:24:37.6392327+05:30
+- **Active Task**: Clickable product cards, mobile Reserve layout, and refined chapter navigation completed; awaiting push approval
+- **Last Updated**: 2026-09-20T17:34:32.6602321+05:30
 - **Last Agent**: Codex
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
 - **Primary Production Build**: `younoya-web/dist` and root `dist/` (verified: 2,276 modules built in 6.84s, zero errors)
@@ -20,6 +20,12 @@
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
 
+### [2026-09-20] Collection Click Targets, Mobile Footer & Chapter Navigation
+- Second-section cards now link to their product pages across photo, title, and body. Reserve and Discover remain separate controls. Delayed pointer capture and drag suppression distinguish browsing from tapping.
+- Mobile price and buttons use separate rows, with fully visible 40px-tall actions; verified at 430px and 320px as well as desktop.
+- Replaced the numbered chapter bar with a translucent panel showing the current chapter in editorial type, subtle direct-jump markers, and previous/next controls. The final arrow continues into the collection. Compact phones retain chapter access via arrows.
+- Verification: root production build passed; desktop/mobile browser checks cover card clicks/taps, Reserve bag action, keyboard routing, drag suppression, navigation in both directions, button bounds, and no horizontal overflow. No production transactions.
+- Next: review locally, then explicit push approval. No push or deployment performed.
 ### [2026-09-20] Scroll-Controlled Story Homepage Implemented (Codex)
 - User confirmed mouse-wheel/trackpad scrolling controls the story, with subtle pointer depth.
 - Replaced the mounted VertexHero with StoryFilm; preserved the existing approved 32-second portrait master, product routes, collection, and bag.

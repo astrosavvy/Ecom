@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowDown, ArrowUpRight } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
 import '../styles/StoryFilm.css'
 
 const FILM = '/media/younoya-category-film-mobile.mp4'
@@ -178,8 +178,20 @@ export default function StoryFilm() {
         {!still && <div className="story-film__bottom">
           <span className="story-film__scroll"><ArrowDown size={15} /> Scroll to unfold</span>
           <nav className="story-film__rail" aria-label="Story chapters">
-            <button aria-label="Return to story opening" aria-current={active === -1 ? 'step' : undefined} onClick={() => goToChapter(-1)}><span className="story-film__rail-number">✦</span><span className="story-film__rail-label">Opening</span></button>
-            {CHAPTERS.map((chapter, index) => <button key={chapter.id} aria-label={`Chapter ${index + 1}: ${chapter.label}`} aria-current={active === index ? 'step' : undefined} onClick={() => goToChapter(index)}><span className="story-film__rail-number">0{index + 1}</span><span className="story-film__rail-label">{chapter.label}</span></button>)}
+            <div className="story-film__current">
+              <span>{active < 0 ? 'A JOURNEY IN FOUR CHAPTERS' : `THE JOURNEY / 0${active + 1} OF 04`}</span>
+              <strong>{active < 0 ? 'The beginning' : CHAPTERS[active].label}</strong>
+            </div>
+            <div className="story-film__stops">
+              <button aria-label="Return to story opening" aria-current={active === -1 ? 'step' : undefined} onClick={() => goToChapter(-1)}><i /></button>
+              {CHAPTERS.map((chapter, index) => <button key={chapter.id} aria-label={`Chapter ${index + 1}: ${chapter.label}`} aria-current={active === index ? 'step' : undefined} onClick={() => goToChapter(index)}><i /></button>)}
+            </div>
+            <div className="story-film__arrows">
+              <button aria-label="Previous chapter" disabled={active === -1} onClick={() => goToChapter(active - 1)}><ArrowLeft size={16} strokeWidth={1.4} /></button>
+              {active < CHAPTERS.length - 1
+                ? <button aria-label="Next chapter" onClick={() => goToChapter(active + 1)}><ArrowRight size={16} strokeWidth={1.4} /></button>
+                : <a href="#intentions" aria-label="Continue to the collection"><ArrowUpRight size={16} strokeWidth={1.4} /></a>}
+            </div>
           </nav>
           <a className="story-film__skip" href="#intentions">The collection <ArrowUpRight size={15} /></a>
         </div>}
