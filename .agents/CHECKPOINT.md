@@ -8,17 +8,33 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 4 — Brand Identity Alignment & Authentic Photoshoot Reference Frames Deployed
-- **Status**: 🟢 Healthy (Zero build errors, Real photoshoot reference frames generated, Documentation synchronized)
-- **Active Task**: Brand Identity Document fully integrated; authentic hamper reference frames (16:9 & 9:16) generated & copied; build verified
-- **Last Updated**: 2026-09-20T16:45:00+05:30
+- **Current Phase**: Phase 4 — Brand Identity Alignment, Lets-Scroll Prompts & 48 FPS Video Pipeline Architecture
+- **Status**: 🟢 Healthy (Zero build errors, 48 FPS vs GIF evaluated, Macro & Radiance keyframes generated, Full prompt packages built)
+- **Active Task**: Lets-scroll video conditioning stills generated (Macro & Climax); 48 FPS interpolation & encoding workflow specified; awaiting user review
+- **Last Updated**: 2026-09-20T16:50:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: `younoya-web/dist` and root `dist/` (verified: 2,276 modules built in 6.62s, zero errors)
+- **Primary Production Build**: `younoya-web/dist` and root `dist/` (verified: 2,276 modules built in 6.84s, zero errors)
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-20] `/lets-scroll` Architecture, 48 FPS Analysis, Macro/Climax Keyframes & Video Prompts Deployed
+- **48 FPS vs 24 FPS vs GIF Architectural Decision**:
+  - **GIFs Rejected**: Completely unusable for scroll scrubbing. HTML `<img>` elements playing GIFs cannot be scrubbed to arbitrary timestamps via JS; file size balloons to 120–300 MB; 256-color limit causes catastrophic banding on dark celestial gradients.
+  - **48 FPS AI-Interpolated Video Recommended**: Doubles frame density (480 frames over 10s = ~5px per frame), providing buttery micro-scroll fluidity on 120Hz ProMotion displays (MacBooks, iPhones). File size increases only 25–35% (~3.8 MB) due to H.264 temporal compression. Decoded with zero CPU load via GPU silicon.
+- **Keyframe Assets Generated for Video Conditioning (`generate_image` + `2026_09_09/`)**:
+  - `younoya-hamper-macro-detail-16x9.jpg`: Macro close-up on opened ruby apple candle and raw amethyst crystal brass urn.
+  - `younoya-hamper-radiance-climax-16x9.jpg`: Climax illumination with glowing golden constellation arcs, fine stardust, and sacred gold Jhula swing altar.
+  - Synced to `creative/younoya-scroll-film/` and `younoya-web/public/media/`.
+- **Production Prompts & FFmpeg Pipeline Authored (`creative/younoya-scroll-film/PROMPTS_AND_FPS_GUIDE.md`)**:
+  - Architecture A (Single-Take 10–12s Hero Video for Seedance 2.0 / Kling / Runway).
+  - Architecture B (2-Leg Seamless Dive & Climax Chain).
+  - Mobile 9:16 Native Portrait Prompt.
+  - FFmpeg `minterpolate` 48 FPS command and small GOP (`-g 8` desktop / `-g 4` mobile) seek-friendly encoding pipeline with in-memory Blob seek.
+- **Build Verification**:
+  - `npm run build` compiled 2,276 modules with exit code 0.
 
 ### [2026-09-20] Brand Identity System Synchronization & Real Photoshoot Reference Frames Deployed
 - **Real Photoshoot Conditioning Frames Rebuilt (`generate_image` + `2026_09_09/`)**:
