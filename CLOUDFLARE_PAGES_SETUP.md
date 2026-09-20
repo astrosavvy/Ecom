@@ -23,9 +23,9 @@ Vite 7 React 19 storefront decoupled from VPS, auto-deploys on push to `astrosav
 
 ## 2. Routing — SPA + Redirects (critical fix 17b5923)
 
-`younoya-web/wrangler.jsonc:5`:
+`younoya-web/wrangler.jsonc`:
 ```json
-{ "assets": { "directory": "dist", "not_found_handling": "single-page-application" } }
+{ "name": "ecom", "pages_build_output_dir": "dist", "compatibility_date": "2025-01-01" }
 ```
 `younoya-web/public/_redirects:1` (must stay 2 lines — no SPA catch-all):
 ```
