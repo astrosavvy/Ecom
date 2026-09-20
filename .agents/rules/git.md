@@ -1,24 +1,30 @@
-# Git Commit & Push Rules (Universal Standard for Cursor & Antigravity)
+# Git Commit & Push Rules (Universal Standard for Codex & Antigravity)
 
 > [!IMPORTANT]
 > **Universal Agent Execution Standard**:
-> All git operations must be executed from the **repository root directory** (`F:\Savvy_Ecom`). Follow this exact 5-step checklist so every agent (Cursor or Antigravity) operates with zero confusion.
+> All git operations must be executed from the **repository root directory** (`F:\Savvy_Ecom`). Follow this exact sequence so every agent (Codex or Antigravity) operates with zero confusion.
 
 ---
 
-## 1. 🛑 MANDATORY LAW: SINGLE FINAL COMMIT ONLY (NO MICRO-COMMITS)
+## 1. 🛑 MANDATORY LAWS: PUSH PERMISSION & SINGLE COMMIT
 
 > [!CAUTION]
-> **STRICTLY FORBIDDEN**:
-> - NEVER commit for individual intermediate edits, scratch files, or partial fixes.
-> - NEVER create a separate follow-up commit just to update a commit hash in `CHECKPOINT.md`.
-> - Every push triggers Cloudflare Workers CI and builds a new production release. Committing incrementally floods CI builds, wastes resources, and deploys unverified intermediate states.
+> **HARD RULES (NON-NEGOTIABLE)**:
+> 1. **NEVER PUSH WITHOUT EXPLICIT USER PERMISSION**:
+>    - NEVER execute `git push` automatically.
+>    - On every task/turn, after committing locally, you MUST ASK the user: *"All changes are verified and committed locally. Would you like me to push to GitHub origin main?"*
+>    - WITHOUT the user's explicit permission, DO NOT PUSH.
+> 2. **SINGLE FINAL COMMIT ONLY (NO MICRO-COMMITS)**:
+>    - NEVER commit for individual intermediate edits, scratch files, or partial fixes.
+>    - NEVER create a separate follow-up commit just to update a commit hash in `CHECKPOINT.md`.
+>    - Every push triggers Cloudflare Workers CI and builds a new production release. Committing incrementally floods CI builds, wastes resources, and deploys unverified intermediate states.
 
 ### The Single-Commit Protocol:
 1. **Batch All Changes**: Perform all code edits, config tweaks, asset placements, and documentation updates in the working tree.
 2. **Verify Locally First**: Run `npm run build` and ensure exit code `0`.
 3. **Update Checkpoint in the Working Tree**: Edit [`.agents/CHECKPOINT.md`](file:///F:/Savvy_Ecom/.agents/CHECKPOINT.md) with details of completed work, test results, and next steps BEFORE staging.
-4. **Single Unified Commit**: Stage everything together (`git add -A`), create ONE semantic commit, and push once.
+4. **Single Unified Commit**: Stage everything together (`git add -A`), create ONE semantic commit.
+5. **Ask Before Pushing**: Prompt the user for explicit approval before running `git push`.
 
 ---
 
@@ -37,7 +43,7 @@ Confirm build exits with code `0`. Do NOT commit if build fails.
 ```bash
 git status
 ```
-- **Files to Stage**: Source code in `younoya-web/`, build output in `younoya-web/dist/` and `dist/`, memory/rules/checkpoint in `.agents/`, root configs (`package.json`, `serve.js`, `.cursorrules`, `wrangler.jsonc`).
+- **Files to Stage**: Source code in `younoya-web/`, build output in `younoya-web/dist/` and `dist/`, memory/rules/checkpoint in `.agents/`, root configs (`CODEX.md`, `AGENTS.md`, `package.json`, `serve.js`, `wrangler.jsonc`).
 - **Files NEVER to Stage**:
   - `2026_09_09/` (283 raw camera photoshoot JPGs, ~2.4 GB) — must remain ignored.
   - Temporary test scratch files or `.zip` files.
@@ -62,7 +68,11 @@ git commit -m "<type>(<scope>): <concise description of complete task>"
 - `docs`: Documentation, memory updates, or checkpoint updates (e.g. `docs(checkpoint): update active milestone`)
 - `chore`: Dependency updates, config adjustments (e.g. `chore: unify build scripts`)
 
-### Step 5: Push Once to Remote
+### Step 5: ASK USER FOR PERMISSION BEFORE PUSHING
+Prompt the user clearly:
+> *"Changes are verified and committed locally. Would you like me to push to GitHub origin main?"*
+
+**ONLY AFTER the user gives explicit permission**:
 ```bash
 git push origin main
 ```

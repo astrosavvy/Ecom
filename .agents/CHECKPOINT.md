@@ -2,16 +2,16 @@
 
 > [!IMPORTANT]
 > **MULTI-AGENT SSOT**:
-> Any agent (**Cursor**, **Antigravity**, **Claude Code**, or automated pipeline) MUST read this file at the start of every turn to know the current state and what to do next. When concluding a turn or completing a milestone, the agent MUST update this document.
+> Any agent (**Codex**, **Antigravity**, **Claude Code**, or automated pipeline) MUST read this file at the start of every turn to know the current state and what to do next. When concluding a turn or completing a milestone, the agent MUST update this document.
 
 ---
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 2 — Cloudflare Worker Static Assets Configured & Single Commit Law Enforced
-- **Status**: 🟢 Healthy (Zero build errors, single-commit rule enforced)
+- **Current Phase**: Phase 2 — OpenAI Codex Architecture Deployed & Push Permission Hard Rule Enforced
+- **Status**: 🟢 Healthy (Zero build errors, Codex rules deployed, push permission enforced)
 - **Active Task**: Ready for Phase 3: Medusa Backend Integration & Storefront Route Expansion
-- **Last Updated**: 2026-09-20T11:07:00+05:30
+- **Last Updated**: 2026-09-20T11:10:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
 - **Primary Production Build**: `younoya-web/dist` (verified: 2,271 modules built in 4.55s, zero errors)
@@ -19,6 +19,14 @@
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-20] Transitioned to OpenAI Codex & Enforced Push Permission Hard Rule
+- **Cursor Files Removed**: Deleted `.cursorrules` and `.cursor/` directory.
+- **Codex Native Configuration Deployed**: Created root [`CODEX.md`](file:///F:/Savvy_Ecom/CODEX.md) (auto-loaded by OpenAI Codex CLI) and root [`AGENTS.md`](file:///F:/Savvy_Ecom/AGENTS.md) pointing directly into `.agents/` SSOT.
+- **Enforced NON-NEGOTIABLE HARD RULE**:
+  1. **Never Push Without Explicit User Permission**: No agent or script may run `git push` automatically. On every change, after local build verification and committing, the agent MUST ask the user: *"Would you like me to push these changes to GitHub now?"* Without explicit user approval, do NOT push.
+  2. **Single Final Commit Only**: No incremental micro-commits for scratch edits or checkpoint hash updates.
+- **Updated All System Rules**: Updated `.agents/rules/git.md`, `.agents/rules/checkpoint-protocol.md`, `.agents/AGENTS.md`, `.agents/workflows/git_workflow.md`, and `.agents/workflows/checkpoint_handoff_workflow.md`.
 
 ### [2026-09-20] Enforced Single Final Commit Law (No Micro-Commits) Across All Agent Rules
 - **Rule Codified**: Prohibited incremental micro-commits for individual file edits and separate follow-up commits for commit hash updates.
