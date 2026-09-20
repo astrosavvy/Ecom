@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, ShoppingBag, X } from 'lucide-react'
 import { useCart } from '../context/CartContext'
@@ -9,11 +9,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const { totalItems, setIsOpen } = useCart()
-  const location = useLocation()
-  const isHome = location.pathname === '/'
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 120)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 30)
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -21,12 +21,8 @@ export default function Navbar() {
 
   const close = () => setMobileOpen(false)
 
-  const isHiddenOnHome = isHome && !scrolled
-
   return (
-    <header
-      className={`navbar ${scrolled ? 'navbar--scrolled' : ''} ${isHiddenOnHome ? 'navbar--hero-hidden' : ''}`}
-    >
+    <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
       <div className="navbar__inner">
         <Link className="navbar__brand" to="/" aria-label="Younoya home">
           <img src="/favicon.png" alt="Younoya" />

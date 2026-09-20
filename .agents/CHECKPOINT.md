@@ -9,16 +9,53 @@
 ## 1. 📍 Executive Project Status
 
 - **Current Phase**: Phase 3 — 3D Spatial Perspective Hero & Scroll-to-Expand Storefront Window Complete
-- **Status**: 🟢 Healthy (Zero build errors, 3D cylinder ring active, scroll-to-expand window live)
-- **Active Task**: Local changes verified and committed; awaiting user push permission
-- **Last Updated**: 2026-09-20T12:05:00+05:30
+- **Status**: 🟢 Healthy (Zero build errors, Unified default Navbar, Desktop cards shifted, Mobile 14% peek active)
+- **Active Task**: All 3 user directives verified via headless browser automation; awaiting user push permission
+- **Last Updated**: 2026-09-20T12:45:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: `younoya-web/dist` and root `dist/` (verified: 2,276 modules built in 6.27s, zero errors)
+- **Primary Production Build**: `younoya-web/dist` and root `dist/` (verified: 2,276 modules built in 6.36s, zero errors)
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-20] Unified Default Header, Desktop 3D Cards Shift, Mobile 14% Window Peek & Luxury Typography Deployed
+- **Unified Default Header Across Whole Site & First Tile**:
+  - Made `Navbar.jsx` the single canonical header across the entire website from `scrollY = 0`, removing `isHiddenOnHome` and `navbar--hero-hidden`.
+  - Removed duplicate `.vertex-nav` from `VertexHero.jsx` and `VertexHero.css`.
+  - Raised `.navbar` to `z-index: 1000` with subtle frosted transition on scroll.
+- **Desktop 3D Rolling Cards Shifted Above**:
+  - Shifted `.ring-card` from `top: 616px` to `top: 535px` (an 81px upward shift) and adjusted `perspective-origin: 586px 835px`.
+  - Cards now orbit with over 170px prominently displayed in the open space between the CTA button and the floating browser window.
+- **Mobile 10–15% Window Peek & Scroll Reveal Animation**:
+  - Changed mobile `.vertex-browser` rest state from `top: 46vh / height: 54vh` (which covered half the screen) to `top: 86vh / height: 14vh` (showing only a 14% peek from the bottom).
+  - Recalibrated scroll kinematics: `currentTop` glides smoothly from `86vh -> 0px` and `currentH` expands from `14vh -> 100vh`.
+  - Repositioned mobile `.hero-stack` (`top: 76px`) and `.vertex-ring` (`top: 285px`), giving the 3D cards the entire middle of the mobile screen to orbit unobstructed.
+- **Cartier-Grade Editorial Typography & Decluttered Copy**:
+  - Elevated H1 typography from heavy `Cinzel 700` uppercase to `Cormorant Garamond` with Roman & italic pairing: `Objects of Affection` / *`for every chapter.`*
+  - Decluttered copy to a single evocative line: *"Astrological guidance & 108× consecrated heirlooms."*
+  - Expanded 3D card spacing from 37 cards down to 24 cards ($15^\circ$ step), widening the gap between adjacent cards to $\approx 103\text{px}$.
+- **Build Verification**:
+  - `npm --prefix younoya-web run build` and root `npm run build` compiled 2,276 modules cleanly in 6.36s with zero errors. All assets synced to root `dist/`.
+- **Mobile 3D Ring Orbit & Framing Fixed**:
+  - Repositioned `.vertex-ring` on mobile to `top: 172px` with `perspective: 440px` and responsive radius `R = Math.min(320, window.innerWidth * 0.82)`. Cards (`74px × 154px`) now orbit majestically in 3D right behind the headline, fully visible at rest.
+  - Adjusted mobile `.vertex-nav` to `width: calc(100vw - 20px); max-width: 390px; height: 46px; border-radius: 23px;` with compact button sizing (`height: 28px`), guaranteeing zero clipping on any phone.
+  - Compacted mobile `.hero-stack` (badge 26px, H1 `clamp(18px, 5.4vw, 23px)`, sub 8.5px, button 32px) so text and 3D cards frame each other with Cartier-grade spatial hierarchy.
+- **Scroll-to-Expand Kinematics & Navbar Coordination**:
+  - Wired `navRef` to fade out the top Atelier nav pill together with `heroCopy` (`heroOpacity`), preventing hero pill from awkwardly overlapping the expanding window.
+  - Configured `Navbar.jsx` to reveal the global sticky navbar on home only when `window.scrollY > window.innerHeight * 0.8`, providing a pristine transition into the permanent site header.
+- **Seamless Website Continuation After Scroller ("New Window Opens Should Be Continued The Main Window")**:
+  - Replaced duplicate static card list inside `.vertex-browser` with the **Five Sacred Sanctums Gateway** (`Love & Connection`, `Confidence & Power`, `Vitality & Balance`, `Wealth & Prosperity`, `Sacred Threshold`) and a downward continuation beacon (`ENTER 3D SANCTUMS ↓`).
+  - Tuned mobile track height from `220vh` to `160vh` (`min-height: 1100px`) and reduced `FlowShowcase` top padding, completely eliminating empty black voids.
+  - As the window finishes expanding to 100vw × 100vh full screen, natural document scrolling immediately glides the user straight into the interactive 3D spatial carousel (`<FlowShowcase />`). The opened window literally continues as the main website.
+- **Desktop Visual Polish & Bug Fixes**:
+  - Fixed desktop `heroCopy.style.transform` bug where an extraneous horizontal `translate(-50%)` shifted the 1172px wide stack 586px off-center to the left. Hero is now centered on all desktop viewports.
+  - Removed Windows default white browser scrollbar from `.browser-pagebody` by enforcing `scrollbar-width: none; overflow-x: hidden; ::-webkit-scrollbar { display: none; }`.
+- **Automated Headless CDP Verification**:
+  - Captured full responsive scroll timelines on Edge headless at `390×844` (mobile: 0px, 250px, 450px, 650px, 850px) and `1440×900` (desktop: 0px, 400px, 800px).
+- **Build Verification**:
+  - `npm --prefix younoya-web run build` and root `npm run build` compiled 2,276 modules cleanly in 6.49s with zero errors. All assets synced to root `dist/`.
 
 ### [2026-09-20] 3D Perspective Cylinder Hero & Scroll-to-Expand Storefront Window Deployed
 - **Architectural Transformation**:
