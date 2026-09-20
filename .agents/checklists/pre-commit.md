@@ -10,3 +10,4 @@ Before pushing changes to GitHub:
   ```bash
   git -c credential.helper= push https://x-access-token:<GITHUB_PAT_TOKEN>@github.com/astrosavvy/Ecom.git main
   ```
+- [ ] **6. Checkpoint Sync**: Record the new commit hash and push confirmation in `.agents/CHECKPOINT.md` before concluding.

@@ -92,6 +92,7 @@ F:\Savvy_Ecom/
 | **Check design tokens, colors & typography** | [`.agents/context/glossary.md`](file:///F:/Savvy_Ecom/.agents/context/glossary.md) |
 | **Understand Medusa modules & OTP auth** | [`.agents/memory/commerce_api.md`](file:///F:/Savvy_Ecom/.agents/memory/commerce_api.md) |
 | **Work on storefront UI / React components** | [`.agents/agents/storefront_agent.md`](file:///F:/Savvy_Ecom/.agents/agents/storefront_agent.md) |
+| **Commit and push changes to remote** | [`.agents/rules/git.md`](file:///F:/Savvy_Ecom/.agents/rules/git.md) / [`.agents/workflows/git_workflow.md`](file:///F:/Savvy_Ecom/.agents/workflows/git_workflow.md) |
 | **Deploy to Cloudflare Pages or VPS** | [`.agents/workflows/deployment_and_testing.md`](file:///F:/Savvy_Ecom/.agents/workflows/deployment_and_testing.md) |
 | **Verify system rules & anti-drift policies** | [`.agents/rules/no_drift_clarification.md`](file:///F:/Savvy_Ecom/.agents/rules/no_drift_clarification.md) |
 
@@ -103,3 +104,26 @@ Whenever you modify application code, data models, or assets:
 1. **Never postpone documentation**: Update the affected `.agents/memory/`, `.agents/context/`, or `.agents/rules/` file in the **exact same turn**.
 2. **Update the checkpoint**: Log the completion in [`.agents/CHECKPOINT.md`](file:///F:/Savvy_Ecom/.agents/CHECKPOINT.md) before yielding.
 3. **Verify the build**: Run `npm run build` in `younoya-web/` (or root `npm run build`) to ensure zero errors.
+
+---
+
+## 6. 🚀 Universal Git Commit & Push Protocol (Root `F:\Savvy_Ecom`)
+
+Always execute from **repository root (`F:\Savvy_Ecom`)**:
+```bash
+# 1. Build Verification (MUST exit 0)
+npm run build
+
+# 2. Stage Changes (2026_09_09/ is always ignored)
+git add -A
+
+# 3. Semantic Commit
+git commit -m "<feat|fix|chore|docs>(<scope>): concise message"
+
+# 4. Push to Origin Main
+git push origin main
+# If 403 Forbidden: git -c credential.helper= push https://x-access-token:<PAT>@github.com/astrosavvy/Ecom.git main
+
+# 5. Checkpoint Sync
+# Record commit hash and push status in .agents/CHECKPOINT.md in the exact same turn
+```
