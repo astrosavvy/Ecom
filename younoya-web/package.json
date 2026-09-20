@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "node -e \"console.log('Build output ready in dist/ - deployment handled by Cloudflare Pages')\"",
-    "deploy:manual": "npx wrangler pages deploy dist --project-name=ecom"
+    "deploy": "npx wrangler deploy"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",

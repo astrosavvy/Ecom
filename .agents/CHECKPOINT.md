@@ -21,13 +21,14 @@
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
 
-### [2026-09-20] Fixed Cloudflare Pages Deploy CI & `wrangler.jsonc` Config
-- **Issue Diagnosed**: Cloudflare Pages CI build succeeded (`vite build` finished in 4.41s), but Cloudflare Pages CI then ran a user deploy command: `npm run deploy` -> `npx wrangler pages deploy dist --project-name=ecom`. Wrangler failed with `Authentication error [code: 10000]` because the user's `CLOUDFLARE_API_TOKEN` lacked Pages Edit permissions or project name mismatch. Additionally, Cloudflare Pages warned that `wrangler.jsonc` was missing `pages_build_output_dir`.
+### [2026-09-20] Configured Cloudflare Worker Static Assets (`npx wrangler deploy`)
+- **Dashboard Analysis**: User shared Cloudflare dashboard showing project `ecom` is a **Cloudflare Worker with Static Assets** (using Version History & Traffic Splitting), NOT legacy Pages.
+- **Root Cause Identified**: Previous commits used `wrangler pages deploy` (which failed with code 10000 because `ecom` is not a Pages project) or a no-op deploy (which succeeded in build logs but didn't register a new version in Version History, keeping the active deployment stuck at `3d76e91f` from 16h ago).
 - **Resolution**:
-  1. Updated `younoya-web/package.json`: changed `"deploy"` to a clean no-op output (`node -e "console.log('Build output ready in dist/ - deployment handled by Cloudflare Pages')"`), allowing Cloudflare Pages CI to exit 0 and natively publish the built `dist/` artifacts. Retained `"deploy:manual"` for manual local CLI wrangler deployments.
-  2. Updated `younoya-web/wrangler.jsonc` and root `wrangler.jsonc`: added `"pages_build_output_dir": "dist"` according to the official Cloudflare Pages Wrangler specification, resolving the CI configuration warning.
-  3. Updated `CLOUDFLARE_PAGES_SETUP.md` with the updated `wrangler.jsonc` syntax.
-  4. Verified both `younoya-web` and root builds compile cleanly with exit code 0.
+  1. Configured `younoya-web/package.json`: `"deploy": "npx wrangler deploy"`. When Cloudflare CI runs `npm run deploy`, Wrangler uploads the static assets in `dist/` and registers a new active version in Version History.
+  2. Restored `younoya-web/wrangler.jsonc` and root `wrangler.jsonc` to the Worker Static Assets schema (`assets: { directory: "dist", html_handling: "auto-trailing-slash", not_found_handling: "single-page-application" }`).
+  3. Tested `npx wrangler deploy --dry-run` in `younoya-web/`: successfully read all 30 files from `dist/` with zero errors.
+  4. Updated documentation in `CLOUDFLARE_PAGES_SETUP.md`.
 
 ### [2026-09-20] Merged "Replace Existing Frontend" (`965a36ca-d445-4600-a7fa-0abb9e982227`)
 - **Native React `FlowShowcase` Component**: Extracted the Léo Parpeix 3D spatial flow animation from the injected bundle in conversation `965a36ca-d445-4600-a7fa-0abb9e982227` and converted it into a first-class, maintainable React component ([`younoya-web/src/components/FlowShowcase.jsx`](file:///F:/Savvy_Ecom/younoya-web/src/components/FlowShowcase.jsx)) and CSS module ([`younoya-web/src/styles/FlowShowcase.css`](file:///F:/Savvy_Ecom/younoya-web/src/styles/FlowShowcase.css)).

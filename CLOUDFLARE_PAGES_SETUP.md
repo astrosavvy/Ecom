@@ -25,7 +25,15 @@ Vite 7 React 19 storefront decoupled from VPS, auto-deploys on push to `astrosav
 
 `younoya-web/wrangler.jsonc`:
 ```json
-{ "name": "ecom", "pages_build_output_dir": "dist", "compatibility_date": "2025-01-01" }
+{
+  "name": "ecom",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "single-page-application"
+  }
+}
 ```
 `younoya-web/public/_redirects:1` (must stay 2 lines — no SPA catch-all):
 ```
