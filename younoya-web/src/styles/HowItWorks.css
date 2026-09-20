@@ -1,0 +1,92 @@
+/* ── How It Works ────── */
+.how-works {
+  position: relative;
+}
+
+.how-works__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.how-works__label {
+  font-size: 0.8rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.how-works__title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: 1rem;
+}
+
+.how-works__steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  position: relative;
+}
+
+/* Connecting line between steps */
+.how-works__steps::before {
+  content: '';
+  position: absolute;
+  top: 3.5rem;
+  left: 16%;
+  right: 16%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.25), transparent);
+}
+
+.how-works__step {
+  text-align: center;
+  position: relative;
+}
+
+.how-works__step-num {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold);
+  background: var(--bg-deep);
+  position: relative;
+  z-index: 2;
+}
+
+.how-works__step-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.how-works__step-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.7rem;
+  color: var(--text-primary);
+}
+
+.how-works__step-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .how-works__steps {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .how-works__steps::before { display: none; }
+}

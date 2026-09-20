@@ -1,0 +1,120 @@
+/* ── Newsletter ────── */
+.newsletter {
+  position: relative;
+  background: var(--bg-section);
+  overflow: hidden;
+}
+
+.newsletter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.2), transparent);
+}
+
+.newsletter__inner {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.newsletter__icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.newsletter__title {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  margin-bottom: 1rem;
+}
+
+.newsletter__desc {
+  color: var(--text-secondary);
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+}
+
+.newsletter__form {
+  display: flex;
+  gap: 0.8rem;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.newsletter__input {
+  flex: 1;
+  padding: 0.85rem 1.4rem;
+  border-radius: 3rem;
+  border: 1.5px solid rgba(201, 168, 76, 0.2);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.newsletter__input::placeholder {
+  color: var(--text-muted);
+}
+
+.newsletter__input:focus {
+  border-color: var(--gold);
+}
+
+@media (max-width: 480px) {
+  .newsletter__form {
+    flex-direction: column;
+  }
+}
+
+/* ── Parallax Divider ────── */
+.parallax-divider {
+  position: relative;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.parallax-divider__bg {
+  position: absolute;
+  inset: -50px;
+  background: radial-gradient(ellipse at center, #1a1440 0%, var(--bg-deep) 70%);
+}
+
+.parallax-divider__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.parallax-divider__quote {
+  font-family: var(--font-accent);
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-style: italic;
+  color: var(--text-secondary);
+  max-width: 600px;
+}
+
+.parallax-divider__attr {
+  color: var(--gold);
+  font-size: 0.85rem;
+  margin-top: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+/* Floating stars in divider */
+.parallax-divider__star {
+  position: absolute;
+  color: var(--gold);
+  opacity: 0.15;
+  font-size: 1.2rem;
+}

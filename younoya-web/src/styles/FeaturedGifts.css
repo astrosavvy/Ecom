@@ -1,0 +1,186 @@
+/* ── Featured Gifts ────── */
+.gifts {
+  position: relative;
+  background: var(--bg-section);
+  overflow: hidden;
+}
+
+.gifts::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.2), transparent);
+}
+
+.gifts__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.gifts__label {
+  font-size: 0.8rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.gifts__title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: 1rem;
+}
+
+.gifts__desc {
+  color: var(--text-secondary);
+  font-family: var(--font-accent);
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+/* Product grid */
+.gifts__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.8rem;
+}
+
+/* Product card */
+.product-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 168, 76, 0.06);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out-expo);
+  position: relative;
+}
+
+.product-card:hover {
+  border-color: rgba(201, 168, 76, 0.2);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.product-card__img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.05), rgba(124, 92, 191, 0.05));
+}
+
+.product-card__badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(201, 168, 76, 0.15);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  color: var(--gold);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.7rem;
+  border-radius: 1rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.product-card__info {
+  padding: 1.4rem;
+}
+
+.product-card__sign {
+  font-size: 0.75rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.product-card__name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.product-card__desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.product-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-card__price {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.product-card__add {
+  background: rgba(201, 168, 76, 0.1);
+  color: var(--gold);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.product-card__add:hover {
+  background: var(--gold);
+  color: var(--bg-deep);
+}
+
+/* ── CTA Banner ────── */
+.cta-banner {
+  margin-top: 4rem;
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.08), rgba(124, 92, 191, 0.08));
+  border: 1px solid rgba(201, 168, 76, 0.12);
+  border-radius: 24px;
+  padding: 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-banner__glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: rgba(201, 168, 76, 0.08);
+  border-radius: 50%;
+  filter: blur(60px);
+  top: -50px;
+  right: -50px;
+}
+
+.cta-banner h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: 0.8rem;
+  position: relative;
+}
+
+.cta-banner p {
+  color: var(--text-secondary);
+  font-family: var(--font-accent);
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  position: relative;
+}

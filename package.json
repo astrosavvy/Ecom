@@ -1,11 +1,14 @@
 {
-  "name": "younoya",
+  "name": "younoya-monorepo",
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "dev": "npm --prefix younoya-web run dev",
+    "build": "npm --prefix younoya-web run build && node -e \"require('fs').cpSync('younoya-web/dist', 'dist', {recursive: true, force: true})\"",
+    "preview": "npm --prefix younoya-web run preview",
     "serve": "node serve.js",
-    "build": "node -e \"console.log('Production dist is ready')\"",
-    "deploy": "node -e \"console.log('Deploy completed')\"",
-    "preview": "node serve.js"
+    "deploy": "npm --prefix younoya-web run deploy",
+    "backend:dev": "npm --prefix backend run dev",
+    "backend:build": "npm --prefix backend run build"
   }
 }

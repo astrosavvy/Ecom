@@ -1,0 +1,101 @@
+/* ── Zodiac Wheel ────── */
+.zodiac {
+  position: relative;
+  background: var(--bg-section);
+  overflow: hidden;
+}
+
+.zodiac::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.2), transparent);
+}
+
+.zodiac__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.zodiac__label {
+  font-size: 0.8rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.zodiac__title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: 1rem;
+}
+
+.zodiac__desc {
+  color: var(--text-secondary);
+  font-family: var(--font-accent);
+  font-size: 1.1rem;
+  font-style: italic;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Sign grid */
+.zodiac__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.2rem;
+}
+
+.zodiac__sign {
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 168, 76, 0.08);
+  border-radius: 16px;
+  padding: 1.8rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+
+.zodiac__sign::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(201, 168, 76, 0.06), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.zodiac__sign:hover {
+  border-color: rgba(201, 168, 76, 0.25);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.zodiac__sign:hover::before {
+  opacity: 1;
+}
+
+.zodiac__sign-symbol {
+  font-size: 2.2rem;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+.zodiac__sign-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.3rem;
+}
+
+.zodiac__sign-dates {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}

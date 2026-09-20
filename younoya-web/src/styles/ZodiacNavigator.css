@@ -1,0 +1,260 @@
+.zodiac-nav {
+  background: var(--bg-deep);
+  position: relative;
+}
+
+.zodiac-nav__header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.zodiac-nav__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  margin-top: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.zodiac-nav__subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Tabs */
+.element-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 3.5rem;
+}
+
+.element-tab {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-expo);
+}
+
+.element-tab:hover {
+  border-color: var(--gold-300);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.element-tab.active {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--gold-300);
+  color: var(--gold-200);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+/* Layout */
+.zodiac-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* Signs Grid */
+.signs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.sign-tile {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 1.1rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-expo);
+}
+
+.sign-tile:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-medium);
+}
+
+.sign-tile.active {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(16, 16, 28, 0.9));
+  border-color: var(--gold-300);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+}
+
+.tile-symbol {
+  font-size: 1.8rem;
+  color: var(--gold-300);
+  line-height: 1;
+}
+
+.tile-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.tile-name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.tile-dates {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Dossier Card */
+.dossier-card {
+  background: radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.08), var(--bg-surface) 65%);
+  border: 1px solid var(--border-medium);
+  border-radius: 20px;
+  padding: 2.75rem 2.25rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), var(--gold-glow);
+}
+
+.dossier-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.dossier-symbol-ring {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-300);
+  background: rgba(212, 175, 55, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+}
+
+.dossier-symbol {
+  font-size: 2.6rem;
+  color: var(--gold-200);
+}
+
+.dossier-element-badge {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--gold-300);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.dossier-sign-name {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.dossier-planet {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.dossier-planet strong {
+  color: var(--gold-200);
+}
+
+.dossier-narrative {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.dossier-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: rgba(6, 6, 11, 0.5);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 0.85rem;
+}
+
+.spec-title {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.spec-val {
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.spec-highlight {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.dossier-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dossier-add-btn {
+  flex: 1;
+}
+
+@media (max-width: 992px) {
+  .zodiac-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .signs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dossier-actions {
+    flex-direction: column;
+  }
+  .dossier-actions button {
+    width: 100%;
+  }
+}

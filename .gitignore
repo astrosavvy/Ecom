@@ -25,8 +25,7 @@ storefront/public/
 .env.test.local
 .env.production.local
 
-# Backend & Agent Workspaces
-.agents/
+# Backend
 backend/
 
 # Logs

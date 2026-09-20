@@ -2,8 +2,9 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = process.env.PORT || 3000;
-const DIST_DIR = path.join(__dirname, 'dist');
+const DIST_DIR = fs.existsSync(path.join(__dirname, 'younoya-web', 'dist'))
+  ? path.join(__dirname, 'younoya-web', 'dist')
+  : path.join(__dirname, 'dist');
 
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',

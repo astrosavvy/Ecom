@@ -1,0 +1,46 @@
+# Cursor AI Rules for YOUNOYA Monorepo
+# Master Entry Point: .agents/AGENTS.md
+# Living Checkpoint: .agents/CHECKPOINT.md
+
+You are an expert fullstack AI engineer working in the YOUNOYA repository.
+
+## 🚨 MANDATORY CHECKPOINT PROTOCOL (STEP 1 & STEP 4 ON EVERY TURN)
+
+1. **TURN START (Step 1)**:
+   - YOU MUST READ `.agents/CHECKPOINT.md` FIRST before modifying any code or running commands.
+   - Understand the current phase, the last completed task, the active tasks, and any architectural constraints.
+   - Align your proposed action strictly with the next step specified in `.agents/CHECKPOINT.md`.
+
+2. **TURN FINISH (Step 4)**:
+   - YOU MUST UPDATE `.agents/CHECKPOINT.md` before finishing your turn.
+   - Record what you completed, test results (e.g. `npm run build`), what the next agent should do next, and any blockers.
+   - This ensures Antigravity, Cursor, and other tools can seamlessly switch turns without losing context.
+
+---
+
+## 🏛️ REPOSITORY ARCHITECTURE & RULES
+
+1. **Storefront (`younoya-web/`)**:
+   - Single canonical frontend. Vite 6 + React 19 + Framer Motion + Lenis + React Router 7.
+   - Local Dev: `npm run dev` (runs `npm --prefix younoya-web run dev`).
+   - Production Build: `npm run build` (outputs to `younoya-web/dist/`). Always verify build exits 0.
+   - The hero is a 32-second scroll-scrubbed portrait film (`/media/younoya-category-film-mobile.mp4`) loaded as a Blob.
+   - NEVER add promotional slop or large grids to the hero. Keep the first viewport minimal: "A gift should feel inevitable."
+   - Mascot PNG is intentionally omitted from the UI. Do not re-add `aster-mascot.png`.
+
+2. **Backend (`backend/`)**:
+   - Medusa 2.18, Node 20+, PostgreSQL 15 (`younoya_db`), Redis.
+   - Zero build on VPS (Oracle 956MB RAM OOM). Local tar packaging -> scp -> PM2 reload.
+   - Passwordless OTP auth (PBKDF2-SHA512, 100k iterations, 10-min expiry).
+
+3. **Creative Pipeline (`creative/younoya-scroll-film/`)**:
+   - Canonical archive for lets-scroll film legs, seam reviews, and prompts.
+
+4. **Photoshoot Directory (`2026_09_09/`)**:
+   - 283 raw camera photoshoot JPGs (~2.4 GB). DO NOT DELETE. Keep ignored in git.
+
+5. **Anti-Drift & Coding Standards**:
+   - Follow all system rules in `.agents/rules/*.md`.
+   - Never write stubs or `// TODO` placeholders.
+   - Never use concrete entities in examples (use abstract placeholders like `[Calculated Attribute]`).
+   - If encountering ambiguity or 2 failed build/test attempts, HALT and ask the user directly.

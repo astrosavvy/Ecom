@@ -1,0 +1,50 @@
+/* ── YOUNOYA Luxury Design Tokens ── */
+:root {
+  /* Brand Gold Spectrum (from logo-gold.svg) */
+  --gold-0: #FFF6D6;
+  --gold-100: #F9E498;
+  --gold-200: #EAD078;
+  --gold-300: #D4AF37;
+  --gold-400: #C9A84C;
+  --gold-500: #B8860B;
+  --gold-600: #9B7008;
+  --gold-700: #7A5A14;
+  --gold-800: #5C430E;
+  --gold-gradient: linear-gradient(135deg, #F4D99D 0%, #D6B06A 32%, #A97124 72%, #7A4A12 100%);
+  --gold-gradient-soft: linear-gradient(135deg, rgba(249, 228, 152, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%);
+  --gold-glow: 0 0 35px rgba(212, 175, 55, 0.25);
+  --gold-glow-strong: 0 0 60px rgba(212, 175, 55, 0.45);
+
+  /* Deep Space & Velvet Obsidian Palette */
+  --bg-deep: #050403;
+  --bg-obsidian: #080604;
+  --bg-surface: #100B07;
+  --bg-surface-elevated: #17100B;
+  --bg-surface-hover: #21150D;
+  --bg-velvet: #230B09;
+
+  /* Borders & Dividers */
+  --border-subtle: rgba(212, 175, 55, 0.12);
+  --border-medium: rgba(212, 175, 55, 0.28);
+  --border-bright: rgba(249, 228, 152, 0.5);
+
+  /* Typography */
+  --text-primary: #F5EEE2;
+  --text-secondary: #C0B4A3;
+  --text-muted: #817568;
+  --text-gold: #D6B06A;
+
+  /* Font Families */
+  --font-serif: 'Cormorant Garamond', 'Instrument Serif', Georgia, serif;
+  --font-display: 'Cinzel', 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Layout & Spacing */
+  --container-max: 1320px;
+  --container-pad: clamp(1.25rem, 5vw, 4rem);
+  --section-pad: clamp(5rem, 12vw, 10rem);
+
+  /* Easing */
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
