@@ -31,14 +31,15 @@
 
 ## 3. 🏛️ Core Brand Mission & Architecture Overview
 
-**YOUNOYA — For every chapter.** A luxury personalised gifting atelier combining Cartier-level spatial aesthetic, Vedic astrology/numerology guidance, and consecration with modern high-performance e-commerce.
+**YOUNOYA — For every chapter.** A premium modern Indian brand at the intersection of astrology, intentional gifting, and meaningful rituals.  
+**Core promise:** *“Astrology-backed gifting, curated for what matters.”* Curates gift hampers (2–3 products in a luxury basket or tray) and individual keepsakes chosen with intention and guided by astrological insight, combining Cartier-level spatial aesthetic with high-performance e-commerce.
 
 ### System Topology:
-1. **Frontend Storefront**: [`younoya-web/`](file:///F:/Savvy_Ecom/younoya-web) — Vite 6 + React 19 + Framer Motion + Lenis + React Router 7. Features a 32-second scroll-scrubbed portrait film (`/media/younoya-category-film-mobile.mp4`), fluid cursor aura, 3D intention cylinder, and luxury cart drawer.
+1. **Frontend Storefront**: [`younoya-web/`](file:///F:/Savvy_Ecom/younoya-web) — Vite 6 + React 19 + Framer Motion + Lenis + React Router 7. Features an interactive scroll-scrubbed hero film (curated hamper with metallic apple candle, raw amethyst vessel, sacred gold keepsake), 3D perspective cylinder, and luxury cart drawer.
 2. **Edge & Cloud Deployment**: Cloudflare Worker with Static Assets (`ecom`). Configuration in [`wrangler.jsonc`](file:///F:/Savvy_Ecom/wrangler.jsonc) with `assets: { directory: "dist", ... }`. Deploy command: `npx wrangler deploy`.
-3. **Commerce & Astro Backend**: [`backend/`](file:///F:/Savvy_Ecom/backend) — Medusa 2.18, Node 20+, PostgreSQL 15 (`younoya_db`), Redis. Custom modules: `younoya-otp`, `younoya-blog`, `younoya-themes`, `younoya-toolkits`, `younoya-recipients`. Zero builds on VPS (956MB RAM OOM).
-4. **Creative Media Engine**: [`creative/younoya-scroll-film/`](file:///F:/Savvy_Ecom/creative/younoya-scroll-film) — 4-leg continuous lets-scroll film chain, prompt packages, seam-grid QA evidence, and raw renders.
-5. **Physical Photoshoot Archive**: `2026_09_09/` — 283 raw camera photoshoot photos (~2.4 GB). Preserved, ignored in git.
+3. **Commerce & Astro Backend**: [`backend/`](file:///F:/Savvy_Ecom/backend) — Medusa 2.18, Node 20+, PostgreSQL 15 (`younoya_db`), Redis. Custom modules: `younoya-otp`, `younoya-blog`, `younoya-astro`, `younoya-themes`, `younoya-toolkits`. Zero builds on VPS (956MB RAM OOM).
+4. **Creative Media Engine**: [`creative/younoya-scroll-film/`](file:///F:/Savvy_Ecom/creative/younoya-scroll-film) — Real photoshoot reference frames (16:9 landscape `younoya-hamper-hero-landscape-16x9.jpg`, 9:16 portrait `younoya-hamper-hero-portrait-9x16.jpg`), 10–12s scroll-scrubbed hero video chain, prompt packages, and seam-grid QA evidence.
+5. **Physical Photoshoot Archive**: `2026_09_09/` — 283 raw camera photoshoot photos (~2.4 GB). Direct visual grounding for authentic products (apple candle `1A8A2284.JPG`, amethyst vessel `1A8A2075.JPG`, gold swing altar `1A8A2150.JPG`). Preserved, ignored in git.
 
 ---
 

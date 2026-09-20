@@ -1,16 +1,21 @@
 # YOUNOYA Platform — Complete System Reference (for Agents)
 
-> Last updated: 2026-08-24. This document supersedes any EverShop-era references.
+> Last updated: 2026-09-20. Aligned with Younoya Website Identity Document.
 > Read this before touching backend, frontend, database, or deployment.
 
 ---
 
-## 1. Architecture
+## 1. Brand Essence & Architecture
+
+**Younoya — For every chapter.** A premium modern Indian brand at the intersection of astrology, intentional gifting, and meaningful rituals.
+- **Core Promise**: *“Astrology-backed gifting, curated for what matters.”*
+- **Core Offering**: Curated gift hampers (2–3 products in a luxury basket/tray) and individual keepsakes, supported by Vedic astrology operating discreetly in the background.
+- **Collections**: 8 primary collections by intention (Love & Connection, Prosperity & Growth, Career & Confidence, Calm & Balance, Home & New Beginnings, Meaningful Gifts, Limited Seasonal Collections, Rituals & Keepsakes).
 
 ```
                         ┌─────────────────────────────┐
-   younoya.com  ──────▶ │  Cloudflare Pages (frontend) │  younoya-web/  (Vite + React 19 + TS)
-   *.pages.dev          │  auto-deploys on git push    │  cinematic film at "/", store under routes
+   younoya.com  ──────▶ │  Cloudflare Pages/Worker     │  younoya-web/  (Vite 6 + React 19 + Framer Motion)
+   *.pages.dev          │  auto-deploys on git push    │  hero scroll-film + 3D cylinder + sanctums
                         └──────────────┬──────────────┘
                                        │  fetch https://api.younoya.com
                         ┌──────────────▼──────────────┐
@@ -18,9 +23,8 @@
                         └──────────────┬──────────────┘
                                        │
                         ┌──────────────▼──────────────┐
-                        │  VPS 140.245.7.165 (Oracle)  │  Ubuntu 22.04, 2 vCPU, 956MB RAM, 4GB swap
-                        │  Medusa v2.18 (systemd)      │  /var/www/medusa/.medusa/server
-                        │  PostgreSQL 14 (localhost)   │  db "younoya", user "younoya"
+   VPS 140.245.7.165    │  Ubuntu 22.04, 2 vCPU, 956MB │  Medusa v2.18 (systemd)
+   (Oracle Cloud)       │  PostgreSQL 15 (localhost)   │  db "younoya", user "younoya"
                         └─────────────────────────────┘
 ```
 
