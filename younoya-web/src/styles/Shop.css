@@ -1,17 +1,17 @@
-.shop-page { min-height: 100vh; padding: 148px max(6vw, 24px) 36px; background: #080b14; color: #faf6ee; }
+.shop-page { min-height: 100vh; padding: 148px max(6vw, 24px) 36px; background: #faf7f0; color: #302a23; }
 .shop-heading, .shop-collection-label, .shop-grid, .shop-footer { max-width: 1320px; margin-inline: auto; }
 .shop-heading { padding-bottom: 74px; }
-.shop-back { display: inline-block; margin-bottom: 54px; font-size: 11px; color: #b9b0a3; }
-.shop-eyebrow { display: block; font-size: 9px; letter-spacing: .2em; color: #d6b06a; }
+.shop-back { display: inline-block; margin-bottom: 54px; font-size: 11px; color: #71685e; }
+.shop-eyebrow { display: block; font-size: 9px; letter-spacing: .2em; color: #85683a; }
 .shop-heading h1 { margin: 22px 0; font-family: var(--font-serif); font-size: clamp(52px, 6.8vw, 98px); font-weight: 400; line-height: .97; letter-spacing: -.045em; }
-.shop-heading h1 em { color: #e0c493; font-weight: 400; }
-.shop-heading p { max-width: 430px; color: #bdb5ac; font-size: 14px; line-height: 1.85; }
-.shop-collection-label { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; border-top: 1px solid #d6b06a30; }
+.shop-heading h1 em { color: #85683a; font-weight: 400; }
+.shop-heading p { max-width: 430px; color: #71685e; font-size: 14px; line-height: 1.85; }
+.shop-collection-label { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; border-top: 1px solid #d7cdbf; }
 .shop-collection-label h2 { font-size: 12px; font-weight: 500; }
-.shop-collection-label > span { font-size: 11px; color: #b9b0a3; }
+.shop-collection-label > span { font-size: 11px; color: #71685e; }
 .shop-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px 28px; }
 .shop-product { display: flex; flex-direction: column; min-width: 0; }
-.shop-product__image { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #120f12; }
+.shop-product__image { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #eee7dc; }
 .shop-product__image img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
 .shop-product__image > span { position: absolute; top: 18px; left: 18px; font-size: 8px; letter-spacing: .16em; color: #f2dfbd; background: #080b1499; padding: 7px 9px; }
 .shop-product__image > i { position: absolute; right: 16px; bottom: 16px; display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #f2dfbd55; border-radius: 50%; background: #080b14b3; color: #f2dfbd; transition: background .2s; }
@@ -19,10 +19,10 @@
 .shop-product:hover i { background: #3b3023; }
 .shop-product__details { flex: 1; display: flex; flex-direction: column; align-items: flex-start; padding-top: 20px; }
 .shop-product h3 { margin: 0 0 9px; font-family: var(--font-serif); font-size: 29px; line-height: 1.1; font-weight: 400; text-wrap: balance; }
-.shop-product p { margin: 0 0 18px; color: #b9b0a3; font-size: 11px; line-height: 1.65; }
-.shop-product__price { margin-top: auto; font-size: 13px; color: #e0c493; }
-.shop-footer { display: flex; justify-content: space-between; align-items: center; gap: 20px; border-top: 1px solid #d6b06a30; margin-top: 88px; padding-top: 28px; }
-.shop-footer > span { font-size: 8px; letter-spacing: .15em; color: #b9b0a3; }
+.shop-product p { margin: 0 0 18px; color: #71685e; font-size: 11px; line-height: 1.65; }
+.shop-product__price { margin-top: auto; font-size: 13px; color: #85683a; }
+.shop-footer { display: flex; justify-content: space-between; align-items: center; gap: 20px; border-top: 1px solid #d7cdbf; margin-top: 88px; padding-top: 28px; }
+.shop-footer > span { font-size: 8px; letter-spacing: .15em; color: #71685e; }
 .shop-footer a { display: inline-flex; align-items: center; gap: 14px; font-size: 11px; }
 @media (max-width: 980px) { .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) {
@@ -41,3 +41,5 @@
   .shop-footer { flex-wrap: wrap; margin-top: 55px; }
 }
 @media (prefers-reduced-motion: reduce) { .shop-product__image img, .shop-product__image > i { transition: none; } .shop-product:hover img, .shop-product:focus-visible img { transform: none; } }
+
+.shop-page :focus-visible { outline: 2px solid #85683a; }

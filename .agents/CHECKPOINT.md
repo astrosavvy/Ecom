@@ -8,17 +8,96 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 4 — Scroll-driven Younoya story & All-Products Shop Route Deployed
-- **Status**: 🟢 Healthy (Pushed to GitHub origin main: 5a2c9af, Zero build errors)
-- **Active Task**: All commits up to `5a2c9af` successfully pushed to GitHub origin main; verified build exit code 0
-- **Last Updated**: 2026-09-20T18:14:00+05:30
-- **Last Agent**: Antigravity
+- **Current Phase**: Phase 5 — Younoya Diorama Story & /lets-scroll Architecture
+- **Status**: Full-screen film ends with fluid atelier choices. `/find-a-gift` is now an animated, five-step Aster conversation with contextual local previews and linked product recommendations.
+- **Active Task**: Interactive gift journey is complete. User explicitly authorized the final GitHub push on 2026-09-22; all accumulated storefront/media/checkpoint changes are included in one verified commit to `origin/main`. Budget remains excluded from all sorting/filtering/selection.
+- **Last Updated**: 2026-09-22T16:45:00+05:30
+- **Last Agent**: Codex
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: `younoya-web/dist` and root `dist/` (verified: 2,278 modules built in 4.50s, zero errors)
+- **Primary Production Build**: younoya-web/dist and root dist verified; 2,277 modules, build exit 0, 4.76 seconds.
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-22] Interactive Aster Gift Journey & Fluid Story Choices (Codex)
+- Replaced the generic intention radio form at `/find-a-gift` with a cinematic five-stage conversation: occasion, recipient, relationship, name, and birth date/time/place. Self-gifting skips the relationship step; unknown birth time is supported.
+- Added the user-requested Aster mascot experience on the dedicated route with floating/tilting motion, orbital halo, constellation sparks, changing guide status, animated scene transitions, and responsive split-screen/mobile staging. This route-specific request supersedes the older blanket checkpoint constraint against using the mascot PNG in the UI.
+- Added a short animated reading state and a contextual recommendation sentence. Current results combine occasion with a clearly disclosed Western solar-sign element preview; the UI does not claim to calculate a Vedic chart or call AI. The disclosure points toward the existing authenticated birth-chart service for the complete future computation.
+- Recommendation results show three clickable real products and retain visible prices. No budget question, range, sort, filter, or recommendation signal was introduced.
+- Redesigned the two final film links as asymmetric, fluid glass controls with editorial overlines, circular moving arrows, animated fill, and compact mobile stacking. Labels remain “Explore the collection” and “Let Younoya choose.”
+- Browser QA passed through the full mobile sequence and into `/product/confidence-personal-power`; ending choices were visually checked at the bottom of the scroll film with no clipping. Browser console had zero warnings/errors.
+- Root `npm run build` passed: 2,277 modules, 4.76 seconds. `git diff --check` passed apart from existing line-ending notices. No commit, push, deployment, or external data transmission.
+- User subsequently gave explicit `git push` authorization. The final repository sync uses the required single-commit workflow and targets `origin/main`; Cloudflare CI deployment is expected to start from that push.
+
+### [2026-09-22] Slower Film, Transparent Header & Intention-Only Gift Finder (Codex)
+- Added four short editorial captions with scroll-driven fades, preserving the full-screen film. Increased section height from 6.2 to 11.4 viewports: scroll travel doubles from 5.2 to 10.4 viewports, halving film advancement per scroll. No duplicated frames or video re-encoding; source duration stays 28.041667s.
+- Restored transparent header with logo left and icon-only shopping bag right; no pill, menu or descriptive navigation. Cart drawer available on homepage again. Light routes use dark cart icon and subdued gold logo.
+- Final 2.5 seconds reveal two actual links: Explore the collection -> /shop; Let Younoya choose -> /find-a-gift. Final static fallback includes these links too. User rejected generic Shop all / Find my gift labels.
+- Restyled /shop to warm ivory with dark text and muted gold, preserving eight real product cards and product routes.
+- Created /find-a-gift with required intention selection and curated matches linked to real product detail pages. No external AI/astrology API or data submission is claimed.
+- Explicit persistent user rule: budget will never be a sorting filter or choosing option. Removed initial budget field, budget state/filtering, budget copy and unused select CSS. Final gift finder uses intention only; collection has no budget filter or price sorting. Product prices remain visible.
+- Verified actual in-app preview: transparent header and final links visible; collection light theme and eight links; cart button opens drawer; finder returns two celebration matches with no budget field. Verified earlier half-speed geometry: at 855px viewport, travel is 8892px and former end scroll maps to roughly 14s. Caption placement visually checked on mobile.
+- Root build passed: 2277 modules, 4.26 seconds; git diff --check passed. No source media changes, commit, push, deployment or transactions. Existing unrelated working-tree changes preserved.
+### [2026-09-22] Existing In-App Preview Refreshed (Codex)
+- Inspected the user's actual in-app tab at http://127.0.0.1:5173/: it still held the old category-film DOM, copy, navigation and collection. Source files and live Vite server were already current.
+- Reloaded that same tab, verified the new video-only DOM with empty visible body text, a loaded Blob video, readyState 4 and duration 28.041667 seconds. Visually confirmed final handover and then opening boutique frames; scrolling back reached time approximately zero.
+- Left the user's existing tab open at the new opening scene. No application code changes were needed. An attempted redundant strict-port server startup exited because the original server was already listening; no duplicate server was started.
+- Root build verification rerun. No commit, push or deployment.
+### [2026-09-22] Rendered Diorama Integration & Video-Only Homepage (Codex)
+- Located all seven user renders in creative/younoya-scroll-film/diorama/render. Each is 1080x1920 H.264, 24fps, four seconds, with AAC audio. Sampled first/last and intermediate frames of every clip in a review sheet. Several joins change framing; product handling is fast. No claim of perfect source continuity.
+- Concatenated numbered clips without reordering into public/media/younoya-diorama-film-mobile.mp4: 720x1280, H.264 yuv420p, 24fps, GOP4, faststart, no audio, 28.041667 seconds, 16,120,822 bytes. Original renders preserved. Four WebP fallback posters extracted from actual frames.
+- User steered to full-screen video with no words, then explicitly selected entire homepage video-only. Home now renders only StoryFilm; no collection/finale, copy, CTA, chapter controls, scrim or opening overlay. Global navbar/cart UI hidden only on home. Shop and product routes and their navbar remain functional; removed links to deleted homepage sections.
+- Preserved scroll-controlled Blob seeking, coalesced latest-target updates, touch priming and stable touch height geometry. Film fills viewport using object-fit cover: portrait source is materially cropped on wide screens. No landscape footage generated.
+- Reduced-motion/data-saving users receive four full-screen stills without MP4 requests; failed video retains a visible scene still. Accessibility labels describe the film without visible copy.
+- Root production build exit 0: 2,275 modules in 4.61 seconds. Superseded intermediate root build assets created this turn removed explicitly; unrelated source logo deletions and untracked skill/media preserved.
+- Browser verification passed at 1440x900, 430x932, 390x844, 320x568 and 844x390: full viewport video, no visible story text, muted Blob source, full seekable duration, forward/reverse seeking, no overflow or page errors. Four-times CPU rapid-scroll and mobile height-change stability passed. Reduced-motion/save-data/failure checks passed.
+- Additional route check: homepage body has no visible text, navbar, collection or finale; direct /shop and a product link work with navigation present. QA scripts, reports and screenshots stored in current Codex visualization directory (fullscreen-qa.json, video-only-routes.cjs, diorama-review.jpg).
+- Local Vite preview running at http://127.0.0.1:5173/. No commit, push, deployment, paid generation or production transaction performed. Real iOS hardware remains untested.
+### [2026-09-22] Gemini Omni Flash Skill Prompt Rewrite (Codex)
+- Read explicitly invoked gemini-omni-flash-prompts SKILL.md plus prompt-formula, chaining-and-continuity and advanced-editing references.
+- Rebuilt all seven video-prompts/mobile_*.txt files with four-sentence camera-first prompts covering reference style, lighting, connecting action and explicit silence. Moved setup, exact first/last PNG inputs and continuity notes outside pasteable prompt text.
+- Preserved the user's seven exact image pairs, mobile-first framing and prior proposed 4/4/4/6/8/6/8-second timing (40 seconds). Used paired-frame generation rather than substituting native extension; user endpoint requirements remain authoritative.
+- Added GEMINI_OMNI_FLASH_PROMPTS.md with seven individually copyable blocks and continuity notes. Updated VIDEO_PROMPTS_V1.md to revision 3, retaining image audit and source/framing/physical-action caveats.
+- Verified exactly seven TXT prompts, four-sentence copy blocks, camera lead, silence instructions, separate continuity notes and all eight existing PNG endpoints in the correct order. Text-only change; no runtime build required.
+- Specific model availability, API schema, keyframe support and duration controls were not verified; deliverables do not assert the skill's version/API/extension-cap claims as current facts.
+- No image changes, video generation, website changes, commit or push. Complex actions may need longer same-pair renders after preview; actual endpoint and motion continuity remain to be tested.
+### [2026-09-21] Corrected Exact Image-Pair Video Prompts (Codex)
+- User rejected the invented eight-take workflow and explicitly required scene_1_start -> scene_1_end -> scene_2_start -> scene_2_end -> scene_3_start -> scene_3_end -> scene_4_start -> scene_4_end. This supersedes the preceding no-end-image architecture-A plan.
+- Individually viewed all eight original PNGs again and reread the storyboard. Rewrote video-prompts/mobile_01_arrival.txt and replaced the remaining obsolete TXT files with six correctly numbered pair prompts. Exactly seven active TXT prompts now exist.
+- Each prompt specifies existing start/end PNGs, first AND last frame conditioning, visible endpoint observations, camera/action direction and strict story boundaries. First clip contains only mascot/exterior/threshold; representative first appears at the distant counter in the second clip.
+- Preserved actual pictured product designs, long gallery, empty tray at scene_3_start, filled tray at scene_3_end, separate open rigid box at scene_4_start, and BOTH characters supporting the final gift. Removed adjacent-counter curation and pre-tied ribbon sleeve inventions.
+- Replaced VIDEO_PROMPTS_V1.md contents with revision 2: seven-row handoff table, eight-image visual audit, source differences/inferred travel notes, PNG/mobile fitting limitations and actual rendered seam QA. User's explicit two-frame workflow takes precedence over the skill's previous architecture-A default.
+- Recommended durations are 4/4/4/6/8/6/8 seconds (40 seconds initial total); complex selection/packing/wrapping may require longer same-pair takes. No claim that all actions fit naturally in four seconds or that prompts guarantee seamless footage.
+- Validation passed: exactly seven complete prompts, all eight referenced PNGs exist, each pair and shared boundary match requested order. No build needed for text-only changes.
+- No source-image edits, paid generation, website changes, commit or push. Creative prompt directory remains gitignored; existing public diorama assets and logo deletions preserved.
+### [2026-09-21] Mobile Diorama Video Prompt Handoff (Codex)
+- User confirmed continuous boutique walkthrough and mobile 9:16 first. Applied lets-scroll architecture A manual handoff: sequential clips with actual preceding final-frame PNG as each next hard start, no end-image constraint.
+- Authored creative/younoya-scroll-film/diorama/VIDEO_PROMPTS_V1.md plus eight complete video-prompts/mobile_*.txt files. Recommended four-second takes, approximately 32 seconds across four story chapters; split the two-product placement if preview requires more time.
+- Standardized existing STORY_AND_PROMPTS_V3.md scene references from JPG to PNG. Existing eight source assets are already PNG; no image conversion or edits performed. Video outputs remain MP4.
+- Proposed adjacent-counter curation alcove and pre-tied ribbon sleeve to keep short-shot physical actions plausible. These staging changes need matching prepared references; existing images were not silently changed.
+- Handoff includes exact output filenames, pending start-frame dependencies, original storyboard references, manual tool settings and forward/backward seam QA. Current PNG framing and product fidelity still need correction before production renders.
+- Validation passed: eight complete prompts with duration and continuity instructions; all eight original PNGs exist; no stale scene JPG references in the storyboard. No build needed for text-only deliverables.
+- No paid generations, website edits, commit or push. Preserved existing logo deletions and untracked public diorama assets. Creative directory is gitignored; this package is delivered locally.
+### [2026-09-21] Diorama V3 Visual & Story Review (Codex)
+- Reviewed `creative/younoya-scroll-film/diorama/STORY_AND_PROMPTS_V3.md` and all eight PNG keyframes, plus the three specified raw product photos and current favicon logo.
+- Narrative approved in principle: arrival, occasion consultation, curation, wrapping/handover. Strongest emotional compositions: scene_2_end and scene_4_end. This is still-image review, not video/seam acceptance.
+- Product fidelity correction recommended: generated apple is glass-like with an ornate gold lid instead of the photographed smooth metallic red candle; amethyst is a cut-crystal arrangement in a goblet rather than raw mineral in the carved vessel; gold altar omits the reference's broad base/side elements and changes its structure.
+- Frame sizes are inconsistent: scene_1_start 1214x1295, scene_1_end 1145x1374, all six remaining scenes 1312x1199. None is native 16:9 or 9:16. Recompose for the target viewport and reserve copy/navigation space before video work.
+- Continuous-camera plan needs explicit bridges at 1-end/2-start and 2-end/3-start; scene 3 covers selection plus return to the counter, requiring intermediate beats. Use actual generated end frames for chained starts; independent storyboard pairs are not verified seamless endpoints.
+- Packaging review: broad three-product tray becomes a smaller-looking box; depict the physical transfer and keep scale believable. Consider arriving without a branded shopping bag to strengthen the first-visit story. Bag/medallion logos drift between monogram and star-only marks.
+- Art direction refinement: reduce pervasive amber/gold glow, retain plum/navy shadows, simplify generic window merchandise, and make the customer's occasion legible with a small visual cue.
+- Documentation mismatch: story names .jpg files while actual assets are .png. The proposed Personalization Toolkit CTA has no current route in App.jsx; `/shop` exists.
+- Tests: image dimensions measured and visual comparison completed; no runtime/build verification required for this review. Assets, source code, and other existing working-tree changes preserved. No generation, commit, or push performed.
+### [2026-09-21] All 8 Canonical Master Diorama Keyframes Generated & Deployed (V3)
+- **All User Feedback Fully Resolved Across All 8 Frames**:
+  1. **Scene 1 (Start & End)**: Facade features official golden YU monogram crest, sparkle star, and "YOUNOYA for every chapter" branding (`scene_1_start.jpg`); over-the-shoulder threshold entry (`scene_1_end.jpg`).
+  2. **Scene 2 (Start & End)**: Grand Italian marble-floored luxury boutique with high lantern chandeliers, clean Younoya logo on counter and rear arch wall, authentic photoshoot keepsakes on shelves (`scene_2_start.jpg`); mascot sharing occasion while representative listens attentively with notebook (`scene_2_end.jpg`).
+  3. **Scene 3 (Start & End)**: Representative alone in the vaulted gallery curating items into the empty hamper tray (`scene_3_start.jpg`); ends back at the counter where the mascot joyfully views the open hamper with the 3 authentic photoshoot products (`scene_3_end.jpg`).
+  4. **Scene 4 (Start & End)**: Clean luxury gift wrapping with dark plum tissue paper and satin ribbon (no stamping) (`scene_4_start.jpg`); handover across the counter of the midnight-navy box featuring the **golden Younoya logo emblem only** (no text) to the happy, consistent mascot (`scene_4_end.jpg`).
+  5. **Scene 5 Purged**: Completely removed obsolete Scene 5 assets from public media and creative archives.
+- All 8 canonical images synchronized to `younoya-web/public/media/diorama/` and `creative/younoya-scroll-film/diorama/`.
+- Updated `storyboard_review.md` artifact for user inspection.
 
 ### [2026-09-20] All-Products Page & Finale Routing
 - Added `/shop` using the canonical eight-product dataset, with responsive product cards linking to `/product/:handle`.
@@ -258,7 +337,7 @@ When starting the next turn or feature, proceed in this exact sequence:
 > 1. **No Catalog Slop on First Screen**: The first screen must stay sparse: brand mark, one thought ("A gift should feel inevitable"), and the cinematic film. Do not re-add large product carousels or form inputs to the hero.
 > 2. **Never Swap Out the 32-Second Portrait Master Silently**: The active video master is `younoya-category-film-mobile.mp4`. Do not revert to the obsolete 12s landscape prototype (`younoya-category-film.mp4`).
 > 3. **Preserve Blob Video Seeking**: Always load the film as a `Blob` in `StoryFilm.jsx` (mounted by `Home.jsx`) to prevent seek-range lockups on static servers.
-> 4. **No Mascot PNG in UI**: `aster-mascot.png` is rejected as a 3D solution. Keep it out of the UI until a real 3D animated model is approved.
+> 4. **Mascot Scope**: `aster-mascot.png` remains excluded from the homepage film itself. The user explicitly approved and requested it as the animated conversational guide on the dedicated `/find-a-gift` route until a real 3D model is available.
 > 5. **No Build on VPS**: Never run `npm run build` on the VPS (956MB RAM OOM).
 
 ---

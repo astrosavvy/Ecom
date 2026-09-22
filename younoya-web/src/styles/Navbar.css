@@ -1,31 +1,9 @@
-.navbar { position: fixed; z-index: 1000; left: 50%; top: 17px; width: min(864px, calc(100vw - 34px)); transform: translateX(-50%); transition: opacity 0.35s ease, transform 0.35s ease; }
-.navbar__inner { position: relative; height: 62px; padding: 0 12px 0 18px; border: 1px solid rgba(247,225,181,.22); border-radius: 32px; display: grid; grid-template-columns: 170px 1fr auto; align-items: center; background: linear-gradient(180deg, rgba(24,17,11,.78), rgba(7,5,3,.58)); backdrop-filter: blur(17px) saturate(125%); box-shadow: inset 0 1px rgba(255,255,255,.055), 0 18px 55px rgba(0,0,0,.16); transition: background .35s, border-color .35s, box-shadow .35s; }
-.navbar--scrolled .navbar__inner { background: rgba(7,5,3,.84); border-color: rgba(233,197,128,.28); box-shadow: inset 0 1px rgba(255,255,255,.05), 0 13px 42px rgba(0,0,0,.32); }
-.navbar__brand { justify-self: start; width: 132px; height: 50px; display: flex; align-items: center; }
-.navbar__brand img { width: 100%; height: 48px; object-fit: contain; object-position: left center; filter: brightness(1.5) saturate(1.24) contrast(1.08) drop-shadow(0 0 7px rgba(224,174,74,.28)); }
-.navbar__descriptor { display: none; }
-.navbar__nav { justify-self: center; display: flex; align-items: center; gap: 24px; }
-.navbar__nav a, .navbar__cart { font-size: 8px; line-height: 1; font-weight: 700; letter-spacing: .17em; text-transform: uppercase; color: rgba(255,244,225,.72); transition: color .25s; }
-.navbar__nav a { white-space: nowrap; }
-.navbar__nav a:hover, .navbar__cart:hover { color: #f0cf8d; }
-.navbar__actions { justify-self: end; display: flex; align-items: center; gap: 8px; }
-.navbar__cart { position: relative; min-width: 76px; height: 39px; padding: 0 11px; border: 1px solid rgba(235,200,135,.18); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; background: linear-gradient(to top, #a92e24 0, #5f1c18 2px, #27130d 7px, #0c0907 22px); }
-.navbar__cart b { min-width: 17px; height: 17px; border-radius: 50%; display: grid; place-items: center; background: #a9281f; color: white; font-size: 9px; }
-.navbar__menu { display: none; width: 32px; height: 32px; border: 0; background: transparent; place-items: center; color: #f3dfba; }
-.navbar__mobile { display: none; margin-top: 8px; overflow: hidden; padding: 15px 18px; border: 1px solid rgba(232,199,135,.2); border-radius: 22px; background: rgba(7,5,3,.96); backdrop-filter: blur(22px); }
-.navbar__mobile a { display: block; padding: 13px 2px; border-bottom: 1px solid rgba(232,199,135,.11); font-family: var(--font-serif); font-size: 24px; }
-.navbar__mobile a:last-child { border-bottom: 0; }
-
-@media (max-width: 760px) {
-  .navbar { top: 11px; width: calc(100vw - 22px); }
-  .navbar__inner { height: 54px; grid-template-columns: 1fr auto; padding: 0 10px 0 15px; }
-  .navbar__brand { width: 112px; height: 46px; }
-  .navbar__brand img { height: 44px; }
-  .navbar__descriptor, .navbar__nav { display: none; }
-  .navbar__actions { justify-self: end; }
-  .navbar__menu { display: grid; }
-  .navbar__mobile { display: block; }
-  .navbar__cart { min-width: 37px; width: 37px; height: 37px; padding: 0; border-radius: 12px; }
-  .navbar__cart span { display: none; }
-  .navbar__cart b { position: absolute; right: -4px; top: -4px; }
-}
+.navbar { position: fixed; z-index: 1000; inset: 0 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 22px 5vw; background: transparent; pointer-events: none; }
+.navbar__brand, .navbar__cart { pointer-events: auto; }
+.navbar__brand { width: 126px; height: 54px; display: flex; align-items: center; }
+.navbar__brand img { width: 100%; height: 100%; object-fit: contain; object-position: left; filter: brightness(1.4) drop-shadow(0 1px 5px #0008); }
+.navbar__cart { position: relative; width: 48px; height: 48px; display: grid; place-items: center; border: 0; background: transparent; color: #faf6ee; filter: drop-shadow(0 1px 4px #0009); }
+.navbar__cart span { position: absolute; right: 0; top: 0; min-width: 18px; border-radius: 50%; background: #faf6ee; color: #29231e; font-size: 10px; }
+.navbar--light .navbar__cart { color: #302a23; filter: none; }
+.navbar--light .navbar__brand img { filter: brightness(.65) saturate(.75); }
+@media (max-width: 700px) { .navbar { padding: 12px 20px; } .navbar__brand { width: 105px; height: 46px; } }

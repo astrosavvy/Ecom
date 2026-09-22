@@ -7,6 +7,7 @@ import CartDrawer from './components/CartDrawer'
 import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
 import Shop from './pages/Shop'
+import GiftFinder from './pages/GiftFinder'
 import './styles/global.css'
 
 function ScrollToTop() {
@@ -23,18 +24,22 @@ function ScrollToTop() {
   }, [pathname, hash])
   return null
 }
+function StoreNavigation() {
+  return <><Navbar /><CartDrawer /></>
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <CartProvider>
         <SmoothScroll>
           <ScrollToTop />
-          <Navbar />
-          <CartDrawer />
+          <StoreNavigation />
           <main>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
+              <Route path="/find-a-gift" element={<GiftFinder />} />
               <Route path="/product/:handle" element={<ProductDetail />} />
             </Routes>
           </main>

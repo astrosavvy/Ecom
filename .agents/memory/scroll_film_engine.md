@@ -1,3 +1,27 @@
+# Latest amendments — 2026-09-22
+
+User now wants sparse captions and a transparent header (logo left, cart icon right) on the full-screen film. Four short captions fade at story boundaries. Scroll travel doubled from 5.2 to 10.4 initial viewport heights (section 11.4vh multiples); film progresses at half the previous rate per scroll without duplicating frames. Video source remains unchanged.
+
+Final 2.5s show Explore the collection (/shop) and Let Younoya choose (/find-a-gift). Homepage still has no collection/finale sections. Cart drawer is accessible on homepage. Collection and new gift finder use light ivory styling. Finder provides explicit intention-based curated matches using the canonical PRODUCTS data.
+
+Persistent user requirement: never use budget as a sort/filter/choosing option. Final finder contains no budget question, state or price-based filtering; all-products has no price sorting. Prices are displayed normally.
+
+---
+# Current implementation — 2026-09-22
+
+The homepage is now video-only at the user's explicit request. Home.jsx renders only StoryFilm; App.jsx hides navigation/cart UI on home, preserving both on /shop and product routes. Collection/finale and all story copy/controls are absent. The prior implementation below is historical.
+
+Active media: /media/younoya-diorama-film-mobile.mp4, composed in order from all seven four-second renders in creative/younoya-scroll-film/diorama/render. Web encode: 720x1280 H.264 yuv420p, 24fps, GOP4, faststart, no audio, 28.041667 seconds, 16.12 MB. Four /media/diorama-*.webp stills come from actual rendered frames. Original sources are unchanged. Source joins show some framing changes; no seamless-source guarantee.
+
+The full sticky section is 6.2 initial viewport heights and maps its scroll range directly to video duration minus 0.05s, without an intro delay. Poster boundaries are 0/8/12/20 seconds. Object-fit cover fills every viewport; portrait footage is cropped on desktop. A native landscape master would be needed to avoid that crop while filling wide screens.
+
+Blob fetch/cleanup, rAF seek coalescing, latest-target handling, touch priming, mobile height stability and media failure fallback remain. Reduced-motion and save-data modes render four static full-screen images and make zero MP4 requests. No video audio or visible text overlays.
+
+Validation: root build exit 0, 2275 modules. Browser QA at 1440x900, 430x932, 390x844, 320x568 and 844x390: full viewport bounds, forward/reverse scrubbing, Blob seekability, no overflow/page errors. CPU throttling, height resize, no-text homepage, static/failure fallbacks and direct shop/product navigation passed. Real iOS not tested. No deployment or push.
+
+---
+
+# Historical implementation (superseded)
 # Scroll Film Engine & Homepage Story
 
 > Current implementation: 2026-09-20, Codex. The approved category film remains the production source.
