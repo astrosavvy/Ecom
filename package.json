@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm --prefix younoya-web run dev",
-    "build": "npm --prefix younoya-web run build && node -e \"require('fs').cpSync('younoya-web/dist', 'dist', {recursive: true, force: true})\"",
+    "build": "npm --prefix younoya-web run build && node scripts/sync-dist.mjs",
     "preview": "npm --prefix younoya-web run preview",
     "serve": "node serve.js",
     "deploy": "npm --prefix younoya-web run deploy",

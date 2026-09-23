@@ -1,0 +1,9 @@
+# Desktop film integration QA — 2026-09-23
+
+The seven supplied `render-desktop/desktop_*.mp4` files are each 1920 × 1080, 24 fps and 96 frames (4 seconds). Their raw joins were not frame-locked. Average RGB changes between adjoining end/start frames were approximately 55.6, 34.0, 64.3, 62.6, 65.3 and 13.5 on the 0–255 scale. Clip 03 also cuts internally at source frame 36; clip 07 cuts internally at frames 37 and 60.
+
+The web master at `younoya-web/public/media/younoya-diorama-film-desktop.mp4` is one H.264 file: 1920 × 1080, 24 fps, 585 frames / 24.375 seconds, no audio, fast-start MP4, 4-frame GOP, CRF 25, 24,462,930 bytes. It is under the Cloudflare Workers 25 MiB per-asset limit. Ten frames at the beginning of clip 05 were omitted to avoid returning to the consultation counter after the representative had already entered the gallery. Short overlaps blend six inter-clip joins and three internal cuts. The original first frame and final handover frame are preserved.
+
+An automated downscaled frame-difference scan found a median motion delta of 15.21 and 95th percentile of 28.69. The nine transition windows peak at 23.53, 17.72, 22.49, 25.34, 27.30, 27.53, 8.28, 9.52 and 14.40; no isolated original-size jump remains. In a local Chromium production-style preview, 27 forward/reverse seeks around these boundaries all settled without hanging (66 ms median, 95 ms maximum). Desktop and mobile each load one pre-assembled master, so scrolling never swaps source clips. The browser selected 24.375 seconds on desktop and 26.75 seconds on mobile, and both reached their final frame without horizontal overflow.
+
+These blends soften cuts in the user renders; they do not create camera-perfect continuity where the source poses or viewpoint differ. Real iOS hardware playback still needs confirmation. For a fully continuous walkthrough, rerender the mismatched endpoints with shared final/start pixels and physical travel between scenes.

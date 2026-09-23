@@ -8,6 +8,8 @@ import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
 import Shop from './pages/Shop'
 import GiftFinder from './pages/GiftFinder'
+import NotFound from './pages/NotFound'
+import SeoHead from './seo/SeoHead'
 import './styles/global.css'
 
 function ScrollToTop() {
@@ -34,6 +36,7 @@ export default function App() {
       <CartProvider>
         <SmoothScroll>
           <ScrollToTop />
+          <SeoHead />
           <StoreNavigation />
           <main>
             <Routes>
@@ -41,6 +44,7 @@ export default function App() {
               <Route path="/shop" element={<Shop />} />
               <Route path="/find-a-gift" element={<GiftFinder />} />
               <Route path="/product/:handle" element={<ProductDetail />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
         </SmoothScroll>

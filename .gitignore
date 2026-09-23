@@ -15,6 +15,8 @@ build/
 out/
 storefront/public/
 *.tsbuildinfo
+.tmp/
+.wrangler/
 
 # Environment variables
 .env
@@ -56,6 +58,7 @@ creative/younoya-scroll-film/*
 !creative/younoya-scroll-film/diorama/
 creative/younoya-scroll-film/diorama/*
 !creative/younoya-scroll-film/diorama/DESKTOP_VIDEO_PROMPTS.md
+!creative/younoya-scroll-film/diorama/DESKTOP_INTEGRATION_QA.md
 !creative/younoya-scroll-film/diorama/video-prompts/
 creative/younoya-scroll-film/diorama/video-prompts/*
 !creative/younoya-scroll-film/diorama/video-prompts/desktop_*.txt

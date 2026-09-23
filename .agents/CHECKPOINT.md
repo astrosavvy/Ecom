@@ -9,16 +9,24 @@
 ## 1. 📍 Executive Project Status
 
 - **Current Phase**: Phase 5 — Younoya Diorama Story & /lets-scroll Architecture
-- **Status**: Mobile film joins have short blends and seek throttling. The homepage ends in centred fluid choices; `/shop` is an editorial light collection; `/find-a-gift` has a boutique representative, conversational steps and a bounded birth calendar.
-- **Active Task**: Current 2026-09-23 storefront/media changes are verified locally and prepared in one final local commit. The seven desktop prompt files are written; their native 16:9 endpoints and video renders remain to be produced. Budget remains excluded from all sorting/filtering/selection. No authorization to push this new work has been given.
-- **Last Updated**: 2026-09-23T15:41:35+05:30
+- **Status**: Mobile and desktop diorama films are integrated as one seekable master per viewport. The ending has compact fluid pill links. `/shop` is an editorial light collection; `/find-a-gift` is a conversational preview. Eleven route-specific SEO shells, sitemap, robots, and LLM discovery files are built.
+- **Active Task**: Desktop film, ending pills, and SEO changes are verified locally. Production is not yet updated: direct Wrangler deployment is unauthenticated, and this new commit has no push authorization. Budget remains excluded from all sorting/filtering/selection.
+- **Last Updated**: 2026-09-23T20:15:09+05:30
 - **Last Agent**: Codex
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: younoya-web/dist and root dist verified; 2,277 modules, build exit 0, 5.43 seconds (2026-09-23).
+- **Primary Production Build**: younoya-web/dist and root dist verified; 2,280 modules, build exit 0, 5.33 seconds (2026-09-23).
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-23] Desktop Film Integration, Crawlable Routes & Pill Choices (Codex)
+- Inspected all seven 1920×1080, 24fps desktop renders in `creative/younoya-scroll-film/diorama/render-desktop`. Built a 24.375-second silent H.264 faststart master with GOP4 and 585 frames at `younoya-web/public/media/younoya-diorama-film-desktop.mp4` (24,462,930 bytes, below Cloudflare's 25 MiB static-asset limit). Trimmed ten rewind frames from clip 05 and softened six interclip joins plus three embedded hard cuts. Source camera mismatches remain; the nine measured transition peaks are below 28 RGB mean-difference points in the finished master, versus 55–65 at several raw joins. See `DESKTOP_INTEGRATION_QA.md`.
+- Added four desktop WebP stills and responsive viewport source selection. `StoryFilm.jsx` keeps a single Blob-backed video per mobile/desktop variant and seeks without changing source between scenes. Reduced-motion and save-data stills choose desktop art where appropriate. Kept mobile master and existing seek throttling.
+- Reworked the final choices from large morphing ovals to compact 999px-radius glass pills, with moving internal sheen and existing magnetic cursor movement. Verified both pills fully fit and link to `/shop` and `/find-a-gift` at 595×835 (two across), 390×844 (stacked), and 1440×900, with no horizontal overflow.
+- Added route-specific titles, descriptions, canonicals, Open Graph/Twitter tags, JSON-LD, 11-entry `sitemap.xml`, `robots.txt`, `llms.txt` and requested `llm.txt` alias. Build now writes crawlable HTML shells for home, collection, guide and eight products, plus a true 404 page. Unknown product handles no longer display the first product. Corrected `/gifts` and `/personalise` redirects; Cloudflare static routing serves extensionless paths and a real 404. Root build now cleans/syncs canonical `younoya-web/dist` so stale hashed assets do not survive.
+- Root `npm run build` passed (2,280 modules); XML and all 11 page canonicals/JSON-LD validated. Official Wrangler dry run passed. Local Wrangler production-style preview returned expected 200/301/307/404 statuses. Browser tested both film variants, final-frame seeking, route metadata and 27 forward/reverse desktop seeks near joins (median 66 ms, max 95 ms); no JS exceptions or tested viewport overflow. Real iOS hardware remains untested.
+- Direct production deploy could not run because Wrangler is unauthenticated in this environment. A push to `origin/main` triggers CI deployment, but requires explicit new user permission under repository Git rules. Do not claim the production site is updated until the push and live verification succeed.
 
 ### [2026-09-23] Desktop Prompts, Seam Repair & Editorial Storefront (Codex)
 - Authored seven desktop 16:9 prompts at `creative/younoya-scroll-film/diorama/video-prompts/desktop_*.txt` plus `DESKTOP_VIDEO_PROMPTS.md`. Each preserves the exact mobile image pair and action. Existing PNG references are near-square, so landscape-expanded first/last frames and desktop renders are still required before website integration. Updated `.gitignore` to track only this prompt package under the otherwise ignored creative media tree.
@@ -320,9 +328,9 @@
 
 ## 3. 🎯 Active Roadmap & Immediate Next Steps
 
-1. **Desktop film production**: Extend all eight original story endpoints to consistent native 16:9 without cropping, render the seven authored desktop pairs, measure seams, then add responsive source selection and measured timing. The current desktop viewport still crops the portrait master.
+1. **Desktop film follow-up**: Responsive desktop render integration is complete. For perfectly continuous camera movement, rerender mismatched source joins and embedded cuts; the current blended master softens but cannot reconstruct missing movement. Check real iOS hardware for scroll-seek performance.
 2. **Commerce and astrology integration**: Connect cart and product data to Medusa, then replace the guide's disclosed local solar-sign preview with authenticated birth-chart and conversational services. Preserve the user's rule against budget-based choice or filtering.
-3. **Production sync**: Review current working-tree diff, prepare one final commit with code/assets/checkpoint, and request explicit user authorization before any new `git push` or deployment. Verify on real iOS hardware for video seek performance.
+3. **Production sync**: After the single final local commit, request explicit user authorization before any `git push origin main`; that push triggers Cloudflare CI. Verify the production routes, SEO files and desktop/mobile film after deployment.
 
 ---
 

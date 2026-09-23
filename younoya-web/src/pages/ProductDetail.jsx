@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { getProductByHandle, PRODUCTS } from '../data/products'
 import { useCart } from '../context/CartContext'
+import NotFound from './NotFound'
 import '../styles/ProductDetail.css'
 
 export default function ProductDetail() {
@@ -70,6 +71,8 @@ export default function ProductDetail() {
   const toggleAccordion = (key) => {
     setActiveAccordion((prev) => (prev === key ? null : key))
   }
+
+  if (!product) return <NotFound />
 
   const relatedProducts = PRODUCTS.filter((p) =>
     product.relatedHandles?.includes(p.handle)

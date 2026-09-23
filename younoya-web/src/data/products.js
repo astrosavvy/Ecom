@@ -386,7 +386,7 @@ export const PRODUCTS = [
 ]
 
 export function getProductByHandle(handle) {
-  return PRODUCTS.find((p) => p.handle === handle) || PRODUCTS[0]
+  return PRODUCTS.find((p) => p.handle === handle) || null
 }
 
 export function getAllProducts() {
