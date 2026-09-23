@@ -1,0 +1,13 @@
+YOUNOYA — Desktop 07 / Handover
+START IMAGE: prepared 16:9 extension of ../scene_4_start.png
+END IMAGE: prepared 16:9 extension of ../scene_4_end.png
+TARGET: 16:9 landscape, 1920x1080 preferred, 24 fps, approximately 8 seconds.
+OUTPUT: render/desktop_07_wrapping_to_handover.mp4
+
+COPY PROMPT BELOW
+
+A close counter-level tracking shot gently reframes from the wrapping hands to the shared handover, keeping the reference miniature 3D treatment and warm lantern light. Across the wide composition the representative finishes the plum tissue fold, places the matching lid, wraps and ties the gold satin ribbon using the ribbon and scissors already on the counter, then offers the finished gift toward the mascot. End exactly on the prepared landscape handover pose with both characters still supporting the closed box, its bow and gold emblem facing camera, before either releases it. Preserve the box proportions, gold fittings, character identities and continuous camera motion. Silent video: no dialogue, music or sound effects.
+
+END COPY PROMPT
+
+Use actual first/last-frame controls. Leave comfortable side space for the final website choices; lengthen this pair if wrapping or the shared handover is skipped.

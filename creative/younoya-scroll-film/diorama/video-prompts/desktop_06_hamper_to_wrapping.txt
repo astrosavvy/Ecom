@@ -1,0 +1,13 @@
+YOUNOYA — Desktop 06 / Packing
+START IMAGE: prepared 16:9 extension of ../scene_3_end.png
+END IMAGE: prepared 16:9 extension of ../scene_4_start.png
+TARGET: 16:9 landscape, 1920x1080 preferred, 24 fps, approximately 6 seconds.
+OUTPUT: render/desktop_06_hamper_to_wrapping.mp4
+
+COPY PROMPT BELOW
+
+A gentle counter-level push-in follows the representative's packing hands, preserving the miniature 3D style and warm lantern reflections on the wood. Keep the mascot visible at the left edge of the wide frame and reveal the preparation area at right as she brings in a separate open rigid gift box, transfers the three keepsakes from the woven tray into it, moves the tray aside and draws plum tissue over the contents. End on the prepared landscape open-box composition midway through her tissue fold, with ribbon spool and scissors visible on the work surface. The woven tray never transforms into the box; the box remains open and has no bow at the endpoint. Silent video: no dialogue, music or sound effects.
+
+END COPY PROMPT
+
+Use actual first/last-frame controls. Extend this pair if the physical transfer cannot read clearly at six seconds.

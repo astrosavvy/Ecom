@@ -20,7 +20,7 @@ export const PRODUCTS = [
       '/media/ritual-portrait.webp',
     ],
     intentionStory:
-      'Born from the timeless geometry of the sacred apple, this keepsake stands as an enduring anchor for affectionate bonds, emotional consecration, and devoted connection. In Vedic thought, Venus (Shukra) governs harmonious communion and refined beauty. Placed within your sanctum or gifted to a cherished soul, it emanates warmth, grounding the sacred pledge of togetherness across life’s ever-unfolding chapters.',
+      'Born from the timeless geometry of the sacred apple, this keepsake stands as an enduring anchor for affectionate bonds, emotional consecration, and devoted connection. In Vedic thought, Venus (Shukra) governs harmonious communion and refined beauty. Placed within your sanctum or gifted to a cherished soul, it emanates warmth, grounding the promise of togetherness through the years ahead.',
     astrologyBadge: 'Venus (Shukra) • Taurus & Libra • 108× Venus Gayatri',
     consecration: {
       ritual: '108× Shukra Gayatri Mantra recitation under auspicious Shukla Paksha muhurta.',
@@ -212,7 +212,7 @@ export const PRODUCTS = [
       '/media/confidence-personal-power.webp',
     ],
     intentionStory:
-      'The crown sanctum object of the Younoya Atelier. Conceived for momentous life transitions — marriages, new enterprises, personal metamorphoses, and sacred thresholds. Uniting the elemental frequencies of all four chapters into a singular monumental heirloom that marks the exact chapter where everything shifted.',
+      'The crown sanctum object of the Younoya Atelier. Conceived for momentous life transitions — marriages, new enterprises, personal metamorphoses, and sacred thresholds. Uniting the elemental frequencies of four intentions into a singular heirloom that marks the moment everything shifted.',
     astrologyBadge: 'Ketu & Jupiter • Universal Transits • 108× Maha Sankalpa',
     consecration: {
       ritual: 'Full 108× Maha Sankalpa ceremony performed by council of senior Vedic pandits.',

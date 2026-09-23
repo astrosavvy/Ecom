@@ -102,7 +102,7 @@ export default function CartDrawer() {
                   {cart.length === 0 ? (
                     <div className="cart-empty">
                       <div className="empty-emblem">✦</div>
-                      <h4>Your Suite is Awaiting Its First Chapter</h4>
+                      <h4>Your next gift begins here</h4>
                       <p>
                         Explore our curated gift vaults or consult the Zodiac Compass to discover bespoke alignments.
                       </p>
@@ -132,7 +132,7 @@ export default function CartDrawer() {
                               </button>
                             </div>
                             <h4 className="cart-item__title">{item.name}</h4>
-                            <p className="cart-item__chapter">Chapter: {item.chapter || 'Bespoke Alignment'}</p>
+                            <p className="cart-item__chapter">{(item.chapter || 'Personal selection').replace(/Chapter/gi, 'Object')}</p>
                             <div className="cart-item__bottom">
                               <div className="cart-item__qty">
                                 <button
@@ -161,7 +161,7 @@ export default function CartDrawer() {
                           <span>Bespoke Wax-Sealed Celestial Inscription</span>
                         </div>
                         <p className="personalization-box__sub">
-                          Each gift includes a hand-pressed gold foil scroll inscribed for your recipient's chapter.
+                          Each gift includes a hand-pressed gold foil scroll inscribed for your recipient.
                         </p>
                         <textarea
                           className="personalization-input"
@@ -231,7 +231,7 @@ export default function CartDrawer() {
                 >
                   ✦
                 </motion.div>
-                <h3>Your Chapter Begins</h3>
+                <h3>Your gift begins here</h3>
                 <p className="success-desc">
                   Thank you for entrusting YOUNOYA with this sacred gifting ritual. Our celestial atelier has received your curation.
                 </p>

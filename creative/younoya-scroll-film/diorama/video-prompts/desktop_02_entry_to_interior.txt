@@ -1,0 +1,13 @@
+YOUNOYA — Desktop 02 / Entry to interior
+START IMAGE: prepared 16:9 extension of ../scene_1_end.png
+END IMAGE: prepared 16:9 extension of ../scene_2_start.png
+TARGET: 16:9 landscape, 1920x1080 preferred, 24 fps, approximately 4 seconds.
+OUTPUT: render/desktop_02_entry_to_interior.mp4
+
+COPY PROMPT BELOW
+
+A rear tracking shot continues through the doorway and rises gently into the same miniature 3D boutique under warm overhead lantern light. Use the landscape width to reveal the marble aisle, symmetrical arches, displays and curved counter while following the mascot past the floral arrangement; the outside arch leaves view naturally. End on the prepared wide interior composition with the mascot in the lower-left foreground and the representative still distant behind the counter, without starting their conversation. Keep one forward camera move with no cut, no teleport, and the shopping bag in the same hand. Silent video: no dialogue, music or sound effects.
+
+END COPY PROMPT
+
+Use actual first/last-frame controls. The exact shared doorway image starts this clip; the exact interior endpoint starts clip 03.

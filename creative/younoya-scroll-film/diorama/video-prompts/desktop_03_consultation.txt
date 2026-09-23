@@ -1,0 +1,13 @@
+YOUNOYA — Desktop 03 / Consultation
+START IMAGE: prepared 16:9 extension of ../scene_2_start.png
+END IMAGE: prepared 16:9 extension of ../scene_2_end.png
+TARGET: 16:9 landscape, 1920x1080 preferred, 24 fps, approximately 4 seconds.
+OUTPUT: render/desktop_03_consultation.mp4
+
+COPY PROMPT BELOW
+
+A forward tracking shot gently arcs from the boutique aisle into a counter-level two-shot, retaining the same miniature 3D treatment and warm lantern light. In the broad desktop frame keep the mascot left, the representative right and an uncluttered visual path across the polished counter; the mascot reaches the counter and raises its hands in a friendly gesture while its black bag hangs from its forearm. The representative leans forward to listen with her hands above the notebook on the desk, ending in the prepared two-shot with no hamper on the counter. Maintain one connected camera move and unchanged character identities and wardrobe. Silent video: no dialogue, music or sound effects.
+
+END COPY PROMPT
+
+Use actual first/last-frame controls. Match the consultation endpoint exactly so clip 04 can follow the representative to the gallery.

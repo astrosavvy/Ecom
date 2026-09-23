@@ -9,16 +9,25 @@
 ## 1. 📍 Executive Project Status
 
 - **Current Phase**: Phase 5 — Younoya Diorama Story & /lets-scroll Architecture
-- **Status**: Full-screen film ends with fluid atelier choices. `/find-a-gift` is now an animated, five-step Aster conversation with contextual local previews and linked product recommendations.
-- **Active Task**: Interactive gift journey is complete. User explicitly authorized the final GitHub push on 2026-09-22; all accumulated storefront/media/checkpoint changes are included in one verified commit to `origin/main`. Budget remains excluded from all sorting/filtering/selection.
-- **Last Updated**: 2026-09-22T16:45:00+05:30
+- **Status**: Mobile film joins have short blends and seek throttling. The homepage ends in centred fluid choices; `/shop` is an editorial light collection; `/find-a-gift` has a boutique representative, conversational steps and a bounded birth calendar.
+- **Active Task**: Current 2026-09-23 storefront/media changes are verified locally and prepared in one final local commit. The seven desktop prompt files are written; their native 16:9 endpoints and video renders remain to be produced. Budget remains excluded from all sorting/filtering/selection. No authorization to push this new work has been given.
+- **Last Updated**: 2026-09-23T15:41:35+05:30
 - **Last Agent**: Codex
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: younoya-web/dist and root dist verified; 2,277 modules, build exit 0, 4.76 seconds.
+- **Primary Production Build**: younoya-web/dist and root dist verified; 2,277 modules, build exit 0, 5.43 seconds (2026-09-23).
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-23] Desktop Prompts, Seam Repair & Editorial Storefront (Codex)
+- Authored seven desktop 16:9 prompts at `creative/younoya-scroll-film/diorama/video-prompts/desktop_*.txt` plus `DESKTOP_VIDEO_PROMPTS.md`. Each preserves the exact mobile image pair and action. Existing PNG references are near-square, so landscape-expanded first/last frames and desktop renders are still required before website integration. Updated `.gitignore` to track only this prompt package under the otherwise ignored creative media tree.
+- Measured original 28.041667-second mobile master at 24 fps: five of six joins showed one-frame mean RGB jumps around 27–34/255 against ordinary median motion around 9.7. Re-encoded the seven legs with five-frame blends across all six joins into a 26.75-second, 720×1280 H.264 seekable master; full-frame-delta scan found no isolated original-size join spike. Source-camera mismatches are softened, not physically repaired; native rerenders are needed for perfect continuity.
+- Snapped scroll targets to video frames and limited random video seeks to about 20 per second, reducing decoder churn on mobile. Preserved Blob playback and reduced-motion still fallback. Updated caption timing to the new duration and centred the final two magnetic, organic glass choices over the handover frame.
+- Rebuilt `/shop` as a light editorial catalog with a signature feature, richer materials/intention/product information, eight product links and intention-only filters. No budget sorting or selection. Removed visible “Chapter” labels from active storefront routes.
+- Replaced Aster in `/find-a-gift` with three transparent-background representative expressions based on the boutique film; added pointer-follow and speech/listening/blink transitions. Reworked the flow as animated answer bubbles and conversation history. Built a month/year calendar limited from today back exactly 120 years, with older and future days disabled. Recommendations use occasion, relationship and solar-sign element; result explicitly discloses that birth time/place are not used by the local preview and that no full Vedic/AI service is connected.
+- Verified both self and other recipient journeys through linked product results; 120-year date boundary (1906-09-22 disabled, 1906-09-23 enabled), mobile 358px overflow, collection links/filters and ending choices in the in-app browser. Blob video loaded and sought to its 26.75-second end. Root `npm run build` passed (2,277 modules, 5.43 seconds). Desktop film, real-device iOS seek performance, authenticated astrology/AI and production deployment remain unverified.
+- Removed temporary encode tools and obsolete root build hashes. Changes are bundled in one final local commit; no push or deployment this turn.
 
 ### [2026-09-22] Interactive Aster Gift Journey & Fluid Story Choices (Codex)
 - Replaced the generic intention radio form at `/find-a-gift` with a cinematic five-stage conversation: occasion, recipient, relationship, name, and birth date/time/place. Self-gifting skips the relationship step; unknown birth time is supported.
@@ -311,22 +320,9 @@
 
 ## 3. 🎯 Active Roadmap & Immediate Next Steps
 
-When starting the next turn or feature, proceed in this exact sequence:
-
-1. **Task 1: Storefront Commerce Route Expansion**
-   - Connect the luxury cart drawer (`src/components/CartDrawer.jsx`) to Medusa 2.18 cart endpoints (`POST /store/carts`, `POST /store/carts/:id/line-items`).
-   - Add routes in `younoya-web/src/App.jsx` for `/shop`, `/product/:handle`, and `/checkout`.
-   - Ensure products in the 4 gift-intention categories link to real Medusa product data.
-
-2. **Task 2: Dedicated Personalization Route (`/personalise`)**
-   - Implement the sacred birth parameters intake (DOB, TOB, POB, Name).
-   - Wire with ephemeris & numerology calculation engine (12 Moon signs × 9 Antardashas -> 4 intentions).
-   - Keep the homepage clean and cinematic while making the personalization journey an intentional, dedicated route.
-
-3. **Task 3: Production Sync & Deploy**
-   - Test `npm run build` in `younoya-web/`.
-   - Push to `main` branch to trigger Cloudflare Pages auto-deploy.
-   - Verify edge delivery at `https://younoya.com/`.
+1. **Desktop film production**: Extend all eight original story endpoints to consistent native 16:9 without cropping, render the seven authored desktop pairs, measure seams, then add responsive source selection and measured timing. The current desktop viewport still crops the portrait master.
+2. **Commerce and astrology integration**: Connect cart and product data to Medusa, then replace the guide's disclosed local solar-sign preview with authenticated birth-chart and conversational services. Preserve the user's rule against budget-based choice or filtering.
+3. **Production sync**: Review current working-tree diff, prepare one final commit with code/assets/checkpoint, and request explicit user authorization before any new `git push` or deployment. Verify on real iOS hardware for video seek performance.
 
 ---
 
@@ -335,9 +331,9 @@ When starting the next turn or feature, proceed in this exact sequence:
 > [!WARNING]
 > DO NOT violate these rules without explicit user instructions:
 > 1. **No Catalog Slop on First Screen**: The first screen must stay sparse: brand mark, one thought ("A gift should feel inevitable"), and the cinematic film. Do not re-add large product carousels or form inputs to the hero.
-> 2. **Never Swap Out the 32-Second Portrait Master Silently**: The active video master is `younoya-category-film-mobile.mp4`. Do not revert to the obsolete 12s landscape prototype (`younoya-category-film.mp4`).
+> 2. **Preserve the Current Story Film**: The active portrait master is `younoya-diorama-film-mobile.mp4` (26.75s, seven source legs with six blended joins). Do not revert to the old category film or obsolete landscape prototype.
 > 3. **Preserve Blob Video Seeking**: Always load the film as a `Blob` in `StoryFilm.jsx` (mounted by `Home.jsx`) to prevent seek-range lockups on static servers.
-> 4. **Mascot Scope**: `aster-mascot.png` remains excluded from the homepage film itself. The user explicitly approved and requested it as the animated conversational guide on the dedicated `/find-a-gift` route until a real 3D model is available.
+> 4. **Guide Scope**: The homepage film keeps its pictured mascot, but `/find-a-gift` now uses transparent expression images of the boutique representative. Do not reintroduce the Aster PNG into the active guide.
 > 5. **No Build on VPS**: Never run `npm run build` on the VPS (956MB RAM OOM).
 
 ---

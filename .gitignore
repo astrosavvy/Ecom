@@ -50,6 +50,15 @@ Thumbs.db
 # Local templates and render scratch files
 lets-scroll-main/
 younoya-scroll-film/
+# Track the authored desktop prompt package while keeping rendered media ignored.
+!creative/younoya-scroll-film/
+creative/younoya-scroll-film/*
+!creative/younoya-scroll-film/diorama/
+creative/younoya-scroll-film/diorama/*
+!creative/younoya-scroll-film/diorama/DESKTOP_VIDEO_PROMPTS.md
+!creative/younoya-scroll-film/diorama/video-prompts/
+creative/younoya-scroll-film/diorama/video-prompts/*
+!creative/younoya-scroll-film/diorama/video-prompts/desktop_*.txt
 storefront/assets/vid/Old/
 storefront/render-handoff/raw/
 storefront/render-handoff/frames/
@@ -57,4 +66,3 @@ storefront/render-handoff/stills_raw/
 storefront/render-handoff/_inspect/
 storefront/render-handoff/_verify/
 storefront/render-handoff/portrait_canvas/
-

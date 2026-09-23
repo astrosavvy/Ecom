@@ -4,31 +4,33 @@ import { ArrowUpRight } from 'lucide-react'
 import '../styles/StoryFilm.css'
 
 const FILM = '/media/younoya-diorama-film-mobile.mp4'
-const FILM_DURATION = 28
+const FILM_DURATION = 26.75
 // Seven supplied four-second clips: arrival, entry, consultation, gallery,
-// curation, packing, handover. Chapter changes include their connecting shots.
-const CHAPTER_TIMES = [0, 8, 12, 20]
+// curation, packing, handover. Five frames blend each join in the web master.
+const CHAPTER_TIMES = [0, 7.58, 11.38, 18.96]
 const CHAPTERS = [
-  { id: 'arrival', image: '/media/diorama-arrival.webp', alt: 'Arriving at the Younoya boutique', label: 'Younoya / For every chapter', title: 'Every gift begins', emphasis: 'with someone.' },
+  { id: 'arrival', image: '/media/diorama-arrival.webp', alt: 'Arriving at the Younoya boutique', label: 'Younoya / Gifts with meaning', title: 'Every gift begins', emphasis: 'with someone.' },
   { id: 'consultation', image: '/media/diorama-consultation.webp', alt: 'A thoughtful gift consultation', label: 'A moment to listen', title: 'Their story.', emphasis: 'Your thoughtfulness.' },
   { id: 'curation', image: '/media/diorama-curation.webp', alt: 'Three keepsakes curated in a hamper', label: 'The art of choosing', title: 'Chosen with care.', emphasis: 'Given with meaning.' },
-  { id: 'handover', image: '/media/diorama-handover.webp', alt: 'Receiving a wrapped Younoya gift', label: 'From you, with meaning', title: 'Beautifully wrapped.', emphasis: 'Ready for their chapter.' },
+  { id: 'handover', image: '/media/diorama-handover.webp', alt: 'Receiving a wrapped Younoya gift', label: 'From you, with meaning', title: 'Beautifully wrapped.', emphasis: 'Ready for their moment.' },
 ]
 
 function StoryCaption({ chapter, ending = false }) {
-  return <div className="story-film__caption">
-    <span>{chapter.label}</span>
-    <h2>{chapter.title}<br /><em>{chapter.emphasis}</em></h2>
-    {ending && <nav className="story-film__choices" aria-label="Choose your gift journey">
+  return <div className={`story-film__caption${ending ? ' story-film__caption--ending' : ''}`}>
+    {ending ? <div className="story-film__ending">
+      <span>A thought becomes a gift</span>
+      <h2>Where shall we <em>begin?</em></h2>
+      <nav className="story-film__choices" aria-label="Choose your gift journey">
       <Link to="/shop">
-        <span><small>The atelier</small>Explore the collection</span>
-        <i><ArrowUpRight size={17} /></i>
+        <span><small>Discover each object</small>Explore the collection</span>
+        <i><ArrowUpRight size={20} /></i>
       </Link>
       <Link to="/find-a-gift">
-        <span><small>Guided by Aster</small>Let Younoya choose</span>
-        <i><ArrowUpRight size={17} /></i>
+        <span><small>A personal consultation</small>Let Younoya choose</span>
+        <i><ArrowUpRight size={20} /></i>
       </Link>
-    </nav>}
+      </nav>
+    </div> : <><span>{chapter.label}</span><h2>{chapter.title}<br /><em>{chapter.emphasis}</em></h2></>}
   </div>
 }
 
@@ -86,7 +88,9 @@ export default function StoryFilm() {
     const section = sectionRef.current
     const video = videoRef.current
     let frame = 0
+    let retry = 0
     let target = 0
+    let lastSeek = 0
     let width = window.innerWidth
     let viewportHeight = window.innerHeight
     let disposed = false
@@ -102,7 +106,16 @@ export default function StoryFilm() {
     section.style.setProperty('--story-height', `${viewportHeight}px`)
     const seek = () => {
       frame = 0
-      if (video.readyState >= 2 && !video.seeking && Math.abs(video.currentTime - target) > 1 / 48) video.currentTime = target
+      if (video.readyState < 2 || video.seeking) return
+      const snapped = Math.round(target * 24) / 24
+      if (Math.abs(video.currentTime - snapped) < 1 / 48) return
+      const delay = 50 - (performance.now() - lastSeek)
+      if (delay > 0) {
+        if (!retry) retry = window.setTimeout(() => { retry = 0; schedule() }, delay)
+        return
+      }
+      lastSeek = performance.now()
+      video.currentTime = Math.min(snapped, Math.max(0, video.duration - 1 / 24))
     }
     const schedule = () => { if (!frame && !disposed) frame = requestAnimationFrame(seek) }
     const update = () => {
@@ -118,7 +131,7 @@ export default function StoryFilm() {
       const fadeOut = chapterIndex === CHAPTERS.length - 1 ? 1 : Math.min(1, (CHAPTER_TIMES[chapterIndex + 1] - time) / 0.8)
       section.style.setProperty('--caption-opacity', Math.max(0, Math.min(fadeIn, fadeOut)))
       section.style.setProperty('--story-progress', progress)
-      if (Number.isFinite(video.duration)) target = filmProgress * Math.max(0, video.duration - 0.05)
+      if (Number.isFinite(video.duration)) target = filmProgress * Math.max(0, video.duration - 1 / 24)
       schedule()
     }
     const resize = () => { measure(); update() }
@@ -139,6 +152,7 @@ export default function StoryFilm() {
     return () => {
       disposed = true
       cancelAnimationFrame(frame)
+      window.clearTimeout(retry)
       window.removeEventListener('scroll', update)
       window.removeEventListener('resize', resize)
       section.removeEventListener('pointerdown', prime)
@@ -147,6 +161,27 @@ export default function StoryFilm() {
       video.removeEventListener('seeked', markPainted)
     }
   }, [source, still])
+
+  useEffect(() => {
+    const stage = sectionRef.current
+    const magnetic = stage.querySelectorAll('.story-film__choices a')
+    if (!magnetic.length || window.matchMedia('(pointer: coarse)').matches) return undefined
+    const move = event => {
+      magnetic.forEach(link => {
+        const bounds = link.getBoundingClientRect()
+        const dx = event.clientX - (bounds.left + bounds.width / 2)
+        const dy = event.clientY - (bounds.top + bounds.height / 2)
+        const distance = Math.hypot(dx, dy)
+        const strength = Math.max(0, 1 - distance / 230)
+        link.style.setProperty('--magnet-x', `${dx * strength * .14}px`)
+        link.style.setProperty('--magnet-y', `${dy * strength * .14}px`)
+      })
+    }
+    const reset = () => magnetic.forEach(link => { link.style.setProperty('--magnet-x', '0px'); link.style.setProperty('--magnet-y', '0px') })
+    stage.addEventListener('pointermove', move, { passive: true })
+    stage.addEventListener('pointerleave', reset)
+    return () => { stage.removeEventListener('pointermove', move); stage.removeEventListener('pointerleave', reset) }
+  }, [ending, still])
 
   return (
     <section id="story" ref={sectionRef} className={`story-film${still ? ' story-film--still' : ''}`} aria-label="The Younoya boutique film. Scroll to follow the story.">

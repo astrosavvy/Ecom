@@ -53,7 +53,7 @@ export default function ProductDetail() {
         price: product.price,
         priceNum: product.priceNum,
         image: product.primaryImage,
-        chapter: `Chapter ${product.chapter} (${product.badge})`,
+        chapter: `Object ${product.chapter} (${product.badge})`,
         seal: selectedSeal,
         personalNote: personalNote.trim() || undefined,
       },
@@ -83,7 +83,7 @@ export default function ProductDetail() {
         <span className="breadcrumb-sep">/</span>
         <Link to="/shop" className="breadcrumb-link">All products</Link>
         <span className="breadcrumb-sep">/</span>
-        <span className="breadcrumb-current">Chapter {product.chapter} • {product.badge}</span>
+        <span className="breadcrumb-current">Object {product.chapter} • {product.badge}</span>
       </nav>
 
       {/* Main Showcase Stage */}
@@ -130,7 +130,7 @@ export default function ProductDetail() {
         <div className="product-info">
           <div className="product-info__header">
             <div className="product-info__badge-row">
-              <span className="product-badge">CHAPTER {product.chapter}</span>
+              <span className="product-badge">OBJECT {product.chapter}</span>
               <span className="product-badge-sub">{product.badge}</span>
               <span className="product-rating">
                 <Star size={12} fill="#d4af37" color="#d4af37" />
@@ -414,7 +414,7 @@ export default function ProductDetail() {
                   <span className="related-card__badge">{rel.badge}</span>
                 </div>
                 <div className="related-card__body">
-                  <span className="related-card__chapter">Chapter {rel.chapter}</span>
+                  <span className="related-card__chapter">Object {rel.chapter}</span>
                   <h3 className="related-card__title">{rel.name}</h3>
                   <span className="related-card__price">{rel.price}</span>
                   <span className="related-card__link">Discover Sanctum ↗</span>

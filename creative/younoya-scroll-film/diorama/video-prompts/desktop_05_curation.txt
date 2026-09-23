@@ -1,0 +1,13 @@
+YOUNOYA — Desktop 05 / Curation
+START IMAGE: prepared 16:9 extension of ../scene_3_start.png
+END IMAGE: prepared 16:9 extension of ../scene_3_end.png
+TARGET: 16:9 landscape, 1920x1080 preferred, 24 fps, approximately 8 seconds.
+OUTPUT: render/desktop_05_curation.mp4
+
+COPY PROMPT BELOW
+
+A continuous tracking shot accompanies the representative's curation and return to the counter in the same miniature 3D style under warm gallery lanterns. Use the landscape width to show each handoff clearly: she completes her reach for the red apple, adds plum lining and the three pictured keepsakes to the woven tray with visible physical handling, then carries the filled tray along the aisle and sets it before the waiting mascot. Finish at the prepared broad counter composition with the ornate red apple at left, purple crystal vessel in the centre and gold swing altar at right, while the mascot lifts both hands beneath its chin in delight. Keep product forms, scale, order and tray material consistent; no object appears or changes identity without being handled. Silent video: no dialogue, music or sound effects.
+
+END COPY PROMPT
+
+Use actual first/last-frame controls. This is the most action-heavy pair; lengthen the same pair if eight seconds causes rushed hands or missing placements.

@@ -1,0 +1,13 @@
+YOUNOYA — Desktop 01 / Arrival
+START IMAGE: prepared 16:9 extension of ../scene_1_start.png
+END IMAGE: prepared 16:9 extension of ../scene_1_end.png
+TARGET: 16:9 landscape, 1920x1080 preferred, 24 fps, approximately 4 seconds.
+OUTPUT: render/desktop_01_arrival.mp4
+
+COPY PROMPT BELOW
+
+A wide three-quarter tracking shot gently dollies forward and lowers behind the mascot toward the boutique doorway, preserving the supplied miniature 3D style under warm lantern light against the blue evening. Compose the full Younoya facade and curved steps across the landscape frame, with the mascot slightly left of centre and clear architecture on both sides; it climbs the steps with its black bag in its right hand and crosses the threshold as the facade leaves view. Finish on the prepared wide rear-view doorway endpoint, with the floral display visible inside and the mascot's gold headband tails and bag unchanged; keep this one unbroken approach with no representative present. Silent video: no dialogue, music or sound effects.
+
+END COPY PROMPT
+
+Use actual first/last-frame controls, not reference-only uploads. Carry rear tracking velocity into clip 02. Preserve the prepared endpoint pixel-for-pixel at the handoff.

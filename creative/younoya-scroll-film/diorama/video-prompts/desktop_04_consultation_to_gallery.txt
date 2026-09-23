@@ -1,0 +1,13 @@
+YOUNOYA — Desktop 04 / Consultation to gallery
+START IMAGE: prepared 16:9 extension of ../scene_2_end.png
+END IMAGE: prepared 16:9 extension of ../scene_3_start.png
+TARGET: 16:9 landscape, 1920x1080 preferred, 24 fps, approximately 6 seconds.
+OUTPUT: render/desktop_04_consultation_to_gallery.mp4
+
+COPY PROMPT BELOW
+
+A smooth lateral tracking shot follows the representative from the counter into the vaulted gallery, retaining the reference miniature 3D style and warm lantern lighting. In the wide frame let the counter recede at left and the product display emerge at right; she finishes listening, retrieves an empty woven tray from below the counter and walks alone toward the display while the mascot remains behind and exits the camera's field naturally. Settle on the prepared landscape gallery composition with the empty tray supported by her left arm and her right hand reaching toward the red apple, stopping before pickup. Preserve her face, plum suit, bun and the tray's empty state. Silent video: no dialogue, music or sound effects.
+
+END COPY PROMPT
+
+Use actual first/last-frame controls. Keep the lateral camera velocity continuous at both joins; do not insert a new room or cut.
