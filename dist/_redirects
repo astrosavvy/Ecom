@@ -1,5 +1,4 @@
-/admin       https://api.younoya.com/app  302
-/app         https://api.younoya.com/app  302
+/app         /admin  301
 /gifts       /shop  301
 /personalise /find-a-gift  301
 /journal     /blog  301

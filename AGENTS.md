@@ -37,9 +37,11 @@
 ### System Topology:
 1. **Frontend Storefront**: [`younoya-web/`](file:///F:/Savvy_Ecom/younoya-web) — Vite 6 + React 19 + Framer Motion + Lenis + React Router 7. Features an interactive scroll-scrubbed hero film (curated hamper with metallic apple candle, raw amethyst vessel, sacred gold keepsake), 3D perspective cylinder, and luxury cart drawer.
 2. **Edge & Cloud Deployment**: Cloudflare Worker with Static Assets (`ecom`). Configuration in [`wrangler.jsonc`](file:///F:/Savvy_Ecom/wrangler.jsonc) with `assets: { directory: "dist", ... }`. Deploy command: `npx wrangler deploy`.
-3. **Commerce & Astro Backend**: [`backend/`](file:///F:/Savvy_Ecom/backend) — Medusa 2.18, Node 20+, PostgreSQL 15 (`younoya_db`), Redis. Custom modules: `younoya-otp`, `younoya-blog`, `younoya-astro`, `younoya-themes`, `younoya-toolkits`. Zero builds on VPS (956MB RAM OOM).
-4. **Creative Media Engine**: [`creative/younoya-scroll-film/`](file:///F:/Savvy_Ecom/creative/younoya-scroll-film) — Real photoshoot reference frames (16:9 landscape `younoya-hamper-hero-landscape-16x9.jpg`, 9:16 portrait `younoya-hamper-hero-portrait-9x16.jpg`), 10–12s scroll-scrubbed hero video chain, prompt packages, and seam-grid QA evidence.
-5. **Physical Photoshoot Archive**: `2026_09_09/` — 283 raw camera photoshoot photos (~2.4 GB). Direct visual grounding for authentic products (apple candle `1A8A2284.JPG`, amethyst vessel `1A8A2075.JPG`, gold swing altar `1A8A2150.JPG`). Preserved, ignored in git.
+3. **Commerce & Astro Backend**: [`backend/`](file:///F:/Savvy_Ecom/backend) — Medusa 2.18, Node 20+, PostgreSQL 15 (`younoya_db`), Redis. Pure headless JSON REST API (`api.younoya.com`). ZERO builds and ZERO admin dashboards on VPS (956MB RAM OOM).
+4. **Admin Management Console**: Hosted exclusively on the Frontend edge (`younoya.com/admin/*`) running as a client-side SPA. Zero RAM/CPU load on VPS.
+5. **Dynamic Media & Lossless Compression**: Media uploaded via Admin is stored permanently on server disk with one-time lossless compression, served through Cloudflare Tunnel with aggressive edge caching (`max-age=31536000`). Never requires frontend rebuilds.
+6. **Creative Media Engine**: [`creative/younoya-scroll-film/`](file:///F:/Savvy_Ecom/creative/younoya-scroll-film) — Real photoshoot reference frames (16:9 landscape `younoya-hamper-hero-landscape-16x9.jpg`, 9:16 portrait `younoya-hamper-hero-portrait-9x16.jpg`), 10–12s scroll-scrubbed hero video chain, prompt packages, and seam-grid QA evidence.
+7. **Physical Photoshoot Archive**: `2026_09_09/` — 283 raw camera photoshoot photos (~2.4 GB). Direct visual grounding for authentic products (apple candle `1A8A2284.JPG`, amethyst vessel `1A8A2075.JPG`, gold swing altar `1A8A2150.JPG`). Preserved, ignored in git.
 
 ---
 

@@ -1,8 +1,15 @@
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import Lenis from 'lenis'
 
 export default function SmoothScroll({ children }) {
+  const { pathname } = useLocation()
   useEffect(() => {
+    if (pathname.startsWith('/admin')) {
+      window.__lenis?.destroy()
+      delete window.__lenis
+      return
+    }
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
     let lenis
     let frame = 0

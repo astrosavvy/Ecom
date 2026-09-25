@@ -8,17 +8,52 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 6 — Admin Panel Access & Live Editorial Blog Integration
-- **Status**: Completed Phase A (Admin Forwarding & Medusa 2.18 Configuration) and Phase B (Cartier-grade live editorial blog on storefront). Routes `/blog` and `/blog/:slug` fully implemented with live API client (`src/lib/api.js`), responsive reader (`BlogPost.jsx`), category filters, article cards (`Blog.jsx`), and luxury styling (`Blog.css`). Added `/admin` and `/app` 302 redirects to Medusa dashboard and `/journal` 301 redirects to `/blog`. Generated 13 crawlable route shells with valid canonicals, Open Graph, Twitter cards, and Schema.org `BlogPosting` JSON-LD.
-- **Active Task**: All code modifications and builds verified locally (exit code 0, 2,284 modules). Awaiting user permission to commit and push changes to GitHub `origin main`.
-- **Last Updated**: 2026-09-25T15:45:00+05:30
+- **Current Phase**: Phase 6 — Edge-Hosted React Admin Console & Headless Server Architecture Deployed
+- **Status**: Relocated the Admin Console to run 100% on the frontend edge (`https://younoya.com/admin/*`) via Cloudflare Workers Static Assets with 16 custom React 19 management modules. Set `admin: { disable: true }` in `backend/medusa-config.ts` so the VPS operates strictly as a headless JSON REST API with zero UI memory or CPU load. Media uploaded via Admin (`POST /admin/uploads`) is saved permanently on server disk (`backend/static/`) with lossless compression and served with aggressive edge caching (`max-age=31536000`), requiring ZERO frontend rebuilds or git commits when authoring posts. Codified Architecture Rules 5, 6, and 7 into `.agents/rules/architecture.md`, `AGENTS.md`, and `.agents/AGENTS.md`. Built 2,301 modules cleanly with exit code 0; generated 13 crawlable storefront shells and 11 admin shells with valid metadata.
+- **Active Task**: All changes implemented and verified locally. Ready for single final commit. Awaiting explicit user approval before `git push`.
+- **Last Updated**: 2026-09-25T16:35:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: younoya-web/dist and root dist verified; 2,284 modules, build exit 0, 6.25 seconds (2026-09-25).
+- **Primary Production Build**: younoya-web/dist and root dist verified; 2,301 modules, build exit 0, 7.14 seconds (2026-09-25).
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-25] Edge-Hosted React Admin Console & Headless Server Architecture Deployed (Antigravity)
+- **Edge-Hosted Admin Console Deployment (`younoya-web/src/admin`)**:
+  - Restored and integrated all 16 custom React 19 management modules from commit `e2a7b3b`:
+    - `AdminApp.tsx`: Root dashboard router, staff auth check (`/admin/users/me`), dynamic role-filtered navigation (`admin`, `support`, `marketing`), and sign-out handler.
+    - `api.ts`: Centralized API client connecting to `https://api.younoya.com` with JWT bearer authentication, token lifecycle management, INR currency formatting (`formatINR`), and date localization (`fmtDate`).
+    - `pages/Login.tsx`: Staff authentication screen with password login, loading state, error alerts, and clean layout styled with `.ad-login`.
+    - `pages/Journal.tsx` & `JournalEdit.tsx`: Complete blog publication engine. Supports draft/live status, dual 16:9 cover and 1:1 square grid image uploads via `POST /admin/uploads` directly to server disk, category tags, author attribution, and markdown prose editing.
+    - `pages/Orders.tsx` & `OrderDetail.tsx`: Order ledger with live payment/fulfillment statuses and line item breakdowns.
+    - `pages/Customers.tsx` & `CustomerDetail.tsx`: Customer accounts, order histories, and Vedic astrological profiles.
+    - `pages/Products.tsx` & `ProductMetadata.tsx`: Product catalog and consecrated keepsake metadata.
+    - `pages/ThemeManager.tsx`: Four sacred gift intention themes (`Love & Connection`, `Confidence & Power`, `Vitality & Balance`, `Wealth & Prosperity`).
+    - `pages/RecommendationRules.tsx`: Astrological recommendation rule management.
+    - `pages/Team.tsx` & `InviteAccept.tsx`: Team member invitations and role management.
+- **Backend Headless Enforcement & OOM Protection**:
+  - Set `admin: { disable: true }` in `backend/medusa-config.ts`.
+  - Prohibited compiling, mounting, or serving `@medusajs/dashboard` on the VPS Node server, completely protecting the 956MB RAM VPS from Out Of Memory crashes.
+  - Kept `adminCors` open for `https://younoya.com` and local development.
+- **Server-Side Dynamic Media Storage & Lossless Compression**:
+  - Uploaded media (`POST /admin/uploads`) is saved permanently on backend disk (`backend/static/`) via `@medusajs/file-local`.
+  - Zero Frontend Rebuilds: Publishing a blog post or adding an image via Admin is 100% instant at runtime; requires zero git commits and zero Vite builds.
+  - Media served via Cloudflare Tunnel with aggressive HTTP caching (`Cache-Control: public, max-age=31536000`), caching compressed images on Cloudflare edge nodes on first fetch and shielding VPS CPU/RAM.
+- **System Rules Codification**:
+  - Formally codified Rules 5, 6, and 7 into `.agents/rules/architecture.md`, `AGENTS.md`, and `.agents/AGENTS.md`:
+    - Rule 5: *Admin Console Hosting Law (Zero Admin UI on VPS Backend)*.
+    - Rule 6: *Server-Side Dynamic Media Storage, Lossless Compression & Edge Caching*.
+    - Rule 7: *Anti-Purge & Operational Route Preservation Law*.
+- **Routing, Navigation & Pre-Rendering**:
+  - Updated `younoya-web/public/_redirects`: removed `/admin` backend redirect; redirected `/app -> /admin (301)`.
+  - Updated `younoya-web/src/App.jsx`: registered `<Route path="/admin/*" element={<AdminApp />} />`, hid storefront `Navbar` and `CartDrawer` when `pathname.startsWith('/admin')`.
+  - Updated `younoya-web/src/components/SmoothScroll.jsx`: disabled Lenis smooth scroll on `/admin/*` for native table, input, and drawer scrolling.
+  - Updated `younoya-web/src/seo/metadata.js`: configured `/admin` with `noindex: true` and `<title>Console | Younoya</title>`.
+  - Updated `younoya-web/scripts/generate-seo.mjs`: pre-rendered 11 static admin shells (`dist/admin/index.html`, `dist/admin/journal/index.html`, etc.) so direct URL navigation on Cloudflare serves HTTP 200 without redirect loops.
+- **Build Verification**:
+  - Both `npm --prefix younoya-web run build` and root `npm run build` compiled 2,301 modules cleanly in 7.14s with exit code 0. Generated 13 crawlable route shells, 11 admin shells, and true 404.html. Sync to root `dist/` verified.
 
 ### [2026-09-25] Admin Panel Access & Live Editorial Blog Deployed (Antigravity)
 - **Admin Panel Resolution**:
@@ -364,6 +399,8 @@
 > 3. **Preserve Blob Video Seeking**: Always load the film as a `Blob` in `StoryFilm.jsx` (mounted by `Home.jsx`) to prevent seek-range lockups on static servers.
 > 4. **Guide Scope**: The homepage film keeps its pictured mascot, but `/find-a-gift` now uses transparent expression images of the boutique representative. Do not reintroduce the Aster PNG into the active guide.
 > 5. **No Build on VPS**: Never run `npm run build` on the VPS (956MB RAM OOM).
+> 6. **Zero Admin UI on VPS**: The Admin Console is hosted exclusively on the frontend edge (`https://younoya.com/admin/*`). Never mount, compile, or serve `@medusajs/dashboard` on the VPS Node server.
+> 7. **Server-Side Dynamic Media Storage & Zero Frontend Rebuilds**: Media uploaded via Admin must be stored on the backend server disk (`backend/static/`) with lossless compression and edge-cached. Adding articles, images, or products must NEVER require a frontend rebuild or git commit.
 
 ---
 

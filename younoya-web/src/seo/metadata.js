@@ -149,6 +149,13 @@ export function getSeo(pathname) {
     ],
   }
 
+  if (path.startsWith('/admin')) return {
+    path,
+    title: 'Console | Younoya',
+    description: 'Younoya Management Console.',
+    noindex: true,
+  }
+
   return {
     path,
     title: 'Page not found | Younoya',

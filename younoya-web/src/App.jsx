@@ -11,12 +11,14 @@ import GiftFinder from './pages/GiftFinder'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import NotFound from './pages/NotFound'
+import AdminApp from './admin/AdminApp'
 import SeoHead from './seo/SeoHead'
 import './styles/global.css'
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
   useEffect(() => {
+    if (pathname.startsWith('/admin')) return
     const frame = requestAnimationFrame(() => {
       let id = ''
       try { id = decodeURIComponent(hash.slice(1)) } catch { /* Ignore malformed external hashes. */ }
@@ -28,12 +30,15 @@ function ScrollToTop() {
   }, [pathname, hash])
   return null
 }
+
 function JournalRedirect() {
   const { slug } = useParams()
   return <Navigate to={slug ? `/blog/${slug}` : '/blog'} replace />
 }
 
 function StoreNavigation() {
+  const { pathname } = useLocation()
+  if (pathname.startsWith('/admin')) return null
   return <><Navbar /><CartDrawer /></>
 }
 
@@ -55,6 +60,7 @@ export default function App() {
               <Route path="/journal" element={<Navigate to="/blog" replace />} />
               <Route path="/journal/:slug" element={<JournalRedirect />} />
               <Route path="/product/:handle" element={<ProductDetail />} />
+              <Route path="/admin/*" element={<AdminApp />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

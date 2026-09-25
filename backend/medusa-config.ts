@@ -19,9 +19,7 @@ module.exports = defineConfig({
     },
   },
   admin: {
-    disable: process.env.MEDUSA_ADMIN_ENABLED === 'false',
-    path: "/app",
-    backendUrl: process.env.MEDUSA_BACKEND_URL || "https://api.younoya.com",
+    disable: true,
   },
   modules: [
     { resolve: "./src/modules/younoya-otp" },
