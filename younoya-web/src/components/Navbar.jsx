@@ -6,7 +6,7 @@ import '../styles/Navbar.css'
 export default function Navbar() {
   const { pathname } = useLocation()
   const { totalItems, setIsOpen } = useCart()
-  const light = pathname === '/shop' || pathname === '/find-a-gift'
+  const light = pathname === '/shop' || pathname === '/find-a-gift' || pathname.startsWith('/blog') || pathname.startsWith('/journal')
   return (
     <header className={`navbar${light ? ' navbar--light' : ''}`}>
       <Link className="navbar__brand" to="/" aria-label="Younoya home">

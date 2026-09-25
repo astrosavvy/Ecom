@@ -65,6 +65,6 @@ export default function Shop() {
     </div>
 
     <div className="collection__consult"><Sparkles size={18} strokeWidth={1.4} /><p>Not sure where to begin? <em>Let us listen first.</em></p><Link to="/find-a-gift">Let Younoya choose <ArrowRight size={17} /></Link></div>
-    <footer className="collection__footer"><span>YOUNOYA / GIFTS WITH MEANING</span><Link to="/">Return to the story <ArrowUpRight size={15} /></Link></footer>
+    <footer className="collection__footer"><span>YOUNOYA / GIFTS WITH MEANING</span><div><Link to="/blog" style={{ marginRight: '18px' }}>The Journal <ArrowUpRight size={15} /></Link><Link to="/">Return to the story <ArrowUpRight size={15} /></Link></div></footer>
   </section>
 }

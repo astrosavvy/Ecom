@@ -7,6 +7,7 @@
 - [The boutique story](https://younoya.com/): a scroll-led visit to Younoya.
 - [The collection](https://younoya.com/shop): eight keepsakes with product details and displayed prices.
 - [Let Younoya choose](https://younoya.com/find-a-gift): an interactive, local gift-selection preview. The current preview is not a full Vedic astrology or AI reading.
+- [The Journal](https://younoya.com/blog): stories of intention, ritual and astrology-backed gifting.
 
 ## The collection
 

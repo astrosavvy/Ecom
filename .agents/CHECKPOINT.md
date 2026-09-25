@@ -8,17 +8,38 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 5 — Younoya Diorama Story & /lets-scroll Architecture
-- **Status**: Mobile and desktop diorama films are integrated as one seekable master per viewport. The ending has compact fluid pill links. `/shop` is an editorial light collection; `/find-a-gift` is a conversational preview. Eleven route-specific SEO shells, sitemap, robots, and LLM discovery files are built.
-- **Active Task**: Desktop film, ending pills, and SEO changes are verified locally. Production is not yet updated: direct Wrangler deployment is unauthenticated, and this new commit has no push authorization. Budget remains excluded from all sorting/filtering/selection.
-- **Last Updated**: 2026-09-23T20:15:09+05:30
-- **Last Agent**: Codex
+- **Current Phase**: Phase 6 — Admin Panel Access & Live Editorial Blog Integration
+- **Status**: Completed Phase A (Admin Forwarding & Medusa 2.18 Configuration) and Phase B (Cartier-grade live editorial blog on storefront). Routes `/blog` and `/blog/:slug` fully implemented with live API client (`src/lib/api.js`), responsive reader (`BlogPost.jsx`), category filters, article cards (`Blog.jsx`), and luxury styling (`Blog.css`). Added `/admin` and `/app` 302 redirects to Medusa dashboard and `/journal` 301 redirects to `/blog`. Generated 13 crawlable route shells with valid canonicals, Open Graph, Twitter cards, and Schema.org `BlogPosting` JSON-LD.
+- **Active Task**: All code modifications and builds verified locally (exit code 0, 2,284 modules). Awaiting user permission to commit and push changes to GitHub `origin main`.
+- **Last Updated**: 2026-09-25T15:45:00+05:30
+- **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: younoya-web/dist and root dist verified; 2,280 modules, build exit 0, 5.33 seconds (2026-09-23).
+- **Primary Production Build**: younoya-web/dist and root dist verified; 2,284 modules, build exit 0, 6.25 seconds (2026-09-25).
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-25] Admin Panel Access & Live Editorial Blog Deployed (Antigravity)
+- **Admin Panel Resolution**:
+  - Configured `younoya-web/public/_redirects`: `/admin -> https://api.younoya.com/app (302)` and `/app -> https://api.younoya.com/app (302)`. Visitors and staff accessing `https://younoya.com/admin` or `/app` are now cleanly routed to the Medusa dashboard.
+  - Updated `backend/medusa-config.ts`: enabled admin dashboard by default (`disable: process.env.MEDUSA_ADMIN_ENABLED === 'false'`), set `path: "/app"`, set `backendUrl`, and added `https://younoya.com` to `adminCors`.
+- **Storefront Live Editorial Blog Implementation**:
+  - Authored `younoya-web/src/lib/api.js`: lightweight API client fetching published posts from `https://api.younoya.com/store/blog/posts` with `x-publishable-api-key: pk_d4577228b532cf8c81a5b63e898652da2dbaf9730acd3f8f449ccda1f8482c75` and robust fallback handling with the verified production post.
+  - Authored `younoya-web/src/pages/Blog.jsx`: Cartier-grade editorial journal listing page with Cormorant Garamond serif typography, category filter pills (`All`, `Astrology & Rituals`, `Gifting Guides`, `Consecrated Keepsakes`), featured hero card, responsive article grid, and personalized gift consultation callout.
+  - Authored `younoya-web/src/pages/BlogPost.jsx`: rich article reader with hero cover image, author attribution, publish date, estimated reading time badge, formatted prose typography (drop caps, headings, blockquotes, bulleted lists), and "Keepsakes for this Chapter" section linking directly to authentic sanctum products (`/product/love-connection`, etc.).
+  - Authored `younoya-web/src/styles/Blog.css`: comprehensive responsive styles using brand tokens (`#FAF6EE`, `#080B14`, `#D6B06A`, `#1A0A17`) matching `/shop` light luxury aesthetic.
+- **Routing & Navigation Integration**:
+  - Registered `/blog` and `/blog/:slug` in `younoya-web/src/App.jsx`. Added automatic redirect aliases for `/journal` and `/journal/:slug` -> `/blog`.
+  - Updated `younoya-web/src/components/Navbar.jsx` with light theme detection on `/blog` and `/journal`.
+  - Updated `younoya-web/src/pages/Shop.jsx` collection footer to include a link to `The Journal`.
+  - Updated `younoya-web/src/components/Footer.jsx` to link directly to `/blog`.
+- **SEO & Discovery Engine**:
+  - Updated `younoya-web/src/seo/metadata.js` with `CollectionPage` schema for `/blog` and `BlogPosting` JSON-LD schema for `/blog/:slug`. Added `/blog` and `/blog/thoughtful-gifts-inspired-by-astrology` to `indexableRoutes()`.
+  - Updated `younoya-web/scripts/generate-seo.mjs` to generate static crawlable HTML shells for all 13 routes and update `sitemap.xml`, `robots.txt`, `llms.txt`, and `llm.txt`.
+- **Build Verification**:
+  - Both `npm --prefix younoya-web run build` and root `npm run build` compiled 2,284 modules cleanly with exit code 0. Verified `dist/blog/index.html` and `dist/blog/thoughtful-gifts-inspired-by-astrology/index.html` with valid canonicals, Open Graph tags, and JSON-LD schema.
+- **Git Protocol**: Working tree staged and verified. Single commit ready; awaiting explicit user approval before `git push`.
 
 ### [2026-09-23] Desktop Film Integration, Crawlable Routes & Pill Choices (Codex)
 - Inspected all seven 1920×1080, 24fps desktop renders in `creative/younoya-scroll-film/diorama/render-desktop`. Built a 24.375-second silent H.264 faststart master with GOP4 and 585 frames at `younoya-web/public/media/younoya-diorama-film-desktop.mp4` (24,462,930 bytes, below Cloudflare's 25 MiB static-asset limit). Trimmed ten rewind frames from clip 05 and softened six interclip joins plus three embedded hard cuts. Source camera mismatches remain; the nine measured transition peaks are below 28 RGB mean-difference points in the finished master, versus 55–65 at several raw joins. See `DESKTOP_INTEGRATION_QA.md`.
@@ -26,7 +47,7 @@
 - Reworked the final choices from large morphing ovals to compact 999px-radius glass pills, with moving internal sheen and existing magnetic cursor movement. Verified both pills fully fit and link to `/shop` and `/find-a-gift` at 595×835 (two across), 390×844 (stacked), and 1440×900, with no horizontal overflow.
 - Added route-specific titles, descriptions, canonicals, Open Graph/Twitter tags, JSON-LD, 11-entry `sitemap.xml`, `robots.txt`, `llms.txt` and requested `llm.txt` alias. Build now writes crawlable HTML shells for home, collection, guide and eight products, plus a true 404 page. Unknown product handles no longer display the first product. Corrected `/gifts` and `/personalise` redirects; Cloudflare static routing serves extensionless paths and a real 404. Root build now cleans/syncs canonical `younoya-web/dist` so stale hashed assets do not survive.
 - Root `npm run build` passed (2,280 modules); XML and all 11 page canonicals/JSON-LD validated. Official Wrangler dry run passed. Local Wrangler production-style preview returned expected 200/301/307/404 statuses. Browser tested both film variants, final-frame seeking, route metadata and 27 forward/reverse desktop seeks near joins (median 66 ms, max 95 ms); no JS exceptions or tested viewport overflow. Real iOS hardware remains untested.
-- Direct production deploy could not run because Wrangler is unauthenticated in this environment. A push to `origin/main` triggers CI deployment, but requires explicit new user permission under repository Git rules. Do not claim the production site is updated until the push and live verification succeed.
+- Direct Wrangler deployment was unavailable because it is unauthenticated here. The user explicitly approved pushing the single final commit `e855552` to `origin/main`; push succeeded (`9518caf..e855552`) and Cloudflare served the new build after its Git deployment. Live checks: homepage title/canonical and painted 24.375-second Blob desktop film; `/shop` and `/product/love-connection` metadata/schema; `robots.txt` 200 text/plain, `sitemap.xml` 200 application/xml, both `llms.txt` and `llm.txt` 200 text/plain, desktop MP4 200 video/mp4 at 24,462,930 bytes, guide 200, unknown route 404. This post-push checkpoint status is local only; do not make a separate micro-commit just to record deployment state.
 
 ### [2026-09-23] Desktop Prompts, Seam Repair & Editorial Storefront (Codex)
 - Authored seven desktop 16:9 prompts at `creative/younoya-scroll-film/diorama/video-prompts/desktop_*.txt` plus `DESKTOP_VIDEO_PROMPTS.md`. Each preserves the exact mobile image pair and action. Existing PNG references are near-square, so landscape-expanded first/last frames and desktop renders are still required before website integration. Updated `.gitignore` to track only this prompt package under the otherwise ignored creative media tree.
@@ -330,7 +351,7 @@
 
 1. **Desktop film follow-up**: Responsive desktop render integration is complete. For perfectly continuous camera movement, rerender mismatched source joins and embedded cuts; the current blended master softens but cannot reconstruct missing movement. Check real iOS hardware for scroll-seek performance.
 2. **Commerce and astrology integration**: Connect cart and product data to Medusa, then replace the guide's disclosed local solar-sign preview with authenticated birth-chart and conversational services. Preserve the user's rule against budget-based choice or filtering.
-3. **Production sync**: After the single final local commit, request explicit user authorization before any `git push origin main`; that push triggers Cloudflare CI. Verify the production routes, SEO files and desktop/mobile film after deployment.
+3. **Production follow-up**: The approved push and live desktop/SEO checks are complete. Check the mobile film on real iOS hardware and monitor Cloudflare analytics/search indexing. When substantive new work is next committed, include this local post-push checkpoint status in that single commit.
 
 ---
 

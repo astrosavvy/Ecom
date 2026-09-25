@@ -38,7 +38,7 @@ export default function Footer() {
               <li><a href="#how-it-works">How It Works</a></li>
               <li><a href="#">Birth Chart Guide</a></li>
               <li><a href="#">Compatibility</a></li>
-              <li><a href="#">Blog</a></li>
+              <li><a href="/blog">The Journal</a></li>
             </ul>
           </div>
 

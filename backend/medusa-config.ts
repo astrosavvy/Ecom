@@ -12,14 +12,16 @@ module.exports = defineConfig({
     },
     http: {
       storeCors: process.env.STORE_CORS || 'http://localhost:5173,https://younoya.com',
-      adminCors: process.env.ADMIN_CORS || 'http://localhost:9000,https://api.younoya.com',
+      adminCors: process.env.ADMIN_CORS || 'http://localhost:5173,http://localhost:9000,https://api.younoya.com,https://younoya.com',
       authCors: process.env.AUTH_CORS || 'http://localhost:5173,https://younoya.com',
       jwtSecret: process.env.JWT_SECRET || 'supersecret_jwt_key_younoya_production_2026',
       cookieSecret: process.env.COOKIE_SECRET || 'supersecret_cookie_key_younoya_production_2026',
     },
   },
   admin: {
-    disable: process.env.MEDUSA_ADMIN_ENABLED !== 'true',
+    disable: process.env.MEDUSA_ADMIN_ENABLED === 'false',
+    path: "/app",
+    backendUrl: process.env.MEDUSA_BACKEND_URL || "https://api.younoya.com",
   },
   modules: [
     { resolve: "./src/modules/younoya-otp" },

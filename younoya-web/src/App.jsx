@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 import SmoothScroll from './components/SmoothScroll'
 import Navbar from './components/Navbar'
@@ -8,6 +8,8 @@ import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
 import Shop from './pages/Shop'
 import GiftFinder from './pages/GiftFinder'
+import Blog from './pages/Blog'
+import BlogPost from './pages/BlogPost'
 import NotFound from './pages/NotFound'
 import SeoHead from './seo/SeoHead'
 import './styles/global.css'
@@ -26,6 +28,11 @@ function ScrollToTop() {
   }, [pathname, hash])
   return null
 }
+function JournalRedirect() {
+  const { slug } = useParams()
+  return <Navigate to={slug ? `/blog/${slug}` : '/blog'} replace />
+}
+
 function StoreNavigation() {
   return <><Navbar /><CartDrawer /></>
 }
@@ -43,6 +50,10 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/find-a-gift" element={<GiftFinder />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/journal" element={<Navigate to="/blog" replace />} />
+              <Route path="/journal/:slug" element={<JournalRedirect />} />
               <Route path="/product/:handle" element={<ProductDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
