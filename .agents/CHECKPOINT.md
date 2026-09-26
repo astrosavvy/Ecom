@@ -29,10 +29,9 @@
   - Authored `ComingSoon.jsx` and `ComingSoon.css` mounted on `Home.jsx` (`/`).
   - Implemented Option B visual foundation: `diorama-arrival-desktop.webp` (1920×1080) on desktop with `scene_1_start.jpg` fallback on mobile.
   - Multi-stop bottom-half dark gradient scrim (`rgba(8,11,20,0) -> rgba(8,11,20,0.65) -> #080B14`).
-  - Cartier-grade typography: Golden Younoya crest (`✦`), brand mark, overline badge, `COMING SOON`, brand promise subtitle, and VIP private email preview invitation form.
-  - Removed all public links to unfinished collections from the Coming Soon page on `main`.
-  - Preserved Edge Admin Console (`/admin`) for staff catalog management.
-  - Hidden top navbar and cart drawer on `/` via `StoreNavigation`.
+  - Cartier-grade minimalist presentation: Golden Younoya crest (`✦`), brand mark, bold `COMING SOON` headline, and VIP private email preview invitation form.
+  - Removed badge, description paragraph, and footer copyright bar per user request for ultra-clean luxury minimalism.
+  - Hidden top navbar and cart drawer on `/` via `StoreNavigation`. Staff console accessible directly at `/admin`.
 - **Documentation & Instructions**:
   - Codified Rule 8 (*Dual Branch Strategy: prepare-to-launch vs main*) into `.agents/rules/architecture.md`.
   - Updated `README.md` with explicit local switching commands between both branches.

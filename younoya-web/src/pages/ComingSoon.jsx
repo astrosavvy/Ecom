@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, Sparkles, Check } from 'lucide-react'
+import { Sparkles, Check } from 'lucide-react'
 import '../styles/ComingSoon.css'
 
 export default function ComingSoon() {
@@ -45,21 +44,10 @@ export default function ComingSoon() {
             <span className="coming-soon__logotype">YOUNOYA</span>
           </div>
 
-          {/* Intention Overline */}
-          <div className="coming-soon__badge">
-            <span>ASTROLOGY-BACKED GIFTING • CONSECRATED HEIRLOOMS</span>
-          </div>
-
           {/* Main Coming Soon Headline */}
           <h1 className="coming-soon__title">
             COMING <em>SOON</em>
           </h1>
-
-          {/* Brand Promise Subtitle */}
-          <p className="coming-soon__description">
-            For every chapter. We are preparing to unveil our boutique collection of
-            astrology-backed gift hampers and hand-consecrated talismans curated for what matters.
-          </p>
 
           {/* Private VIP Access Form */}
           <div className="coming-soon__action-box">
@@ -87,12 +75,6 @@ export default function ComingSoon() {
             )}
           </div>
         </motion.div>
-
-        {/* Discreet Operational Footer */}
-        <footer className="coming-soon__footer">
-          <span>© {new Date().getFullYear()} YOUNOYA ATELIER • ALL RIGHTS RESERVED</span>
-          <Link to="/admin" className="coming-soon__staff-link">Staff Console</Link>
-        </footer>
       </div>
     </main>
   )
