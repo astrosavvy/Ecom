@@ -9,9 +9,9 @@
 ## 1. 📍 Executive Project Status
 
 - **Current Phase**: Phase 7 — Production Coming Soon Deployed on `main` & Full Platform Preserved on `prepare-to-launch`
-- **Status**: Successfully pushed full-fledged storefront (10-brooch collection, elevated Aster gift finder, scroll diorama film, 3D cylinder, cart drawer, blog, and admin console) to GitHub `prepare-to-launch` branch (`origin/prepare-to-launch`). On `main`, deployed the pure Coming Soon landing page (`/`) using Option B (Boutique Facade & Mascot Arrival `diorama-arrival-desktop.webp` with bottom-half dark gradient overlay and Cartier-grade typography) with zero unfinished public links. Preserved the Edge Admin Console (`/admin`) for staff operations. Pre-rendered static HTML shells. Root build verified cleanly with exit code 0.
-- **Active Task**: All changes implemented and verified locally on `main`. Ready for single final commit. Awaiting explicit user approval before `git push origin main`.
-- **Last Updated**: 2026-09-26T17:20:00+05:30
+- **Status**: Successfully deployed Coming Soon page on `main` and preserved complete platform on `prepare-to-launch`. Eliminated text carets on display typography (`user-select: none`, `caret-color: transparent`, `cursor: default`) and removed rectangular `:focus-visible` browser outline from input fields and pills, replacing it with a refined luxury gold focus glow. Build verified with exit code 0.
+- **Active Task**: Input focus styling and text caret elimination verified. Single final commit prepared locally. Ready to ask user for push permission.
+- **Last Updated**: 2026-09-26T18:13:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
 - **Primary Production Build**: younoya-web/dist and root dist verified; build exit 0.
@@ -19,6 +19,18 @@
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-26] Caret Elimination on Typography & Rectangular Input Focus Outline Fixed (Antigravity)
+- **Eliminated Caret on Headings & Typography**:
+  - Added `user-select: none`, `-webkit-user-select: none`, `caret-color: transparent`, and `cursor: default` to `.coming-soon`, `.coming-soon__content`, `.coming-soon__title`, `.coming-soon__brand`, and media containers.
+  - Clicking on "COMING SOON", "✦ YOUNOYA", or the page background no longer displays a blinking text caret or triggers an I-beam cursor.
+  - Kept `caret-color: #D6B06A` and `cursor: text` strictly isolated to the email input field.
+- **Fixed Rectangular Box Around Text Box on Click**:
+  - In `global.css`, exempted `input` and `textarea` from the global `:focus-visible { outline: 1px solid #e8c57f; outline-offset: 4px; }` rule, which was drawing a floating rectangular outline around the rounded pill input when clicked.
+  - In `ComingSoon.css`, enforced `outline: none !important; border: none !important; box-shadow: none !important;` on `.coming-soon__input:focus` and `:focus-visible`.
+  - Added smooth luxury focus styling to the rounded form container via `.coming-soon__notify-form:focus-within` with subtle golden glow (`border-color: rgba(214, 176, 106, 0.75)`, `box-shadow: 0 0 0 1px rgba(214, 176, 106, 0.3)`).
+- **Build Verification**:
+  - `npm run build` compiled 2,301 modules cleanly in 5.89s with exit code 0; synced all 13 crawlable route shells and 11 admin shells to `dist/`.
 
 ### [2026-09-26] Production Coming Soon Deployed on `main` & Full Platform Preserved on `prepare-to-launch` (Antigravity)
 - **Full Platform Remote Preservation (`prepare-to-launch`)**:
