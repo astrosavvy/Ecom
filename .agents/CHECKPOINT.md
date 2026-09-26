@@ -8,17 +8,55 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 6 — Edge-Hosted React Admin Console & Headless Server Architecture Deployed
-- **Status**: Relocated the Admin Console to run 100% on the frontend edge (`https://younoya.com/admin/*`) via Cloudflare Workers Static Assets with 16 custom React 19 management modules. Set `admin: { disable: true }` in `backend/medusa-config.ts` so the VPS operates strictly as a headless JSON REST API with zero UI memory or CPU load. Media uploaded via Admin (`POST /admin/uploads`) is saved permanently on server disk (`backend/static/`) with lossless compression and served with aggressive edge caching (`max-age=31536000`), requiring ZERO frontend rebuilds or git commits when authoring posts. Codified Architecture Rules 5, 6, and 7 into `.agents/rules/architecture.md`, `AGENTS.md`, and `.agents/AGENTS.md`. Built 2,301 modules cleanly with exit code 0; generated 13 crawlable storefront shells and 11 admin shells with valid metadata.
-- **Active Task**: All changes implemented and verified locally. Ready for single final commit. Awaiting explicit user approval before `git push`.
-- **Last Updated**: 2026-09-25T16:35:00+05:30
+- **Current Phase**: Phase 7 — `prepare-to-launch` Preserved, Coming Soon Landing Deployed on `main`, 10-Brooch Catalog Overhaul & Elevated Gift Finder
+- **Status**: Successfully created and pushed branch `prepare-to-launch` to GitHub remote (`origin`), preserving the entire full-fledged interactive platform (scroll diorama film, 3D cylinder, cart drawer, admin console). On `main`, deployed Cartier-grade Coming Soon landing page on `/` using Option B boutique facade with bottom dark velvet gradient. Replaced legacy products with the 10 authentic handcrafted brooches from `YOUNOYA_Brooch_Collection_Updated_Dimensions_Weights_Pricing.docx` (all dimensions, weights, and INR pricing) supported by luxury SVG glyph emblems. Elevated `/find-a-gift` with Aster guide halo, dynamic resonance alignment bar, cosmic elemental attunement, and direct brooch matches. Generated 15 crawlable route shells and 11 admin shells. Root build verified with exit code 0 (2,303 modules, 6.69s).
+- **Active Task**: All changes implemented and verified locally. Ready for single final commit. Awaiting explicit user approval before `git push origin main`.
+- **Last Updated**: 2026-09-26T17:15:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: younoya-web/dist and root dist verified; 2,301 modules, build exit 0, 7.14 seconds (2026-09-25).
+- **Primary Production Build**: younoya-web/dist and root dist verified; 2,303 modules, build exit 0, 6.69 seconds (2026-09-26).
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-26] `prepare-to-launch` Preserved, Coming Soon Landing, 10-Brooch Catalog & Elevated Gift Finder Deployed (Antigravity)
+- **Branch Preservation (`prepare-to-launch`)**:
+  - Created and pushed branch `prepare-to-launch` to GitHub `astrosavvy/Ecom`.
+  - Permanently preserved the full-fledged interactive e-commerce platform (scroll diorama film, 3D perspective cylinder, luxury cart drawer, blog, and admin console). Developers can switch to `prepare-to-launch` for full local testing.
+- **Production Coming Soon Landing Page (`main`)**:
+  - Authored `younoya-web/src/pages/ComingSoon.jsx` and `younoya-web/src/styles/ComingSoon.css`.
+  - Option B visual foundation: `diorama-arrival-desktop.webp` (1920×1080) for desktop and `scene_1_start.jpg` for mobile fallback.
+  - Multi-stop bottom-half dark gradient scrim (`rgba(8,11,20,0) -> #080B14`).
+  - Cartier-grade typography: Gilded Younoya crest (`✦`), brand mark, overline badge, `COMING SOON`, brand promise, VIP email preview invite form, and links to `/shop`, `/find-a-gift`, `/blog`, and `/admin`.
+  - Mounted on `Home.jsx` (`/`), kept StoryFilm on `/story`, and updated `StoreNavigation` to omit sticky navigation on `/`.
+- **10 Authentic Handcrafted Brooches Catalog Overhaul**:
+  - Replaced legacy placeholder products in `younoya-web/src/data/products.js` with the 10 authentic pieces from `YOUNOYA_Brooch_Collection_Updated_Dimensions_Weights_Pricing.docx`:
+    1. *THE GOLDEN FLIGHT* (Rising Phoenix) — ₹2,499 (4.30×1.50 in, 42.92g, Gold Finish & Clear Crystals)
+    2. *THE VERDANT RISING* (Green Crystal Phoenix) — ₹2,350 (4.50×1.50 in, 39.52g, Emerald Crystals)
+    3. *FLAMINGO GRACE* (Crystal Flamingo) — ₹2,350 (4.30×1.20 in, 42.10g, Ruby Accent Stone)
+    4. *VIVID TOUCAN MUSE* (Multicolor Toucan) — ₹2,550 (3.80×1.20 in, 31.90g, Red Enamel Beak)
+    5. *GOLDEN INSTINCT* (Black Metal Squirrel) — ₹2,450 (2.70×1.80 in, 27.65g, Gold Detailing & Acorn Crystal)
+    6. *SOLAR EMBRACE* (Solar Dragonfly) — ₹2,250 (2.80×2.80 in, 30.00g, Gold Finish & Clear Crystals)
+    7. *FIRE & RADIANCE* (Radiant Scorpion) — ₹2,099 (3.10×1.30 in, 36.04g, Red & Orange Crystals)
+    8. *FLAMINGO AURA* (Purple Crystal Flamingo) — ₹2,550 (3.80×1.50 in, 37.73g, Amethyst Hue & Silver Frame)
+    9. *CAT'S EYE* (Long-Tailed Cat) — ₹2,099 (3.80×1.20 in, 37.06g, Silver Metal & Emerald Eyes)
+    10. *THE INNER KINGDOM* (Multi-Animal Sanctum) — ₹1,500 (2.10×1.30 in, 10.86g, Silver Metal & Green Crystals)
+  - Generated 10 bespoke luxury SVG emblem visual assets in `younoya-web/public/media/brooches/`.
+  - Rebuilt `Shop.jsx` with intention filters (`Confidence & Power`, `Vitality & Renewal`, `Love & Devotion`, `Wealth & Wisdom`, `Protection`), dimension badges, and exact gram weights.
+  - Exported `getProductByHandle` and `getRelatedProducts` helpers.
+- **Elevated Gift Finder Consultation (`/find-a-gift`)**:
+  - Upgraded Aster consultation flow with dynamic representative halo, real-time Guide speech status (`Listening`, `Attuning`, `Divining`), and dynamic **Celestial Resonance Alignment Gauge** (`70% -> 98% Harmonics`).
+  - Mapped all flow stages directly to the 10 authentic brooches.
+  - Results view showcases matching brooches with exact dimensions, weights, and INR pricing.
+- **SEO & Pre-Rendering**:
+  - Updated `metadata.js` and `generate-seo.mjs` for Coming Soon home page and 10 brooches collection.
+  - Pre-rendered 15 crawlable HTML shells and 11 admin shells with valid canonicals and JSON-LD schema.
+- **Rule Codification & Documentation**:
+  - Added Rule 8 (*Dual Branch Strategy: prepare-to-launch vs main*) to `.agents/rules/architecture.md`.
+  - Updated `README.md` with branch checkout and execution guide.
+- **Build Verification**:
+  - Both `npm --prefix younoya-web run build` and root `npm run build` compiled 2,303 modules in 6.69s with exit code 0. Clean production assets synchronized to root `dist/`.
 
 ### [2026-09-25] Edge-Hosted React Admin Console & Headless Server Architecture Deployed (Antigravity)
 - **Edge-Hosted Admin Console Deployment (`younoya-web/src/admin`)**:

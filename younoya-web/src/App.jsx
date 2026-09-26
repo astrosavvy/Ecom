@@ -5,6 +5,7 @@ import SmoothScroll from './components/SmoothScroll'
 import Navbar from './components/Navbar'
 import CartDrawer from './components/CartDrawer'
 import Home from './pages/Home'
+import StoryFilm from './components/StoryFilm'
 import ProductDetail from './pages/ProductDetail'
 import Shop from './pages/Shop'
 import GiftFinder from './pages/GiftFinder'
@@ -38,7 +39,7 @@ function JournalRedirect() {
 
 function StoreNavigation() {
   const { pathname } = useLocation()
-  if (pathname.startsWith('/admin')) return null
+  if (pathname === '/' || pathname.startsWith('/admin')) return null
   return <><Navbar /><CartDrawer /></>
 }
 
@@ -53,6 +54,7 @@ export default function App() {
           <main>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/story" element={<StoryFilm />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/find-a-gift" element={<GiftFinder />} />
               <Route path="/blog" element={<Blog />} />

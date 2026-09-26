@@ -20,19 +20,19 @@ export function getSeo(pathname) {
 
   if (path === '/') return {
     path,
-    title: 'Meaningful Gifts & Keepsakes | Younoya',
-    description: 'Explore Younoya’s intentional keepsakes and astrology-inspired gifting. Follow the boutique story, discover the collection, or let us guide your choice.',
-    image: '/media/diorama-handover-desktop.webp',
+    title: 'YOUNOYA — Coming Soon | Astrology-Backed Gifting',
+    description: 'Younoya is preparing to open its doors. Astrology-backed gifting, curated gift hampers, and consecrated Vedic keepsakes for every chapter.',
+    image: '/media/diorama-arrival-desktop.webp',
     schema: [
       { '@context': 'https://schema.org', '@type': 'Organization', name: 'Younoya', url: SITE_URL, logo: absolute('/brand.webp') },
-      { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Younoya', url: SITE_URL, description: 'Meaningful gifts and keepsakes chosen with intention.' },
+      { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Younoya', url: SITE_URL, description: 'Astrology-backed gifting, curated gift hampers, and consecrated keepsakes.' },
     ],
   }
 
   if (path === '/shop') return {
     path,
-    title: 'Explore Meaningful Gifts & Keepsakes | Younoya',
-    description: 'Explore eight considered Younoya keepsakes for connection, new beginnings, balance and abundance. Discover each object’s story, materials and price.',
+    title: 'Explore Consecrated Brooches & Heirlooms | Younoya',
+    description: 'Explore ten authentic handcrafted consecrated brooches for confidence, renewal, devotion, and grounded abundance. Discover each piece’s exact dimensions, weight, and astrological attunement.',
     image: PRODUCTS[0].primaryImage,
     schema: {
       '@context': 'https://schema.org',

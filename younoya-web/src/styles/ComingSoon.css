@@ -1,0 +1,296 @@
+.coming-soon {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  background-color: #080B14;
+  color: #FAF6EE;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow-x: hidden;
+  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+}
+
+/* Background Facade Image with Object-Cover */
+.coming-soon__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.coming-soon__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: brightness(0.92) contrast(1.05);
+}
+
+/* Half-bottom darker shading gradient */
+.coming-soon__gradient-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 11, 20, 0) 0%,
+    rgba(8, 11, 20, 0.2) 25%,
+    rgba(8, 11, 20, 0.65) 50%,
+    rgba(8, 11, 20, 0.92) 75%,
+    #080B14 100%
+  );
+  pointer-events: none;
+}
+
+/* Editorial Content Container */
+.coming-soon__content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 8rem 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.coming-soon__inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Brand Mark */
+.coming-soon__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.coming-soon__crest {
+  color: #D6B06A;
+  font-size: 1.1rem;
+  line-height: 1;
+  animation: crestPulse 4s ease-in-out infinite;
+}
+
+@keyframes crestPulse {
+  0%, 100% { opacity: 0.6; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.coming-soon__logotype {
+  font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.3em;
+  color: #F0D08F;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Overline Badge */
+.coming-soon__badge {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(214, 176, 106, 0.25);
+  background: rgba(20, 10, 23, 0.45);
+  backdrop-filter: blur(12px);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  color: #D6B06A;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+/* Main Headline */
+.coming-soon__title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  color: #FAF6EE;
+  margin: 0 0 1.25rem;
+  text-transform: uppercase;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
+}
+
+.coming-soon__title em {
+  font-style: italic;
+  font-weight: 400;
+  color: #F0D08F;
+  letter-spacing: 0.04em;
+}
+
+/* Description */
+.coming-soon__description {
+  max-width: 620px;
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  line-height: 1.65;
+  color: #D1D5DB;
+  margin: 0 0 2.25rem;
+  font-weight: 300;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Private VIP Notification Box */
+.coming-soon__action-box {
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 2.5rem;
+}
+
+.coming-soon__notify-form {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  background: rgba(14, 10, 18, 0.75);
+  border: 1px solid rgba(214, 176, 106, 0.35);
+  border-radius: 9999px;
+  padding: 0.35rem 0.4rem 0.35rem 1.25rem;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.coming-soon__input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FAF6EE;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.coming-soon__input::placeholder {
+  color: #9CA3AF;
+  font-size: 0.85rem;
+}
+
+.coming-soon__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.35rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #F0D08F 0%, #D6B06A 100%);
+  color: #080B14;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.coming-soon__btn:hover {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F0D08F 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(214, 176, 106, 0.4);
+}
+
+.coming-soon__subscribed {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  background: rgba(20, 15, 25, 0.85);
+  border: 1px solid rgba(214, 176, 106, 0.5);
+  font-size: 0.85rem;
+  color: #FAF6EE;
+}
+
+/* Links */
+.coming-soon__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+  font-size: 0.85rem;
+  color: #9CA3AF;
+  margin-bottom: 2rem;
+}
+
+.coming-soon__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #D6B06A;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.coming-soon__link:hover {
+  color: #F0D08F;
+  text-decoration: underline;
+}
+
+.coming-soon__link-divider {
+  color: rgba(214, 176, 106, 0.3);
+}
+
+/* Footer */
+.coming-soon__footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(214, 176, 106, 0.15);
+  padding-top: 1.5rem;
+  font-size: 0.7rem;
+  color: #6B7280;
+  letter-spacing: 0.1em;
+}
+
+.coming-soon__staff-link {
+  color: #6B7280;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.coming-soon__staff-link:hover {
+  color: #D6B06A;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+  .coming-soon__content {
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+
+  .coming-soon__notify-form {
+    flex-direction: column;
+    border-radius: 1rem;
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .coming-soon__btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem;
+  }
+
+  .coming-soon__footer {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+}
