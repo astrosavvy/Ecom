@@ -41,3 +41,21 @@
 - **No Accidental Purging**: Core platform operational routes and subsystems (`/admin/*`, `/blog/*`, `/shop`, `/find-a-gift`) MUST NOT be purged, deleted, or omitted during visual redesigns, homepage diorama iterations, or styling updates.
 - **Router Audit Requirement**: Any modification to `younoya-web/src/App.jsx` or router structure must verify that all operational consoles and public endpoints remain fully routed.
 
+## 8. Dual Branch Strategy: `prepare-to-launch` vs `main`
+- **`prepare-to-launch` Branch (GitHub Remote & Local Full Platform)**:
+  - Preserves the full-fledged, interactive Younoya e-commerce experience (10 handcrafted brooches collection, elevated Aster gift finder, scroll-scrubbed hero film, 3D perspective cylinder, luxury cart drawer, blog, and admin console).
+  - Use this branch for ongoing local feature development, photos integration, and staging before public launch:
+    ```bash
+    git checkout prepare-to-launch
+    npm run dev
+    ```
+- **`main` Branch (Production Deployment)**:
+  - Serves the production Coming Soon landing page at `https://younoya.com` (`/`), featuring the boutique facade diorama with dark bottom shading and luxury typography.
+  - Keeps operational staff route active (`/admin` for management console).
+  - Use this branch to verify the live production experience:
+    ```bash
+    git checkout main
+    npm run dev
+    ```
+
+

@@ -28,6 +28,22 @@ docs/DEPLOYMENT.md     full VPS + Pages runbook
 .agents/YOUNOYA_PLATFORM.md  complete system reference
 ```
 
+## Dual Branch Architecture (`prepare-to-launch` vs `main`)
+
+* **`prepare-to-launch` Branch (Full Platform)**: 10 handcrafted brooches collection, elevated Aster gift finder, scroll diorama film, 3D cylinder, cart drawer, blog, and admin console.
+  ```bash
+  # To run the full-fledged website locally:
+  git checkout prepare-to-launch
+  npm run dev          # http://localhost:5173
+  ```
+
+* **`main` Branch (Production Coming Soon)**: Coming Soon landing page (`/`) with boutique facade and bottom velvet gradient, plus staff console (`/admin`).
+  ```bash
+  # To run the production Coming Soon branch locally:
+  git checkout main
+  npm run dev          # http://localhost:5173
+  ```
+
 ## Run it
 
 Any static server for the built storefront, or dev:
@@ -36,8 +52,7 @@ Any static server for the built storefront, or dev:
 cd younoya-web
 npm install
 npm run dev          # http://localhost:5173  (VITE_API_URL defaults to https://api.younoya.com)
-npm run build        # dist/ 218 modules 751k — verify no TS errors before push
-npx wrangler deploy  # Cloudflare Pages via wrangler.jsonc
+npm run build        # dist/ build verification
 ```
 
 Backend (Medusa — never build on VPS 956MB):

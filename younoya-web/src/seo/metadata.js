@@ -20,12 +20,12 @@ export function getSeo(pathname) {
 
   if (path === '/') return {
     path,
-    title: 'Meaningful Gifts & Keepsakes | Younoya',
-    description: 'Explore Younoya’s intentional keepsakes and astrology-inspired gifting. Follow the boutique story, discover the collection, or let us guide your choice.',
-    image: '/media/diorama-handover-desktop.webp',
+    title: 'YOUNOYA — Coming Soon | Astrology-Backed Gifting',
+    description: 'Younoya is preparing to open its doors. Astrology-backed gifting, curated gift hampers, and consecrated Vedic keepsakes for every chapter.',
+    image: '/media/diorama-arrival-desktop.webp',
     schema: [
       { '@context': 'https://schema.org', '@type': 'Organization', name: 'Younoya', url: SITE_URL, logo: absolute('/brand.webp') },
-      { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Younoya', url: SITE_URL, description: 'Meaningful gifts and keepsakes chosen with intention.' },
+      { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Younoya', url: SITE_URL, description: 'Astrology-backed gifting, curated gift hampers, and consecrated keepsakes.' },
     ],
   }
 

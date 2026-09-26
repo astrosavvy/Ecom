@@ -8,17 +8,37 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 6 — Edge-Hosted React Admin Console & Headless Server Architecture Deployed
-- **Status**: Relocated the Admin Console to run 100% on the frontend edge (`https://younoya.com/admin/*`) via Cloudflare Workers Static Assets with 16 custom React 19 management modules. Set `admin: { disable: true }` in `backend/medusa-config.ts` so the VPS operates strictly as a headless JSON REST API with zero UI memory or CPU load. Media uploaded via Admin (`POST /admin/uploads`) is saved permanently on server disk (`backend/static/`) with lossless compression and served with aggressive edge caching (`max-age=31536000`), requiring ZERO frontend rebuilds or git commits when authoring posts. Codified Architecture Rules 5, 6, and 7 into `.agents/rules/architecture.md`, `AGENTS.md`, and `.agents/AGENTS.md`. Built 2,301 modules cleanly with exit code 0; generated 13 crawlable storefront shells and 11 admin shells with valid metadata.
-- **Active Task**: All changes implemented and verified locally. Ready for single final commit. Awaiting explicit user approval before `git push`.
-- **Last Updated**: 2026-09-25T16:35:00+05:30
+- **Current Phase**: Phase 7 — Production Coming Soon Deployed on `main` & Full Platform Preserved on `prepare-to-launch`
+- **Status**: Successfully pushed full-fledged storefront (10-brooch collection, elevated Aster gift finder, scroll diorama film, 3D cylinder, cart drawer, blog, and admin console) to GitHub `prepare-to-launch` branch (`origin/prepare-to-launch`). On `main`, deployed the pure Coming Soon landing page (`/`) using Option B (Boutique Facade & Mascot Arrival `diorama-arrival-desktop.webp` with bottom-half dark gradient overlay and Cartier-grade typography) with zero unfinished public links. Preserved the Edge Admin Console (`/admin`) for staff operations. Pre-rendered static HTML shells. Root build verified cleanly with exit code 0.
+- **Active Task**: All changes implemented and verified locally on `main`. Ready for single final commit. Awaiting explicit user approval before `git push origin main`.
+- **Last Updated**: 2026-09-26T17:20:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: younoya-web/dist and root dist verified; 2,301 modules, build exit 0, 7.14 seconds (2026-09-25).
+- **Primary Production Build**: younoya-web/dist and root dist verified; build exit 0.
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-26] Production Coming Soon Deployed on `main` & Full Platform Preserved on `prepare-to-launch` (Antigravity)
+- **Full Platform Remote Preservation (`prepare-to-launch`)**:
+  - Pushed commit `f55711d` to GitHub `origin/prepare-to-launch`.
+  - Permanently preserved the full-fledged interactive e-commerce platform (10 authentic handcrafted brooches, elevated Aster consultation flow, scroll diorama film, 3D cylinder, cart drawer, blog, and admin console).
+  - Developers run `git checkout prepare-to-launch && npm run dev` to develop or preview the complete store.
+- **Production Coming Soon Landing Page (`main`)**:
+  - Authored `ComingSoon.jsx` and `ComingSoon.css` mounted on `Home.jsx` (`/`).
+  - Implemented Option B visual foundation: `diorama-arrival-desktop.webp` (1920×1080) on desktop with `scene_1_start.jpg` fallback on mobile.
+  - Multi-stop bottom-half dark gradient scrim (`rgba(8,11,20,0) -> rgba(8,11,20,0.65) -> #080B14`).
+  - Cartier-grade typography: Golden Younoya crest (`✦`), brand mark, overline badge, `COMING SOON`, brand promise subtitle, and VIP private email preview invitation form.
+  - Removed all public links to unfinished collections from the Coming Soon page on `main`.
+  - Preserved Edge Admin Console (`/admin`) for staff catalog management.
+  - Hidden top navbar and cart drawer on `/` via `StoreNavigation`.
+- **Documentation & Instructions**:
+  - Codified Rule 8 (*Dual Branch Strategy: prepare-to-launch vs main*) into `.agents/rules/architecture.md`.
+  - Updated `README.md` with explicit local switching commands between both branches.
+- **Build Verification**:
+  - Compiled cleanly with exit code 0; generated valid crawlable static shells.
+
 
 ### [2026-09-25] Edge-Hosted React Admin Console & Headless Server Architecture Deployed (Antigravity)
 - **Edge-Hosted Admin Console Deployment (`younoya-web/src/admin`)**:

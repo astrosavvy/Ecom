@@ -1,5 +1,5 @@
-import StoryFilm from '../components/StoryFilm'
+import ComingSoon from './ComingSoon'
 
 export default function Home() {
-  return <StoryFilm />
+  return <ComingSoon />
 }

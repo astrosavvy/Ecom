@@ -38,7 +38,7 @@ function JournalRedirect() {
 
 function StoreNavigation() {
   const { pathname } = useLocation()
-  if (pathname.startsWith('/admin')) return null
+  if (pathname === '/' || pathname.startsWith('/admin')) return null
   return <><Navbar /><CartDrawer /></>
 }
 

@@ -41,7 +41,7 @@ async function writeDiscoveryFiles() {
 
 function fallbackContent(route, seo) {
   if (route.startsWith('/admin')) return `<main><h1>Younoya Console</h1><p>Administrative portal for the Younoya team.</p></main>`
-  if (route === '/') return `<main><h1>Younoya — meaningful gifts and keepsakes</h1><p>${escapeHtml(seo.description)}</p><p><a href="/shop">Explore the collection</a> or <a href="/find-a-gift">let Younoya help you choose</a>.</p></main>`
+  if (route === '/') return `<main><h1>YOUNOYA — Coming Soon</h1><p>${escapeHtml(seo.description)}</p></main>`
   if (route === '/shop') return `<main><h1>The Younoya collection</h1><p>${escapeHtml(seo.description)}</p><ul>${PRODUCTS.map(product => `<li><a href="/product/${product.handle}">${escapeHtml(product.name)}</a> — ${escapeHtml(product.price)}</li>`).join('')}</ul></main>`
   if (route === '/find-a-gift') return `<main><h1>Let Younoya help you choose</h1><p>${escapeHtml(seo.description)}</p><p><a href="/shop">Explore the collection</a>.</p></main>`
   if (route === '/blog') return `<main><h1>The Younoya Journal</h1><p>${escapeHtml(seo.description)}</p><p><a href="/shop">Explore keepsakes</a> or read our stories.</p></main>`
