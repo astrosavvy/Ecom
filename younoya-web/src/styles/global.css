@@ -19,6 +19,8 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-scrolling iframe { pointer-events: none; }
 
 :focus-visible { outline: 1px solid #e8c57f; outline-offset: 4px; }
+input:focus, input:focus-visible,
+textarea:focus, textarea:focus-visible { outline: none !important; }
 
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {
   body, button, a, input { cursor: auto; }

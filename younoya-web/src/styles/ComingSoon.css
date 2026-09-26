@@ -10,6 +10,11 @@
   justify-content: flex-end;
   overflow-x: hidden;
   font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  caret-color: transparent;
+  cursor: default;
 }
 
 /* Background Facade Image with Object-Cover */
@@ -20,6 +25,9 @@
   height: 100%;
   z-index: 1;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
 }
 
 .coming-soon__image {
@@ -28,6 +36,9 @@
   object-fit: cover;
   object-position: center 30%;
   filter: brightness(0.92) contrast(1.05);
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
 }
 
 /* Half-bottom darker shading gradient */
@@ -60,6 +71,10 @@
   align-items: center;
   text-align: center;
   box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  cursor: default;
 }
 
 .coming-soon__inner {
@@ -67,6 +82,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Brand Mark */
@@ -75,6 +92,10 @@
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  cursor: default;
 }
 
 .coming-soon__crest {
@@ -82,6 +103,8 @@
   font-size: 1.1rem;
   line-height: 1;
   animation: crestPulse 4s ease-in-out infinite;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 @keyframes crestPulse {
@@ -96,53 +119,39 @@
   color: #F0D08F;
   font-weight: 600;
   text-transform: uppercase;
-}
-
-/* Overline Badge */
-.coming-soon__badge {
-  display: inline-block;
-  padding: 0.35rem 1rem;
-  border-radius: 9999px;
-  border: 1px solid rgba(214, 176, 106, 0.25);
-  background: rgba(20, 10, 23, 0.45);
-  backdrop-filter: blur(12px);
-  font-size: 0.68rem;
-  letter-spacing: 0.22em;
-  color: #D6B06A;
-  text-transform: uppercase;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  cursor: default;
 }
 
 /* Main Headline */
 .coming-soon__title {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  font-size: clamp(3rem, 8.5vw, 6rem);
   font-weight: 300;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   line-height: 1;
   color: #FAF6EE;
-  margin: 0 0 1.25rem;
+  margin: 0.5rem 0 2rem;
   text-transform: uppercase;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  caret-color: transparent;
+  cursor: default;
 }
 
 .coming-soon__title em {
   font-style: italic;
   font-weight: 400;
   color: #F0D08F;
-  letter-spacing: 0.04em;
-}
-
-/* Description */
-.coming-soon__description {
-  max-width: 620px;
-  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
-  line-height: 1.65;
-  color: #D1D5DB;
-  margin: 0 0 2.25rem;
-  font-weight: 300;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.05em;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+  cursor: default;
 }
 
 /* Private VIP Notification Box */
@@ -162,21 +171,45 @@
   padding: 0.35rem 0.4rem 0.35rem 1.25rem;
   backdrop-filter: blur(16px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  outline: none;
+}
+
+.coming-soon__notify-form:focus-within {
+  border-color: rgba(214, 176, 106, 0.75);
+  box-shadow: 0 0 0 1px rgba(214, 176, 106, 0.3), 0 10px 30px rgba(0, 0, 0, 0.5);
+  outline: none;
 }
 
 .coming-soon__input {
   flex: 1;
   background: transparent;
-  border: none;
-  outline: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
   color: #FAF6EE;
   font-size: 0.9rem;
   font-family: inherit;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
+  caret-color: #D6B06A;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.coming-soon__input:focus,
+.coming-soon__input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 .coming-soon__input::placeholder {
   color: #9CA3AF;
   font-size: 0.85rem;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .coming-soon__btn {
@@ -188,13 +221,22 @@
   background: linear-gradient(135deg, #F0D08F 0%, #D6B06A 100%);
   color: #080B14;
   border: none;
+  outline: none;
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
   transition: all 0.25s ease;
   white-space: nowrap;
+}
+
+.coming-soon__btn:focus,
+.coming-soon__btn:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(214, 176, 106, 0.5);
 }
 
 .coming-soon__btn:hover {
@@ -215,64 +257,11 @@
   color: #FAF6EE;
 }
 
-/* Links */
-.coming-soon__links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem 1.25rem;
-  font-size: 0.85rem;
-  color: #9CA3AF;
-  margin-bottom: 2rem;
-}
-
-.coming-soon__link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  color: #D6B06A;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.coming-soon__link:hover {
-  color: #F0D08F;
-  text-decoration: underline;
-}
-
-.coming-soon__link-divider {
-  color: rgba(214, 176, 106, 0.3);
-}
-
-/* Footer */
-.coming-soon__footer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid rgba(214, 176, 106, 0.15);
-  padding-top: 1.5rem;
-  font-size: 0.7rem;
-  color: #6B7280;
-  letter-spacing: 0.1em;
-}
-
-.coming-soon__staff-link {
-  color: #6B7280;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.coming-soon__staff-link:hover {
-  color: #D6B06A;
-}
-
 /* Mobile Adjustments */
 @media (max-width: 640px) {
   .coming-soon__content {
     padding-top: 4rem;
-    padding-bottom: 2rem;
+    padding-bottom: 3rem;
   }
 
   .coming-soon__notify-form {
@@ -286,11 +275,5 @@
     width: 100%;
     justify-content: center;
     padding: 0.75rem;
-  }
-
-  .coming-soon__footer {
-    flex-direction: column;
-    gap: 0.75rem;
-    text-align: center;
   }
 }

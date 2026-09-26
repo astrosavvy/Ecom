@@ -9,16 +9,26 @@
 ## 1. 📍 Executive Project Status
 
 - **Current Phase**: Phase 7 — `prepare-to-launch` Preserved, Coming Soon Landing Deployed on `main`, 10-Brooch Catalog Overhaul & Elevated Gift Finder
-- **Status**: Successfully created and pushed branch `prepare-to-launch` to GitHub remote (`origin`), preserving the entire full-fledged interactive platform (scroll diorama film, 3D cylinder, cart drawer, admin console). On `main`, deployed Cartier-grade Coming Soon landing page on `/` using Option B boutique facade with bottom dark velvet gradient. Replaced legacy products with the 10 authentic handcrafted brooches from `YOUNOYA_Brooch_Collection_Updated_Dimensions_Weights_Pricing.docx` (all dimensions, weights, and INR pricing) supported by luxury SVG glyph emblems. Elevated `/find-a-gift` with Aster guide halo, dynamic resonance alignment bar, cosmic elemental attunement, and direct brooch matches. Generated 15 crawlable route shells and 11 admin shells. Root build verified with exit code 0 (2,303 modules, 6.69s).
-- **Active Task**: All changes implemented and verified locally. Ready for single final commit. Awaiting explicit user approval before `git push origin main`.
-- **Last Updated**: 2026-09-26T17:15:00+05:30
+- **Status**: Complete platform preserved on `prepare-to-launch`. Eliminated text carets on display typography (`user-select: none`, `caret-color: transparent`, `cursor: default`) and removed rectangular `:focus-visible` browser outline from input fields and pills, replacing it with a refined luxury gold focus glow. Root build verified with exit code 0 (2,303 modules, 5.87s).
+- **Active Task**: All changes implemented and verified locally. Ready for single final commit. Awaiting explicit user approval before `git push origin prepare-to-launch`.
+- **Last Updated**: 2026-09-26T18:14:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: younoya-web/dist and root dist verified; 2,303 modules, build exit 0, 6.69 seconds (2026-09-26).
+- **Primary Production Build**: younoya-web/dist and root dist verified; 2,303 modules, build exit 0.
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-26] Caret Elimination on Typography & Rectangular Input Focus Outline Fixed (Antigravity)
+- **Eliminated Caret on Headings & Typography**:
+  - Added `user-select: none`, `-webkit-user-select: none`, `caret-color: transparent`, and `cursor: default` to typography and media containers.
+  - Clicking on headings or text no longer displays a blinking text caret or triggers an I-beam cursor.
+- **Fixed Rectangular Box Around Text Box on Click**:
+  - In `global.css`, exempted `input` and `textarea` from the global `:focus-visible { outline: 1px solid #e8c57f; outline-offset: 4px; }` rule.
+  - In `ComingSoon.css`, enforced `outline: none !important; border: none !important; box-shadow: none !important;` on `.coming-soon__input:focus` and `:focus-visible`.
+- **Build Verification**:
+  - `npm run build` compiled 2,303 modules cleanly in 5.87s with exit code 0.
 
 ### [2026-09-26] `prepare-to-launch` Preserved, Coming Soon Landing, 10-Brooch Catalog & Elevated Gift Finder Deployed (Antigravity)
 - **Branch Preservation (`prepare-to-launch`)**:
