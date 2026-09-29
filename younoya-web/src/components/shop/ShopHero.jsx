@@ -48,7 +48,6 @@ export default function ShopHero() {
           alt="YOUNOYA authentic luxury consecrated hamper" 
           fetchPriority="high"
         />
-        <div className="livora-hero-bar__seam-blend" />
         <div className="livora-hero-bar__badge">
           <div className="livora-hero-bar__badge-thumb">
             <img src="/media/products/the-golden-flight-card.webp" alt="Phoenix Brooch Preview" />

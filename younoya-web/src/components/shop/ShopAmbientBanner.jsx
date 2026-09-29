@@ -6,14 +6,14 @@ export default function ShopAmbientBanner() {
     <section className="livora-ambient">
       <div className="livora-ambient__box">
         <div className="livora-ambient__copy">
-          <span className="livora-kicker livora-kicker--gold">✧ NEW ARRIVAL</span>
-          <h2>The Consecration Altar & Gift Hamper</h2>
+          <span className="livora-kicker">✧ CURATED CONSECRATION</span>
+          <h2>The Consecration Altar & Bespoke Hamper</h2>
           <p>
-            Flexible, intentional and consecrated for real life. Each bespoke luxury hamper unites 
-            the consecrated brooch with our solid metallic apple candle and celestial attunement scroll.
+            Flexible, intentional, and consecrated for life's pivotal chapters. Each bespoke luxury hamper unites 
+            your chosen talisman with our solid metallic apple candle and celestial attunement scroll.
           </p>
-          <Link to="/find-a-gift" className="livora-btn livora-btn--gold">
-            Discover Collection <ArrowRight size={15} />
+          <Link to="/find-a-gift" className="livora-btn livora-btn--dark">
+            Discover Curated Hampers <ArrowRight size={15} />
           </Link>
         </div>
 

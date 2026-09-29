@@ -8,10 +8,10 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 10 — Livora-Grade Full Tile Hero & Seamless Mid-Join Architecture
-- **Status**: Production-ready on `main`. Upgraded `/shop` with a full-width light-themed tile bar where the editorial brand text and the brand hamper image join seamlessly in the middle (50/50 split with zero gap, subtle seam gradient blend, and floating collection badge with round thumbnail). Implemented the 3-column "Crafted to Inspire" bento banner and dark forest ambient banner. Build verified exit code 0; Wrangler dry run validated 166 assets.
-- **Active Task**: Verified locally. Ready for single final commit and user push approval.
-- **Last Updated**: 2026-09-29T19:20:00+05:30
+- **Current Phase**: Phase 11 — True Full-Width Hero, Mobile Engine, Authentic Intention Cards & Light Luxury Harmonisation
+- **Status**: Production-ready on `main`. Fully resolved the 3 visual defects: (1) Hero is now a true full-width architectural tile spanning viewport width with clean 50/50 midline join and zero muddy gradient overlay, with full mobile viewport optimization; (2) Excised all cartoon diorama mascot stills and installed authentic, Cartier-grade photoshoot heirloom photography across all 4 intentions; (3) Converted the jarring dark green ambient banner into a cohesive light luxury hamper feature banner and resolved bento typography wrapping. Build verified exit code 0; Wrangler dry run validated 166 assets. All component files strictly preserved under 85 lines.
+- **Active Task**: All changes committed locally and verified. Ready for user push approval.
+- **Last Updated**: 2026-09-29T20:23:00+05:30
 - **Last Agent**: Antigravity
 - **Primary URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 
@@ -19,7 +19,31 @@
 
 ## 2. 🏁 Consolidated Milestone History
 
-### [2026-09-29] Phase 10: Full Tile Hero Bar (Text & Image Joining at Midline) & Modular Refinement
+### [2026-09-29] Phase 11: True Full-Width Hero, Mobile Engine, Authentic Intention Cards & Light Luxury Harmonisation
+- **True Full-Width Hero Tile Bar (`ShopHero.jsx`, `Shop.jsx`, `Shop.css`)**:
+  - Extracted `ShopHero` into a dedicated full-width container (`.livora-hero-full-wrap`, `width: 100%; padding: 0 clamp(16px, 2.5vw, 40px);`), eliminating narrow boxed container margins and letting the tile bar stretch across the screen matching Livora.
+  - Completely excised `.livora-hero-bar__seam-blend`: eliminated the dirty, muddy grey gradient smudge down the center, achieving a clean, crisp architectural 50/50 midline junction.
+  - Dedicated Mobile Engine: fluid typography (`clamp(2rem, 8vw, 2.5rem)`), touch-friendly full-width pill buttons (`min-height: 48px`), controlled image aspect ratio (`min-height: 300px; aspect-ratio: 16/10;`), and responsive floating badge positioning that never clips or causes horizontal overflow.
+- **Authentic Luxury Intention Photography (`ShopIntentions.jsx`, `Shop.css`)**:
+  - Completely eradicated the "absurd and unprofessional" 3D cartoon diorama doll mascot stills (`scene_1_start.jpg` ... `scene_4_start.jpg`).
+  - Installed authentic, Cartier-grade physical photoshoot photography:
+    - *Courage & Presence*: Golden Jaguar talisman on carved stone and wood pedestal (`confidence-personal-power.webp`)
+    - *Growth & Vitality*: Five Sacred Crystal Consecration Jars on illuminated rotunda (`vitality-inner-balance.webp`)
+    - *Love & Devotion*: Solid Metallic Ruby Apple Candles with dried botanical core (`love-connection.webp`)
+    - *Instinct & Focus*: Raw Amethyst & Obsidian Eye Altar on brass pedestal (`wealth-prosperity.webp`)
+  - Upgraded to 3:4 portrait cards with refined gradient scrims and floating pill tags (`Explore Courage →`, `Explore Vitality →`, etc.). Responsive 2x2 grid layout on mobile viewports.
+- **Light Luxury Hamper Banner & Bento Typography Polish (`ShopAmbientBanner.jsx`, `ShopPhilosophyBento.jsx`, `Shop.css`)**:
+  - Eliminated the jarring `#283328` dark forest green box. Rebuilt `ShopAmbientBanner` as an alabaster luxury card (`#FFFFFF` on `#FAF7F2` with hairline border `#E8E2D8`), rich dark ink serif typography (`#1F1914`), dark pill button (`Discover Curated Hampers →`), and clean macro hamper photography with light-mode carousel buttons.
+  - Resolved bento text wrapping in `ShopPhilosophyBento` (`word-break: normal; hyphens: none`), ensuring natural editorial line breaks.
+- **Strict File Length Law Compliance (< 85 lines)**:
+  - `Shop.jsx`: 83 lines
+  - `ShopHero.jsx`: 64 lines
+  - `ShopIntentions.jsx`: 39 lines
+  - `ShopAmbientBanner.jsx`: 34 lines
+  - `ShopPhilosophyBento.jsx`: 53 lines
+- **Verification**:
+  - `npm run build`: Exit code 0 (2,383 modules transformed, 16 route shells, 11 admin shells).
+  - `npx wrangler deploy --dry-run`: Exit code 0 (166 assets validated).
 - **Full Tile Bar Hero (`ShopHero.jsx` & `Shop.css`)**:
   - Implemented the full-width architectural tile banner directly matching Livora Interiors (Image 3).
   - Left half: Light-themed warm cream background (`#FAF7F2`) with editorial typography, subtext, dual pill buttons, and avatar social proof.
