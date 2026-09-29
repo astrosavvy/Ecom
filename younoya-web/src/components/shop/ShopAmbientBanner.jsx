@@ -12,7 +12,7 @@ export default function ShopAmbientBanner() {
           </h2>
           <p>Tell Younoya who it is for and what you wish to celebrate. We will guide you toward a piece with purpose.</p>
           <div className="livora-ambient-promo__action">
-            <Link to="/find-a-gift" className="livora-btn livora-btn--terracotta">
+            <Link to="/find-a-gift" className="livora-btn livora-btn--gold">
               Let Younoya choose
             </Link>
             <span className="livora-promo-swirl">✦</span>

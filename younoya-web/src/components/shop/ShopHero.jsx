@@ -9,14 +9,13 @@ export default function ShopHero() {
         <h1 className="livora-hero-bar__title">Wear your meaning.<br /><em>Every day.</em></h1>
         <p className="livora-hero-bar__desc">A collection of symbolic brooches for the people, moments and intentions that stay with you.</p>
         <div className="livora-hero-bar__buttons">
-          <a href="#pieces" className="livora-btn livora-btn--terracotta">Explore the collection</a>
+          <a href="#pieces" className="livora-btn livora-btn--gold">Explore the collection</a>
           <Link to="/find-a-gift" className="livora-btn-watch">
             <span className="livora-play-icon"><Sparkles size={16} strokeWidth={1.5} /></span>
             <span>Find your piece</span>
           </Link>
         </div>
         <div className="livora-hero-bar__proof">
-          <span className="livora-hero-bar__proof-index" aria-hidden="true">01 / 10</span>
           <span className="livora-hero-bar__proof-text">Ten pieces. A meaning for every wearer.</span>
         </div>
       </div>

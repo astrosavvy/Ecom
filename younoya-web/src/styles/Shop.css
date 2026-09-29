@@ -86,29 +86,17 @@
 }
 
 .livora-btn--gold {
-  background: #C4973B;
-  color: #121510;
-  border: 1px solid #C4973B;
+  background: #D6B06A;
+  color: #1E1C1A;
+  border: 1px solid #D6B06A;
+  box-shadow: none;
 }
 
 .livora-btn--gold:hover {
-  background: #D9A948;
+  background: #F0D08F;
+  border-color: #F0D08F;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(196, 151, 59, 0.25);
-}
-
-.livora-btn--terracotta {
-  background: #8C4A26;
-  color: #FAF7F2;
-  border: 1px solid #8C4A26;
-  box-shadow: 0 4px 14px rgba(140, 74, 38, 0.22);
-}
-
-.livora-btn--terracotta:hover {
-  background: #753B1C;
-  border-color: #753B1C;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(140, 74, 38, 0.3);
+  box-shadow: 0 7px 20px rgba(158, 116, 50, .17);
 }
 
 .livora-btn-watch {
@@ -123,7 +111,7 @@
 }
 
 .livora-btn-watch:hover {
-  color: #8C4A26;
+  color: #9a753d;
 }
 
 .livora-play-icon {
@@ -692,16 +680,16 @@
 }
 
 .livora-card__quick-bag:hover {
-  background: #8C4A26;
-  color: #FFFFFF;
-  border-color: #8C4A26;
+  background: #D6B06A;
+  color: #1E1C1A;
+  border-color: #D6B06A;
   transform: scale(1.08);
 }
 
 .livora-card__quick-bag.is-added {
-  background: #2E5A36;
+  background: #9a753d;
   color: #FFFFFF;
-  border-color: #2E5A36;
+  border-color: #9a753d;
 }
 
 .livora-card__body {
@@ -789,7 +777,7 @@
 .livora-ambient-promo__kicker {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #8C4A26;
+  color: #9a753d;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   display: block;
@@ -807,7 +795,7 @@
 
 .livora-ambient-promo__copy h2 em {
   font-style: italic;
-  color: #8C4A26;
+  color: #9a753d;
   font-weight: 500;
 }
 
@@ -826,7 +814,7 @@
 }
 
 .livora-promo-swirl {
-  color: #8C4A26;
+  color: #9a753d;
   font-size: 1.25rem;
 }
 
@@ -1131,10 +1119,10 @@
 }
 .livora-hero-bar__left { padding-block: 42px; padding-right: 12px; }
 .livora-hero-bar__title { font-size: clamp(3.5rem, 5vw, 5.1rem); line-height: .96; margin: 20px 0 22px; text-wrap: balance; }
-.livora-hero-bar__title em { color: #95511f; }
+.livora-hero-bar__title em { color: #9a753d; }
 .livora-hero-bar__desc { max-width: 390px; font-size: 1.05rem; line-height: 1.7; margin-bottom: 30px; }
 .livora-hero-bar__buttons { margin-bottom: 30px; }
-.livora-hero-bar__proof { gap: 13px; }
+.livora-hero-bar__proof { gap: 0; }
 .livora-hero-bar__avatars img { width: 38px; height: 38px; object-position: center; }
 .livora-hero-bar__proof-text { font-size: .8rem; }
 .livora-hero-bar__right { height: 638px; min-width: 0; width: calc(100% + 72px); margin-left: -72px; isolation: isolate; }
@@ -1167,7 +1155,7 @@
 .livora-dual-features__grid { gap: 18px; }
 .livora-feature-tile { position: relative; min-height: 218px; padding: 24px 30px; background: #f5eee5; border: 0; box-shadow: none; }
 .livora-feature-tile__copy { position: relative; z-index: 1; flex: 0 0 58%; }
-.livora-feature-tile__badge { width: 40px; height: 40px; margin-bottom: 15px; background: #b87c3a; box-shadow: none; }
+.livora-feature-tile__badge { width: 40px; height: 40px; margin-bottom: 15px; background: #d6b06a; color: #1e1c1a; box-shadow: none; }
 .livora-feature-tile h3 { font-size: 1.38rem; }
 .livora-feature-tile p { max-width: 235px; }
 .livora-feature-tile__media { position: absolute; inset: 0 0 0 auto; width: 45%; height: 100%; margin: 0; border-radius: 0 20px 20px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 26%); mask-image: linear-gradient(90deg, transparent, #000 26%); }
@@ -1253,88 +1241,52 @@
   .livora-usp__item { align-items: flex-start; }
 }
 
-/* Editorial details for the collection introduction. */
-.livora-hero-bar__proof-index {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 59px;
-  min-height: 34px;
-  border: 1px solid #d5b995;
-  border-radius: 999px;
-  color: #925d2f;
-  font: 600 .68rem var(--font-sans);
-  letter-spacing: .11em;
-  white-space: nowrap;
-}
-
-/* Reference-led footer: a restrained benefits band and concise link columns. */
+/* Quiet footer in the same ivory and gold palette as the shop. */
 .shop-footer {
   margin-top: 36px;
-  background: #fcf9f5;
-  border-top: 1px solid #e2d7c9;
-  color: #2b241f;
+  background: #faf6ee;
+  border-top: 1px solid #e3d9cb;
+  color: #1e1c1a;
 }
 .shop-footer__inner {
   max-width: 1512px;
   margin-inline: auto;
-  padding: 18px clamp(22px, 4.3vw, 70px) 25px;
+  padding: 26px clamp(22px, 4.3vw, 70px) 23px;
 }
-.shop-footer__benefits {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  padding: 14px 0;
-  border-radius: 7px;
-  background: #173b2e;
-  color: #faf6ec;
-}
-.shop-footer__benefit {
+.shop-footer__identity {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-width: 0;
-  padding: 2px clamp(12px, 2vw, 28px);
-}
-.shop-footer__benefit + .shop-footer__benefit { border-left: 1px solid rgba(255, 255, 255, .18); }
-.shop-footer__benefit svg { flex: none; color: #e5d4ac; }
-.shop-footer__benefit strong,
-.shop-footer__benefit small { display: block; }
-.shop-footer__benefit strong { font-size: .62rem; letter-spacing: .08em; line-height: 1.2; }
-.shop-footer__benefit small { margin-top: 3px; color: #d6e0d7; font-size: .61rem; line-height: 1.3; }
-.shop-footer__body {
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
-  gap: 24px;
-  padding: 24px 8px 0;
+  gap: 18px;
 }
 .shop-footer__mark {
-  color: #382b22;
-  font: 500 1.13rem var(--font-serif);
+  color: #1e1c1a;
+  font: 500 1.18rem var(--font-serif);
   letter-spacing: .14em;
   text-decoration: none;
   white-space: nowrap;
 }
-.shop-footer__mark span { color: #a66e3e; font-size: .8rem; }
-.shop-footer__brand p { margin: 5px 0 0; color: #887664; font: italic .76rem var(--font-serif); }
-.shop-footer__nav,
-.shop-footer__contact { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-.shop-footer__nav strong,
-.shop-footer__contact strong { margin-bottom: 3px; color: #91704e; font-size: .61rem; letter-spacing: .14em; }
+.shop-footer__mark span { color: #b38b49; font-size: .76rem; }
+.shop-footer__tagline { color: #917b60; font: italic .86rem var(--font-serif); }
+.shop-footer__details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 17px;
+  padding-top: 17px;
+  border-top: 1px solid #e6dac9;
+}
+.shop-footer__nav { display: flex; align-items: center; gap: clamp(18px, 3vw, 36px); }
 .shop-footer__nav a,
-.shop-footer__contact a {
-  color: #675749;
-  font-size: .72rem;
+.shop-footer__email {
+  color: #554b3f;
+  font-size: .78rem;
   text-decoration: none;
+  white-space: nowrap;
 }
-.shop-footer__contact small { margin-top: 6px; color: #9a8877; font-size: .61rem; }
+.shop-footer__copyright { color: #9e8b75; font-size: .68rem; white-space: nowrap; }
 .shop-footer__nav a:hover,
-.shop-footer__contact a:hover { color: #95511f; }
-
-@media (max-width: 900px) {
-  .shop-footer__benefit { gap: 8px; }
-  .shop-footer__benefit strong { font-size: .55rem; }
-  .shop-footer__benefit small { font-size: .54rem; }
-}
+.shop-footer__email:hover { color: #9a753d; }
 @media (max-width: 640px) {
   .livora-hero-bar { margin-top: 78px; gap: 4px; }
   .livora-hero-bar__left { padding: 25px 0 8px; }
@@ -1354,9 +1306,9 @@
   .livora-btn-watch { gap: 8px; font-size: .78rem; white-space: nowrap; }
   .livora-play-icon { width: 37px; height: 37px; }
   .livora-hero-bar__proof {
-    gap: 12px;
-    border-top: 1px solid #e5d8c9;
-    padding-top: 15px;
+    gap: 0;
+    border-top: 0;
+    padding-top: 0;
   }
   .livora-hero-bar__proof-text { font-size: .74rem; line-height: 1.4; }
   .livora-hero-bar__floating-card {
@@ -1372,17 +1324,19 @@
   .livora-hero-bar__card-title svg { width: 14px; height: 14px; }
   .livora-hero-bar__floating-card strong { margin-bottom: 5px; font-size: .98rem; }
   .livora-hero-bar__card-detail { padding-top: 6px; font-size: .62rem; line-height: 1.25; }
-  .shop-footer__inner { padding: 15px 18px 22px; }
-  .shop-footer__benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 6px 0; }
-  .shop-footer__benefit { gap: 9px; padding: 9px 13px; }
-  .shop-footer__benefit:nth-child(3) { border-left: 0; }
-  .shop-footer__benefit:nth-child(-n+2) { border-bottom: 1px solid rgba(255, 255, 255, .18); }
-  .shop-footer__benefit strong { font-size: .56rem; }
-  .shop-footer__benefit small { font-size: .55rem; }
-  .shop-footer__body { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px 12px; padding: 20px 4px 0; }
-  .shop-footer__brand { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 11px; }
-  .shop-footer__mark { font-size: 1rem; }
-  .shop-footer__brand p { margin: 0; font-size: .68rem; }
+  .shop-footer__inner { padding: 23px 18px 25px; }
+  .shop-footer__identity { gap: 12px; }
+  .shop-footer__mark { font-size: 1.04rem; }
+  .shop-footer__tagline { font-size: .72rem; }
+  .shop-footer__details {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 15px 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+  }
+  .shop-footer__nav { grid-column: 1 / -1; gap: 23px; }
   .shop-footer__nav a,
-  .shop-footer__contact a { font-size: .68rem; }
+  .shop-footer__email { font-size: .72rem; }
+  .shop-footer__copyright { font-size: .63rem; text-align: right; }
 }

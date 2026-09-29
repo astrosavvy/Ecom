@@ -168,7 +168,8 @@
   filter: brightness(.72) contrast(1.45) saturate(1.2);
 }
 .navbar--shop .navbar__brand-name { display: none; }
-.navbar--shop .navbar__cta-btn { background: #8c4a26; }
+.navbar--shop .navbar__cta-btn { background: #d6b06a; color: #1e1c1a; box-shadow: none; }
+.navbar--shop .navbar__cta-btn:hover { background: #f0d08f; }
 .navbar--shop .navbar__cta-btn:active,
 .navbar--shop .navbar__icon-link:active { transform: scale(.97); }
 .navbar--shop :is(a, button):focus-visible { outline: 2px solid #a37b24; outline-offset: 3px; }
