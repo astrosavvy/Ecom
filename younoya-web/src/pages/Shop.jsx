@@ -49,16 +49,14 @@ export default function Shop() {
 
   return (
     <div className="livora-shop">
-      <div className="livora-hero-full-wrap">
+      <div className="livora-shop__shell">
         <nav className="livora-crumb" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
           <span>/</span>
           <span className="livora-crumb__current">The Collection</span>
         </nav>
-        <ShopHero />
-      </div>
 
-      <div className="livora-shop__shell">
+        <ShopHero />
         <ShopUspBar />
         <ShopIntentions onSelectIntention={filterByIntention} />
         <ShopPhilosophyBento featured={featured} />

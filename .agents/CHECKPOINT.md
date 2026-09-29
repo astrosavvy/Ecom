@@ -8,10 +8,10 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 11 — True Full-Width Hero, Mobile Engine, Authentic Intention Cards & Light Luxury Harmonisation
-- **Status**: Production-ready on `main`. Fully resolved the 3 visual defects: (1) Hero is now a true full-width architectural tile spanning viewport width with clean 50/50 midline join and zero muddy gradient overlay, with full mobile viewport optimization; (2) Excised all cartoon diorama mascot stills and installed authentic, Cartier-grade photoshoot heirloom photography across all 4 intentions; (3) Converted the jarring dark green ambient banner into a cohesive light luxury hamper feature banner and resolved bento typography wrapping. Build verified exit code 0; Wrangler dry run validated 166 assets. All component files strictly preserved under 85 lines.
+- **Current Phase**: Phase 12 — Boxless Architectural Modernization (Livora SSOT Alignment)
+- **Status**: Production-ready on `main`. Transformed `/shop` from enclosed card-in-card boxy containers to an open, continuous, and boxless editorial design directly matching the Livora reference (`media_1790693781175.png`): (1) Hero is completely unboxed — left text sits directly on open warm ivory canvas, right image is an architectural photograph with smooth corners; (2) USP Bar is completely boxless between two hairline dividers; (3) Purpose section transformed to Livora split layout with zero card boxes; (4) Reviews transformed to Livora split layout with soft unboxed cards; (5) Bento product visual floats freely without inner frame boxes. Build verified exit code 0; Wrangler dry run validated 166 assets. All components strictly under 85 lines.
 - **Active Task**: All changes committed locally and verified. Ready for user push approval.
-- **Last Updated**: 2026-09-29T20:23:00+05:30
+- **Last Updated**: 2026-09-29T20:33:00+05:30
 - **Last Agent**: Antigravity
 - **Primary URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 
@@ -19,7 +19,33 @@
 
 ## 2. 🏁 Consolidated Milestone History
 
-### [2026-09-29] Phase 11: True Full-Width Hero, Mobile Engine, Authentic Intention Cards & Light Luxury Harmonisation
+### [2026-09-29] Phase 12: Boxless Architectural Modernization (Livora SSOT Alignment)
+- **100% Boxless Hero Section (`ShopHero.jsx`, `Shop.css`)**:
+  - Removed enclosing card borders, card background wrappers, and drop shadows around the hero.
+  - Left editorial text sits freely on the open warm ivory page canvas (`#FAF7F2`) with natural breathing room.
+  - Right side is an architectural photography frame (`border-radius: var(--radius-xl)`) holding authentic photoshoot photography with floating collection pill badge.
+- **100% Boxless USP Trust Row (`ShopUspBar.jsx`, `Shop.css`)**:
+  - Completely excised the white card container, border, and drop shadow.
+  - Transformed into an open, airy horizontal row framed only by hairline top and bottom borders (`border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 32px 0;`).
+- **Livora Split Purpose Section (`ShopPurpose.jsx`, `Shop.css`)**:
+  - Eliminated the 4 boxed cards (`.livora-purpose__card`).
+  - Implemented the Livora 2-column split layout: Left headline (`✦ WHY CHOOSE YOUNOYA / Gifting with sacred purpose`), Right 4 inline items with clean line icons and concise descriptions without card backgrounds or borders.
+- **Livora Split Reviews Section (`ShopTestimonials.jsx`, `Shop.css`)**:
+  - Implemented the Livora split layout: Left lead column (`✦ WHAT OUR SEEKERS SAY / Loved by thousands of cherished seekers / View All Reviews →`), Right 3 soft review cards.
+- **Floating Bento Visual (`ShopPhilosophyBento.jsx`, `Shop.css`)**:
+  - Removed the inner box around the center product so the consecrated talisman floats freely on the canvas.
+- **Strict File Length Law Compliance (< 85 lines)**:
+  - `Shop.jsx`: 81 lines
+  - `ShopHero.jsx`: 64 lines
+  - `ShopUspBar.jsx`: 38 lines
+  - `ShopIntentions.jsx`: 39 lines
+  - `ShopPhilosophyBento.jsx`: 53 lines
+  - `ShopAmbientBanner.jsx`: 34 lines
+  - `ShopPurpose.jsx`: 45 lines
+  - `ShopTestimonials.jsx`: 65 lines
+- **Verification**:
+  - `npm run build`: Exit code 0 (2,383 modules transformed, 16 route shells, 11 admin shells).
+  - `npx wrangler deploy --dry-run`: Exit code 0 (166 assets validated).
 - **True Full-Width Hero Tile Bar (`ShopHero.jsx`, `Shop.jsx`, `Shop.css`)**:
   - Extracted `ShopHero` into a dedicated full-width container (`.livora-hero-full-wrap`, `width: 100%; padding: 0 clamp(16px, 2.5vw, 40px);`), eliminating narrow boxed container margins and letting the tile bar stretch across the screen matching Livora.
   - Completely excised `.livora-hero-bar__seam-blend`: eliminated the dirty, muddy grey gradient smudge down the center, achieving a clean, crisp architectural 50/50 midline junction.

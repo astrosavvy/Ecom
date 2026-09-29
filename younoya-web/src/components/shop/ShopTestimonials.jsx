@@ -1,4 +1,4 @@
-import { Star } from 'lucide-react'
+import { ArrowRight, Star } from 'lucide-react'
 
 const TESTIMONIALS = [
   {
@@ -26,34 +26,39 @@ const TESTIMONIALS = [
 
 export default function ShopTestimonials() {
   return (
-    <section className="livora-reviews">
-      <div className="livora-reviews__header">
-        <span className="livora-kicker">WHAT OUR RECIPIENTS SAY</span>
-        <h2>Loved by seekers across <em>every chapter.</em></h2>
-      </div>
+    <section className="livora-reviews" aria-label="Customer Reviews">
+      <div className="livora-reviews__split">
+        <div className="livora-reviews__lead">
+          <span className="livora-kicker">✦ WHAT OUR SEEKERS SAY</span>
+          <h2>Loved by thousands<br />of <em>cherished seekers.</em></h2>
+          <a href="#pieces" className="livora-link-more">
+            View All Reviews <ArrowRight size={15} />
+          </a>
+        </div>
 
-      <div className="livora-reviews__grid">
-        {TESTIMONIALS.map((item, idx) => (
-          <div key={idx} className="livora-review-card">
-            <div className="livora-review-card__stars">
-              {[...Array(item.rating)].map((_, i) => (
-                <Star key={i} size={15} fill="#B8860B" stroke="none" />
-              ))}
-            </div>
-            <blockquote className="livora-review-card__quote">
-              "{item.quote}"
-            </blockquote>
-            <div className="livora-review-card__author">
-              <div className="livora-review-card__avatar">
-                {item.author.charAt(0)}
+        <div className="livora-reviews__grid">
+          {TESTIMONIALS.map((item, idx) => (
+            <div key={idx} className="livora-review-card">
+              <div className="livora-review-card__stars">
+                {[...Array(item.rating)].map((_, i) => (
+                  <Star key={i} size={14} fill="#B8860B" stroke="none" />
+                ))}
               </div>
-              <div>
-                <strong>{item.author}</strong>
-                <small>{item.city} • Verified Buyer ({item.piece})</small>
+              <blockquote className="livora-review-card__quote">
+                "{item.quote}"
+              </blockquote>
+              <div className="livora-review-card__author">
+                <div className="livora-review-card__avatar">
+                  {item.author.charAt(0)}
+                </div>
+                <div>
+                  <strong>{item.author}</strong>
+                  <small>{item.city} • Verified Seeker</small>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   )
