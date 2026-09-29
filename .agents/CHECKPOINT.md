@@ -8,16 +8,41 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 12 — Boxless Architectural Modernization (Livora SSOT Alignment)
-- **Status**: Production-ready on `main`. Transformed `/shop` from enclosed card-in-card boxy containers to an open, continuous, and boxless editorial design directly matching the Livora reference (`media_1790693781175.png`): (1) Hero is completely unboxed — left text sits directly on open warm ivory canvas, right image is an architectural photograph with smooth corners; (2) USP Bar is completely boxless between two hairline dividers; (3) Purpose section transformed to Livora split layout with zero card boxes; (4) Reviews transformed to Livora split layout with soft unboxed cards; (5) Bento product visual floats freely without inner frame boxes. Build verified exit code 0; Wrangler dry run validated 166 assets. All components strictly under 85 lines.
+- **Current Phase**: Phase 13 — Light-Themed Luxury Intentions, Interactive Bag & Broad Architecture
+- **Status**: Production-ready on `main`. Fully executed user refinement requests: (1) Replaced intention cards with 4 light-themed luxury photographs on sunlit marble and travertine plinths; (2) Removed all occurrences of "Tax included" across ProductCard, ProductRelated, ProductBuyBox, and Shop.css; (3) Overhauled CartDrawer with real interactive features: complimentary Consecration Scroll progress meter, live note counter (0/180), interactive promo code engine (`ASTER10`), and single clean luxury total (excising duplicate subtotal rows); (4) Modularized CartItem into `<CartItem />` keeping both components strictly under 100 lines; (5) Adopted broad-themed layout (`max-width: 1520px`) and organic soft backdrop matching Image 3. Build verified exit code 0; Wrangler dry run validated 171 assets.
 - **Active Task**: All changes committed locally and verified. Ready for user push approval.
-- **Last Updated**: 2026-09-29T20:33:00+05:30
+- **Last Updated**: 2026-09-29T21:45:00+05:30
 - **Last Agent**: Antigravity
 - **Primary URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 
 ---
 
 ## 2. 🏁 Consolidated Milestone History
+
+### [2026-09-29] Phase 13: Light-Themed Intentions, Interactive Cart & Broad Styling
+- **Recreated Light-Themed Intention Photography (`ShopIntentions.jsx`, `public/media/intentions/`)**:
+  - Generated and integrated 4 high-end light-themed editorial photographs on warm ivory marble and travertine slabs:
+    - *Courage & Presence*: Golden Jaguar brooch talisman on sunlit ivory marble pedestal (`courage-presence-light.jpg`)
+    - *Growth & Vitality*: Five sacred crystal glass consecration vials with gold caps on illuminated travertine slab (`growth-vitality-light.jpg`)
+    - *Love & Devotion*: Metallic ruby-red apple candles with botanical soy wax on light travertine plinth (`love-devotion-light.jpg`)
+    - *Instinct & Focus*: Raw amethyst crystal and gold eye talisman sculpture on light sandstone pedestal (`instinct-focus-light.jpg`)
+  - Updated card overlay gradient in `Shop.css` to soft warm ivory scrim, ensuring high contrast legibility while keeping the bright talismans and white marble glowing.
+- **Total Elimination of "Tax Included"**:
+  - Removed `<span className="livora-card__tax">Tax included</span>` from `ProductCard.jsx` and `ProductRelated.jsx`.
+  - Updated `ProductBuyBox.jsx` delivery note from "Tax included • Free insured courier..." to "Complimentary insured express delivery across India (2–4 days)".
+  - Cleaned up unused `.livora-card__tax` CSS in `Shop.css`.
+- **Interactive Bag / Cart Drawer Overhaul (`CartDrawer.jsx`, `CartItem.jsx`, `CartDrawer.css`)**:
+  - Added interactive Consecration Scroll progress meter (`Add ₹... more for complimentary Consecration Scroll`).
+  - Added interactive Seeker / Promo voucher input (`ASTER10` unlocks 10% instant celestial blessing).
+  - Added live character counter on gift note (`0/180`).
+  - Replaced duplicate "Atelier Subtotal" and "Subtotal" rows with a single, clean luxury breakdown (Bag Subtotal, Celestial Blessing, Insured Express Courier: Complimentary, Total).
+  - Modularized `CartItem.jsx` (57 lines) keeping `CartDrawer.jsx` (98 lines) strictly under the 100-line ceiling.
+- **Image 3 Broad Themed Style (`Shop.css`)**:
+  - Broadened container width to `max-width: 1520px; padding: 0 clamp(24px, 4.5vw, 68px);`.
+  - Polished catalog card price row and refined spacing.
+- **Verification**:
+  - `npm run build`: Exit code 0 (2,384 modules transformed, 16 route shells, 11 admin shells).
+  - `npx wrangler deploy --dry-run`: Exit code 0 (171 assets validated).
 
 ### [2026-09-29] Phase 12: Boxless Architectural Modernization (Livora SSOT Alignment)
 - **100% Boxless Hero Section (`ShopHero.jsx`, `Shop.css`)**:

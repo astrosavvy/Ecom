@@ -41,6 +41,21 @@
 .summary-row { display:flex; justify-content:space-between; gap:15px; color:#66594c; font-size:12px; }
 .summary-row--total { padding-top:12px; border-top:1px solid #ccbaa4; color:#241c17; }
 .total-val { font-family:var(--font-serif); font-size:23px; }
-.checkout-btn { width:100%; }
+.cart-progress { margin-bottom: 16px; padding: 12px 14px; background: #efe7db; border-radius: 4px; border: 1px solid #dccfbe; }
+.cart-progress__label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; color: #725a38; margin-bottom: 8px; }
+.cart-progress__track { width: 100%; height: 5px; background: #dfd4c4; border-radius: 9999px; overflow: hidden; }
+.cart-progress__bar { height: 100%; background: linear-gradient(90deg, #b8860b, #d4af37); transition: width 0.4s ease; }
+.cart-item__personal-note { font-size: 10px; color: #8e6942; font-style: italic; margin: 0 0 4px; }
+.cart-note-len { margin-left: auto; color: #9c8a78; font-size: 10px; font-weight: normal; }
+.cart-voucher { display: flex; gap: 8px; margin-top: 14px; }
+.cart-voucher input { flex: 1; padding: 10px 12px; border: 1px solid #baa992; background: #fcf9f3; font-size: 11px; color: #241c17; border-radius: 0; outline: none; }
+.cart-voucher input:focus { border-color: #92704c; }
+.cart-voucher__btn { padding: 0 16px; border: 0; background: #92704c; color: #fff8ec; font-size: 11px; font-weight: 600; cursor: pointer; display: grid; place-items: center; }
+.cart-voucher__btn:hover { background: #7c5936; }
+.cart-voucher__success { display: block; margin-top: 6px; color: #2e6930; font-size: 10px; font-weight: 600; }
+.summary-row--discount { color: #2e6930; font-weight: 600; }
+.summary-free { color: #8e6942; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.08em; }
+.checkout-btn { width:100%; gap: 8px; cursor: pointer; }
 .checkout-guarantee { margin-top:12px; color:#887967; text-align:center; font-size:10px; }
 @media (max-width:520px) { .cart-drawer__header,.cart-drawer__body,.cart-drawer__footer { padding-left:21px; padding-right:21px; } }
+

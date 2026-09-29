@@ -5,7 +5,7 @@ import { ArrowUpRight, Check, Heart, Star } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 
 export default function ProductCard({ product, index, reducedMotion, onWishlist, isWishlisted }) {
-  const { addToCart } = useCart()
+  const { addToCart, setIsOpen } = useCart()
   const [added, setAdded] = useState(false)
 
   function handleQuickAdd(e) {
@@ -22,6 +22,7 @@ export default function ProductCard({ product, index, reducedMotion, onWishlist,
       chapter: 'Younoya brooch',
     }, 1)
     setAdded(true)
+    setIsOpen(true)
     setTimeout(() => setAdded(false), 2000)
   }
 
@@ -72,7 +73,6 @@ export default function ProductCard({ product, index, reducedMotion, onWishlist,
 
         <div className="livora-card__price-row">
           <strong className="livora-card__price">{product.price}</strong>
-          <span className="livora-card__tax">Tax included</span>
         </div>
 
         <div className="livora-card__actions">

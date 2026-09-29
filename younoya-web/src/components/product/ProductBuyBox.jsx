@@ -3,22 +3,10 @@ import { ArrowRight, ArrowUpRight, Check, Compass, Heart, Minus, Plus, Scroll, S
 import ProductPersonalization from './ProductPersonalization'
 
 export default function ProductBuyBox({
-  product,
-  quantity,
-  onQuantityChange,
-  added,
-  onAddPiece,
-  personalizing,
-  onTogglePersonalizing,
-  isWishlisted,
-  onToggleWishlist,
-  personalSectionRef,
-  recipient,
-  onRecipientChange,
-  message,
-  onMessageChange,
-  personalizedNote,
-  reducedMotion
+  product, quantity, onQuantityChange, added, onAddPiece,
+  personalizing, onTogglePersonalizing, isWishlisted, onToggleWishlist,
+  personalSectionRef, recipient, onRecipientChange, message, onMessageChange,
+  personalizedNote, reducedMotion
 }) {
   return (
     <article className="livora-buybox">
@@ -54,7 +42,7 @@ export default function ProductBuyBox({
           <span className="livora-buybox__badge">Consecrated Brooch</span>
         </div>
         <small className="livora-buybox__delivery-note">
-          Tax included • Free insured courier delivery across India (2–4 days)
+          Complimentary insured express delivery across India (2–4 days)
         </small>
       </div>
 
@@ -114,13 +102,10 @@ export default function ProductBuyBox({
           >
             <ProductPersonalization
               personalRef={personalSectionRef}
-              recipient={recipient}
-              onRecipientChange={onRecipientChange}
-              message={message}
-              onMessageChange={onMessageChange}
+              recipient={recipient} onRecipientChange={onRecipientChange}
+              message={message} onMessageChange={onMessageChange}
               personalizedNote={personalizedNote}
-              onClose={onTogglePersonalizing}
-              onSubmit={() => onAddPiece(true)}
+              onClose={onTogglePersonalizing} onSubmit={() => onAddPiece(true)}
             />
           </motion.div>
         )}

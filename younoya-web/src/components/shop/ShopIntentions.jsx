@@ -1,10 +1,10 @@
 import { ArrowRight } from 'lucide-react'
 
 const INTENTIONS = [
-  { id: 'confidence-power', title: 'Courage & Presence', deity: 'Surya (Sun) • Agni Fire', image: '/media/confidence-personal-power.webp', tag: 'Explore Courage →' },
-  { id: 'vitality-balance', title: 'Growth & Vitality', deity: 'Budha (Mercury) • Prithvi Earth', image: '/media/vitality-inner-balance.webp', tag: 'Explore Vitality →' },
-  { id: 'love-connection', title: 'Love & Devotion', deity: 'Shukra (Venus) • Jala Water', image: '/media/love-connection.webp', tag: 'Explore Devotion →' },
-  { id: 'protection', title: 'Instinct & Focus', deity: 'Ketu & Mars • Vayu Air', image: '/media/wealth-prosperity.webp', tag: 'Explore Focus →' },
+  { id: 'confidence-power', title: 'Courage & Presence', deity: 'Surya (Sun) • Agni Fire', image: '/media/intentions/courage-presence-light.jpg', tag: 'Explore Courage →' },
+  { id: 'vitality-balance', title: 'Growth & Vitality', deity: 'Budha (Mercury) • Prithvi Earth', image: '/media/intentions/growth-vitality-light.jpg', tag: 'Explore Vitality →' },
+  { id: 'love-connection', title: 'Love & Devotion', deity: 'Shukra (Venus) • Jala Water', image: '/media/intentions/love-devotion-light.jpg', tag: 'Explore Devotion →' },
+  { id: 'protection', title: 'Instinct & Focus', deity: 'Ketu & Mars • Vayu Air', image: '/media/intentions/instinct-focus-light.jpg', tag: 'Explore Focus →' },
 ]
 
 export default function ShopIntentions({ onSelectIntention }) {

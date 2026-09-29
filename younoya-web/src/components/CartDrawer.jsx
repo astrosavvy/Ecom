@@ -1,162 +1,106 @@
-import React from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { X, Plus, Minus, Trash2, Gift } from 'lucide-react'
+import { X, Gift, Sparkles, Check, ArrowRight } from 'lucide-react'
 import { useCart } from '../context/CartContext'
+import CartItem from './cart/CartItem'
 import '../styles/CartDrawer.css'
 
-export default function CartDrawer() {
-  const {
-    cart,
-    isOpen,
-    setIsOpen,
-    removeFromCart,
-    updateQuantity,
-    totalPrice,
-    totalItems,
-    giftNote,
-    setGiftNote,
-  } = useCart()
+const FREE_GIFT_TIER = 5000
 
-  const handleClose = () => {
-    setIsOpen(false)
+export default function CartDrawer() {
+  const { cart, isOpen, setIsOpen, removeFromCart, updateQuantity, totalPrice, totalItems, giftNote, setGiftNote } = useCart()
+  const [code, setCode] = useState('')
+  const [discount, setDiscount] = useState(0)
+  const [codeApplied, setCodeApplied] = useState(false)
+
+  const progress = Math.min(100, Math.round((totalPrice / FREE_GIFT_TIER) * 100))
+  const remaining = Math.max(0, FREE_GIFT_TIER - totalPrice)
+  const finalTotal = Math.max(0, totalPrice - discount)
+
+  function applyVoucher(e) {
+    e.preventDefault()
+    if (!code.trim()) return
+    const normalized = code.trim().toUpperCase()
+    if (normalized === 'ASTER10' || normalized === 'NOYA' || normalized === 'RITUAL') {
+      const disc = Math.round(totalPrice * 0.1)
+      setDiscount(disc)
+      setCodeApplied(true)
+    } else {
+      setCodeApplied(false)
+      setDiscount(0)
+    }
   }
 
   return (
     <AnimatePresence>
       {isOpen && (
         <div className="cart-overlay">
-          <motion.div
-            className="cart-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={handleClose}
-          />
-
-          <motion.div
-            className="cart-drawer"
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-          >
-            {/* Header */}
+          <motion.div className="cart-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsOpen(false)} />
+          <motion.aside className="cart-drawer" initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 220 }}>
             <div className="cart-drawer__header">
               <div className="header-title">
                 <span className="eyebrow-mini">YOUNOYA ATELIER</span>
-                <h3>Your bag ({totalItems})</h3>
+                <h3>Your Bag ({totalItems})</h3>
               </div>
-              <button
-                className="cart-close-btn"
-                onClick={handleClose}
-                aria-label="Close shopping bag"
-              >
-                <X size={20} />
-              </button>
+              <button className="cart-close-btn" onClick={() => setIsOpen(false)} aria-label="Close bag"><X size={18} /></button>
             </div>
 
-            <>
-
-                {/* Items List */}
-                <div className="cart-drawer__body">
-                  {cart.length === 0 ? (
-                    <div className="cart-empty">
-                      <div className="empty-emblem">✦</div>
-                      <h4>Your next gift begins here</h4>
-                      <p>
-                        Explore the collection or let Younoya help you choose a piece with meaning.
-                      </p>
-                      <Link className="btn-gold" to="/shop" onClick={handleClose}>Explore the collection</Link>
-                    </div>
-                  ) : (
-                    <div className="cart-items">
-                      {cart.map((item) => (
-                        <div key={item.id} className="cart-item">
-                          <div className="cart-item__img-box">
-                            {item.image ? <img src={item.image} alt="" /> : <span className="cart-item__emoji">{item.emoji || '✦'}</span>}
-                          </div>
-                          <div className="cart-item__details">
-                            <div className="cart-item__top">
-                              <span className="cart-item__sign">{item.sign || item.tag}</span>
-                              <button
-                                className="cart-item__remove"
-                                onClick={() => removeFromCart(item.id)}
-                                title="Remove item"
-                              >
-                                <Trash2 size={15} />
-                              </button>
-                            </div>
-                            <h4 className="cart-item__title">{item.name}</h4>
-                            <p className="cart-item__chapter">{(item.chapter || 'Personal selection').replace(/Chapter/gi, 'Object')}</p>
-                            {item.personalNote && <p className="cart-item__chapter">Personal note: {item.personalNote}</p>}
-                            <div className="cart-item__bottom">
-                              <div className="cart-item__qty">
-                                <button
-                                  onClick={() => updateQuantity(item.id, -1)}
-                                  disabled={item.quantity <= 1}
-                                >
-                                  <Minus size={12} />
-                                </button>
-                                <span>{item.quantity}</span>
-                                <button onClick={() => updateQuantity(item.id, 1)}>
-                                  <Plus size={12} />
-                                </button>
-                              </div>
-                              <span className="cart-item__price">
-                                ₹{(item.priceNum * item.quantity).toLocaleString('en-IN')}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-
-                      {/* Bespoke Personalization Accordion */}
-                      <div className="personalization-box">
-                        <div className="personalization-box__header">
-                          <Gift size={16} className="text-gold" />
-                          <span>Your gift note</span>
-                        </div>
-                        <p className="personalization-box__sub">
-                          Add a note for this order. You can also personalize each piece on its product page.
-                        </p>
-                        <textarea
-                          className="personalization-input"
-                          placeholder="Write a note for this order..."
-                          rows={2}
-                          value={giftNote}
-                          onChange={(e) => setGiftNote(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                  )}
+            <div className="cart-drawer__body">
+              {cart.length === 0 ? (
+                <div className="cart-empty">
+                  <div className="empty-emblem">✦</div>
+                  <h4>Your sacred bag is empty</h4>
+                  <p>Explore our astrology-backed keepsakes consecrated with Vedic intention.</p>
+                  <Link className="btn-gold" to="/shop" onClick={() => setIsOpen(false)}>Explore Collection</Link>
                 </div>
-
-                {/* Footer */}
-                {cart.length > 0 && (
-                  <div className="cart-drawer__footer">
-                    <div className="cart-summary">
-                      <div className="summary-row">
-                        <span>Atelier Subtotal</span>
-                        <span>₹{totalPrice.toLocaleString('en-IN')}</span>
-                      </div>
-                      <div className="summary-row summary-row--total">
-                        <span>Subtotal</span>
-                        <span className="total-val">₹{totalPrice.toLocaleString('en-IN')}</span>
-                      </div>
+              ) : (
+                <div className="cart-items">
+                  <div className="cart-progress">
+                    <div className="cart-progress__label">
+                      <Sparkles size={13} className="text-gold" />
+                      <span>{remaining > 0 ? `Add ₹${remaining.toLocaleString('en-IN')} for complimentary Consecration Scroll` : '✦ Complimentary Consecration Scroll Unlocked!'}</span>
                     </div>
-
-                    <button className="btn-gold checkout-btn" type="button" disabled>
-                      <span>Checkout opens soon</span>
-                    </button>
-
-                    <div className="checkout-guarantee">
-                      <span>Your selections are saved in this browser for now.</span>
-                    </div>
+                    <div className="cart-progress__track"><div className="cart-progress__bar" style={{ width: `${progress}%` }} /></div>
                   </div>
-                )}
-            </>
-          </motion.div>
+
+                  {cart.map((item) => (
+                    <CartItem key={item.id} item={item} onUpdateQuantity={updateQuantity} onRemove={removeFromCart} />
+                  ))}
+
+                  <div className="personalization-box">
+                    <div className="personalization-box__header">
+                      <Gift size={15} className="text-gold" />
+                      <span>Order Blessing & Gift Note</span>
+                      <small className="cart-note-len">{giftNote.length}/180</small>
+                    </div>
+                    <textarea className="personalization-input" maxLength={180} placeholder="Inscribe a personal blessing or gift note..." rows={2} value={giftNote} onChange={(e) => setGiftNote(e.target.value)} />
+                  </div>
+
+                  <form className="cart-voucher" onSubmit={applyVoucher}>
+                    <input type="text" placeholder="Promo / Seeker Code (e.g. ASTER10)" value={code} onChange={(e) => setCode(e.target.value)} />
+                    <button type="submit" className="cart-voucher__btn">{codeApplied ? <Check size={14} /> : 'Apply'}</button>
+                  </form>
+                  {codeApplied && <small className="cart-voucher__success">✦ 10% Seeker Blessing Applied (-₹{discount.toLocaleString('en-IN')})</small>}
+                </div>
+              )}
+            </div>
+
+            {cart.length > 0 && (
+              <div className="cart-drawer__footer">
+                <div className="cart-summary">
+                  <div className="summary-row"><span>Bag Subtotal</span><span>₹{totalPrice.toLocaleString('en-IN')}</span></div>
+                  {discount > 0 && <div className="summary-row summary-row--discount"><span>Celestial Blessing (10%)</span><span>-₹{discount.toLocaleString('en-IN')}</span></div>}
+                  <div className="summary-row"><span>Insured Express Courier</span><span className="summary-free">Complimentary</span></div>
+                  <div className="summary-row summary-row--total"><span>Total</span><span className="total-val">₹{finalTotal.toLocaleString('en-IN')}</span></div>
+                </div>
+                <button className="btn-gold checkout-btn" type="button" onClick={() => alert('Proceeding to Consecrated Checkout.')}>
+                  <span>Proceed to Checkout</span> <ArrowRight size={15} />
+                </button>
+                <div className="checkout-guarantee"><span>✦ Sealed with authentic gold wax & sanctified in our atelier.</span></div>
+              </div>
+            )}
+          </motion.aside>
         </div>
       )}
     </AnimatePresence>

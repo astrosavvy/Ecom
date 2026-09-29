@@ -43,7 +43,6 @@ export default function ProductRelated({ related }) {
               <p className="livora-card__sub">{item.subtitle}</p>
               <div className="livora-card__price-row">
                 <strong className="livora-card__price">{item.price}</strong>
-                <span className="livora-card__tax">Tax included</span>
               </div>
               <div className="livora-card__actions">
                 <Link to={`/product/${item.handle}`} className="livora-btn livora-btn--dark livora-btn--full">
