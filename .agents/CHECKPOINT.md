@@ -8,17 +8,44 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 7 — Production Coming Soon Deployed on `main` & Full Platform Preserved on `prepare-to-launch`
-- **Status**: Successfully deployed Coming Soon page on `main` and preserved complete platform on `prepare-to-launch`. Eliminated text carets on display typography (`user-select: none`, `caret-color: transparent`, `cursor: default`) and removed rectangular `:focus-visible` browser outline from input fields and pills, replacing it with a refined luxury gold focus glow. Build verified with exit code 0.
-- **Active Task**: Input focus styling and text caret elimination verified. Single final commit prepared locally. Ready to ask user for push permission.
-- **Last Updated**: 2026-09-26T18:13:00+05:30
+- **Current Phase**: Phase 8 — Blog 404 Fixed, Backlinks Deployed, Image Compression & Storefront Live on `main` via Direct Links
+- **Status**: Successfully configured Cloudflare Static Assets SPA routing (`"not_found_handling": "single-page-application"` and `_redirects` rewrites) resolving the 404 error on dynamic published blog posts. Merged the 10 authentic brooches, luxury SVG emblems, elevated GiftFinder, and Shop into `main` so all direct links (`/shop`, `/find-a-gift`, `/blog`, `/blog/:slug`, `/product/:handle`, `/admin/*`) are 100% accessible and live, while keeping `/` exclusively as the luxury Coming Soon landing page. Removed the product recommendation grid from `BlogPost.jsx`. Built rich markdown and HTML backlink parsing into `BlogPost.jsx` and added "🔗 Add Link" with store shortcuts to `JournalEdit.tsx`. Implemented in-browser Canvas WebP image compression in Admin and compressed existing blog covers from ~2MB down to ~100KB WebP (94% savings) at exact same dimensions. Streamlined `Blog.jsx` with dynamic category filters. Root build verified with exit code 0 (16 route shells, 11 admin shells).
+- **Active Task**: All changes implemented and verified locally on `main`. Staged for single final commit. Awaiting explicit user approval before `git push origin main`.
+- **Last Updated**: 2026-09-29T15:55:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
-- **Primary Production Build**: younoya-web/dist and root dist verified; build exit 0.
+- **Primary Production Build**: younoya-web/dist and root dist verified; 16 route shells, 11 admin shells, build exit 0.
 
 ---
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
+
+### [2026-09-29] Blog 404 Resolution, Backlinks, Removal of Products from Blogs, Image Compression & Storefront Direct Links on Main (Antigravity)
+- **Direct Links & Storefront Accessibility on `main`**:
+  - Maintained `/` exclusively as the luxury Coming Soon landing page (boutique diorama facade with bottom-half dark gradient).
+  - Merged the 10 authentic brooches (`src/data/products.js`), 10 luxury SVG vector glyphs (`public/media/brooches/*.svg`), elevated `/find-a-gift` Aster consultation flow, and `/shop` from `prepare-to-launch` into `main`.
+  - Configured Cloudflare Workers Static Assets to `"not_found_handling": "single-page-application"` in `wrangler.jsonc` and `younoya-web/wrangler.jsonc`.
+  - Added SPA fallback rewrites in `public/_redirects` (`/blog/* /index.html 200`, `/admin/* /index.html 200`).
+  - All direct links (`/shop`, `/find-a-gift`, `/blog`, `/blog/:slug`, `/product/:handle`, `/admin/*`) are now live, active, and accessible without 404 errors.
+- **Published Blog Post 404 Resolution**:
+  - Dynamically published articles like `/blog/why-younoya-is-different-from-a-traditional-astrology-store` now load seamlessly via SPA client routing.
+  - In `generate-seo.mjs`, generated static crawlable HTML shells (`dist/blog/[slug]/index.html`), JSON-LD `BlogPosting` schemas, and updated `sitemap.xml`, `robots.txt`, and `llms.txt`.
+- **Backlinks Authoring & Storefront Rendering**:
+  - In `JournalEdit.tsx`, added a dedicated **"🔗 Add Link"** toolbar action with a prompt dialog and quick internal store shortcut buttons (`+ Shop Link`, `+ Gift Finder`).
+  - In `BlogPost.jsx`, authored an inline markdown and HTML link parser: internal links route instantly via React Router `<Link to={...} className="article-backlink">`, while external links render `<a href={...} target="_blank" rel="noopener noreferrer">` with a subtle external icon.
+  - Styled `.article-backlink` in `Blog.css` with a delicate gold underline and ambient hover glow.
+- **Removed Products from Blog Posts**:
+  - Completely excised the "Keepsakes for this Chapter" product grid (`.article-keepsakes`) from `BlogPost.jsx` per user direction. The article now concludes cleanly with author attribution, consultation callout, and return navigation.
+- **Image Compression Pipeline (Preserving Exact Dimensions)**:
+  - Compressed the 2 existing blog cover images from **1.64 MB and 2.11 MB down to 103 KB and 119 KB WebP** (94% file size reduction) preserving exact dimensions ((1672×941) and (1536×1024)) and saved them in `younoya-web/public/media/blog/`.
+  - Updated `younoya-web/src/lib/api.js` with `getOptimizedImageUrl` to serve these lightweight WebP assets.
+  - Created `younoya-web/src/admin/utils/imageCompressor.ts` using HTML5 Canvas WebP compression (quality 0.82) preserving exact width/height. Integrated into `JournalEdit.tsx` so all future uploads are compressed on the client before being sent to `/admin/uploads`.
+- **Streamlined Blog Redesign (`Blog.jsx` & `Blog.css`)**:
+  - Created a clean, quiet luxury header (`The Journal`, `✦ YOUNOYA ATELIER`).
+  - Dynamic category pills that hide empty categories automatically.
+  - Unified editorial grid with 16:9 thumbnails, reading time, and direct reading action.
+- **Build Verification**:
+  - Root `npm run build` compiled 2,302 modules with exit code 0; generated 16 crawlable route shells, 11 admin shells, and synced to `dist/`.
 
 ### [2026-09-26] Caret Elimination on Typography & Rectangular Input Focus Outline Fixed (Antigravity)
 - **Eliminated Caret on Headings & Typography**:

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { api, getToken } from "../api"
+import { compressImage } from "../utils/imageCompressor"
 
 const API = import.meta.env.VITE_API_URL || "https://api.younoya.com"
 
@@ -114,13 +115,46 @@ export default function JournalEdit() {
     }, 0)
   }
 
+  function insertLink(customUrl?: string, customText?: string) {
+    const el = contentTextareaRef.current
+    if (!el) return
+    const start = el.selectionStart || 0
+    const end = el.selectionEnd || 0
+    const selected = el.value.substring(start, end) || customText || "Link Text"
+
+    let url = customUrl
+    if (!url) {
+      const entered = window.prompt("Enter destination URL (e.g. /shop, /find-a-gift, or https://...):", "/shop")
+      if (!entered) return
+      url = entered.trim()
+    }
+
+    const replacement = `[${selected}](${url})`
+    const nextValue = el.value.substring(0, start) + replacement + el.value.substring(end)
+    setContent(nextValue)
+    setTimeout(() => {
+      el.focus()
+      el.setSelectionRange(start + 1, start + 1 + selected.length)
+    }, 0)
+  }
+
   async function uploadImage(file: File, target: "cover" | "list") {
     setUploading(target)
     setError(null)
     setSuccessMsg(null)
     try {
+      // High-performance client-side WebP compression preserving exact dimensions
+      let fileToUpload = file
+      try {
+        const compressed = await compressImage(file, { quality: 0.82 })
+        fileToUpload = compressed.file
+        console.log(`[Image Compressor] ${file.name}: ${(compressed.originalSize / 1024).toFixed(1)} KB -> ${(compressed.compressedSize / 1024).toFixed(1)} KB (${compressed.savingsPercent}% savings, ${compressed.width}x${compressed.height})`)
+      } catch (compErr) {
+        console.warn("[Image Compressor] Compression skipped, using original file:", compErr)
+      }
+
       const form = new FormData()
-      form.append("files", file)
+      form.append("files", fileToUpload)
       const res = await fetch(`${API}/admin/uploads`, {
         method: "POST",
         headers: { authorization: `Bearer ${getToken()}` },
@@ -141,7 +175,7 @@ export default function JournalEdit() {
           setListImage(normalized)
           setCustomListUrl(normalized)
         }
-        setSuccessMsg(`Image uploaded successfully!`)
+        setSuccessMsg(`Image optimized & uploaded successfully!`)
       } else {
         throw new Error("Upload returned no image URL.")
       }
@@ -472,6 +506,10 @@ export default function JournalEdit() {
                   <button type="button" onClick={() => insertFormat("<blockquote>", "</blockquote>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Quote">❝ Quote</button>
                   <button type="button" onClick={() => insertFormat("<hr />\n", "")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Divider Line">― Line</button>
                   <button type="button" onClick={() => insertFormat("<p>", "</p>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Paragraph">Paragraph</button>
+                  <span style={{ borderRight: "1px solid rgba(26,26,30,0.15)", margin: "0 2px" }} />
+                  <button type="button" onClick={() => insertLink()} style={{ background: "#fff", border: "1px solid rgba(212,175,55,0.4)", color: "#996515", borderRadius: "4px", padding: "4px 10px", fontSize: "12px", fontWeight: 600, cursor: "pointer" }} title="Add Markdown / Web Backlink">🔗 Add Link</button>
+                  <button type="button" onClick={() => insertLink("/shop", "The Collection")} style={{ background: "rgba(212,175,55,0.1)", border: "1px solid rgba(212,175,55,0.25)", color: "#1a1a1e", borderRadius: "4px", padding: "4px 8px", fontSize: "11px", cursor: "pointer" }} title="Quick link to Collection">+ Shop Link</button>
+                  <button type="button" onClick={() => insertLink("/find-a-gift", "Gift Consultation")} style={{ background: "rgba(212,175,55,0.1)", border: "1px solid rgba(212,175,55,0.25)", color: "#1a1a1e", borderRadius: "4px", padding: "4px 8px", fontSize: "11px", cursor: "pointer" }} title="Quick link to Gift Finder">+ Gift Finder</button>
                 </div>
 
                 <textarea

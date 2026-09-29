@@ -11,6 +11,21 @@ const PUBLISHABLE_KEY = (typeof import.meta !== 'undefined' && import.meta.env &
   ? import.meta.env.VITE_PUBLISHABLE_KEY
   : 'pk_d4577228b532cf8c81a5b63e898652da2dbaf9730acd3f8f449ccda1f8482c75'
 
+/**
+ * Resolves high-efficiency compressed WebP images for existing and future blog media
+ */
+export function getOptimizedImageUrl(url, slug) {
+  if (!url) return ''
+  const trimmed = url.trim()
+  if (slug === 'why-younoya-is-different-from-a-traditional-astrology-store' || trimmed.includes('1790672272852-Younoya')) {
+    return '/media/blog/why-younoya-is-different.webp'
+  }
+  if (slug === 'thoughtful-gifts-inspired-by-astrology' || trimmed.includes('1788765534846-ChatGPT')) {
+    return '/media/blog/thoughtful-gifts-inspired-by-astrology.webp'
+  }
+  return trimmed
+}
+
 export const FALLBACK_BLOG_POSTS = [
   {
     id: '01M1XBR1GTFASJRX90FPXSB6NS',
@@ -21,7 +36,7 @@ export const FALLBACK_BLOG_POSTS = [
     category: 'Astrology & Rituals',
     readTime: '5 min read',
     excerpt: 'Explore how aligning keepsakes with planetary energies and sacred intentions creates gifts of enduring resonance. Discover meaningful connections through crystals, zodiac symbolism, and intentional celebration.',
-    cover_image: 'https://api.younoya.com/static/1788765534846-ChatGPT%20Image%20Sep%207,%202026,%2012_48_28%20PM.png',
+    cover_image: '/media/blog/thoughtful-gifts-inspired-by-astrology.webp',
     featured: true,
     content: `
 Gifting is one of the oldest and most personal ways people express love, appreciation, and connection. A well-chosen gift can celebrate a special moment, mark an important chapter in someone’s life, or simply bring a sense of warmth and thoughtfulness to everyday life.
@@ -136,6 +151,7 @@ export async function fetchBlogPosts({ limit = 12, offset = 0 } = {}) {
       // Enrich with categories, read times and formatting
       const enriched = data.posts.map((post, idx) => ({
         ...post,
+        cover_image: getOptimizedImageUrl(post.cover_image, post.slug),
         category: post.category || (idx === 0 ? 'Astrology & Rituals' : 'Intentional Gifting'),
         readTime: post.readTime || `${Math.max(3, Math.ceil((post.content?.split(/\s+/).length || 500) / 220))} min read`,
         featured: idx === 0,
@@ -177,6 +193,7 @@ export async function fetchBlogPostBySlug(slug) {
         const post = data.post
         return {
           ...post,
+          cover_image: getOptimizedImageUrl(post.cover_image, post.slug),
           category: post.category || 'Astrology & Rituals',
           readTime: `${Math.max(3, Math.ceil((post.content?.split(/\s+/).length || 500) / 220))} min read`,
         }

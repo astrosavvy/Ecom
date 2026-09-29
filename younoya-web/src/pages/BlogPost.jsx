@@ -1,9 +1,80 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, ArrowUpRight, Sparkles, Clock, Calendar, ShieldCheck } from 'lucide-react'
-import { fetchBlogPostBySlug } from '../lib/api'
-import { PRODUCTS } from '../data/products'
+import { ArrowLeft, ArrowRight, ArrowUpRight, Calendar, Clock } from 'lucide-react'
+import { fetchBlogPostBySlug, getOptimizedImageUrl } from '../lib/api'
 import '../styles/Blog.css'
+
+/**
+ * Render inline text supporting:
+ * - Markdown links: [Text](URL)
+ * - HTML links: <a href="URL">Text</a>
+ * - Bold: **Text**
+ * - Italic: *Text*
+ */
+function renderInline(text, keyPrefix = '') {
+  if (!text) return null
+
+  const regex = /\[([^\]]+)\]\(([^)]+)\)|<a\s+[^>]*href=["']([^"']+)["'][^>]*>(.*?)<\/a>|(\*\*[^*]+\*\*)|(\*[^*]+\*)/g
+
+  const nodes = []
+  let lastIndex = 0
+  let match
+  let i = 0
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index))
+    }
+
+    if (match[1] && match[2]) {
+      // Markdown link: [text](url)
+      nodes.push(renderLinkNode(match[1], match[2], `${keyPrefix}-md-${i++}`))
+    } else if (match[3] && match[4]) {
+      // HTML link: <a href="url">text</a>
+      nodes.push(renderLinkNode(match[4], match[3], `${keyPrefix}-html-${i++}`))
+    } else if (match[5]) {
+      // Bold **text**
+      nodes.push(<strong key={`${keyPrefix}-b-${i++}`}>{match[5].slice(2, -2)}</strong>)
+    } else if (match[6]) {
+      // Italic *text*
+      nodes.push(<em key={`${keyPrefix}-em-${i++}`}>{match[6].slice(1, -1)}</em>)
+    }
+
+    lastIndex = regex.lastIndex
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex))
+  }
+
+  return nodes.length > 0 ? nodes : text
+}
+
+function renderLinkNode(text, url, key) {
+  const isInternal = url.startsWith('/') || url.includes('younoya.com')
+  const cleanTarget = isInternal ? url.replace(/^https?:\/\/(www\.)?younoya\.com/, '') || '/' : url
+
+  if (isInternal) {
+    return (
+      <Link key={key} to={cleanTarget} className="article-backlink">
+        {text}
+      </Link>
+    )
+  }
+
+  return (
+    <a
+      key={key}
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="article-backlink article-backlink--external"
+    >
+      {text}
+      <ArrowUpRight size={12} className="inline-link-icon" />
+    </a>
+  )
+}
 
 export default function BlogPost() {
   const { slug } = useParams()
@@ -25,13 +96,6 @@ export default function BlogPost() {
       isMounted = false
     }
   }, [slug])
-
-  // Select 3 authentic keepsakes to feature alongside the article
-  const relatedKeepsakes = [
-    PRODUCTS.find((p) => p.handle === 'love-connection') || PRODUCTS[0],
-    PRODUCTS.find((p) => p.handle === 'vitality-inner-balance') || PRODUCTS[1],
-    PRODUCTS.find((p) => p.handle === 'confidence-personal-power') || PRODUCTS[2],
-  ].filter(Boolean)
 
   if (loading) {
     return (
@@ -71,11 +135,12 @@ export default function BlogPost() {
       })
     : 'September 2026'
 
-  // Format content paragraphs and subheadings
+  const coverUrl = getOptimizedImageUrl(post.cover_image, post.slug)
+
+  // Format content paragraphs, subheadings, and lists with rich inline links
   const renderFormattedContent = (content) => {
     if (!content) return null
 
-    // Split paragraphs by double newline
     const blocks = content.split(/\n\s*\n/)
 
     return blocks.map((block, idx) => {
@@ -86,7 +151,7 @@ export default function BlogPost() {
       if (trimmed.startsWith('## ')) {
         return (
           <h2 key={idx}>
-            {trimmed.replace(/^##\s+/, '')}
+            {renderInline(trimmed.replace(/^##\s+/, ''), `h2-${idx}`)}
           </h2>
         )
       }
@@ -95,7 +160,7 @@ export default function BlogPost() {
       if (trimmed.startsWith('### ')) {
         return (
           <h3 key={idx}>
-            {trimmed.replace(/^###\s+/, '')}
+            {renderInline(trimmed.replace(/^###\s+/, ''), `h3-${idx}`)}
           </h3>
         )
       }
@@ -104,7 +169,7 @@ export default function BlogPost() {
       if (trimmed.startsWith('> ')) {
         return (
           <blockquote key={idx}>
-            {trimmed.replace(/^>\s+/, '')}
+            {renderInline(trimmed.replace(/^>\s+/, ''), `bq-${idx}`)}
           </blockquote>
         )
       }
@@ -114,35 +179,19 @@ export default function BlogPost() {
         const items = trimmed.split('\n').filter((l) => l.trim().startsWith('- '))
         return (
           <ul key={idx}>
-            {items.map((item, itemIdx) => {
-              const text = item.replace(/^-\s+/, '')
-              // Handle bold format **text**
-              const parts = text.split(/(\*\*[^*]+\*\*)/)
-              return (
-                <li key={itemIdx}>
-                  {parts.map((part, pIdx) => {
-                    if (part.startsWith('**') && part.endsWith('**')) {
-                      return <strong key={pIdx}>{part.slice(2, -2)}</strong>
-                    }
-                    return part
-                  })}
-                </li>
-              )
-            })}
+            {items.map((item, itemIdx) => (
+              <li key={itemIdx}>
+                {renderInline(item.replace(/^-\s+/, ''), `li-${idx}-${itemIdx}`)}
+              </li>
+            ))}
           </ul>
         )
       }
 
-      // Standard paragraph with bold formatting
-      const parts = trimmed.split(/(\*\*[^*]+\*\*)/)
+      // Standard paragraph
       return (
         <p key={idx}>
-          {parts.map((part, pIdx) => {
-            if (part.startsWith('**') && part.endsWith('**')) {
-              return <strong key={pIdx}>{part.slice(2, -2)}</strong>
-            }
-            return part
-          })}
+          {renderInline(trimmed, `p-${idx}`)}
         </p>
       )
     })
@@ -175,52 +224,22 @@ export default function BlogPost() {
           </div>
         </header>
 
-        {/* Hero Cover Image */}
-        {post.cover_image && (
+        {/* Hero Cover Image (Preserving exact dimensions with optimized WebP) */}
+        {coverUrl && (
           <div className="article-cover">
-            <img src={post.cover_image} alt={post.title} fetchPriority="high" />
+            <img
+              src={coverUrl}
+              alt={post.title}
+              fetchPriority="high"
+              decoding="async"
+            />
           </div>
         )}
 
-        {/* Article Prose Content */}
+        {/* Article Prose Content with Backlinks */}
         <div className="article-prose">
           {renderFormattedContent(post.content)}
         </div>
-
-        {/* Keepsakes for this Chapter */}
-        <section className="article-keepsakes" aria-labelledby="keepsakes-title">
-          <div className="article-keepsakes__head">
-            <span className="article-keepsakes__eyebrow">
-              <Sparkles size={12} /> SACRED ALIGNMENTS
-            </span>
-            <h2 id="keepsakes-title" className="article-keepsakes__title">
-              Keepsakes for this Chapter
-            </h2>
-          </div>
-
-          <div className="article-keepsakes__grid">
-            {relatedKeepsakes.map((product) => (
-              <Link
-                key={product.id}
-                to={`/product/${product.handle}`}
-                className="article-keepsake-card"
-                aria-label={`Explore keepsake ${product.name}`}
-              >
-                <div className="article-keepsake-card__img">
-                  <img
-                    src={product.primaryImage}
-                    alt={product.name}
-                    loading="lazy"
-                  />
-                </div>
-                <div className="article-keepsake-card__info">
-                  <h3 className="article-keepsake-card__name">{product.name}</h3>
-                  <span className="article-keepsake-card__price">{product.price}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
 
         {/* Consultation Callout */}
         <aside className="journal-consult" style={{ marginTop: '48px' }}>
@@ -228,7 +247,7 @@ export default function BlogPost() {
             Begin your personal <em>gifting journey.</em>
           </h3>
           <p>
-            Explore our curated sanctum collections or receive an astrological recommendation attuned to your loved one’s birth chart.
+            Explore our curated keepsake collections or receive an astrological recommendation attuned to your loved one’s birth chart.
           </p>
           <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link to="/find-a-gift" className="journal-consult__btn">
@@ -249,8 +268,8 @@ export default function BlogPost() {
           <Link to="/blog">
             <ArrowLeft size={14} /> Back to all stories
           </Link>
-          <Link to="/">
-            Return to Boutique Story <ArrowUpRight size={14} />
+          <Link to="/shop">
+            The Collection <ArrowUpRight size={14} />
           </Link>
         </footer>
       </div>

@@ -4,10 +4,17 @@ export const SITE_URL = 'https://younoya.com'
 
 export const KNOWN_POSTS = [
   {
+    slug: 'why-younoya-is-different-from-a-traditional-astrology-store',
+    title: 'Why Younoya Is Different From a Traditional Astrology Store',
+    description: 'Explore how Younoya reimagines astrology-inspired gifting through handcrafted keepsakes, intentional aesthetics, and authentic symbolism.',
+    image: '/media/blog/why-younoya-is-different.webp',
+    published_at: '2026-09-29T08:57:59.260Z',
+  },
+  {
     slug: 'thoughtful-gifts-inspired-by-astrology',
     title: 'Thoughtful Gifts Inspired by Astrology',
     description: 'Explore how aligning keepsakes with planetary energies and sacred intentions creates gifts of enduring resonance.',
-    image: 'https://api.younoya.com/static/1788765534846-ChatGPT%20Image%20Sep%207,%202026,%2012_48_28%20PM.png',
+    image: '/media/blog/thoughtful-gifts-inspired-by-astrology.webp',
     published_at: '2026-09-07T07:18:57.806Z',
   },
 ]

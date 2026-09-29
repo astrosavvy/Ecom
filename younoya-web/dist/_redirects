@@ -3,3 +3,6 @@
 /personalise /find-a-gift  301
 /journal     /blog  301
 /journal/*   /blog/:splat  301
+/blog/*      /index.html   200
+/admin/*     /index.html   200
+
