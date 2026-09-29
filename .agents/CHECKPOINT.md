@@ -9,9 +9,9 @@
 ## 1. 📍 Executive Project Status
 
 - **Current Phase**: Phase 8 — Strapi-Grade TipTap Block Editor, Backlinks Engine, Image Compression & Storefront Live on `main`
-- **Status**: Production-ready on `main`. Deployed TipTap rich text block editor (the same engine powering Strapi v5) in `younoya-web/src/admin` with zero VPS RAM overhead. Features visual block editing, floating link modal with `Ctrl+K`, quick internal route presets (`/shop`, `/find-a-gift`), and smart copy-paste from Google Docs/Word with all hyperlinks preserved. Resolved Cloudflare deploy infinite-loop error [code: 100324] (`"not_found_handling": "single-page-application"` in `wrangler.jsonc`). Storefront direct links (`/shop`, `/find-a-gift`, `/blog`, `/blog/:slug`, `/product/:handle`, `/admin/*`) active with zero 404s. Build verified exit code 0; Wrangler dry-run passed (126 assets).
-- **Active Task**: Build verified locally and validated with Wrangler dry run. Ready for single final commit and user push approval.
-- **Last Updated**: 2026-09-29T16:32:00+05:30
+- **Status**: Production-ready on `main`. Deployed TipTap rich text block editor (the same engine powering Strapi v5) in `younoya-web/src/admin` with zero VPS RAM overhead. Created canonical master site navigation ledger (`SITE_LINKS.md`) cataloging all storefront routes, 10 consecrated keepsakes, editorial blog articles, admin views, SEO endpoints, and Medusa REST APIs with clickable Production and Local Dev URLs. Build verified exit code 0 across 2,364 modules.
+- **Active Task**: All links cataloged in `SITE_LINKS.md`. Build verified locally. Ready for single final commit and user push approval.
+- **Last Updated**: 2026-09-29T16:45:00+05:30
 - **Last Agent**: Antigravity
 - **Primary URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 
@@ -20,6 +20,9 @@
 ## 2. 🏁 Consolidated Milestone History
 
 ### [2026-09-29] Phase 8: TipTap Editor (Strapi v5 Engine), Backlinks, Cloudflare Deploy Fix & Storefront Direct Links
+- **Master Site Navigation & Verification Ledger (`SITE_LINKS.md`)**:
+  - Authored canonical URL index document in root with direct clickable Markdown links for Production (`https://younoya.com`), Local Development (`http://localhost:5173`), and Local Preview (`http://localhost:3000`).
+  - Covers 5 Core Storefront routes, 10 authentic Consecrated Brooches, Editorial stories with backlink validation, 11 Edge-hosted Admin modules (including TipTap block editor), 4 SEO/LLM discovery endpoints, and 9 Medusa headless REST API endpoints.
 - **TipTap Rich Block Editor Deployment (`younoya-web/src/admin`)**:
   - Installed `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-link`, `@tiptap/extension-image`, and `@tiptap/extension-placeholder`.
   - Authored `RichTextEditor.tsx` and `editor.css` with quiet luxury aesthetics.
