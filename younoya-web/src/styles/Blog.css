@@ -548,34 +548,26 @@
 }
 
 /* ── Interactive Backlinks & External Links ── */
-.article-backlink {
-  color: #8C6D23;
+.article-backlink,
+.article-prose a,
+.article-prose-inner a {
+  color: #A37B24;
   text-decoration: none;
-  border-bottom: 1.5px solid rgba(214, 176, 106, 0.5);
+  border-bottom: 1.5px solid rgba(181, 138, 56, 0.5);
   font-weight: 500;
   padding-bottom: 1px;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 3px;
+  display: inline;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-.article-backlink:hover {
-  color: #B58A38;
-  border-bottom-color: #B58A38;
-  background: rgba(214, 176, 106, 0.1);
+.article-backlink:hover,
+.article-prose a:hover,
+.article-prose-inner a:hover {
+  color: #7A4F0C;
+  border-bottom-color: #7A4F0C;
+  background: rgba(214, 176, 106, 0.12);
   border-radius: 2px;
-}
-
-.article-backlink--external {
-  color: #6E5316;
-}
-
-.inline-link-icon {
-  display: inline-block;
-  vertical-align: middle;
-  opacity: 0.7;
-  transform: translateY(-1px);
 }
 
 /* ── Mobile Responsiveness ── */

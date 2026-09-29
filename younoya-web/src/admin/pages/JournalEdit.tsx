@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { api, getToken } from "../api"
 import { compressImage } from "../utils/imageCompressor"
+import RichTextEditor from "../components/RichTextEditor"
 
 const API = import.meta.env.VITE_API_URL || "https://api.younoya.com"
 
@@ -63,7 +64,6 @@ export default function JournalEdit() {
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"write" | "preview">("write")
 
-  const contentTextareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInput = useRef<HTMLInputElement>(null)
   const listInput = useRef<HTMLInputElement>(null)
 
@@ -99,44 +99,6 @@ export default function JournalEdit() {
       .catch((e) => setError(e instanceof Error ? e.message : "Could not load the article."))
       .finally(() => setBusy(false))
   }, [id])
-
-  function insertFormat(tagOpen: string, tagClose: string) {
-    const el = contentTextareaRef.current
-    if (!el) return
-    const start = el.selectionStart || 0
-    const end = el.selectionEnd || 0
-    const selected = el.value.substring(start, end) || "text"
-    const replacement = `${tagOpen}${selected}${tagClose}`
-    const nextValue = el.value.substring(0, start) + replacement + el.value.substring(end)
-    setContent(nextValue)
-    setTimeout(() => {
-      el.focus()
-      el.setSelectionRange(start + tagOpen.length, start + tagOpen.length + selected.length)
-    }, 0)
-  }
-
-  function insertLink(customUrl?: string, customText?: string) {
-    const el = contentTextareaRef.current
-    if (!el) return
-    const start = el.selectionStart || 0
-    const end = el.selectionEnd || 0
-    const selected = el.value.substring(start, end) || customText || "Link Text"
-
-    let url = customUrl
-    if (!url) {
-      const entered = window.prompt("Enter destination URL (e.g. /shop, /find-a-gift, or https://...):", "/shop")
-      if (!entered) return
-      url = entered.trim()
-    }
-
-    const replacement = `[${selected}](${url})`
-    const nextValue = el.value.substring(0, start) + replacement + el.value.substring(end)
-    setContent(nextValue)
-    setTimeout(() => {
-      el.focus()
-      el.setSelectionRange(start + 1, start + 1 + selected.length)
-    }, 0)
-  }
 
   async function uploadImage(file: File, target: "cover" | "list") {
     setUploading(target)
@@ -495,56 +457,29 @@ export default function JournalEdit() {
             </div>
 
             {activeTab === "write" ? (
-              <div>
-                {/* Formatting Toolbar */}
-                <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "10px", background: "#f5eee1", padding: "6px 8px", borderRadius: "8px", border: "1px solid rgba(26,26,30,0.08)" }}>
-                  <button type="button" onClick={() => insertFormat("<strong>", "</strong>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Bold"><b>B</b></button>
-                  <button type="button" onClick={() => insertFormat("<em>", "</em>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Italic"><i>I</i></button>
-                  <button type="button" onClick={() => insertFormat("<h2>", "</h2>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Heading 2">H2</button>
-                  <button type="button" onClick={() => insertFormat("<h3>", "</h3>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Heading 3">H3</button>
-                  <button type="button" onClick={() => insertFormat("<ul>\n  <li>", "</li>\n</ul>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Bullet List">• List</button>
-                  <button type="button" onClick={() => insertFormat("<blockquote>", "</blockquote>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Quote">❝ Quote</button>
-                  <button type="button" onClick={() => insertFormat("<hr />\n", "")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Divider Line">― Line</button>
-                  <button type="button" onClick={() => insertFormat("<p>", "</p>")} style={{ background: "#fff", border: "1px solid rgba(26,26,30,0.1)", borderRadius: "4px", padding: "4px 8px", fontSize: "12px", cursor: "pointer" }} title="Paragraph">Paragraph</button>
-                  <span style={{ borderRight: "1px solid rgba(26,26,30,0.15)", margin: "0 2px" }} />
-                  <button type="button" onClick={() => insertLink()} style={{ background: "#fff", border: "1px solid rgba(212,175,55,0.4)", color: "#996515", borderRadius: "4px", padding: "4px 10px", fontSize: "12px", fontWeight: 600, cursor: "pointer" }} title="Add Markdown / Web Backlink">🔗 Add Link</button>
-                  <button type="button" onClick={() => insertLink("/shop", "The Collection")} style={{ background: "rgba(212,175,55,0.1)", border: "1px solid rgba(212,175,55,0.25)", color: "#1a1a1e", borderRadius: "4px", padding: "4px 8px", fontSize: "11px", cursor: "pointer" }} title="Quick link to Collection">+ Shop Link</button>
-                  <button type="button" onClick={() => insertLink("/find-a-gift", "Gift Consultation")} style={{ background: "rgba(212,175,55,0.1)", border: "1px solid rgba(212,175,55,0.25)", color: "#1a1a1e", borderRadius: "4px", padding: "4px 8px", fontSize: "11px", cursor: "pointer" }} title="Quick link to Gift Finder">+ Gift Finder</button>
+              busy ? (
+                <div style={{ padding: "60px", textAlign: "center", color: "#8a8175" }}>
+                  Opening the atelier archives...
                 </div>
-
-                <textarea
-                  ref={contentTextareaRef}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  rows={16}
-                  placeholder="Write the full narrative of the article here. Use the formatting buttons above for bold, headings, lists, and quotes..."
-                  style={{
-                    width: "100%",
-                    minHeight: "360px",
-                    padding: "16px",
-                    background: "#FFFBF0",
-                    border: "1px solid rgba(26,26,30,0.1)",
-                    borderRadius: "10px",
-                    outline: "none",
-                    fontFamily: "var(--font-body, Inter, sans-serif)",
-                    fontSize: "0.9375rem",
-                    lineHeight: "1.7",
-                    color: "#1a1a1e",
-                    resize: "vertical",
-                  }}
+              ) : (
+                <RichTextEditor
+                  key={id || "new"}
+                  content={content}
+                  onChange={setContent}
                 />
-              </div>
+              )
             ) : (
               <div
+                className="article-prose"
                 style={{
-                  minHeight: "360px",
-                  padding: "24px",
+                  minHeight: "420px",
+                  padding: "28px",
                   background: "#FFFBF0",
                   border: "1px solid rgba(26,26,30,0.1)",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   fontFamily: "var(--font-body, Inter, sans-serif)",
                   color: "#1a1a1e",
-                  lineHeight: "1.8",
+                  lineHeight: "1.85",
                 }}
               >
                 {content ? (

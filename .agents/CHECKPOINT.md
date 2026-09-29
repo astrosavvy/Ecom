@@ -8,10 +8,10 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 8 — Blog 404 Fixed, Backlinks Deployed, Image Compression, Cloudflare Deploy Verified & Storefront Live on `main` via Direct Links
-- **Status**: Production-ready on `main`. Cloudflare deploy infinite-loop error [code: 100324] resolved by removing redundant `/index.html 200` rewrites from `_redirects` (native SPA routing handled by `"not_found_handling": "single-page-application"` in `wrangler.jsonc`). Validated with `npx wrangler deploy --dry-run` (exit code 0, 126 static assets). Storefront direct links (`/shop`, `/find-a-gift`, `/blog`, `/blog/:slug`, `/product/:handle`, `/admin/*`) are 100% active, while `/` is the luxury Coming Soon facade. Backlink authoring and storefront parsing deployed. WebP image compression operational (94% file savings). Product recommendation grid removed from blog posts. Build verified with exit code 0.
-- **Active Task**: Ready to push verified fixes and compressed checkpoint to GitHub `origin main`.
-- **Last Updated**: 2026-09-29T16:03:00+05:30
+- **Current Phase**: Phase 8 — Strapi-Grade TipTap Block Editor, Backlinks Engine, Image Compression & Storefront Live on `main`
+- **Status**: Production-ready on `main`. Deployed TipTap rich text block editor (the same engine powering Strapi v5) in `younoya-web/src/admin` with zero VPS RAM overhead. Features visual block editing, floating link modal with `Ctrl+K`, quick internal route presets (`/shop`, `/find-a-gift`), and smart copy-paste from Google Docs/Word with all hyperlinks preserved. Resolved Cloudflare deploy infinite-loop error [code: 100324] (`"not_found_handling": "single-page-application"` in `wrangler.jsonc`). Storefront direct links (`/shop`, `/find-a-gift`, `/blog`, `/blog/:slug`, `/product/:handle`, `/admin/*`) active with zero 404s. Build verified exit code 0; Wrangler dry-run passed (126 assets).
+- **Active Task**: Build verified locally and validated with Wrangler dry run. Ready for single final commit and user push approval.
+- **Last Updated**: 2026-09-29T16:32:00+05:30
 - **Last Agent**: Antigravity
 - **Primary URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 
@@ -19,7 +19,19 @@
 
 ## 2. 🏁 Consolidated Milestone History
 
-### [2026-09-29] Phase 8: Cloudflare Deploy Fix, Blog 404 Resolution, Backlinks, Image Compression & Storefront Direct Links
+### [2026-09-29] Phase 8: TipTap Editor (Strapi v5 Engine), Backlinks, Cloudflare Deploy Fix & Storefront Direct Links
+- **TipTap Rich Block Editor Deployment (`younoya-web/src/admin`)**:
+  - Installed `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-link`, `@tiptap/extension-image`, and `@tiptap/extension-placeholder`.
+  - Authored `RichTextEditor.tsx` and `editor.css` with quiet luxury aesthetics.
+  - Floating backlink popover + `Ctrl+K` hotkey with internal preset chips (`/shop`, `/find-a-gift`, `/blog`, `/product/*`).
+  - Native `linkOnPaste: true`: pasting rich text from Google Docs, Word, or Notion preserves all hyperlinks, bolding, and lists.
+  - Built-in converter `convertLegacyMarkdownToHtml` seamlessly opens existing markdown articles in the visual editor.
+  - Replaced raw textarea in `JournalEdit.tsx` with `RichTextEditor` and wired real-time styled preview.
+  - **Zero Server RAM**: 100% client-side React execution, zero additional memory on the 956MB VPS. Saves clean HTML/JSON directly to the existing Medusa `younoya-blog` module and PostgreSQL database.
+- **Storefront & Backlink Typography Polish (`BlogPost.jsx` & `Blog.css`)**:
+  - `renderFormattedContent` handles both native TipTap HTML and legacy Markdown without double-wrapping.
+  - Click delegation routes internal links via React Router `navigate()` without browser reloads.
+  - Updated `.article-backlink` and `.article-prose a` with `display: inline`, warm amber/gold color `#A37B24`, subtle underline, and hover glow matching user reference. Removed disruptive trailing icon.
 - **Cloudflare Deploy Infinite-Loop Fix**:
   - Removed lines 6–7 (`/blog/*` and `/admin/*` rewrites to `/index.html 200`) from `public/_redirects` which triggered Cloudflare's canonicalizer loop [code: 100324].
   - Cloudflare natively serves `index.html` for client routing via `"not_found_handling": "single-page-application"` in `wrangler.jsonc`.

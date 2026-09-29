@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, ArrowUpRight, Calendar, Clock } from 'lucide-react'
 import { fetchBlogPostBySlug, getOptimizedImageUrl } from '../lib/api'
 import '../styles/Blog.css'
@@ -62,22 +62,28 @@ function renderLinkNode(text, url, key) {
     )
   }
 
+  // Ensure external URLs have protocol
+  let safeExternalUrl = url
+  if (!safeExternalUrl.startsWith('http://') && !safeExternalUrl.startsWith('https://')) {
+    safeExternalUrl = `https://${safeExternalUrl}`
+  }
+
   return (
     <a
       key={key}
-      href={url}
+      href={safeExternalUrl}
       target="_blank"
       rel="noopener noreferrer"
       className="article-backlink article-backlink--external"
     >
       {text}
-      <ArrowUpRight size={12} className="inline-link-icon" />
     </a>
   )
 }
 
 export default function BlogPost() {
   const { slug } = useParams()
+  const navigate = useNavigate()
   const [post, setPost] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -137,46 +143,79 @@ export default function BlogPost() {
 
   const coverUrl = getOptimizedImageUrl(post.cover_image, post.slug)
 
-  // Format content paragraphs, subheadings, and lists with rich inline links
+  const handleInternalLinkClick = (e) => {
+    const anchor = e.target.closest('a')
+    if (!anchor) return
+    const href = anchor.getAttribute('href')
+    if (!href) return
+
+    // Route internal links via React Router without page reload
+    if (href.startsWith('/') || href.includes('younoya.com')) {
+      e.preventDefault()
+      const cleanPath = href.replace(/^https?:\/\/(www\.)?younoya\.com/, '') || '/'
+      navigate(cleanPath)
+    }
+  }
+
+  // Format content: supports native HTML from TipTap editor as well as legacy Markdown
   const renderFormattedContent = (content) => {
     if (!content) return null
+
+    const trimmed = content.trim()
+    const isHtml =
+      trimmed.startsWith('<p>') ||
+      trimmed.startsWith('<div') ||
+      trimmed.startsWith('<h') ||
+      trimmed.startsWith('<article') ||
+      trimmed.includes('</p>') ||
+      trimmed.includes('</h2>')
+
+    if (isHtml) {
+      return (
+        <div
+          className="article-prose-inner"
+          dangerouslySetInnerHTML={{ __html: content }}
+          onClick={handleInternalLinkClick}
+        />
+      )
+    }
 
     const blocks = content.split(/\n\s*\n/)
 
     return blocks.map((block, idx) => {
-      const trimmed = block.trim()
-      if (!trimmed) return null
+      const trimmedBlock = block.trim()
+      if (!trimmedBlock) return null
 
       // Subheading level 2
-      if (trimmed.startsWith('## ')) {
+      if (trimmedBlock.startsWith('## ')) {
         return (
           <h2 key={idx}>
-            {renderInline(trimmed.replace(/^##\s+/, ''), `h2-${idx}`)}
+            {renderInline(trimmedBlock.replace(/^##\s+/, ''), `h2-${idx}`)}
           </h2>
         )
       }
 
       // Subheading level 3
-      if (trimmed.startsWith('### ')) {
+      if (trimmedBlock.startsWith('### ')) {
         return (
           <h3 key={idx}>
-            {renderInline(trimmed.replace(/^###\s+/, ''), `h3-${idx}`)}
+            {renderInline(trimmedBlock.replace(/^###\s+/, ''), `h3-${idx}`)}
           </h3>
         )
       }
 
       // Blockquote
-      if (trimmed.startsWith('> ')) {
+      if (trimmedBlock.startsWith('> ')) {
         return (
           <blockquote key={idx}>
-            {renderInline(trimmed.replace(/^>\s+/, ''), `bq-${idx}`)}
+            {renderInline(trimmedBlock.replace(/^>\s+/, ''), `bq-${idx}`)}
           </blockquote>
         )
       }
 
       // Bullet lists
-      if (trimmed.includes('\n- ') || trimmed.startsWith('- ')) {
-        const items = trimmed.split('\n').filter((l) => l.trim().startsWith('- '))
+      if (trimmedBlock.includes('\n- ') || trimmedBlock.startsWith('- ')) {
+        const items = trimmedBlock.split('\n').filter((l) => l.trim().startsWith('- '))
         return (
           <ul key={idx}>
             {items.map((item, itemIdx) => (
@@ -191,7 +230,7 @@ export default function BlogPost() {
       // Standard paragraph
       return (
         <p key={idx}>
-          {renderInline(trimmed, `p-${idx}`)}
+          {renderInline(trimmedBlock, `p-${idx}`)}
         </p>
       )
     })

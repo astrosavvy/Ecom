@@ -43,11 +43,11 @@ Gifting is one of the oldest and most personal ways people express love, appreci
 
 In recent years, more people have begun looking for gifts that offer something deeper than standard presents. Instead of generic items, they are drawn to gifts that carry meaning, reflect personal identity, or connect with the stories and symbols that matter to them.
 
-This is where astrology-inspired gifting comes in.
+This is where [astrology-inspired gifting](/find-a-gift) comes in.
 
 Astrology offers a rich visual and symbolic language that connects people to the stars, the seasons, and the qualities associated with different zodiac signs. When combined with wearable design and natural materials like crystals and gemstones, it creates a way to give gifts that feel deeply personal without being overly complicated.
 
-At YOUNOYA, we explore how thoughtful design, zodiac inspiration, and crystal jewelry come together to create meaningful gifting experiences.
+At YOUNOYA, we explore how thoughtful design, zodiac inspiration, and [crystal jewelry](/shop) come together to create meaningful gifting experiences. Explore [The Collection](/shop) or receive a personal reading through our [Gift Finder](/find-a-gift).
 
 ## Crystal Bracelets: Meaning You Can Wear
 
