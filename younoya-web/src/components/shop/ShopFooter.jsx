@@ -1,50 +1,35 @@
 import { Link } from 'react-router-dom'
+import { ArrowUpRight } from 'lucide-react'
 
-export default function ShopFooter({ onSelectIntention }) {
+export default function ShopFooter() {
   return (
-    <footer className="livora-footer">
-      <div className="livora-footer__top">
-        <div className="livora-footer__brand">
-          <img src="/favicon.png" alt="Younoya crest" />
-          <h3>YOUNOYA</h3>
-          <p>Astrology-backed gifting, curated for what matters. Consecrated heirlooms for every chapter.</p>
+    <footer className="shop-footer">
+      <div className="shop-footer__inner">
+        <div className="shop-footer__eyebrow"><span>✦</span> YOUNOYA ATELIER <span>✦</span></div>
+        <div className="shop-footer__main">
+          <div className="shop-footer__lead">
+            <h2>For what <em>matters.</em></h2>
+            <p>Symbolic objects, chosen with intention and guided by astrological insight.</p>
+            <Link to="/find-a-gift" className="shop-footer__consult">Let Younoya choose <ArrowUpRight size={17} strokeWidth={1.5} /></Link>
+          </div>
+          <nav className="shop-footer__nav" aria-label="Footer navigation">
+            <div>
+              <h3>Explore</h3>
+              <a href="#pieces">The collection</a>
+              <Link to="/find-a-gift">Find a gift</Link>
+              <Link to="/blog">The journal</Link>
+            </div>
+            <div>
+              <h3>Connect</h3>
+              <a href="mailto:care@younoya.com">care@younoya.com</a>
+              <span>We are here to help you choose.</span>
+            </div>
+          </nav>
         </div>
-        <div className="livora-footer__nav">
-          <div>
-            <h4>The Collection</h4>
-            <ul>
-              <li><a href="#pieces">The 10 Brooches</a></li>
-              <li><Link to="/find-a-gift">Aster Gift Finder</Link></li>
-              <li><Link to="/blog">The Journal</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4>Vedic Intentions</h4>
-            <ul>
-              <li><button type="button" onClick={() => onSelectIntention('confidence-power')}>Courage & Presence</button></li>
-              <li><button type="button" onClick={() => onSelectIntention('vitality-balance')}>Growth & Vitality</button></li>
-              <li><button type="button" onClick={() => onSelectIntention('love-connection')}>Love & Devotion</button></li>
-              <li><button type="button" onClick={() => onSelectIntention('protection')}>Instinct & Focus</button></li>
-            </ul>
-          </div>
-          <div>
-            <h4>Atelier Support</h4>
-            <ul>
-              <li><Link to="/admin">Admin Console</Link></li>
-              <li><a href="mailto:care@younoya.com">care@younoya.com</a></li>
-              <li><span>Complimentary Insured Delivery Across India</span></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div className="livora-footer__bottom">
-        <span>© {new Date().getFullYear()} YOUNOYA. All rights reserved. Consecrated in Jaipur & New Delhi.</span>
-        <div className="livora-footer__links">
-          <Link to="/blog">Journal</Link>
-          <span>•</span>
-          <Link to="/find-a-gift">Gift Consultation</Link>
-          <span>•</span>
-          <a href="#pieces">Browse Pieces</a>
+        <div className="shop-footer__bottom">
+          <Link to="/" className="shop-footer__mark" aria-label="Younoya home">YOUNOYA <span>✦</span></Link>
+          <span>© {new Date().getFullYear()} YOUNOYA. For every chapter.</span>
+          <a href="#shop-top" className="shop-footer__top-link">Back to top ↑</a>
         </div>
       </div>
     </footer>

@@ -7,7 +7,7 @@ import ShopDualFeatureTiles from '../components/shop/ShopDualFeatureTiles'
 import ShopCatalog from '../components/shop/ShopCatalog'
 import ShopAmbientBanner from '../components/shop/ShopAmbientBanner'
 import ShopInspiration from '../components/shop/ShopInspiration'
-import ShopUspBar from '../components/shop/ShopUspBar'
+import ShopFooter from '../components/shop/ShopFooter'
 import '../styles/Shop.css'
 
 const FILTERS = [
@@ -53,7 +53,7 @@ export default function Shop() {
   }
 
   return (
-    <div className="livora-shop">
+    <div className="livora-shop" id="shop-top">
       <div className="livora-shop__shell">
         <ShopHero />
         <ShopDualFeatureTiles />
@@ -75,8 +75,8 @@ export default function Shop() {
         />
         <ShopAmbientBanner />
         <ShopInspiration />
-        <ShopUspBar />
       </div>
+      <ShopFooter />
     </div>
   )
 }

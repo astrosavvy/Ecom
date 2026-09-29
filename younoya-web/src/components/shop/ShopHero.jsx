@@ -16,11 +16,7 @@ export default function ShopHero() {
           </Link>
         </div>
         <div className="livora-hero-bar__proof">
-          <div className="livora-hero-bar__avatars" aria-hidden="true">
-            <img src="/media/products/wild-poise-card.webp" alt="" />
-            <img src="/media/products/the-golden-flight-card.webp" alt="" />
-            <img src="/media/products/flamingo-grace-card.webp" alt="" />
-          </div>
+          <span className="livora-hero-bar__proof-index" aria-hidden="true">01 / 10</span>
           <span className="livora-hero-bar__proof-text">Ten pieces. A meaning for every wearer.</span>
         </div>
       </div>

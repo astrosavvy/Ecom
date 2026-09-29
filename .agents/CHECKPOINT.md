@@ -8,16 +8,22 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 15 — Integrated reference composition for `/shop`
-- **Status**: The shop redesign is complete locally and `npm run build` exits 0. The hero product photograph now blends into the same warm canvas as its copy and occupies the full right side, matching the user's visual correction. The initial page follows the reference sequence: navigation, hero, two feature tiles, five product cards, consultation banner, three inspiration cards and a four-part service row. Ten products remain accessible through expansion and intention filters. No push or deployment has been performed for this phase.
-- **Active Task**: Create one final local commit containing source, generated shop assets, built dist and this checkpoint; then request explicit permission before pushing `main`. Linked product detail pages still carry their existing separate implementation and should be audited independently.
-- **Last Updated**: 2026-09-29T22:24:54+05:30
-- **Last Agent**: Antigravity
+- **Current Phase**: Phase 16 — Mobile shop polish and editorial footer
+- **Status**: The reference-based `/shop` redesign and follow-up mobile fixes are complete locally. The shop header now displays the full Younoya wordmark at a legible size, the hero copy and proof line are more balanced, the mobile Wild Poise card is smaller, and a warm editorial footer replaces the old icon row. Desktop and mobile browser views were checked; `npm run build` exits 0. No push or deployment has been performed for these shop phases.
+- **Active Task**: Await explicit permission before pushing the verified local `main` commits to GitHub. Linked product detail pages retain their separate existing implementation and should be audited independently if requested.
+- **Last Updated**: 2026-09-29T22:40:20+05:30
+- **Last Agent**: Codex
 - **Primary URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 
 ---
 
 ## 2. 🏁 Consolidated Milestone History
+
+### [2026-09-29] Phase 16: Mobile Shop Polish and Editorial Footer (Codex)
+- Increased the shop-only Younoya wordmark from a squeezed 32px image to a legible full logo with stronger contrast, while keeping the shared navbar on other routes untouched.
+- Tightened the mobile hero spacing and button proportions, replaced distracting overlapping proof images with a quiet `01 / 10` collection count, and reduced the featured Wild Poise card footprint without changing its route or price.
+- Replaced the unprofessional four-icon closing row with a warm editorial footer containing collection, gift consultation, journal, contact, and back-to-top navigation. Kept copy free of unverified service promises.
+- Visually checked the 430px mobile hero/footer and desktop hero/footer in the local browser. `npm run build` passed and regenerated both production dist trees; the existing >500KB chunk warning remains non-blocking. Changes are local pending push permission.
 
 ### [2026-09-29] Phase 15: Integrated Shop Reference Composition (Codex)
 - Reworked `/shop` against the user-supplied Home & Kitchen reference: removed the breadcrumb, intention grid and simulated newsletter from the main composition; used a larger merged hero with shared organic orbit, two feature tiles, a five-piece opening row, editorial consultation banner, three story cards and compact service row.
