@@ -3,13 +3,12 @@ import { useReducedMotion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { PRODUCTS } from '../data/products'
 import ShopHero from '../components/shop/ShopHero'
-import ShopUspBar from '../components/shop/ShopUspBar'
-import ShopIntentions from '../components/shop/ShopIntentions'
-import ShopPhilosophyBento from '../components/shop/ShopPhilosophyBento'
-import ShopAmbientBanner from '../components/shop/ShopAmbientBanner'
+import ShopDualFeatureTiles from '../components/shop/ShopDualFeatureTiles'
 import ShopCatalog from '../components/shop/ShopCatalog'
-import ShopPurpose from '../components/shop/ShopPurpose'
-import ShopTestimonials from '../components/shop/ShopTestimonials'
+import ShopIntentions from '../components/shop/ShopIntentions'
+import ShopAmbientBanner from '../components/shop/ShopAmbientBanner'
+import ShopInspiration from '../components/shop/ShopInspiration'
+import ShopUspBar from '../components/shop/ShopUspBar'
 import ShopNewsletter from '../components/shop/ShopNewsletter'
 import ShopFooter from '../components/shop/ShopFooter'
 import '../styles/Shop.css'
@@ -31,8 +30,6 @@ export default function Shop() {
   const visible = activeFilter === 'all' 
     ? PRODUCTS 
     : PRODUCTS.filter(product => product.intention === activeFilter)
-
-  const featured = PRODUCTS.find(p => p.handle === 'the-golden-flight') || PRODUCTS[0]
 
   function toggleWishlist(id) {
     setWishlist(prev => prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id])
@@ -57,10 +54,7 @@ export default function Shop() {
         </nav>
 
         <ShopHero />
-        <ShopUspBar />
-        <ShopIntentions onSelectIntention={filterByIntention} />
-        <ShopPhilosophyBento featured={featured} />
-        <ShopAmbientBanner />
+        <ShopDualFeatureTiles />
         <ShopCatalog 
           filters={FILTERS}
           activeFilter={activeFilter}
@@ -71,8 +65,10 @@ export default function Shop() {
           onWishlist={toggleWishlist}
           wishlist={wishlist}
         />
-        <ShopPurpose />
-        <ShopTestimonials />
+        <ShopIntentions onSelectIntention={filterByIntention} />
+        <ShopAmbientBanner />
+        <ShopInspiration />
+        <ShopUspBar />
         <ShopNewsletter />
         <ShopFooter onSelectIntention={filterByIntention} />
       </div>

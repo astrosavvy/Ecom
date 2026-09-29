@@ -13,15 +13,16 @@ export default function ShopCatalog({
 }) {
   return (
     <section id="pieces" className="livora-catalog">
-      <div className="livora-catalog__head">
-        <div>
-          <span className="livora-kicker">THE COMPLETE CATALOG</span>
-          <h2>The Ten Consecrated <em>Heirlooms.</em></h2>
+      <div className="livora-catalog__trending-head">
+        <div className="livora-trending-title-row">
+          <span className="livora-trending-line" />
+          <h2>✦ Trending Heirlooms ✦</h2>
+          <span className="livora-trending-line" />
         </div>
-        <p>Every piece is individually numbered and accompanied by a signed Certificate of Consecration.</p>
+        <p>Handpicked astrology-backed essentials to upgrade your daily ritual.</p>
       </div>
 
-      <div className="livora-filters" role="group" aria-label="Filter by intention">
+      <div className="livora-filters" role="group" aria-label="Filter by chapter">
         {filters.map(filter => {
           const count = filter.id === 'all' 
             ? products.length 
@@ -38,11 +39,6 @@ export default function ShopCatalog({
             </button>
           )
         })}
-      </div>
-
-      <div className="livora-results-bar">
-        <span>SHOWING {String(visibleProducts.length).padStart(2, '0')} PIECES</span>
-        <span>HANDCRAFTED & CONSECRATED IN LIMITED BATCHES</span>
       </div>
 
       <motion.div layout={!reducedMotion} className="livora-grid">

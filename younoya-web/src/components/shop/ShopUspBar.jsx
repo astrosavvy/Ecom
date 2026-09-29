@@ -1,35 +1,35 @@
-import { Compass, Package, ShieldCheck, Sparkles } from 'lucide-react'
+import { Headphones, RotateCcw, ShieldCheck, Truck } from 'lucide-react'
 
 export default function ShopUspBar() {
   return (
     <section className="livora-usp" aria-label="Brand Guarantees">
       <div className="livora-usp__box">
         <div className="livora-usp__item">
-          <span className="livora-usp__icon"><ShieldCheck size={20} strokeWidth={1.5} /></span>
+          <span className="livora-usp__icon"><Truck size={22} strokeWidth={1.5} /></span>
           <div>
-            <strong>Precious Metallurgy</strong>
-            <small>24K Gold electroplate over solid jewelers brass</small>
+            <strong>Free Insured Shipping</strong>
+            <small>Complimentary express courier across India</small>
           </div>
         </div>
         <div className="livora-usp__item">
-          <span className="livora-usp__icon"><Sparkles size={20} strokeWidth={1.5} /></span>
+          <span className="livora-usp__icon"><RotateCcw size={22} strokeWidth={1.5} /></span>
           <div>
-            <strong>108× Consecration</strong>
-            <small>Purified in sacred sandalwood & Shukla Paksha muhurta</small>
+            <strong>Consecrated Exchange</strong>
+            <small>30-day sacred replacement guarantee</small>
           </div>
         </div>
         <div className="livora-usp__item">
-          <span className="livora-usp__icon"><Compass size={20} strokeWidth={1.5} /></span>
+          <span className="livora-usp__icon"><ShieldCheck size={22} strokeWidth={1.5} /></span>
           <div>
-            <strong>Planetary Alignment</strong>
-            <small>Attuned to your Lagna, Nakshatra & life chapter</small>
+            <strong>Secure Payment</strong>
+            <small>100% encrypted & tamper-proof checkout</small>
           </div>
         </div>
         <div className="livora-usp__item">
-          <span className="livora-usp__icon"><Package size={20} strokeWidth={1.5} /></span>
+          <span className="livora-usp__icon"><Headphones size={22} strokeWidth={1.5} /></span>
           <div>
-            <strong>Heirloom Unboxing</strong>
-            <small>Rigid obsidian box, velvet pouch & attunement scroll</small>
+            <strong>Atelier Support</strong>
+            <small>Personalized astrological concierge assistance</small>
           </div>
         </div>
       </div>
