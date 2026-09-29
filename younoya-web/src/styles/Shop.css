@@ -1,4 +1,4 @@
-/* ── YOUNOYA LIVORA-INSPIRED ATELIER SHOP (QUIET LUXURY & ROUNDED BOXES) ── */
+/* ── YOUNOYA LIVORA ATELIER SHOP (FULL TILE HERO & LIGHT-THEMED ARCHITECTURE) ── */
 
 .livora-shop {
   --ink: #1F1914;
@@ -11,13 +11,12 @@
   --bg-subtle: #F4EFE8;
   --gold: #A37B24;
   --gold-light: #C9A84C;
-  --gold-glow: rgba(163, 123, 36, 0.15);
-  --dark-altar: #1C201A;
-  --radius-sm: 0.75rem;    /* 12px */
-  --radius-md: 1.25rem;    /* 20px */
-  --radius-lg: 1.5rem;     /* 24px */
-  --radius-xl: 2rem;       /* 32px */
-  --radius-full: 9999px;   /* Pills */
+  --dark-forest: #283328;
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-full: 9999px;
   
   min-height: 100vh;
   background-color: var(--bg-page);
@@ -44,9 +43,7 @@
   color: var(--gold);
 }
 
-.livora-kicker--gold {
-  color: #E6C575;
-}
+.livora-kicker--gold { color: #E6C575; }
 
 .livora-btn {
   display: inline-flex;
@@ -100,103 +97,99 @@
   box-shadow: 0 8px 20px rgba(196, 151, 59, 0.25);
 }
 
-.livora-btn--full {
-  width: 100%;
-}
+.livora-btn--full { width: 100%; }
 
 /* ── BREADCRUMB ── */
 .livora-crumb {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-top: 108px;
+  padding-top: 100px;
   font-size: 0.8125rem;
   color: var(--muted);
 }
 
-.livora-crumb a:hover {
-  color: var(--ink);
-}
+.livora-crumb a:hover { color: var(--ink); }
+.livora-crumb__current { color: var(--ink); font-weight: 500; }
 
-.livora-crumb__current {
-  color: var(--ink);
-  font-weight: 500;
-}
-
-/* ── SECTION 1: HERO (Image 3 Livora Inspired) ── */
-.livora-hero {
+/* ── SECTION 1: FULL TILE HERO BAR (Text & Image Joining in the Middle) ── */
+.livora-hero-bar {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
-  align-items: center;
-  gap: clamp(32px, 5vw, 72px);
-  padding: 48px 0 64px;
+  align-items: stretch;
+  background: #FAF7F2;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 40px rgba(31, 25, 20, 0.05);
+  margin: 16px 0 44px;
+  min-height: 560px;
 }
 
-.livora-hero__content {
+.livora-hero-bar__left {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(44px, 5.5vw, 84px) clamp(32px, 4.5vw, 64px);
+  background: #FAF7F2;
+  z-index: 2;
 }
 
-.livora-hero__title {
-  margin: 16px 0 20px;
+.livora-hero-bar__title {
+  margin: 16px 0 18px;
   font-family: var(--font-serif);
-  font-size: clamp(3.2rem, 5.5vw, 5.2rem);
+  font-size: clamp(3rem, 5vw, 4.8rem);
   font-weight: 400;
-  line-height: 1.02;
+  line-height: 1.03;
   letter-spacing: -0.03em;
   color: var(--ink);
 }
 
-.livora-hero__title em {
+.livora-hero-bar__title em {
   font-style: italic;
-  font-weight: 400;
   color: #8C6A24;
 }
 
-.livora-hero__desc {
-  max-width: 520px;
+.livora-hero-bar__desc {
+  max-width: 480px;
   margin: 0 0 32px;
   font-size: 1.0625rem;
   line-height: 1.65;
   color: var(--ink-soft);
 }
 
-.livora-hero__buttons {
+.livora-hero-bar__buttons {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 16px;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 
-.livora-hero__proof {
+.livora-hero-bar__proof {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.livora-hero__avatars {
+.livora-hero-bar__avatars {
   display: flex;
   align-items: center;
 }
 
-.livora-hero__avatars img,
-.livora-hero__avatar-more {
+.livora-hero-bar__avatars img,
+.livora-hero-bar__avatar-more {
   width: 36px;
   height: 36px;
   border-radius: 50%;
   border: 2px solid #FAF7F2;
   margin-left: -8px;
   object-fit: cover;
-  background: #E8E2D8;
 }
 
-.livora-hero__avatars img:first-child {
-  margin-left: 0;
-}
+.livora-hero-bar__avatars img:first-child { margin-left: 0; }
 
-.livora-hero__avatar-more {
+.livora-hero-bar__avatar-more {
   display: grid;
   place-items: center;
   font-size: 0.75rem;
@@ -205,7 +198,7 @@
   color: #FAF7F2;
 }
 
-.livora-hero__proof-text {
+.livora-hero-bar__proof-text {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -213,42 +206,46 @@
   color: var(--muted);
 }
 
-.livora-hero__proof-stars {
-  display: flex;
-  gap: 3px;
-}
+.livora-hero-bar__proof-stars { display: flex; gap: 3px; }
 
-/* Hero Right Visual with Floating Inset Badge */
-.livora-hero__visual {
+/* Right Half of Hero Tile: Reaches Midline Seam */
+.livora-hero-bar__right {
   position: relative;
   width: 100%;
-}
-
-.livora-hero__frame {
-  position: relative;
-  aspect-ratio: 16 / 11;
-  border-radius: var(--radius-xl);
+  height: 100%;
+  min-height: 520px;
   overflow: hidden;
-  box-shadow: 0 20px 45px rgba(31, 25, 20, 0.08);
-  border: 1px solid var(--line);
-  background: var(--bg-card);
+  background: #F4EFE8;
 }
 
-.livora-hero__frame img {
+.livora-hero-bar__right img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transition: transform 0.8s ease;
 }
 
-.livora-hero__frame:hover img {
+.livora-hero-bar:hover .livora-hero-bar__right img {
   transform: scale(1.02);
 }
 
-.livora-hero__badge {
+/* Seamless join in the middle */
+.livora-hero-bar__seam-blend {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 90px;
+  background: linear-gradient(to right, #FAF7F2 0%, rgba(250, 247, 242, 0.45) 45%, rgba(250, 247, 242, 0) 100%);
+  pointer-events: none;
+}
+
+/* Floating Badge in Bottom-Right Corner */
+.livora-hero-bar__badge {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -260,7 +257,7 @@
   border: 1px solid rgba(232, 226, 216, 0.8);
 }
 
-.livora-hero__badge-thumb {
+.livora-hero-bar__badge-thumb {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -270,44 +267,15 @@
   border: 1px solid var(--line);
 }
 
-.livora-hero__badge-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.livora-hero-bar__badge-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
-.livora-hero__badge-copy {
-  display: flex;
-  flex-direction: column;
-}
-
-.livora-hero__badge-copy small {
-  font-size: 0.6875rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.livora-hero__badge-copy strong {
-  font-size: 0.875rem;
-  color: var(--ink);
-}
-
-.livora-hero__badge-copy a {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--gold);
-  margin-top: 2px;
-}
+.livora-hero-bar__badge-copy { display: flex; flex-direction: column; }
+.livora-hero-bar__badge-copy small { font-size: 0.6875rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.livora-hero-bar__badge-copy strong { font-size: 0.875rem; color: var(--ink); }
+.livora-hero-bar__badge-copy a { display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 600; color: var(--gold); margin-top: 2px; }
 
 /* ── SECTION 2: USP TRUST BAR (Rounded Pill Box) ── */
-.livora-usp {
-  padding: 16px 0 54px;
-}
-
+.livora-usp { padding: 10px 0 54px; }
 .livora-usp__box {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -319,12 +287,7 @@
   box-shadow: 0 6px 24px rgba(31, 25, 20, 0.03);
 }
 
-.livora-usp__item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
+.livora-usp__item { display: flex; align-items: center; gap: 16px; }
 .livora-usp__icon {
   display: grid;
   place-items: center;
@@ -335,35 +298,18 @@
   color: var(--gold);
   flex-shrink: 0;
 }
-
-.livora-usp__item strong {
-  display: block;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 2px;
-}
-
-.livora-usp__item small {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--muted);
-  line-height: 1.35;
-}
+.livora-usp__item strong { display: block; font-size: 0.9375rem; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.livora-usp__item small { display: block; font-size: 0.75rem; color: var(--muted); line-height: 1.35; }
 
 /* ── SECTION 3: SHOP BY INTENTION (Rounded Cards Strip) ── */
-.livora-intentions {
-  padding: 40px 0 72px;
-}
-
+.livora-intentions { padding: 32px 0 64px; }
 .livora-intentions__header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
-
 .livora-intentions__header h2 {
   margin: 8px 0 0;
   font-family: var(--font-serif);
@@ -371,11 +317,7 @@
   font-weight: 400;
   letter-spacing: -0.02em;
 }
-
-.livora-intentions__header h2 em {
-  font-style: italic;
-  color: #8C6A24;
-}
+.livora-intentions__header h2 em { font-style: italic; color: #8C6A24; }
 
 .livora-link-more {
   display: inline-flex;
@@ -391,12 +333,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
-.livora-link-more:hover {
-  color: var(--gold);
-  border-color: var(--gold);
-  gap: 12px;
-}
+.livora-link-more:hover { color: var(--gold); border-color: var(--gold); gap: 12px; }
 
 .livora-intentions__grid {
   display: grid;
@@ -413,17 +350,8 @@
   border: 1px solid var(--line);
   box-shadow: 0 8px 24px rgba(31, 25, 20, 0.04);
 }
-
-.livora-intent-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.livora-intent-card:hover img {
-  transform: scale(1.06);
-}
+.livora-intent-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.livora-intent-card:hover img { transform: scale(1.06); }
 
 .livora-intent-card__overlay {
   position: absolute;
@@ -432,25 +360,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(15,10,6,0.65) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(15,10,6,0.65) 100%);
   color: #FAF7F2;
 }
-
-.livora-intent-card__overlay h3 {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  font-weight: 400;
-  line-height: 1.1;
-  color: #FFFFFF;
-}
-
-.livora-intent-card__overlay small {
-  display: block;
-  font-size: 0.75rem;
-  color: #E2D9CC;
-  margin-top: 4px;
-}
-
+.livora-intent-card__overlay h3 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; line-height: 1.1; color: #FFFFFF; }
+.livora-intent-card__overlay small { display: block; font-size: 0.75rem; color: #E2D9CC; margin-top: 4px; }
 .livora-intent-card__tag {
   align-self: flex-start;
   padding: 6px 14px;
@@ -462,24 +376,16 @@
   border-radius: var(--radius-full);
   transition: all 0.25s ease;
 }
+.livora-intent-card:hover .livora-intent-card__tag { background: var(--ink); color: #FAF7F2; transform: translateX(4px); }
 
-.livora-intent-card:hover .livora-intent-card__tag {
-  background: var(--ink);
-  color: #FAF7F2;
-  transform: translateX(4px);
-}
-
-/* ── SECTION 4: BRAND PHILOSOPHY BENTO BANNER (User Specific Requirement) ── */
-.livora-bento {
-  padding: 40px 0 72px;
-}
-
+/* ── SECTION 4: CRAFTED TO INSPIRE / 3-COLUMN BENTO ── */
+.livora-bento { padding: 36px 0 64px; }
 .livora-bento__inner {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: 1.15fr 1fr 0.95fr;
   align-items: center;
-  gap: clamp(32px, 5vw, 64px);
-  padding: clamp(36px, 5vw, 64px);
+  gap: clamp(24px, 4vw, 48px);
+  padding: clamp(36px, 5vw, 60px);
   background: var(--bg-card);
   border-radius: var(--radius-xl);
   border: 1px solid var(--line);
@@ -487,194 +393,113 @@
 }
 
 .livora-bento__copy h2 {
-  margin: 14px 0 20px;
+  margin: 14px 0 18px;
   font-family: var(--font-serif);
-  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-size: clamp(2.2rem, 3.5vw, 3.2rem);
   font-weight: 400;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
-
-.livora-bento__copy h2 em {
-  font-style: italic;
-  color: #8C6A24;
-}
-
-.livora-bento__copy p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--ink-soft);
-  margin-bottom: 18px;
-}
-
+.livora-bento__copy h2 em { font-style: italic; color: #8C6A24; }
+.livora-bento__copy p { font-size: 0.95rem; line-height: 1.65; color: var(--ink-soft); margin-bottom: 20px; }
 .livora-bento__link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: var(--gold);
-  margin-top: 12px;
+  color: var(--ink);
   padding-bottom: 2px;
-  border-bottom: 1px solid var(--gold);
-  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--ink);
 }
+.livora-bento__link:hover { color: var(--gold); border-color: var(--gold); gap: 12px; }
 
-.livora-bento__link:hover {
-  color: #6E5114;
-  border-color: #6E5114;
-  gap: 12px;
-}
-
-/* Spotlight Card in Bento */
-.livora-bento__spotlight {
-  width: 100%;
-}
-
-.livora-spotlight-card {
-  padding: 24px;
-  background: var(--bg-page);
+.livora-bento__center-media {
+  aspect-ratio: 1 / 1;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--line);
-  box-shadow: 0 8px 24px rgba(31, 25, 20, 0.03);
-}
-
-.livora-spotlight-card__image {
-  aspect-ratio: 1 / 0.9;
-  border-radius: var(--radius-md);
   overflow: hidden;
-  background: #FFFFFF;
-  margin-bottom: 20px;
+  background: #FAF7F2;
   border: 1px solid var(--line-light);
 }
-
-.livora-spotlight-card__image img {
+.livora-bento__center-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s ease;
 }
+.livora-bento:hover .livora-bento__center-media img { transform: scale(1.05); }
 
-.livora-spotlight-card:hover .livora-spotlight-card__image img {
-  transform: scale(1.04);
-}
-
-.livora-spotlight-card__head {
+.livora-bento__product-info {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 8px;
+  flex-direction: column;
 }
-
-.livora-spotlight-card__head h3 {
+.livora-bento__product-title h3 {
   font-family: var(--font-serif);
-  font-size: 1.625rem;
+  font-size: 1.75rem;
   font-weight: 400;
-  line-height: 1.1;
-  color: var(--ink);
-  margin-top: 4px;
+  margin: 0 0 4px;
 }
-
-.livora-spotlight-card__head strong {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.livora-spotlight-card__info > p {
-  font-size: 0.875rem;
-  color: var(--muted);
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-
-.livora-spotlight-card__swatches {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.swatch {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-}
-
+.livora-bento__product-title strong { font-size: 1.25rem; font-weight: 700; color: var(--ink); }
+.livora-bento__product-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.5; margin: 12px 0 16px; }
+.livora-bento__swatches { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+.swatch { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
 .swatch--gold { background: #D4AF37; }
 .swatch--crystal { background: #E8F0F8; }
 .swatch--brass { background: #8C6A24; }
 
-.livora-spotlight-card__swatches small {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-left: 6px;
-}
-
-/* ── SECTION 5: SECONDARY AMBIENT BANNER (Dark Altar Box) ── */
-.livora-ambient {
-  padding: 40px 0 72px;
-}
-
+/* ── SECTION 5: MODULAR SOFA / ALTAR BANNER (Dark Forest Green) ── */
+.livora-ambient { padding: 32px 0 64px; }
 .livora-ambient__box {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1.25fr;
   align-items: center;
-  gap: clamp(32px, 5vw, 64px);
-  background: var(--dark-altar);
+  background: var(--dark-forest);
   color: #FAF7F2;
   border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: 0 20px 48px rgba(18, 22, 16, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 48px rgba(18, 22, 16, 0.22);
 }
-
-.livora-ambient__copy {
-  padding: clamp(36px, 5vw, 64px);
-}
-
+.livora-ambient__copy { padding: clamp(36px, 5vw, 64px); }
 .livora-ambient__copy h2 {
-  margin: 12px 0 18px;
+  margin: 12px 0 16px;
   font-family: var(--font-serif);
   font-size: clamp(2.2rem, 3.6vw, 3.2rem);
   font-weight: 400;
   line-height: 1.1;
   color: #FFFFFF;
 }
+.livora-ambient__copy p { font-size: 0.95rem; line-height: 1.65; color: #D6CEBF; margin-bottom: 28px; }
 
-.livora-ambient__copy p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: #D6CEBF;
-  margin-bottom: 28px;
+.livora-ambient__visual { position: relative; height: 100%; min-height: 380px; }
+.livora-ambient__visual img { width: 100%; height: 100%; object-fit: cover; }
+.livora-ambient__nav-arrows {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+}
+.livora-ambient__nav-arrows button {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+  cursor: pointer;
 }
 
-.livora-ambient__visual {
-  height: 100%;
-  min-height: 380px;
-}
-
-.livora-ambient__visual img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ── SECTION 6: THE 10 HEIRLOOMS CATALOG GRID ── */
-.livora-catalog {
-  padding: 64px 0 96px;
-  scroll-margin-top: 90px;
-}
-
+/* ── SECTION 6: CATALOG (Trending Finds / The 10 Heirlooms) ── */
+.livora-catalog { padding: 54px 0 84px; scroll-margin-top: 90px; }
 .livora-catalog__head {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
-
 .livora-catalog__head h2 {
   margin: 8px 0 0;
   font-family: var(--font-serif);
@@ -682,28 +507,10 @@
   font-weight: 400;
   letter-spacing: -0.02em;
 }
+.livora-catalog__head h2 em { font-style: italic; color: #8C6A24; }
+.livora-catalog__head p { max-width: 320px; font-size: 0.875rem; color: var(--muted); line-height: 1.5; }
 
-.livora-catalog__head h2 em {
-  font-style: italic;
-  color: #8C6A24;
-}
-
-.livora-catalog__head p {
-  max-width: 320px;
-  font-size: 0.875rem;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-/* Filter Pill Bar */
-.livora-filters {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 12px 0 28px;
-  scrollbar-width: thin;
-}
-
+.livora-filters { display: flex; gap: 10px; overflow-x: auto; padding: 12px 0 24px; scrollbar-width: thin; }
 .livora-filters__pill {
   flex: 0 0 auto;
   display: inline-flex;
@@ -719,27 +526,10 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
-.livora-filters__pill:hover {
-  border-color: var(--ink);
-  transform: translateY(-1px);
-}
-
-.livora-filters__pill.is-active {
-  background: var(--ink);
-  color: #FAF7F2;
-  border-color: var(--ink);
-}
-
-.livora-filters__pill span {
-  font-size: 0.6875rem;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-.livora-filters__pill.is-active span {
-  color: #E2D9CC;
-}
+.livora-filters__pill:hover { border-color: var(--ink); transform: translateY(-1px); }
+.livora-filters__pill.is-active { background: var(--ink); color: #FAF7F2; border-color: var(--ink); }
+.livora-filters__pill span { font-size: 0.6875rem; color: var(--muted); font-weight: 600; }
+.livora-filters__pill.is-active span { color: #E2D9CC; }
 
 .livora-results-bar {
   display: flex;
@@ -749,17 +539,16 @@
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   color: var(--muted);
-  margin-bottom: 36px;
+  margin-bottom: 32px;
 }
 
-/* 3-Column Catalog Grid */
 .livora-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 40px 24px;
+  gap: 36px 24px;
 }
 
-/* Rounded Product Card */
+/* Light Themed Product Card */
 .livora-card {
   display: flex;
   flex-direction: column;
@@ -770,11 +559,7 @@
   box-shadow: 0 6px 20px rgba(31, 25, 20, 0.03);
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
-
-.livora-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 36px rgba(31, 25, 20, 0.08);
-}
+.livora-card:hover { transform: translateY(-6px); box-shadow: 0 16px 36px rgba(31, 25, 20, 0.08); }
 
 .livora-card__media {
   position: relative;
@@ -782,35 +567,20 @@
   background: #FAF7F2;
   overflow: hidden;
 }
-
-.livora-card__link {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.livora-card__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.livora-card:hover .livora-card__media img {
-  transform: scale(1.06);
-}
+.livora-card__link { display: block; width: 100%; height: 100%; }
+.livora-card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.livora-card:hover .livora-card__media img { transform: scale(1.06); }
 
 .livora-card__badge {
   position: absolute;
   top: 14px;
   left: 14px;
   padding: 5px 10px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(6px);
   border-radius: var(--radius-full);
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--ink);
   border: 1px solid var(--line);
@@ -825,17 +595,13 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(6px);
   border: 1px solid var(--line);
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform 0.2s ease;
 }
-
-.livora-card__wish:hover {
-  transform: scale(1.1);
-  background: #FFFFFF;
-}
+.livora-card__wish:hover { transform: scale(1.1); background: #FFFFFF; }
 
 .livora-card__body {
   padding: 22px;
@@ -843,33 +609,10 @@
   flex-direction: column;
   flex: 1;
 }
-
-.livora-card__meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.livora-card__rating {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
-.livora-card__stars {
-  display: flex;
-  gap: 2px;
-}
-
-.livora-card__chapter {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: #9C8F80;
-}
+.livora-card__meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.livora-card__rating { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--muted); }
+.livora-card__stars { display: flex; gap: 2px; }
+.livora-card__chapter { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; color: #9C8F80; }
 
 .livora-card__title h3 {
   font-family: var(--font-serif);
@@ -878,13 +621,8 @@
   line-height: 1.15;
   color: var(--ink);
   margin: 0 0 6px;
-  transition: color 0.2s ease;
 }
-
-.livora-card__title:hover h3 {
-  color: var(--gold);
-}
-
+.livora-card__title:hover h3 { color: var(--gold); }
 .livora-card__sub {
   font-size: 0.8125rem;
   color: var(--muted);
@@ -895,25 +633,9 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-.livora-card__price-row {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-top: auto;
-  margin-bottom: 16px;
-}
-
-.livora-card__price {
-  font-size: 1.1875rem;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.livora-card__tax {
-  font-size: 0.75rem;
-  color: var(--muted);
-}
+.livora-card__price-row { display: flex; align-items: baseline; gap: 8px; margin-top: auto; margin-bottom: 16px; }
+.livora-card__price { font-size: 1.1875rem; font-weight: 700; color: var(--ink); }
+.livora-card__tax { font-size: 0.75rem; color: var(--muted); }
 
 .livora-card__actions {
   display: grid;
@@ -938,15 +660,8 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
-.livora-card__btn-add:hover {
-  background: #332B24;
-}
-
-.livora-card__btn-add.is-added {
-  background: #2E5A36;
-  border-color: #2E5A36;
-}
+.livora-card__btn-add:hover { background: #332B24; }
+.livora-card__btn-add.is-added { background: #2E5A36; border-color: #2E5A36; }
 
 .livora-card__btn-view {
   display: inline-flex;
@@ -959,419 +674,88 @@
   font-size: 0.8125rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.2s ease;
 }
+.livora-card__btn-view:hover { background: #EBE5DC; }
 
-.livora-card__btn-view:hover {
-  background: #EBE5DC;
-  gap: 6px;
-}
+/* ── SECTION 7, 8, 9: PURPOSE, REVIEWS, NEWSLETTER ── */
+.livora-purpose { padding: 48px 0 72px; }
+.livora-purpose__header { text-align: center; max-width: 600px; margin: 0 auto 40px; }
+.livora-purpose__header h2 { margin: 8px 0 0; font-family: var(--font-serif); font-size: clamp(2.2rem, 3.8vw, 3.2rem); font-weight: 400; }
+.livora-purpose__header h2 em { font-style: italic; color: #8C6A24; }
+.livora-purpose__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.livora-purpose__card { padding: 32px 24px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--line); }
+.livora-purpose__icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--bg-subtle); color: var(--gold); margin-bottom: 18px; }
+.livora-purpose__card h3 { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 400; margin-bottom: 10px; }
+.livora-purpose__card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
 
-/* ── SECTION 7: WHY CHOOSE YOUNOYA (Rounded Bento Cards) ── */
-.livora-purpose {
-  padding: 64px 0 80px;
-}
+.livora-reviews { padding: 36px 0 72px; }
+.livora-reviews__header { text-align: center; max-width: 600px; margin: 0 auto 40px; }
+.livora-reviews__header h2 { margin: 8px 0 0; font-family: var(--font-serif); font-size: clamp(2.2rem, 3.8vw, 3.2rem); font-weight: 400; }
+.livora-reviews__header h2 em { font-style: italic; color: #8C6A24; }
+.livora-reviews__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.livora-review-card { padding: 32px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--line); display: flex; flex-direction: column; }
+.livora-review-card__stars { display: flex; gap: 3px; margin-bottom: 16px; }
+.livora-review-card__quote { font-family: var(--font-serif); font-size: 1.125rem; line-height: 1.6; font-style: italic; color: var(--ink-soft); margin: 0 0 24px; flex: 1; }
+.livora-review-card__author { display: flex; align-items: center; gap: 12px; }
+.livora-review-card__avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--bg-subtle); color: var(--gold); display: grid; place-items: center; font-weight: 700; font-size: 0.875rem; }
+.livora-review-card__author strong { display: block; font-size: 0.875rem; color: var(--ink); }
+.livora-review-card__author small { display: block; font-size: 0.75rem; color: var(--muted); }
 
-.livora-purpose__header {
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto 48px;
-}
+.livora-newsletter { padding: 32px 0 72px; }
+.livora-newsletter__box { display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; gap: 40px; background: var(--bg-subtle); border-radius: var(--radius-xl); border: 1px solid var(--line); overflow: hidden; }
+.livora-newsletter__copy { padding: clamp(36px, 5vw, 64px); }
+.livora-newsletter__copy h2 { margin: 10px 0 12px; font-family: var(--font-serif); font-size: clamp(2rem, 3.4vw, 2.8rem); font-weight: 400; line-height: 1.15; }
+.livora-newsletter__copy h2 em { font-style: italic; color: #8C6A24; }
+.livora-newsletter__copy p { font-size: 0.9375rem; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
+.livora-newsletter__form { display: flex; gap: 10px; max-width: 480px; }
+.livora-newsletter__form input { flex: 1; padding: 0.85rem 1.25rem; border-radius: var(--radius-full); border: 1px solid var(--line); background: #FFFFFF; font-size: 0.875rem; outline: none; }
+.livora-newsletter__success { display: inline-flex; align-items: center; gap: 8px; padding: 0.85rem 1.5rem; background: #E8F2EA; color: #21542B; border-radius: var(--radius-full); font-size: 0.875rem; font-weight: 500; }
+.livora-newsletter__image { height: 100%; min-height: 280px; }
+.livora-newsletter__image img { width: 100%; height: 100%; object-fit: cover; }
 
-.livora-purpose__header h2 {
-  margin: 8px 0 0;
-  font-family: var(--font-serif);
-  font-size: clamp(2.2rem, 3.8vw, 3.2rem);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-}
+.livora-footer { padding: 54px 0 36px; border-top: 1px solid var(--line); }
+.livora-footer__top { display: grid; grid-template-columns: 1.2fr 2fr; gap: 48px; margin-bottom: 44px; }
+.livora-footer__brand img { width: 36px; height: 36px; margin-bottom: 14px; }
+.livora-footer__brand h3 { font-family: var(--font-serif); font-size: 1.5rem; letter-spacing: 0.12em; margin-bottom: 8px; }
+.livora-footer__brand p { max-width: 320px; font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+.livora-footer__nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.livora-footer__nav h4 { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
+.livora-footer__nav ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.livora-footer__nav a, .livora-footer__nav button { background: transparent; border: none; font-size: 0.875rem; color: var(--muted); cursor: pointer; text-align: left; padding: 0; }
+.livora-footer__nav a:hover, .livora-footer__nav button:hover { color: var(--ink); }
+.livora-footer__nav span { font-size: 0.8125rem; color: var(--gold); }
+.livora-footer__bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--line-light); font-size: 0.8125rem; color: var(--muted); }
+.livora-footer__links { display: flex; align-items: center; gap: 12px; }
+.livora-footer__links a:hover { color: var(--ink); }
 
-.livora-purpose__header h2 em {
-  font-style: italic;
-  color: #8C6A24;
-}
-
-.livora-purpose__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-.livora-purpose__card {
-  padding: 32px 24px;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--line);
-  box-shadow: 0 6px 20px rgba(31, 25, 20, 0.03);
-}
-
-.livora-purpose__icon {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--bg-subtle);
-  color: var(--gold);
-  margin-bottom: 20px;
-}
-
-.livora-purpose__card h3 {
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
-  font-weight: 400;
-  margin-bottom: 10px;
-  color: var(--ink);
-}
-
-.livora-purpose__card p {
-  font-size: 0.875rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-/* ── SECTION 8: TESTIMONIALS (3 Rounded Cards) ── */
-.livora-reviews {
-  padding: 40px 0 80px;
-}
-
-.livora-reviews__header {
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto 48px;
-}
-
-.livora-reviews__header h2 {
-  margin: 8px 0 0;
-  font-family: var(--font-serif);
-  font-size: clamp(2.2rem, 3.8vw, 3.2rem);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-}
-
-.livora-reviews__header h2 em {
-  font-style: italic;
-  color: #8C6A24;
-}
-
-.livora-reviews__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
-.livora-review-card {
-  padding: 32px;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--line);
-  box-shadow: 0 8px 24px rgba(31, 25, 20, 0.03);
-  display: flex;
-  flex-direction: column;
-}
-
-.livora-review-card__stars {
-  display: flex;
-  gap: 3px;
-  margin-bottom: 16px;
-}
-
-.livora-review-card__quote {
-  font-family: var(--font-serif);
-  font-size: 1.125rem;
-  line-height: 1.6;
-  font-style: italic;
-  color: var(--ink-soft);
-  margin: 0 0 24px;
-  flex: 1;
-}
-
-.livora-review-card__author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.livora-review-card__avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--bg-subtle);
-  color: var(--gold);
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 0.875rem;
-}
-
-.livora-review-card__author strong {
-  display: block;
-  font-size: 0.875rem;
-  color: var(--ink);
-}
-
-.livora-review-card__author small {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
-/* ── SECTION 9: VIP NEWSLETTER BANNER (Rounded Box with Warm Image) ── */
-.livora-newsletter {
-  padding: 40px 0 80px;
-}
-
-.livora-newsletter__box {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  align-items: center;
-  gap: 40px;
-  background: var(--bg-subtle);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--line);
-  overflow: hidden;
-}
-
-.livora-newsletter__copy {
-  padding: clamp(36px, 5vw, 64px);
-}
-
-.livora-newsletter__copy h2 {
-  margin: 10px 0 12px;
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 3.4vw, 2.8rem);
-  font-weight: 400;
-  line-height: 1.15;
-}
-
-.livora-newsletter__copy h2 em {
-  font-style: italic;
-  color: #8C6A24;
-}
-
-.livora-newsletter__copy p {
-  font-size: 0.9375rem;
-  color: var(--muted);
-  line-height: 1.6;
-  margin-bottom: 24px;
-}
-
-.livora-newsletter__form {
-  display: flex;
-  gap: 10px;
-  max-width: 480px;
-}
-
-.livora-newsletter__form input {
-  flex: 1;
-  padding: 0.85rem 1.25rem;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--line);
-  background: #FFFFFF;
-  font-size: 0.875rem;
-  color: var(--ink);
-  outline: none;
-}
-
-.livora-newsletter__form input:focus {
-  border-color: var(--ink);
-}
-
-.livora-newsletter__success {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0.85rem 1.5rem;
-  background: #E8F2EA;
-  color: #21542B;
-  border-radius: var(--radius-full);
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.livora-newsletter__image {
-  height: 100%;
-  min-height: 280px;
-}
-
-.livora-newsletter__image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ── SECTION 10: ATELIER FOOTER ── */
-.livora-footer {
-  padding: 64px 0 40px;
-  border-top: 1px solid var(--line);
-}
-
-.livora-footer__top {
-  display: grid;
-  grid-template-columns: 1.2fr 2fr;
-  gap: 48px;
-  margin-bottom: 48px;
-}
-
-.livora-footer__brand img {
-  width: 40px;
-  height: 40px;
-  margin-bottom: 16px;
-}
-
-.livora-footer__brand h3 {
-  font-family: var(--font-serif);
-  font-size: 1.6rem;
-  letter-spacing: 0.12em;
-  margin-bottom: 8px;
-}
-
-.livora-footer__brand p {
-  max-width: 320px;
-  font-size: 0.875rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.livora-footer__nav {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
-.livora-footer__nav h4 {
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink);
-  margin-bottom: 16px;
-}
-
-.livora-footer__nav ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.livora-footer__nav a,
-.livora-footer__nav button {
-  background: transparent;
-  border: none;
-  font-size: 0.875rem;
-  color: var(--muted);
-  cursor: pointer;
-  text-align: left;
-  padding: 0;
-  transition: color 0.2s ease;
-}
-
-.livora-footer__nav a:hover,
-.livora-footer__nav button:hover {
-  color: var(--ink);
-}
-
-.livora-footer__nav span {
-  font-size: 0.8125rem;
-  color: var(--gold);
-}
-
-.livora-footer__bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 24px;
-  border-top: 1px solid var(--line-light);
-  font-size: 0.8125rem;
-  color: var(--muted);
-}
-
-.livora-footer__links {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.livora-footer__links a:hover {
-  color: var(--ink);
-}
-
-/* ── RESPONSIVE MEDIA QUERIES ── */
+/* ── RESPONSIVE ── */
 @media (max-width: 1100px) {
-  .livora-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .livora-intentions__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .livora-usp__box {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .livora-purpose__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .livora-grid { grid-template-columns: repeat(2, 1fr); }
+  .livora-intentions__grid { grid-template-columns: repeat(2, 1fr); }
+  .livora-usp__box { grid-template-columns: repeat(2, 1fr); }
+  .livora-purpose__grid { grid-template-columns: repeat(2, 1fr); }
+  .livora-bento__inner { grid-template-columns: 1fr 1fr; }
+  .livora-bento__product-info { grid-column: span 2; }
 }
 
 @media (max-width: 860px) {
-  .livora-hero {
-    grid-template-columns: 1fr;
-    gap: 40px;
-    padding-top: 24px;
-  }
-  .livora-hero__content {
-    align-items: flex-start;
-  }
-  .livora-bento__inner {
-    grid-template-columns: 1fr;
-  }
-  .livora-ambient__box {
-    grid-template-columns: 1fr;
-  }
-  .livora-ambient__visual {
-    min-height: 240px;
-  }
-  .livora-reviews__grid {
-    grid-template-columns: 1fr;
-  }
-  .livora-newsletter__box {
-    grid-template-columns: 1fr;
-  }
-  .livora-newsletter__image {
-    display: none;
-  }
-  .livora-footer__top {
-    grid-template-columns: 1fr;
-  }
+  .livora-hero-bar { grid-template-columns: 1fr; }
+  .livora-hero-bar__right { min-height: 340px; }
+  .livora-hero-bar__seam-blend { display: none; }
+  .livora-ambient__box { grid-template-columns: 1fr; }
+  .livora-reviews__grid { grid-template-columns: 1fr; }
+  .livora-newsletter__box { grid-template-columns: 1fr; }
+  .livora-newsletter__image { display: none; }
+  .livora-footer__top { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
-  .livora-crumb {
-    padding-top: 96px;
-  }
-  .livora-hero__title {
-    font-size: 2.8rem;
-  }
-  .livora-grid {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-  .livora-intentions__grid {
-    grid-template-columns: 1fr;
-  }
-  .livora-usp__box {
-    grid-template-columns: 1fr;
-    padding: 20px;
-  }
-  .livora-purpose__grid {
-    grid-template-columns: 1fr;
-  }
-  .livora-footer__nav {
-    grid-template-columns: 1fr;
-  }
-  .livora-footer__bottom {
-    flex-direction: column;
-    gap: 14px;
-    text-align: center;
-  }
+  .livora-crumb { padding-top: 90px; }
+  .livora-hero-bar__title { font-size: 2.6rem; }
+  .livora-grid { grid-template-columns: 1fr; }
+  .livora-intentions__grid { grid-template-columns: 1fr; }
+  .livora-usp__box { grid-template-columns: 1fr; padding: 20px; }
+  .livora-purpose__grid { grid-template-columns: 1fr; }
+  .livora-footer__nav { grid-template-columns: 1fr; }
+  .livora-footer__bottom { flex-direction: column; gap: 14px; text-align: center; }
 }
