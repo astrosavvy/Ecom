@@ -47,7 +47,7 @@ function fallbackContent(route, seo) {
   if (route === '/blog') return `<main><h1>The Younoya Journal</h1><p>${escapeHtml(seo.description)}</p><p><a href="/shop">Explore keepsakes</a> or read our stories.</p></main>`
   if (route.startsWith('/blog/')) return `<main><nav><a href="/blog">The Journal</a></nav><h1>${escapeHtml(seo.title)}</h1><p>${escapeHtml(seo.description)}</p><p><a href="/shop">Explore keepsakes</a>.</p></main>`
   const product = seo.product
-  if (product) return `<main><nav><a href="/shop">The collection</a></nav><h1>${escapeHtml(product.name)}</h1><p>${escapeHtml(product.subtitle)}</p><p>${escapeHtml(product.price)}</p><p>${escapeHtml(product.intentionStory)}</p><h2>Materials</h2><ul>${Object.values(product.materials).map(value => `<li>${escapeHtml(value)}</li>`).join('')}</ul></main>`
+  if (product) return `<main><nav><a href="/shop">The collection</a></nav><h1>${escapeHtml(product.name)}</h1><p>${escapeHtml(product.subtitle)}</p><p>${escapeHtml(product.price)}</p><p>${escapeHtml(product.intentionStory)}</p><h2>Piece details</h2><ul><li>Dimensions: ${escapeHtml(product.specs.dimensions)}</li><li>Weight: ${escapeHtml(product.specs.weight)}</li><li>Colour: ${escapeHtml(product.specs.color)}</li></ul></main>`
   return `<main><h1>${escapeHtml(seo.title)}</h1><p>${escapeHtml(seo.description)}</p></main>`
 }
 

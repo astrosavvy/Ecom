@@ -1,174 +1,104 @@
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ArrowRight, ArrowUpRight, Sparkles } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, Sparkles } from 'lucide-react'
 import { PRODUCTS } from '../data/products'
 import '../styles/Shop.css'
 
-const EDITS = [
-  { id: 'all', label: 'All 10 Consecrated Brooches', handles: PRODUCTS.map(item => item.handle) },
-  { id: 'confidence', label: 'Confidence & Power', handles: ['the-golden-flight', 'vivid-toucan-muse'] },
-  { id: 'vitality', label: 'Vitality & Renewal', handles: ['the-verdant-rising', 'solar-embrace', 'flamingo-aura'] },
-  { id: 'devotion', label: 'Love & Devotion', handles: ['flamingo-grace'] },
-  { id: 'wealth', label: 'Wealth & Wisdom', handles: ['golden-instinct', 'the-inner-kingdom'] },
-  { id: 'protection', label: 'Protection & Shielding', handles: ['fire-and-radiance', 'cats-eye'] },
+const FILTERS = [
+  { id: 'all', label: 'All pieces' },
+  { id: 'confidence-power', label: 'Courage & presence' },
+  { id: 'vitality-balance', label: 'Growth & renewal' },
+  { id: 'love-connection', label: 'Connection' },
+  { id: 'wealth-prosperity', label: 'Possibility' },
+  { id: 'protection', label: 'Instinct & focus' },
 ]
 
-const SIGNATURE = PRODUCTS.find(item => item.handle === 'the-golden-flight') || PRODUCTS[0]
+const featured = PRODUCTS.find(product => product.handle === 'the-golden-flight')
 
-function ProductEditorial({ product, index }) {
+function Piece({ product, index, reducedMotion }) {
   return (
     <motion.article
-      className="collection-piece"
-      layout
-      initial={{ opacity: 0, y: 22 }}
+      className="atelier-piece"
+      layout={!reducedMotion}
+      initial={reducedMotion ? false : { opacity: 0, y: 26 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -15 }}
-      transition={{ duration: 0.42, delay: Math.min(index * 0.055, 0.25) }}
+      exit={reducedMotion ? undefined : { opacity: 0, y: 12 }}
+      transition={{ duration: 0.38, delay: Math.min(index * 0.045, 0.22) }}
     >
-      <Link
-        className="collection-piece__visual"
-        to={`/product/${product.handle}`}
-        aria-label={`Explore ${product.name}`}
-      >
-        <img
-          src={product.primaryImage}
-          alt={product.name}
-          loading={index < 4 ? 'eager' : 'lazy'}
-        />
-        <span className="collection-piece__open" aria-hidden="true">
-          <ArrowUpRight size={21} strokeWidth={1.3} />
-        </span>
+      <Link className="atelier-piece__image" to={`/product/${product.handle}`} aria-label={`Explore ${product.name}`}>
+        <img src={product.cardImage} alt={product.subtitle} loading={index < 3 ? 'eager' : 'lazy'} />
+        <span className="atelier-piece__index">{String(PRODUCTS.indexOf(product) + 1).padStart(2, '0')} / 10</span>
+        <span className="atelier-piece__arrow" aria-hidden="true"><ArrowUpRight size={22} strokeWidth={1.3} /></span>
       </Link>
-      <div className="collection-piece__content">
-        <div className="collection-piece__line">
-          <span>{product.badge}</span>
-          <span>{product.specs?.weight || 'HANDCRAFTED'}</span>
+      <div className="atelier-piece__body">
+        <span className="atelier-piece__motif">{product.motif} <span>•</span> {product.tagline}</span>
+        <div className="atelier-piece__titleline">
+          <Link to={`/product/${product.handle}`}><h3>{product.name}</h3></Link>
+          <span>{product.price}</span>
         </div>
-        <Link to={`/product/${product.handle}`}>
-          <h3>{product.name}</h3>
-        </Link>
-        <p className="collection-piece__subtitle">{product.subtitle}</p>
-        <div className="collection-piece__specs-preview">
-          <span>{product.specs?.dimensions}</span>
-        </div>
-        <div className="collection-piece__end">
-          <span>{product.tagline.split(' • ')[0]}</span>
-          <strong>{product.price}</strong>
-        </div>
+        <p>{product.subtitle}</p>
+        <div className="atelier-piece__foot"><span>{product.specs.dimensions}</span><Link to={`/product/${product.handle}`}>Discover the piece <ArrowRight size={14} /></Link></div>
       </div>
     </motion.article>
   )
 }
 
 export default function Shop() {
-  const [activeEdit, setActiveEdit] = useState('all')
-  const selected = EDITS.find(edit => edit.id === activeEdit) || EDITS[0]
-  const visible = PRODUCTS.filter(
-    product => selected.handles.includes(product.handle) && (activeEdit !== 'all' || product.handle !== SIGNATURE.handle)
-  )
+  const [activeFilter, setActiveFilter] = useState('all')
+  const reducedMotion = useReducedMotion()
+  const visible = activeFilter === 'all' ? PRODUCTS : PRODUCTS.filter(product => product.intention === activeFilter)
 
   return (
-    <section className="collection" aria-labelledby="collection-title">
-      <header className="collection__intro">
-        <Link to="/" className="collection__return">
-          Younoya / Home <ArrowUpRight size={13} />
-        </Link>
-        <div className="collection__intro-grid">
+    <div className="atelier-shop">
+      <div className="atelier-shop__shell">
+        <nav className="atelier-shop__crumb" aria-label="Breadcrumb"><Link to="/">Younoya</Link><span>/</span><span>The collection</span></nav>
+
+        <header className="atelier-shop__header">
           <div>
-            <span className="collection__eyebrow">THE YOUNOYA ATELIER</span>
-            <h1 id="collection-title">
-              Consecrated Brooches.<br />
-              <em>Heirlooms to keep.</em>
-            </h1>
+            <span className="atelier-shop__kicker"><span className="atelier-shop__spark">✳</span> THE YOUNOYA COLLECTION <span>— 01 / 10</span></span>
+            <h1>Objects of meaning.<br /><em>Made to be worn.</em></h1>
           </div>
-          <p>
-            Handcrafted brooches imbued with celestial symbolism and Vedic intention.
-            Explore exact dimensions, artisan weights, and sacred meanings behind each authentic talisman.
-          </p>
-        </div>
-      </header>
+          <p>Ten sculptural brooches. Ten ways to carry an intention close. Explore the character, colour and story of each piece.</p>
+        </header>
 
-      {activeEdit === 'all' && (
-        <Link
-          className="collection-feature"
-          to={`/product/${SIGNATURE.handle}`}
-          aria-label={`Explore ${SIGNATURE.name}`}
-        >
-          <div className="collection-feature__image">
-            <img src={SIGNATURE.primaryImage} alt={SIGNATURE.name} fetchPriority="high" />
+        <Link to={`/product/${featured.handle}`} className="atelier-shop__feature" aria-label={`Explore ${featured.name}`}>
+          <div className="atelier-shop__feature-copy">
+            <span>IN FOCUS <span>✳</span> THE RISING PHOENIX</span>
+            <h2>To begin<br /><em>again.</em></h2>
+            <p>A vivid red phoenix for courage, renewal and the beautiful possibility of what comes next.</p>
+            <div className="atelier-shop__feature-link">Meet the piece <span><ArrowUpRight size={21} strokeWidth={1.4} /></span></div>
           </div>
-          <div className="collection-feature__copy">
-            <span className="collection__eyebrow">SIGNATURE CONSECRATION</span>
-            <h2>
-              The Rising Phoenix<br />
-              <em>triumphant in gold.</em>
-            </h2>
-            <p>{SIGNATURE.intentionStory.split('. ')[0]}.</p>
-            <div className="collection-feature__specs">
-              <span>{SIGNATURE.specs.dimensions}</span>
-              <span>•</span>
-              <span>{SIGNATURE.specs.weight}</span>
-            </div>
-            <div className="collection-feature__bottom">
-              <span>{SIGNATURE.name}</span>
-              <span>{SIGNATURE.price}</span>
-              <i><ArrowUpRight size={20} /></i>
-            </div>
-          </div>
+          <div className="atelier-shop__feature-image"><img src={featured.primaryImage} alt={featured.subtitle} fetchPriority="high" /></div>
+          <span className="atelier-shop__feature-count">02 &nbsp;/&nbsp; 10</span>
         </Link>
-      )}
 
-      <div className="collection__body">
-        <div className="collection__toolbar">
-          <div>
-            <span className="collection__eyebrow">EXPLORE BY INTENTION</span>
-            <h2>The Consecrated <em>Edits</em></h2>
+        <section id="pieces" className="atelier-shop__catalog" aria-labelledby="atelier-catalog-title">
+          <div className="atelier-shop__catalog-head">
+            <div><span className="atelier-shop__kicker">THE ATELIER EDIT</span><h2 id="atelier-catalog-title">Find what <em>speaks to you.</em></h2></div>
+            <a href="#atelier-filters" className="atelier-shop__browse">Browse by intention <ArrowDown size={16} /></a>
           </div>
-          <span>{selected.handles.length.toString().padStart(2, '0')} brooches</span>
-        </div>
-        <div className="collection__filters" role="group" aria-label="Filter collection by intention">
-          {EDITS.map(edit => (
-            <button
-              type="button"
-              key={edit.id}
-              className={edit.id === activeEdit ? 'is-selected' : ''}
-              aria-pressed={edit.id === activeEdit}
-              onClick={() => setActiveEdit(edit.id)}
-            >
-              {edit.label}
-              <span>{edit.handles.length.toString().padStart(2, '0')}</span>
-            </button>
-          ))}
-        </div>
-        <motion.div layout className="collection__grid">
-          <AnimatePresence mode="popLayout">
-            {visible.map((product, index) => (
-              <ProductEditorial key={product.id} product={product} index={index} />
-            ))}
-          </AnimatePresence>
-        </motion.div>
-      </div>
+          <div id="atelier-filters" className="atelier-shop__filters" role="group" aria-label="Filter by intention">
+            {FILTERS.map(filter => {
+              const count = filter.id === 'all' ? PRODUCTS.length : PRODUCTS.filter(product => product.intention === filter.id).length
+              return <button key={filter.id} type="button" className={activeFilter === filter.id ? 'is-active' : ''} aria-pressed={activeFilter === filter.id} onClick={() => setActiveFilter(filter.id)}>{filter.label}<span>{String(count).padStart(2, '0')}</span></button>
+            })}
+          </div>
+          <div className="atelier-shop__results"><span>SHOWING {String(visible.length).padStart(2, '0')} PIECES</span><span>AN INTENTION FOR EVERY MOMENT</span></div>
+          <motion.div layout={!reducedMotion} className="atelier-shop__grid">
+            <AnimatePresence mode="popLayout">
+              {visible.map((product, index) => <Piece key={product.id} product={product} index={index} reducedMotion={reducedMotion} />)}
+            </AnimatePresence>
+          </motion.div>
+        </section>
 
-      <div className="collection__consult">
-        <Sparkles size={18} strokeWidth={1.4} />
-        <p>Not sure which piece aligns with their astrological chart? <em>Let our Sanctum guide consult with you.</em></p>
-        <Link to="/find-a-gift">
-          Consult Gift Guide <ArrowRight size={17} />
-        </Link>
+        <aside className="atelier-shop__guide">
+          <div className="atelier-shop__guide-icon"><Sparkles size={24} strokeWidth={1.2} /></div>
+          <div><span className="atelier-shop__kicker">A MORE PERSONAL WAY TO CHOOSE</span><h2>Not sure which one<br /><em>feels like theirs?</em></h2><p>Let Younoya guide you toward a piece with meaning.</p></div>
+          <Link to="/find-a-gift">Let Younoya choose <ArrowUpRight size={19} /></Link>
+        </aside>
+        <footer className="atelier-shop__footer"><span>YOUNOYA · OBJECTS OF MEANING</span><Link to="/blog">Read the journal <ArrowUpRight size={16} /></Link></footer>
       </div>
-
-      <footer className="collection__footer">
-        <span>YOUNOYA / CONSECRATED HEIRLOOMS & BROOCHES</span>
-        <div>
-          <Link to="/blog" style={{ marginRight: '18px' }}>
-            The Journal <ArrowUpRight size={15} />
-          </Link>
-          <Link to="/">
-            Return to Home <ArrowUpRight size={15} />
-          </Link>
-        </div>
-      </footer>
-    </section>
+    </div>
   )
 }

@@ -8,16 +8,28 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 8 — Strapi-Grade TipTap Block Editor, Backlinks Engine, Image Compression & Storefront Live on `main`
-- **Status**: Production-ready on `main`. Deployed TipTap rich text block editor (the same engine powering Strapi v5) in `younoya-web/src/admin` with zero VPS RAM overhead. Created canonical master site navigation ledger (`SITE_LINKS.md`) cataloging all storefront routes, 10 consecrated keepsakes, editorial blog articles, admin views, SEO endpoints, and Medusa REST APIs with clickable Production and Local Dev URLs. Build verified exit code 0 across 2,364 modules.
-- **Active Task**: All links cataloged in `SITE_LINKS.md`. Build verified locally. Ready for single final commit and user push approval.
-- **Last Updated**: 2026-09-29T16:45:00+05:30
-- **Last Agent**: Antigravity
+- **Current Phase**: Phase 9 — Photo-led collection and product detail redesign complete locally
+- **Status**: Local build verified. `/shop` and all ten `/product/:handle` routes now use verified P55–P64 product photographs and the user-supplied updated brooch document for prices, dimensions, weights and editorial story. Storefront changes are not pushed or deployed. The root `/` Coming Soon page remains intact.
+- **Active Task**: Final review and single local commit for the collection/PDP redesign. Await explicit user permission before pushing `main`. Checkout remains deliberately unavailable until Medusa order placement is connected; the former simulated success flow was removed.
+- **Last Updated**: 2026-09-29T17:46:37+05:30
+- **Last Agent**: Codex
 - **Primary URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 
 ---
 
 ## 2. 🏁 Consolidated Milestone History
+
+### [2026-09-29] Photo-Led Brooch Collection and Product Pages (Codex)
+- Rebuilt the light `/shop` editorial collection and shared product detail page for all ten brooches. Matched P55–P64 source folders to each physical object and prepared 29 optimized gallery WebPs plus ten card derivatives in `public/media/products/`. The original `New_Edited_Pics/` archive remains untouched and untracked.
+- Extracted the ten product entries from `YOUNOYA_Brooch_Collection_Updated_Dimensions_Weights_Pricing.docx` into `productEditorial.js`, with documented prices, dimensions, weights, colour, symbolism, astrological framing and wear guidance. Replaced the former Solar Embrace dragonfly with the P55 jaguar as Wild Poise (₹ 2,499); the legacy URL redirects to `/product/wild-poise`. Retained other existing URL handles for link compatibility.
+- Replaced unrelated SVG/diorama product imagery, fabricated ratings, ritual/mantra, metal, certification and shipping assertions in the product template with the documented facts and photos. All product pages now have a prominent inline `Personalize me` flow for recipient name and message; distinct notes create distinct bag lines. Removed gallery tabs, story accordions and the personalization popup per user direction.
+- Applied warm ivory to the product route, document overscroll, header/cart icon and bag drawer. Removed the cart's unsupported delivery/certification promises and fake order-confirmation screen; the bag clearly states checkout opens soon until a real order endpoint is wired.
+- Updated gift recommendations, SEO metadata/route shells, sitemap and `SITE_LINKS.md` for the ten-piece catalog. Verified `npm run build` exit 0 (2,364 modules, 16 crawlable route shells), ten documented prices and 29 gallery paths, filter selection, legacy redirect, responsive light product view and inline personalization-to-bag behavior in the local browser. The Vite >500KB bundle-size warning remains pre-existing/non-blocking.
+
+### [2026-09-29] Shop and Product Detail Redesign Plan (Codex)
+- Audited live `/shop` and `/product/the-golden-flight` alongside `Shop.jsx`, `ProductDetail.jsx`, their styles, product data, cart state and brand tokens. The existing light collection has functional intention filters and ten linked products; the dark detail template uses a large symbolic SVG as its lead image, unrelated diorama stills in its gallery, heavy bordered panels and inline note/seal inputs below the initial purchase information. No dedicated `Personalize me` CTA exists.
+- Planned a photo-led warm-ivory editorial collection and one reusable detail template for all ten product handles, with restrained reveal, gallery and filter motion; a prominent personalization action opening a focused note/seal editor; and separate personalized cart lines for distinct inscriptions. Keep intention-only filtering, prices, routes, SEO, Coming Soon `/` and reduced-motion behavior.
+- Product photo mapping is a prerequisite: the ten current products point primarily to symbolic SVGs while untracked `New_Edited_Pics/` contains 70 numbered photo groups; a sampled P1 image depicts a different object and cannot be blindly assigned. Verify every product-to-image match before publishing. Verify ratings, certification, ritual and delivery claims before retaining them as sales assurances. No build or deployment was run because this was a planning-only request.
 
 ### [2026-09-29] Phase 8: TipTap Editor (Strapi v5 Engine), Backlinks, Cloudflare Deploy Fix & Storefront Direct Links
 - **Master Site Navigation & Verification Ledger (`SITE_LINKS.md`)**:
@@ -95,8 +107,8 @@
 
 ## 3. 🎯 Active Roadmap & Immediate Next Steps
 
-1. **Verify Cloudflare CI Deployment**: Confirm build passes on Cloudflare Workers Static Assets without `_redirects` errors following the push to `origin main`.
-2. **Medusa Commerce & Auth Sync**: Connect live storefront cart and checkout to Medusa 2.18 REST endpoints on `api.younoya.com`.
+1. **Review and Push**: Review the light collection/PDP in local preview, then request explicit user permission before any push to `origin main`. Verify Cloudflare CI after an authorized push.
+2. **Medusa Commerce & Auth Sync**: Connect live storefront cart and checkout to Medusa 2.18 REST endpoints on `api.younoya.com`; remove the checkout-unavailable state only after real order placement is verified.
 3. **Full Launch Transition**: When ready for full public launch, merge `prepare-to-launch` into `main` to replace `/` Coming Soon facade with the scroll diorama film.
 
 ---

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Plus, Minus, Trash2, Sparkles, ShieldCheck, Gift, ArrowRight } from 'lucide-react'
-import confetti from 'canvas-confetti'
+import { Link } from 'react-router-dom'
+import { X, Plus, Minus, Trash2, Gift } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import '../styles/CartDrawer.css'
 
@@ -16,30 +16,10 @@ export default function CartDrawer() {
     totalItems,
     giftNote,
     setGiftNote,
-    waxSealColor,
-    setWaxSealColor,
-    clearCart,
   } = useCart()
-
-  const [checkoutStep, setCheckoutStep] = useState('cart') // 'cart' | 'success'
-
-  const freeShippingThreshold = 5000
-  const progressToFreeShipping = Math.min(100, (totalPrice / freeShippingThreshold) * 100)
-  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - totalPrice)
-
-  const handleCheckout = () => {
-    confetti({
-      particleCount: 80,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#F9E498', '#D4AF37', '#B8860B', '#FFFFFF'],
-    })
-    setCheckoutStep('success')
-  }
 
   const handleClose = () => {
     setIsOpen(false)
-    setTimeout(() => setCheckoutStep('cart'), 400)
   }
 
   return (
@@ -65,7 +45,7 @@ export default function CartDrawer() {
             <div className="cart-drawer__header">
               <div className="header-title">
                 <span className="eyebrow-mini">YOUNOYA ATELIER</span>
-                <h3>Your Gifting Suite ({totalItems})</h3>
+                <h3>Your bag ({totalItems})</h3>
               </div>
               <button
                 className="cart-close-btn"
@@ -76,26 +56,7 @@ export default function CartDrawer() {
               </button>
             </div>
 
-            {checkoutStep === 'cart' ? (
-              <>
-                {/* Free Shipping Meter */}
-                <div className="shipping-meter">
-                  <div className="shipping-meter__text">
-                    {remainingForFreeShipping === 0 ? (
-                      <span className="text-gold">✦ Complimentary Worldwide White-Glove Shipping Unlocked</span>
-                    ) : (
-                      <span>
-                        Add <strong className="text-gold">₹{remainingForFreeShipping.toLocaleString('en-IN')}</strong> more for complimentary delivery
-                      </span>
-                    )}
-                  </div>
-                  <div className="shipping-meter__bar">
-                    <div
-                      className="shipping-meter__fill"
-                      style={{ width: `${progressToFreeShipping}%` }}
-                    />
-                  </div>
-                </div>
+            <>
 
                 {/* Items List */}
                 <div className="cart-drawer__body">
@@ -104,14 +65,9 @@ export default function CartDrawer() {
                       <div className="empty-emblem">✦</div>
                       <h4>Your next gift begins here</h4>
                       <p>
-                        Explore our curated gift vaults or consult the Zodiac Compass to discover bespoke alignments.
+                        Explore the collection or let Younoya help you choose a piece with meaning.
                       </p>
-                      <button
-                        className="btn-gold"
-                        onClick={handleClose}
-                      >
-                        Explore The Vault
-                      </button>
+                      <Link className="btn-gold" to="/shop" onClick={handleClose}>Explore the collection</Link>
                     </div>
                   ) : (
                     <div className="cart-items">
@@ -133,6 +89,7 @@ export default function CartDrawer() {
                             </div>
                             <h4 className="cart-item__title">{item.name}</h4>
                             <p className="cart-item__chapter">{(item.chapter || 'Personal selection').replace(/Chapter/gi, 'Object')}</p>
+                            {item.personalNote && <p className="cart-item__chapter">Personal note: {item.personalNote}</p>}
                             <div className="cart-item__bottom">
                               <div className="cart-item__qty">
                                 <button
@@ -158,31 +115,18 @@ export default function CartDrawer() {
                       <div className="personalization-box">
                         <div className="personalization-box__header">
                           <Gift size={16} className="text-gold" />
-                          <span>Bespoke Wax-Sealed Celestial Inscription</span>
+                          <span>Your gift note</span>
                         </div>
                         <p className="personalization-box__sub">
-                          Each gift includes a hand-pressed gold foil scroll inscribed for your recipient.
+                          Add a note for this order. You can also personalize each piece on its product page.
                         </p>
                         <textarea
                           className="personalization-input"
-                          placeholder="Compose your heartfelt message or let our astrologer scribe a blessing..."
+                          placeholder="Write a note for this order..."
                           rows={2}
                           value={giftNote}
                           onChange={(e) => setGiftNote(e.target.value)}
                         />
-                        <div className="wax-seal-selector">
-                          <span className="selector-label">Atelier Wax Seal:</span>
-                          <div className="seal-options">
-                            {['gold', 'obsidian', 'burgundy', 'emerald'].map((color) => (
-                              <button
-                                key={color}
-                                className={`seal-opt seal-opt--${color} ${waxSealColor === color ? 'active' : ''}`}
-                                onClick={() => setWaxSealColor(color)}
-                                title={`${color} wax seal`}
-                              />
-                            ))}
-                          </div>
-                        </div>
                       </div>
                     </div>
                   )}
@@ -196,66 +140,22 @@ export default function CartDrawer() {
                         <span>Atelier Subtotal</span>
                         <span>₹{totalPrice.toLocaleString('en-IN')}</span>
                       </div>
-                      <div className="summary-row">
-                        <span>Cosmic Inscription & Packaging</span>
-                        <span className="text-gold">Complimentary</span>
-                      </div>
                       <div className="summary-row summary-row--total">
-                        <span>Total Investment</span>
+                        <span>Subtotal</span>
                         <span className="total-val">₹{totalPrice.toLocaleString('en-IN')}</span>
                       </div>
                     </div>
 
-                    <button
-                      className="btn-gold checkout-btn"
-                      onClick={handleCheckout}
-                    >
-                      <span>Proceed to checkout</span>
-                      <ArrowRight size={16} />
+                    <button className="btn-gold checkout-btn" type="button" disabled>
+                      <span>Checkout opens soon</span>
                     </button>
 
                     <div className="checkout-guarantee">
-                      <ShieldCheck size={14} className="text-gold" />
-                      <span>Insured Celestial Courier · Authentic Gemological Certification</span>
+                      <span>Your selections are saved in this browser for now.</span>
                     </div>
                   </div>
                 )}
-              </>
-            ) : (
-              <div className="cart-success">
-                <motion.div
-                  className="success-emblem"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: 'spring', damping: 15 }}
-                >
-                  ✦
-                </motion.div>
-                <h3>Your gift begins here</h3>
-                <p className="success-desc">
-                  Thank you for entrusting YOUNOYA with this sacred gifting ritual. Our celestial atelier has received your curation.
-                </p>
-                <div className="success-details">
-                  <div className="detail-item">
-                    <span>Order Inscription:</span>
-                    <strong>#YN-{Math.floor(100000 + Math.random() * 900000)}</strong>
-                  </div>
-                  <div className="detail-item">
-                    <span>Delivery Timing:</span>
-                    <strong>Aligned with the Upcoming Solar Cycle</strong>
-                  </div>
-                </div>
-                <button
-                  className="btn-gold"
-                  onClick={() => {
-                    clearCart()
-                    handleClose()
-                  }}
-                >
-                  Return to the Cosmos
-                </button>
-              </div>
-            )}
+            </>
           </motion.div>
         </div>
       )}

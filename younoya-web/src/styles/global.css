@@ -4,6 +4,7 @@
 html { background: #050403; color: #f5eee2; scroll-behavior: auto; -webkit-font-smoothing: antialiased; }
 body { min-width: 320px; overflow-x: hidden; background: #050403; color: #f5eee2; font-family: var(--font-sans); line-height: 1.5; }
 body { cursor: auto; }
+html.store-light, html.store-light body { background: #f6f1e8; color: #241c17; }
 button, a { cursor: pointer; }
 input { cursor: text; }
 button, input { font: inherit; }

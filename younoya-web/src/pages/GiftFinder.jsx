@@ -6,9 +6,9 @@ import { PRODUCTS } from '../data/products'
 import '../styles/GiftFinder.css'
 
 const EVENTS = [
-  { id: 'milestone', label: 'A milestone achievement', note: 'Honouring bravery & sovereign elevation', handles: ['the-golden-flight', 'vivid-toucan-muse', 'solar-embrace'] },
+  { id: 'milestone', label: 'A milestone achievement', note: 'Honouring bravery & sovereign elevation', handles: ['the-golden-flight', 'vivid-toucan-muse', 'wild-poise'] },
   { id: 'anniversary', label: 'An anniversary or union', note: 'A sacred bond worth honouring', handles: ['flamingo-grace', 'the-inner-kingdom', 'flamingo-aura'] },
-  { id: 'beginning', label: 'A brave new chapter', note: 'Fresh horizons & grounded renewal', handles: ['the-verdant-rising', 'the-golden-flight', 'solar-embrace'] },
+  { id: 'beginning', label: 'A brave new chapter', note: 'Fresh horizons & grounded renewal', handles: ['the-verdant-rising', 'the-golden-flight', 'wild-poise'] },
   { id: 'gratitude', label: 'Deep gratitude & wisdom', note: 'For what words cannot hold', handles: ['golden-instinct', 'cats-eye', 'the-inner-kingdom'] },
   { id: 'protection', label: 'Sacred protection & boundary', note: 'Inner alchemy & fierce sanctuary', handles: ['fire-and-radiance', 'cats-eye', 'the-golden-flight'] },
 ]
@@ -22,13 +22,13 @@ const RELATION_HANDLES = {
   Friend: 'the-verdant-rising',
   Colleague: 'golden-instinct',
   'Someone special': 'the-golden-flight',
-  self: 'solar-embrace',
+  self: 'wild-poise',
 }
 
 const ELEMENT_HANDLES = {
   fire: ['the-golden-flight', 'fire-and-radiance'],
   earth: ['golden-instinct', 'the-verdant-rising'],
-  air: ['vivid-toucan-muse', 'solar-embrace'],
+  air: ['vivid-toucan-muse', 'cats-eye'],
   water: ['flamingo-grace', 'flamingo-aura'],
 }
 
@@ -579,7 +579,7 @@ export default function GiftFinder() {
               </div>
 
               <p className="oracle__disclosure">
-                Matches are determined by astrological solar alignment, intention, and elemental harmony. Full Vedic Janam Kundali attunement is conducted upon order consecration.
+                These suggestions draw on your moment, intention and the symbolic character of each piece.
               </p>
               
               <div className="oracle__result-actions">

@@ -39,7 +39,7 @@ export function getSeo(pathname) {
   if (path === '/shop') return {
     path,
     title: 'Explore Meaningful Gifts & Keepsakes | Younoya',
-    description: 'Explore eight considered Younoya keepsakes for connection, new beginnings, balance and abundance. Discover each object’s story, materials and price.',
+    description: 'Explore ten sculptural Younoya brooches for courage, connection, renewal and possibility. Discover each piece’s story, dimensions and price.',
     image: PRODUCTS[0].primaryImage,
     schema: {
       '@context': 'https://schema.org',
@@ -131,7 +131,7 @@ export function getSeo(pathname) {
   if (product) return {
     path,
     title: `${product.name} | Younoya`,
-    description: `${product.name} — ${product.tagline}. Discover its story and materials at Younoya.`,
+    description: `${product.name} — ${product.tagline}. Explore its symbolism, measured details and price at Younoya.`,
     image: product.primaryImage,
     product,
     schema: [

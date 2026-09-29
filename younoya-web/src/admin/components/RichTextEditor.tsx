@@ -506,7 +506,7 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
                   </button>
                   <button
                     type="button"
-                    onClick={() => setLinkUrl('/product/solar-embrace')}
+                    onClick={() => setLinkUrl('/product/wild-poise')}
                     className="tiptap-chip"
                   >
                     ✦ Solar Embrace Brooch

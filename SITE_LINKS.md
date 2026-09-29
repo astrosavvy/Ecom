@@ -21,20 +21,20 @@
 
 ---
 
-## 2. 💎 Consecrated Keepsakes (All 10 Product Routes)
+## 2. 💎 The Brooch Collection (All 10 Product Routes)
 
-| Product Motif & Chapter | Production Link | Local Dev Link | Key Details |
+| Product | Production Link | Local Dev Link | Verified details |
 |:---|:---|:---|:---|
-| **01. The Golden Flight** | [younoya.com/product/the-golden-flight](https://younoya.com/product/the-golden-flight) | [localhost:5173/product/the-golden-flight](http://localhost:5173/product/the-golden-flight) | Rising Phoenix Brooch • Warm Gold Finish & Clear White Crystals (₹ 2,499) |
-| **02. The Verdant Rising** | [younoya.com/product/the-verdant-rising](https://younoya.com/product/the-verdant-rising) | [localhost:5173/product/the-verdant-rising](http://localhost:5173/product/the-verdant-rising) | Green Crystal Phoenix • Emerald Radiance & Vitality (₹ 2,350) |
-| **03. Flamingo Grace** | [younoya.com/product/flamingo-grace](https://younoya.com/product/flamingo-grace) | [localhost:5173/product/flamingo-grace](http://localhost:5173/product/flamingo-grace) | Crystal Flamingo Brooch • Ruby Accent Stone & Poise (₹ 2,350) |
-| **04. Vivid Toucan Muse** | [younoya.com/product/vivid-toucan-muse](https://younoya.com/product/vivid-toucan-muse) | [localhost:5173/product/vivid-toucan-muse](http://localhost:5173/product/vivid-toucan-muse) | Multicolor Crystal Toucan • Red Enamel Beak & Charisma (₹ 2,550) |
-| **05. Golden Instinct** | [younoya.com/product/golden-instinct](https://younoya.com/product/golden-instinct) | [localhost:5173/product/golden-instinct](http://localhost:5173/product/golden-instinct) | Black Metal Squirrel Brooch • Gold Detailing & Acorn Crystal (₹ 2,450) |
-| **06. Solar Embrace** | [younoya.com/product/solar-embrace](https://younoya.com/product/solar-embrace) | [localhost:5173/product/solar-embrace](http://localhost:5173/product/solar-embrace) | Dragonfly Brooch • Gold Finish with Pavé Clear Crystals (₹ 2,250) |
-| **07. Fire & Radiance** | [younoya.com/product/fire-and-radiance](https://younoya.com/product/fire-and-radiance) | [localhost:5173/product/fire-and-radiance](http://localhost:5173/product/fire-and-radiance) | Scorpion Brooch • Red & Orange Crystals & Protective Power (₹ 2,099) |
-| **08. Flamingo Aura** | [younoya.com/product/flamingo-aura](https://younoya.com/product/flamingo-aura) | [localhost:5173/product/flamingo-aura](http://localhost:5173/product/flamingo-aura) | Purple Crystal Flamingo • Amethyst Hue & Silver Frame (₹ 2,550) |
-| **09. Cat's Eye** | [younoya.com/product/cats-eye](https://younoya.com/product/cats-eye) | [localhost:5173/product/cats-eye](http://localhost:5173/product/cats-eye) | Long-Tailed Cat Brooch • Silver Metal with Green Crystal Eyes (₹ 2,099) |
-| **10. The Inner Kingdom** | [younoya.com/product/the-inner-kingdom](https://younoya.com/product/the-inner-kingdom) | [localhost:5173/product/the-inner-kingdom](http://localhost:5173/product/the-inner-kingdom) | Multi-Animal Sculptural Brooch • Silver Metal & Green Crystals (₹ 1,500) |
+| **Wild Poise** | [younoya.com/product/wild-poise](https://younoya.com/product/wild-poise) | [localhost:5173/product/wild-poise](http://localhost:5173/product/wild-poise) | Black metal jaguar with double chain · 49.05 g · ₹ 2,499 |
+| **Phoenix Renewal — Rise** | [younoya.com/product/the-golden-flight](https://younoya.com/product/the-golden-flight) | [localhost:5173/product/the-golden-flight](http://localhost:5173/product/the-golden-flight) | Red phoenix · 26.82 g · ₹ 2,350 |
+| **Phoenix Renewal — Flourish** | [younoya.com/product/the-verdant-rising](https://younoya.com/product/the-verdant-rising) | [localhost:5173/product/the-verdant-rising](http://localhost:5173/product/the-verdant-rising) | Green stone and crystal phoenix · 25.90 g · ₹ 2,350 |
+| **Flamingo Grace** | [younoya.com/product/flamingo-grace](https://younoya.com/product/flamingo-grace) | [localhost:5173/product/flamingo-grace](http://localhost:5173/product/flamingo-grace) | Crystal flamingo with red stone · 37.43 g · ₹ 2,550 |
+| **Vivid Toucan Muse** | [younoya.com/product/vivid-toucan-muse](https://younoya.com/product/vivid-toucan-muse) | [localhost:5173/product/vivid-toucan-muse](http://localhost:5173/product/vivid-toucan-muse) | Multicoloured crystal toucan · 56.03 g · ₹ 2,450 |
+| **Golden Instinct** | [younoya.com/product/golden-instinct](https://younoya.com/product/golden-instinct) | [localhost:5173/product/golden-instinct](http://localhost:5173/product/golden-instinct) | Black metal squirrel with golden finish · 23.76 g · ₹ 2,250 |
+| **Fire & Radiance** | [younoya.com/product/fire-and-radiance](https://younoya.com/product/fire-and-radiance) | [localhost:5173/product/fire-and-radiance](http://localhost:5173/product/fire-and-radiance) | Red and orange crystal scorpion · 36.04 g · ₹ 2,099 |
+| **Flamingo Aura** | [younoya.com/product/flamingo-aura](https://younoya.com/product/flamingo-aura) | [localhost:5173/product/flamingo-aura](http://localhost:5173/product/flamingo-aura) | Purple crystal flamingo · 37.73 g · ₹ 2,550 |
+| **Cat's Eye** | [younoya.com/product/cats-eye](https://younoya.com/product/cats-eye) | [localhost:5173/product/cats-eye](http://localhost:5173/product/cats-eye) | Crystal-embellished long-tailed cat · 37.06 g · ₹ 2,099 |
+| **The Inner Kingdom** | [younoya.com/product/the-inner-kingdom](https://younoya.com/product/the-inner-kingdom) | [localhost:5173/product/the-inner-kingdom](http://localhost:5173/product/the-inner-kingdom) | Sculptural silver multi-animal brooch · 10.86 g · ₹ 1,500 |
 
 ---
 

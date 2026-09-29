@@ -38,6 +38,11 @@ function JournalRedirect() {
 
 function StoreNavigation() {
   const { pathname } = useLocation()
+  const lightStorefront = pathname !== '/' && !pathname.startsWith('/admin')
+  useEffect(() => {
+    document.documentElement.classList.toggle('store-light', lightStorefront)
+    return () => document.documentElement.classList.remove('store-light')
+  }, [lightStorefront])
   if (pathname === '/' || pathname.startsWith('/admin')) return null
   return <><Navbar /><CartDrawer /></>
 }
@@ -59,6 +64,7 @@ export default function App() {
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/journal" element={<Navigate to="/blog" replace />} />
               <Route path="/journal/:slug" element={<JournalRedirect />} />
+              <Route path="/product/solar-embrace" element={<Navigate to="/product/wild-poise" replace />} />
               <Route path="/product/:handle" element={<ProductDetail />} />
               <Route path="/admin/*" element={<AdminApp />} />
               <Route path="*" element={<NotFound />} />
