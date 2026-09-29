@@ -9,9 +9,9 @@
 ## 1. 📍 Executive Project Status
 
 - **Current Phase**: Phase 8 — Blog 404 Fixed, Backlinks Deployed, Image Compression & Storefront Live on `main` via Direct Links
-- **Status**: Successfully configured Cloudflare Static Assets SPA routing (`"not_found_handling": "single-page-application"` and `_redirects` rewrites) resolving the 404 error on dynamic published blog posts. Merged the 10 authentic brooches, luxury SVG emblems, elevated GiftFinder, and Shop into `main` so all direct links (`/shop`, `/find-a-gift`, `/blog`, `/blog/:slug`, `/product/:handle`, `/admin/*`) are 100% accessible and live, while keeping `/` exclusively as the luxury Coming Soon landing page. Removed the product recommendation grid from `BlogPost.jsx`. Built rich markdown and HTML backlink parsing into `BlogPost.jsx` and added "🔗 Add Link" with store shortcuts to `JournalEdit.tsx`. Implemented in-browser Canvas WebP image compression in Admin and compressed existing blog covers from ~2MB down to ~100KB WebP (94% savings) at exact same dimensions. Streamlined `Blog.jsx` with dynamic category filters. Root build verified with exit code 0 (16 route shells, 11 admin shells).
-- **Active Task**: All changes implemented and verified locally on `main`. Staged for single final commit. Awaiting explicit user approval before `git push origin main`.
-- **Last Updated**: 2026-09-29T15:55:00+05:30
+- **Status**: Resolved Cloudflare deployment error [code: 100324] by removing redundant `/index.html 200` rewrites from `_redirects` which conflicted with Cloudflare Static Assets SPA canonicalizer (`"not_found_handling": "single-page-application"` in `wrangler.jsonc` handles SPA routing natively without infinite loops). Verified via `npx wrangler deploy --dry-run` in both root and `younoya-web` (exit code 0, 126 files validated). All 16 crawlable route shells and 11 admin shells verified in `dist/`.
+- **Active Task**: All changes verified locally and dry-run validated with Wrangler. Ready for single final commit and user push approval.
+- **Last Updated**: 2026-09-29T16:01:00+05:30
 - **Last Agent**: Antigravity
 - **Primary Development URL**: `http://localhost:5173/` (`npm --prefix younoya-web run dev` or root `npm run dev`)
 - **Primary Production Build**: younoya-web/dist and root dist verified; 16 route shells, 11 admin shells, build exit 0.
@@ -20,12 +20,20 @@
 
 ## 2. 🏁 Checkpoint History & Completed Milestones
 
+### [2026-09-29] Cloudflare Deploy Fix: _redirects Infinite Loop Resolution (Antigravity)
+- **Root Cause & Fix**:
+  - Cloudflare deployment failed on `ecom` with `Invalid _redirects configuration: Line 6: Infinite loop detected in this rule. This would cause a redirect to strip .html or /index and end up triggering this rule again [code: 100324]`.
+  - Cloudflare Static Assets canonicalizes requests by stripping `.html` and `/index`, so `/blog/* /index.html 200` triggers an internal rewrite loop.
+  - Since `wrangler.jsonc` already specifies `"not_found_handling": "single-page-application"`, Cloudflare automatically serves `/index.html` on any non-matching route.
+  - Removed lines 6 and 7 from `public/_redirects`.
+- **Wrangler Validation**:
+  - Ran `npx wrangler deploy --dry-run` from both root and `younoya-web/`: both exited with code 0 and validated all 126 static assets without warnings or errors.
+
 ### [2026-09-29] Blog 404 Resolution, Backlinks, Removal of Products from Blogs, Image Compression & Storefront Direct Links on Main (Antigravity)
 - **Direct Links & Storefront Accessibility on `main`**:
   - Maintained `/` exclusively as the luxury Coming Soon landing page (boutique diorama facade with bottom-half dark gradient).
   - Merged the 10 authentic brooches (`src/data/products.js`), 10 luxury SVG vector glyphs (`public/media/brooches/*.svg`), elevated `/find-a-gift` Aster consultation flow, and `/shop` from `prepare-to-launch` into `main`.
   - Configured Cloudflare Workers Static Assets to `"not_found_handling": "single-page-application"` in `wrangler.jsonc` and `younoya-web/wrangler.jsonc`.
-  - Added SPA fallback rewrites in `public/_redirects` (`/blog/* /index.html 200`, `/admin/* /index.html 200`).
   - All direct links (`/shop`, `/find-a-gift`, `/blog`, `/blog/:slug`, `/product/:handle`, `/admin/*`) are now live, active, and accessible without 404 errors.
 - **Published Blog Post 404 Resolution**:
   - Dynamically published articles like `/blog/why-younoya-is-different-from-a-traditional-astrology-store` now load seamlessly via SPA client routing.
