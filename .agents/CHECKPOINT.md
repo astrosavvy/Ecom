@@ -8,16 +8,22 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 14 — Canonical 7-Tile Architecture (Reference Image Tile-by-Tile Alignment)
-- **Status**: Production-ready on `main`. Carefully reconstructed each tile of `/shop` to mirror the reference layout (`media_1790698709736.png`): (1) Tile 1 Navbar with logo, center links, search, wishlist heart, bag counter, and terracotta pill button; (2) Tile 2 Hero with organic background loops, diamond sparkle stars, arched oval luxury frame, terracotta pill, circular play button, and floating card with 3 finish dots; (3) Tile 3 Dual Feature Bento with 2 horizontal cards ("Sacred & Functional" and "Vedic Craftsmanship") with circular badges and product peeks; (4) Tile 4 Trending Finds with centered decorative line header and 5-card row with star ratings, price, and wishlist heart; (5) Tile 5 Limited Time Offer rounded banner ("Up to 25% Off") with organic curved backdrop; (6) Tile 6 Atelier Inspiration with 3 editorial landscape cards; (7) Tile 7 Bottom Trust Bar with line icons for Shipping, Exchange, Security, and Concierge. Build verified exit code 0; Wrangler dry run validated 171 assets. All components strictly under 80 lines.
-- **Active Task**: All changes committed locally and verified. Ready for user push approval.
-- **Last Updated**: 2026-09-29T21:58:00+05:30
+- **Current Phase**: Phase 15 — Integrated reference composition for `/shop`
+- **Status**: The shop redesign is complete locally and `npm run build` exits 0. The hero product photograph now blends into the same warm canvas as its copy and occupies the full right side, matching the user's visual correction. The initial page follows the reference sequence: navigation, hero, two feature tiles, five product cards, consultation banner, three inspiration cards and a four-part service row. Ten products remain accessible through expansion and intention filters. No push or deployment has been performed for this phase.
+- **Active Task**: Create one final local commit containing source, generated shop assets, built dist and this checkpoint; then request explicit permission before pushing `main`. Linked product detail pages still carry their existing separate implementation and should be audited independently.
+- **Last Updated**: 2026-09-29T22:24:54+05:30
 - **Last Agent**: Antigravity
 - **Primary URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 
 ---
 
 ## 2. 🏁 Consolidated Milestone History
+
+### [2026-09-29] Phase 15: Integrated Shop Reference Composition (Codex)
+- Reworked `/shop` against the user-supplied Home & Kitchen reference: removed the breadcrumb, intention grid and simulated newsletter from the main composition; used a larger merged hero with shared organic orbit, two feature tiles, a five-piece opening row, editorial consultation banner, three story cards and compact service row.
+- Created five neutral-studio collection-card derivatives and one large hero visual from the supplied Wild Poise and other authentic P55–P59 product photos with the imagegen skill. Kept source photos and PDP galleries unchanged. The generated WebPs are in `younoya-web/public/media/shop-*.webp` and their source prompts preserve the product silhouettes, stones and metal details while changing only the setting.
+- Replaced unsupported shop ratings, 10,000-customer claim, fabricated 25% discount, unverified shipping/exchange/payment guarantees and material claims with truthful symbolism and consultation copy. Featured Wild Poise price remains ₹2,499 from the product document.
+- Added functional collection search, locally saved pieces, all-ten expansion and intention filtering while preserving product routes and quick bag actions. Corrected Shop navigation state and removed mobile orbit overflow. Verified desktop and 430px mobile layouts, all shop images loading, product route navigation, filter count (3 for Courage & presence) and `npm run build` exit 0. The existing >500KB JS chunk warning is non-blocking.
 
 ### [2026-09-29] Phase 14: Canonical 7-Tile Storefront Architecture
 - **Tile 1 (Top Navigation — `Navbar.jsx`, `Navbar.css`)**:

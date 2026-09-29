@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Check, Heart, ShoppingBag, Star } from 'lucide-react'
+import { Check, Heart, ShoppingBag } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 
 export default function ProductCard({ product, index, reducedMotion, onWishlist, isWishlisted }) {
@@ -37,7 +37,7 @@ export default function ProductCard({ product, index, reducedMotion, onWishlist,
     >
       <div className="livora-card__media">
         <Link to={`/product/${product.handle}`} className="livora-card__link" aria-label={`Explore ${product.name}`}>
-          <img src={product.cardImage || product.primaryImage} alt={product.name} loading={index < 5 ? 'eager' : 'lazy'} />
+          <img src={product.shopCardImage || product.cardImage || product.primaryImage} alt={product.name} loading={index < 5 ? 'eager' : 'lazy'} />
         </Link>
         <button
           type="button"
@@ -52,15 +52,9 @@ export default function ProductCard({ product, index, reducedMotion, onWishlist,
 
       <div className="livora-card__body">
         <Link to={`/product/${product.handle}`} className="livora-card__title">
-          <h3>{product.name}</h3>
+          <h3>{product.shopName}</h3>
         </Link>
-        <div className="livora-card__rating">
-          <div className="livora-card__stars">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} size={11} fill="#C4973B" stroke="none" />
-            ))}
-          </div>
-        </div>
+        <p className="livora-card__descriptor">{product.subtitle}</p>
 
         <div className="livora-card__price-row">
           <strong className="livora-card__price">{product.price}</strong>

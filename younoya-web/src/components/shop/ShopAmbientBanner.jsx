@@ -2,21 +2,18 @@ import { Link } from 'react-router-dom'
 
 export default function ShopAmbientBanner() {
   return (
-    <section className="livora-ambient-promo" aria-label="Limited Time Offer">
+    <section className="livora-ambient-promo" aria-label="A personal gift consultation">
       <div className="livora-ambient-promo__card">
         <div className="livora-ambient-promo__copy">
-          <span className="livora-ambient-promo__kicker">Limited Time Offer</span>
+          <span className="livora-ambient-promo__kicker">A MORE PERSONAL WAY TO GIFT</span>
           <h2>
-            Up to <em>25% Off</em><br />
-            on Curated Bestsellers
+            Let the meaning<br />
+            <em>find its match.</em>
           </h2>
-          <p>
-            Consecrated luxury gift hampers united with hand-poured botanical candles 
-            and personalized celestial scrolls.
-          </p>
+          <p>Tell Younoya who it is for and what you wish to celebrate. We will guide you toward a piece with purpose.</p>
           <div className="livora-ambient-promo__action">
             <Link to="/find-a-gift" className="livora-btn livora-btn--terracotta">
-              Grab the Deal
+              Let Younoya choose
             </Link>
             <span className="livora-promo-swirl">✦</span>
           </div>
@@ -25,8 +22,8 @@ export default function ShopAmbientBanner() {
         <div className="livora-ambient-promo__visual">
           <div className="livora-promo-loop-bg" />
           <img 
-            src="/media/younoya-hamper-hero-landscape-16x9.jpg" 
-            alt="Consecrated Bestseller Hamper Lifestyle Setting" 
+            src="/media/intentions/love-devotion-light.jpg"
+            alt="A red apple candle arranged in a sunlit Younoya setting"
             loading="lazy" 
           />
         </div>

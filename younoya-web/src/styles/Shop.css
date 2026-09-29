@@ -1118,3 +1118,137 @@
   .livora-footer__nav { grid-template-columns: 1fr; }
   .livora-footer__bottom { flex-direction: column; gap: 14px; text-align: center; }
 }
+
+/* Reference-led storefront composition: one continuous, warm editorial canvas. */
+.livora-shop { background: #fcf9f5; overflow-x: clip; }
+.livora-shop__shell { max-width: 1512px; padding-inline: clamp(22px, 4.3vw, 70px); }
+.livora-hero-bar {
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 665px;
+  margin: 76px 0 8px;
+  position: relative;
+}
+.livora-hero-bar__left { padding-block: 42px; padding-right: 12px; }
+.livora-hero-bar__title { font-size: clamp(3.5rem, 5vw, 5.1rem); line-height: .96; margin: 20px 0 22px; text-wrap: balance; }
+.livora-hero-bar__title em { color: #95511f; }
+.livora-hero-bar__desc { max-width: 390px; font-size: 1.05rem; line-height: 1.7; margin-bottom: 30px; }
+.livora-hero-bar__buttons { margin-bottom: 30px; }
+.livora-hero-bar__proof { gap: 13px; }
+.livora-hero-bar__avatars img { width: 38px; height: 38px; object-position: center; }
+.livora-hero-bar__proof-text { font-size: .8rem; }
+.livora-hero-bar__right { height: 638px; min-width: 0; width: calc(100% + 72px); margin-left: -72px; isolation: isolate; }
+.livora-hero-bar__right::before {
+  top: 1%; right: 2%; width: 92%; height: 94%;
+  border: 0; border-radius: 50%;
+  background: radial-gradient(circle, #eee0cd 2%, #f8f0e6 62%, transparent 71%);
+}
+.livora-hero-bar__arch-frame {
+  width: 100%; height: 100%; margin-left: auto;
+  border: 0; border-radius: 0; box-shadow: none;
+  -webkit-mask-image: radial-gradient(ellipse 66% 56% at 58% 51%, #000 58%, transparent 96%);
+  mask-image: radial-gradient(ellipse 66% 56% at 58% 51%, #000 58%, transparent 96%);
+}
+.livora-hero-bar__arch-frame img { object-position: 52% center; }
+.livora-hero-bar__orbit { position: absolute; z-index: 2; width: 112%; height: 69%; border: 1px solid rgba(166, 101, 45, .36); border-radius: 50%; transform: rotate(-26deg); pointer-events: none; }
+.livora-hero-bar__orbit--one { top: 18%; left: -4%; }
+.livora-hero-bar__orbit--two { width: 108%; height: 67%; top: 20%; left: -2%; transform: rotate(21deg); opacity: .35; }
+.livora-hero-bar__spark { position: absolute; z-index: 3; color: #a45d24; font-size: 1.85rem; line-height: 1; pointer-events: none; }
+.livora-hero-bar__spark--one { left: 2%; top: 15%; }
+.livora-hero-bar__spark--two { right: 0; top: 18%; }
+.livora-hero-bar__floating-card { bottom: 48px; right: -10px; min-width: 236px; padding: 17px 20px; text-decoration: none; color: var(--ink); transition: transform .25s ease, box-shadow .25s ease; }
+.livora-hero-bar__floating-card:hover { transform: translateY(-4px); box-shadow: 0 17px 42px rgba(77, 46, 23, .17); }
+.livora-hero-bar__card-label { color: #8d7057; font-size: .61rem; letter-spacing: .15em; font-weight: 700; }
+.livora-hero-bar__card-title { display: flex; align-items: center; justify-content: space-between; margin: 5px 0 3px; font: 500 1.28rem var(--font-serif); }
+.livora-hero-bar__floating-card strong { margin-bottom: 8px; }
+.livora-hero-bar__card-detail { padding-top: 9px; border-top: 1px solid #ece5dc; font-size: .72rem; color: var(--muted); }
+
+.livora-dual-features { margin: 4px 0 18px; }
+.livora-dual-features__grid { gap: 18px; }
+.livora-feature-tile { position: relative; min-height: 218px; padding: 24px 30px; background: #f5eee5; border: 0; box-shadow: none; }
+.livora-feature-tile__copy { position: relative; z-index: 1; flex: 0 0 58%; }
+.livora-feature-tile__badge { width: 40px; height: 40px; margin-bottom: 15px; background: #b87c3a; box-shadow: none; }
+.livora-feature-tile h3 { font-size: 1.38rem; }
+.livora-feature-tile p { max-width: 235px; }
+.livora-feature-tile__media { position: absolute; inset: 0 0 0 auto; width: 45%; height: 100%; margin: 0; border-radius: 0 20px 20px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 26%); mask-image: linear-gradient(90deg, transparent, #000 26%); }
+
+.livora-catalog { padding: 8px 0 36px; }
+.livora-catalog__trending-head { margin-bottom: 23px; }
+.livora-trending-title-row h2 { font-size: clamp(2.2rem, 3vw, 2.75rem); }
+.livora-catalog__tools { margin: 0 0 14px; }
+.livora-catalog__search { display: block; width: min(100%, 480px); margin: 0 auto 12px; padding: 13px 19px; border: 1px solid #d7c8b7; border-radius: 100px; background: #fff; color: var(--ink); font: inherit; }
+.livora-catalog__saved-label { text-align: center; color: var(--muted); }
+.livora-catalog__empty { text-align: center; padding: 48px 12px; color: var(--muted); }
+.livora-catalog__more { display: flex; align-items: center; gap: 10px; margin: 22px auto 0; border: 0; border-bottom: 1px solid #9b6c3e; background: transparent; color: #8c4a26; padding: 7px 2px; cursor: pointer; font: 600 .84rem var(--font-sans); transition: gap .2s ease; }
+.livora-catalog__more:hover { gap: 16px; }
+.livora-grid { gap: 16px; }
+.livora-card { border: 0; border-radius: 13px; background: #fff; box-shadow: none; }
+.livora-card__media { aspect-ratio: 1 / .94; border-radius: 13px 13px 0 0; }
+.livora-card__body { padding: 13px 13px 14px; }
+.livora-card__title h3 { font-size: .98rem; font-family: var(--font-sans); font-weight: 600; }
+.livora-card__descriptor { margin: 1px 0 9px; color: #9b6734; font-size: .69rem; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.livora-card__price { font-size: .9rem; }
+
+.livora-ambient-promo { padding: 6px 0 28px; }
+.livora-ambient-promo__card { display: block; min-height: 292px; padding: 38px 58px; background: #f5ede2; border: 0; }
+.livora-ambient-promo__copy { position: relative; z-index: 2; width: 49%; }
+.livora-ambient-promo__copy h2 { font-size: clamp(2.5rem, 3.4vw, 3.8rem); }
+.livora-ambient-promo__copy p { font-size: .84rem; max-width: 340px; margin-bottom: 18px; }
+.livora-ambient-promo__visual { position: absolute; inset: 0 0 0 auto; width: 58%; height: 100%; border-radius: 0; box-shadow: none; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 28%); mask-image: linear-gradient(90deg, transparent 0%, #000 28%); }
+.livora-ambient-promo__visual img { object-position: center 49%; }
+.livora-promo-loop-bg { border-style: solid; }
+.livora-inspiration { padding: 5px 0 25px; }
+.livora-inspiration__header { margin-bottom: 16px; }
+.livora-inspiration__grid { gap: 18px; }
+.livora-inspo-card__media { aspect-ratio: 16 / 8.5; border-radius: 12px; }
+.livora-inspo-card h3 { font-size: 1.1rem; }
+.livora-usp { margin: 0; padding: 22px 0 28px; border-top: 1px solid #e7ddcf; border-bottom: 0; }
+.livora-usp__box { gap: 20px; }
+.livora-usp__item { gap: 9px; }
+.livora-usp__icon { width: 36px; height: 36px; }
+.livora-usp__item strong { font-size: .78rem; }
+.livora-usp__item small { font-size: .69rem; }
+
+@media (max-width: 900px) {
+  .livora-hero-bar { grid-template-columns: 1fr; gap: 10px; margin-top: 74px; min-height: 0; }
+  .livora-hero-bar__left { padding: 38px 0 5px; }
+  .livora-hero-bar__right { height: min(78vw, 570px); min-height: 360px; width: 100%; margin-left: 0; }
+  .livora-hero-bar__arch-frame { width: min(100%, 660px); height: 100%; }
+  .livora-hero-bar__floating-card { right: 3%; }
+  .livora-grid { grid-template-columns: repeat(3, 1fr); }
+  .livora-dual-features__grid { grid-template-columns: repeat(2, 1fr); }
+  .livora-feature-tile { min-height: 210px; }
+  .livora-ambient-promo__card { min-height: 305px; }
+  .livora-ambient-promo__copy { width: 57%; }
+  .livora-inspiration__grid { grid-template-columns: repeat(3, 1fr); }
+  .livora-usp__box { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .livora-shop__shell { padding-inline: 18px; }
+  .livora-hero-bar { margin-top: 68px; }
+  .livora-hero-bar__left { padding-top: 34px; }
+  .livora-hero-bar__title { font-size: clamp(3.05rem, 11.2vw, 4.15rem); }
+  .livora-hero-bar__desc { font-size: .96rem; }
+  .livora-hero-bar__buttons { flex-direction: row; }
+  .livora-hero-bar__buttons .livora-btn, .livora-btn-watch { width: auto; min-height: 44px; }
+  .livora-hero-bar__proof { flex-direction: row; align-items: center; }
+  .livora-hero-bar__right { height: 410px; min-height: 0; }
+  .livora-hero-bar__arch-frame { width: 100%; height: 94%; }
+  .livora-hero-bar__orbit { width: 106%; left: -3%; }
+  .livora-hero-bar__floating-card { right: 0; bottom: 13px; min-width: 178px; padding: 12px 14px; }
+  .livora-hero-bar__card-title { font-size: 1.08rem; }
+  .livora-dual-features__grid { grid-template-columns: 1fr; gap: 12px; }
+  .livora-feature-tile { min-height: 178px; flex-direction: row; }
+  .livora-feature-tile__media { width: 47%; height: 100%; margin: 0; }
+  .livora-grid { grid-template-columns: repeat(2, 1fr); gap: 11px; }
+  .livora-trending-line { width: 25px; }
+  .livora-trending-title-row { gap: 9px; }
+  .livora-trending-title-row h2 { font-size: 1.75rem; white-space: nowrap; }
+  .livora-ambient-promo__card { padding: 28px 24px 0; min-height: 470px; }
+  .livora-ambient-promo__copy { width: 100%; }
+  .livora-ambient-promo__visual { top: auto; bottom: 0; width: 100%; height: 53%; -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%); mask-image: linear-gradient(180deg, transparent, #000 30%); }
+  .livora-inspiration__grid { grid-template-columns: 1fr; }
+  .livora-inspo-card__media { aspect-ratio: 16 / 9; }
+  .livora-usp__box { grid-template-columns: repeat(2, 1fr); }
+  .livora-usp__item { align-items: flex-start; }
+}

@@ -19,11 +19,11 @@ const ARTICLES = [
   },
   {
     id: 3,
-    slug: 'thoughtful-gifts-inspired-by-astrology',
-    date: 'August 05, 2026',
-    category: 'Sacred Living',
-    title: 'Curating a Calm Altar Space for Daily Morning Consecration',
-    image: '/media/younoya-hamper-hero-landscape-16x9.jpg'
+    slug: null,
+    date: 'A personal conversation',
+    category: 'Gift Guide',
+    title: 'Find the piece that speaks to their moment',
+    image: '/media/intentions/growth-vitality-light.jpg'
   }
 ]
 
@@ -32,12 +32,12 @@ export default function ShopInspiration() {
     <section className="livora-inspiration" aria-label="Atelier Inspiration">
       <div className="livora-inspiration__header">
         <h2>Atelier Inspiration</h2>
-        <p>Tips, ideas & Vedic inspiration for every chapter of living.</p>
+        <p>Stories, symbolism and thoughtful ways to give.</p>
       </div>
 
       <div className="livora-inspiration__grid">
         {ARTICLES.map(article => (
-          <Link key={article.id} to={`/blog/${article.slug}`} className="livora-inspo-card">
+          <Link key={article.id} to={article.slug ? `/blog/${article.slug}` : '/find-a-gift'} className="livora-inspo-card">
             <div className="livora-inspo-card__media">
               <img src={article.image} alt={article.title} loading="lazy" />
             </div>

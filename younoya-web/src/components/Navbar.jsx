@@ -7,9 +7,10 @@ export default function Navbar() {
   const { pathname } = useLocation()
   const { totalItems, setIsOpen } = useCart()
   const light = pathname === '/shop' || pathname === '/find-a-gift' || pathname.startsWith('/product/') || pathname.startsWith('/blog')
+  const shop = pathname === '/shop'
 
   return (
-    <header className={`navbar${light ? ' navbar--light' : ''}`}>
+    <header className={`navbar${light ? ' navbar--light' : ''}${shop ? ' navbar--shop' : ''}`}>
       <div className="navbar__left">
         <Link className="navbar__brand" to="/" aria-label="Younoya home">
           <img src="/favicon.png" alt="Younoya" />
@@ -19,26 +20,25 @@ export default function Navbar() {
 
       {light && (
         <nav className="navbar__center" aria-label="Main navigation">
-          <Link to="/shop" className={`navbar__nav-link ${pathname === '/shop' ? 'is-active' : ''}`}>
-            Home
-          </Link>
-          <Link to="/shop#pieces" className="navbar__nav-link">Shop</Link>
+          <Link to="/" className="navbar__nav-link">Home</Link>
+          <Link to="/shop#pieces" className={`navbar__nav-link ${pathname === '/shop' ? 'is-active' : ''}`}>Shop</Link>
           <Link to="/find-a-gift" className={`navbar__nav-link ${pathname === '/find-a-gift' ? 'is-active' : ''}`}>
-            Collections
+            Gift guide
           </Link>
           <Link to="/blog" className={`navbar__nav-link ${pathname.startsWith('/blog') ? 'is-active' : ''}`}>
             Journal
           </Link>
+          <a href="mailto:care@younoya.com" className="navbar__nav-link">Contact</a>
         </nav>
       )}
 
       <div className="navbar__right">
         {light && (
           <>
-            <Link to="/shop#pieces" className="navbar__icon-link" aria-label="Search collection">
+            <Link to="/shop?search=1#pieces" className="navbar__icon-link" aria-label="Search collection">
               <Search size={18} strokeWidth={1.5} />
             </Link>
-            <Link to="/shop#pieces" className="navbar__icon-link" aria-label="Saved pieces">
+            <Link to="/shop?saved=1#pieces" className="navbar__icon-link" aria-label="Saved pieces">
               <Heart size={18} strokeWidth={1.5} />
             </Link>
           </>

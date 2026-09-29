@@ -1,16 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useReducedMotion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { PRODUCTS } from '../data/products'
 import ShopHero from '../components/shop/ShopHero'
 import ShopDualFeatureTiles from '../components/shop/ShopDualFeatureTiles'
 import ShopCatalog from '../components/shop/ShopCatalog'
-import ShopIntentions from '../components/shop/ShopIntentions'
 import ShopAmbientBanner from '../components/shop/ShopAmbientBanner'
 import ShopInspiration from '../components/shop/ShopInspiration'
 import ShopUspBar from '../components/shop/ShopUspBar'
-import ShopNewsletter from '../components/shop/ShopNewsletter'
-import ShopFooter from '../components/shop/ShopFooter'
 import '../styles/Shop.css'
 
 const FILTERS = [
@@ -24,35 +21,40 @@ const FILTERS = [
 
 export default function Shop() {
   const [activeFilter, setActiveFilter] = useState('all')
-  const [wishlist, setWishlist] = useState([])
+  const [wishlist, setWishlist] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('younoya-saved-pieces') || '[]')
+      return Array.isArray(saved) ? saved : []
+    }
+    catch { return [] }
+  })
+  const [expanded, setExpanded] = useState(false)
+  const [query, setQuery] = useState('')
+  const [searchParams] = useSearchParams()
   const reducedMotion = useReducedMotion()
+  const searchActive = searchParams.has('search')
+  const savedOnly = searchParams.has('saved')
 
-  const visible = activeFilter === 'all' 
-    ? PRODUCTS 
-    : PRODUCTS.filter(product => product.intention === activeFilter)
+  useEffect(() => {
+    localStorage.setItem('younoya-saved-pieces', JSON.stringify(wishlist))
+  }, [wishlist])
+
+  const matching = PRODUCTS.filter(product =>
+    (activeFilter === 'all' || product.intention === activeFilter) &&
+    (!savedOnly || wishlist.includes(product.id)) &&
+    (!query || `${product.name} ${product.subtitle} ${product.motif}`.toLowerCase().includes(query.toLowerCase()))
+  )
+  const visible = expanded || activeFilter !== 'all' || searchActive || savedOnly
+    ? matching
+    : matching.slice(0, 5)
 
   function toggleWishlist(id) {
     setWishlist(prev => prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id])
   }
 
-  function filterByIntention(id) {
-    setActiveFilter(id)
-    const target = document.getElementById('pieces')
-    if (target) {
-      if (window.__lenis) window.__lenis.scrollTo(target, { offset: -90 })
-      else target.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   return (
     <div className="livora-shop">
       <div className="livora-shop__shell">
-        <nav className="livora-crumb" aria-label="Breadcrumb">
-          <Link to="/">Home</Link>
-          <span>/</span>
-          <span className="livora-crumb__current">The Collection</span>
-        </nav>
-
         <ShopHero />
         <ShopDualFeatureTiles />
         <ShopCatalog 
@@ -64,13 +66,16 @@ export default function Shop() {
           reducedMotion={reducedMotion}
           onWishlist={toggleWishlist}
           wishlist={wishlist}
+          expanded={expanded}
+          onExpand={() => setExpanded(true)}
+          searchActive={searchActive}
+          savedOnly={savedOnly}
+          query={query}
+          onQueryChange={setQuery}
         />
-        <ShopIntentions onSelectIntention={filterByIntention} />
         <ShopAmbientBanner />
         <ShopInspiration />
         <ShopUspBar />
-        <ShopNewsletter />
-        <ShopFooter onSelectIntention={filterByIntention} />
       </div>
     </div>
   )
