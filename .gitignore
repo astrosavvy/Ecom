@@ -40,6 +40,8 @@ yarn-error.log*
 # Media and User Uploads
 /media/
 2026_09_09/
+New_Edited_Pics/
+*.docx
 
 # OS / Editor Files
 .DS_Store
