@@ -38,6 +38,7 @@
   --font-serif: 'Cormorant Garamond', 'Instrument Serif', Georgia, serif;
   --font-display: 'Cinzel', 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-numeric: var(--font-sans);
 
   /* Layout & Spacing */
   --container-max: 1320px;

@@ -8,16 +8,23 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 19 — Minimal brand-matched benefits footer
-- **Status**: The `/shop` footer now restores a concise three-value benefits row over brand/navigation/contact information. It uses gold line icons and fine ivory dividers instead of a green or terracotta box. Footer height is about 205px at the user's 762px screenshot width and 207px at 430px/360px, with no horizontal overflow. `npm run build` exits 0. No push or deployment has been performed for these shop phases.
-- **Active Task**: Await explicit permission before pushing the verified local `main` commits to GitHub. Linked product detail pages retain their separate existing implementation and should be audited independently if requested.
-- **Last Updated**: 2026-09-29T23:11:23+05:30
+- **Current Phase**: Phase 20 — Rounded bag drawer redesign
+- **Status**: The bag drawer now uses rounded ivory and gold cards, a cleaner product image, a compact mobile-safe summary and pill checkout action. Its shipping line reads “Shipping (Express)” with a green “Free” highlight. Commerce prices now use one standard sans-serif numeric font across the bag, shop, product detail and legacy price components. Promo validation is inline, and its 10% discount recalculates with the cart total. Mobile and desktop browser checks and `npm run build` passed. No push or deployment has been performed for these shop phases.
+- **Active Task**: Await explicit permission before pushing the verified local `main` commits to GitHub. Online checkout has no implemented route yet; the bag now states this inline instead of showing a misleading alert.
+- **Last Updated**: 2026-09-29T23:30:30+05:30
 - **Last Agent**: Codex
 - **Primary URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 
 ---
 
 ## 2. 🏁 Consolidated Milestone History
+
+### [2026-09-29] Phase 20: Rounded Bag Drawer Redesign (Codex)
+- Restyled the bag overlay with a warm ivory canvas, softly rounded progress/product/gift-note cards, pill quantity control and checkout action, refined type and spacing, and responsive 360px/desktop layouts. Updated the shipping summary to “Shipping (Express)” and a green “Free” pill.
+- Reused the catalog's neutral studio product image where available, replacing the saturated yellow cart thumbnail. Kept cart quantity, removal, gift note and promo behavior.
+- Added inline invalid-code feedback and made the existing 10% promo recalculate when item quantities change. Replaced the checkout alert with an honest inline notice because this frontend has no checkout route.
+- Standardized prices on `Plus Jakarta Sans` with lining/tabular numerals across the bag, shop, product detail and older storefront price components; retained serif editorial headings. Browser-computed font on cart item, total and shop card prices is `Plus Jakarta Sans`.
+- Checked the live drawer at 360px and desktop widths, tested `ASTER10` on a ₹2,350 bag (₹235 discount and ₹2,115 total), restored the original bag state, and ran `npm run build` successfully after the final copy and typography edits. The existing >500KB chunk warning remains non-blocking. Changes are local pending push permission.
 
 ### [2026-09-29] Phase 19: Minimal Brand-Matched Benefits Footer (Codex)
 - Restored the useful upper footer layer as three unboxed values: meaningful symbols, guided selection and personal care. Used thin gold line icons and ivory hairline dividers while keeping the compact brand, links and care details below.

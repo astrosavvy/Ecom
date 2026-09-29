@@ -1148,7 +1148,7 @@
 .livora-hero-bar__floating-card:hover { transform: translateY(-4px); box-shadow: 0 17px 42px rgba(77, 46, 23, .17); }
 .livora-hero-bar__card-label { color: #8d7057; font-size: .61rem; letter-spacing: .15em; font-weight: 700; }
 .livora-hero-bar__card-title { display: flex; align-items: center; justify-content: space-between; margin: 5px 0 3px; font: 500 1.28rem var(--font-serif); }
-.livora-hero-bar__floating-card strong { margin-bottom: 8px; }
+.livora-hero-bar__floating-card strong { margin-bottom: 8px; font-family: var(--font-numeric); font-variant-numeric: lining-nums tabular-nums; }
 .livora-hero-bar__card-detail { padding-top: 9px; border-top: 1px solid #ece5dc; font-size: .72rem; color: var(--muted); }
 
 .livora-dual-features { margin: 4px 0 18px; }
@@ -1175,7 +1175,7 @@
 .livora-card__body { padding: 13px 13px 14px; }
 .livora-card__title h3 { font-size: .98rem; font-family: var(--font-sans); font-weight: 600; }
 .livora-card__descriptor { margin: 1px 0 9px; color: #9b6734; font-size: .69rem; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.livora-card__price { font-size: .9rem; }
+.livora-card__price { font-family: var(--font-numeric); font-size: .9rem; font-variant-numeric: lining-nums tabular-nums; }
 
 .livora-ambient-promo { padding: 6px 0 28px; }
 .livora-ambient-promo__card { display: block; min-height: 292px; padding: 38px 58px; background: #f5ede2; border: 0; }

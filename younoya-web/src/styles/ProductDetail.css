@@ -219,8 +219,10 @@
 }
 
 .livora-buybox__price {
+  font-family: var(--font-numeric);
   font-size: 1.625rem;
   font-weight: 700;
+  font-variant-numeric: lining-nums tabular-nums;
   color: var(--ink);
 }
 

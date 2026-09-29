@@ -393,7 +393,8 @@
 }
 
 .ring-card__price {
-  font-family: var(--font-serif, "Cormorant Garamond", serif);
+  font-family: var(--font-numeric);
+  font-variant-numeric: lining-nums tabular-nums;
   font-size: 11px;
   color: #ecd49f;
   margin-top: 2px;

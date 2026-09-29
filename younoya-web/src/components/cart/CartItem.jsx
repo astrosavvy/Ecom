@@ -1,13 +1,16 @@
 import { Minus, Plus, Trash2 } from 'lucide-react'
+import { getProductByHandle } from '../../data/products'
 
 export default function CartItem({ item, onUpdateQuantity, onRemove }) {
   const lineTotal = (item.priceNum * item.quantity).toLocaleString('en-IN')
+  const product = getProductByHandle(item.handle || item.id?.split('::')[0])
+  const image = product?.shopCardImage || item.image
 
   return (
     <div className="cart-item">
       <div className="cart-item__img-box">
-        {item.image ? (
-          <img src={item.image} alt={item.name} loading="lazy" />
+        {image ? (
+          <img src={image} alt={item.name} loading="lazy" />
         ) : (
           <span className="cart-item__emoji">{item.emoji || '✦'}</span>
         )}

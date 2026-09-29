@@ -242,7 +242,8 @@
 }
 
 .card-price {
-  font-family: var(--font-serif);
+  font-family: var(--font-numeric);
+  font-variant-numeric: lining-nums tabular-nums;
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--gold-300);

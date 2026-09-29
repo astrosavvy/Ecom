@@ -11,24 +11,28 @@ const FREE_GIFT_TIER = 5000
 export default function CartDrawer() {
   const { cart, isOpen, setIsOpen, removeFromCart, updateQuantity, totalPrice, totalItems, giftNote, setGiftNote } = useCart()
   const [code, setCode] = useState('')
-  const [discount, setDiscount] = useState(0)
   const [codeApplied, setCodeApplied] = useState(false)
+  const [codeError, setCodeError] = useState('')
+  const [checkoutMessage, setCheckoutMessage] = useState('')
 
+  const discount = codeApplied ? Math.round(totalPrice * 0.1) : 0
   const progress = Math.min(100, Math.round((totalPrice / FREE_GIFT_TIER) * 100))
   const remaining = Math.max(0, FREE_GIFT_TIER - totalPrice)
   const finalTotal = Math.max(0, totalPrice - discount)
 
   function applyVoucher(e) {
     e.preventDefault()
-    if (!code.trim()) return
+    if (!code.trim()) {
+      setCodeError('Enter a code to apply it.')
+      return
+    }
     const normalized = code.trim().toUpperCase()
     if (normalized === 'ASTER10' || normalized === 'NOYA' || normalized === 'RITUAL') {
-      const disc = Math.round(totalPrice * 0.1)
-      setDiscount(disc)
       setCodeApplied(true)
+      setCodeError('')
     } else {
       setCodeApplied(false)
-      setDiscount(0)
+      setCodeError('That code was not recognised. Please check and try again.')
     }
   }
 
@@ -37,7 +41,7 @@ export default function CartDrawer() {
       {isOpen && (
         <div className="cart-overlay">
           <motion.div className="cart-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsOpen(false)} />
-          <motion.aside className="cart-drawer" initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 220 }}>
+          <motion.aside className="cart-drawer" role="dialog" aria-modal="true" aria-label="Your bag" initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 220 }}>
             <div className="cart-drawer__header">
               <div className="header-title">
                 <span className="eyebrow-mini">YOUNOYA ATELIER</span>
@@ -68,20 +72,22 @@ export default function CartDrawer() {
                     <CartItem key={item.id} item={item} onUpdateQuantity={updateQuantity} onRemove={removeFromCart} />
                   ))}
 
-                  <div className="personalization-box">
-                    <div className="personalization-box__header">
-                      <Gift size={15} className="text-gold" />
-                      <span>Order Blessing & Gift Note</span>
-                      <small className="cart-note-len">{giftNote.length}/180</small>
+                  <div className="cart-gift-card">
+                    <div className="personalization-box">
+                      <div className="personalization-box__header">
+                        <Gift size={17} className="text-gold" />
+                        <span>Order Blessing & Gift Note</span>
+                        <small className="cart-note-len">{giftNote.length}/180</small>
+                      </div>
+                      <textarea className="personalization-input" aria-label="Order blessing and gift note" maxLength={180} placeholder="Add a personal note for the moment..." rows={2} value={giftNote} onChange={(e) => setGiftNote(e.target.value)} />
                     </div>
-                    <textarea className="personalization-input" maxLength={180} placeholder="Inscribe a personal blessing or gift note..." rows={2} value={giftNote} onChange={(e) => setGiftNote(e.target.value)} />
+                    <form className="cart-voucher" onSubmit={applyVoucher}>
+                      <input type="text" aria-label="Promo or seeker code" placeholder="Promo or seeker code" value={code} onChange={(e) => { setCode(e.target.value); setCodeError(''); if (codeApplied) setCodeApplied(false) }} />
+                      <button type="submit" className="cart-voucher__btn">{codeApplied ? <><Check size={14} /> Applied</> : 'Apply'}</button>
+                    </form>
+                    {codeApplied && <small className="cart-voucher__success">10% gift code applied · −₹{discount.toLocaleString('en-IN')}</small>}
+                    {codeError && <small className="cart-voucher__error" role="alert">{codeError}</small>}
                   </div>
-
-                  <form className="cart-voucher" onSubmit={applyVoucher}>
-                    <input type="text" placeholder="Promo / Seeker Code (e.g. ASTER10)" value={code} onChange={(e) => setCode(e.target.value)} />
-                    <button type="submit" className="cart-voucher__btn">{codeApplied ? <Check size={14} /> : 'Apply'}</button>
-                  </form>
-                  {codeApplied && <small className="cart-voucher__success">✦ 10% Seeker Blessing Applied (-₹{discount.toLocaleString('en-IN')})</small>}
                 </div>
               )}
             </div>
@@ -91,12 +97,13 @@ export default function CartDrawer() {
                 <div className="cart-summary">
                   <div className="summary-row"><span>Bag Subtotal</span><span>₹{totalPrice.toLocaleString('en-IN')}</span></div>
                   {discount > 0 && <div className="summary-row summary-row--discount"><span>Celestial Blessing (10%)</span><span>-₹{discount.toLocaleString('en-IN')}</span></div>}
-                  <div className="summary-row"><span>Insured Express Courier</span><span className="summary-free">Complimentary</span></div>
+                  <div className="summary-row"><span>Shipping (Express)</span><span className="summary-free">Free</span></div>
                   <div className="summary-row summary-row--total"><span>Total</span><span className="total-val">₹{finalTotal.toLocaleString('en-IN')}</span></div>
                 </div>
-                <button className="btn-gold checkout-btn" type="button" onClick={() => alert('Proceeding to Consecrated Checkout.')}>
+                <button className="btn-gold checkout-btn" type="button" onClick={() => setCheckoutMessage('Online checkout is being prepared. Write to care@younoya.com and we will help with your order.')}>
                   <span>Proceed to Checkout</span> <ArrowRight size={15} />
                 </button>
+                {checkoutMessage && <p className="checkout-message" role="status">{checkoutMessage}</p>}
                 <div className="checkout-guarantee"><span>✦ Sealed with authentic gold wax & sanctified in our atelier.</span></div>
               </div>
             )}
