@@ -1237,8 +1237,8 @@
   .livora-hero-bar__orbit { width: 106%; left: -3%; }
   .livora-hero-bar__floating-card { right: 0; bottom: 13px; min-width: 178px; padding: 12px 14px; }
   .livora-hero-bar__card-title { font-size: 1.08rem; }
-  .livora-dual-features__grid { grid-template-columns: 1fr; gap: 12px; }
-  .livora-feature-tile { min-height: 178px; flex-direction: row; }
+  .livora-dual-features__grid { grid-template-columns: 1fr; grid-auto-rows: 1fr; gap: 12px; }
+  .livora-feature-tile { height: 100%; min-height: 218px; flex-direction: row; }
   .livora-feature-tile__media { width: 47%; height: 100%; margin: 0; }
   .livora-grid { grid-template-columns: repeat(2, 1fr); gap: 11px; }
   .livora-trending-line { width: 25px; }
@@ -1268,107 +1268,72 @@
   white-space: nowrap;
 }
 
-/* A closing editorial footer in place of the old icon grid. */
+/* Reference-led footer: a restrained benefits band and concise link columns. */
 .shop-footer {
-  margin-top: clamp(34px, 5vw, 76px);
-  background: #f1e8dc;
-  border-top: 1px solid #dfd1bf;
+  margin-top: 36px;
+  background: #fcf9f5;
+  border-top: 1px solid #e2d7c9;
   color: #2b241f;
 }
 .shop-footer__inner {
   max-width: 1512px;
   margin-inline: auto;
-  padding: clamp(42px, 5vw, 76px) clamp(22px, 4.3vw, 70px) 25px;
+  padding: 18px clamp(22px, 4.3vw, 70px) 25px;
 }
-.shop-footer__eyebrow {
+.shop-footer__benefits {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 14px 0;
+  border-radius: 7px;
+  background: #173b2e;
+  color: #faf6ec;
+}
+.shop-footer__benefit {
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #d9c9b6;
-  color: #96652f;
-  font: 600 .7rem var(--font-sans);
-  letter-spacing: .2em;
+  gap: 12px;
+  min-width: 0;
+  padding: 2px clamp(12px, 2vw, 28px);
 }
-.shop-footer__eyebrow span { font-size: 1rem; }
-.shop-footer__main {
+.shop-footer__benefit + .shop-footer__benefit { border-left: 1px solid rgba(255, 255, 255, .18); }
+.shop-footer__benefit svg { flex: none; color: #e5d4ac; }
+.shop-footer__benefit strong,
+.shop-footer__benefit small { display: block; }
+.shop-footer__benefit strong { font-size: .62rem; letter-spacing: .08em; line-height: 1.2; }
+.shop-footer__benefit small { margin-top: 3px; color: #d6e0d7; font-size: .61rem; line-height: 1.3; }
+.shop-footer__body {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
-  gap: clamp(50px, 8vw, 150px);
-  padding: clamp(42px, 5vw, 75px) 0 clamp(58px, 7vw, 105px);
-}
-.shop-footer__lead h2 {
-  margin: 0 0 19px;
-  font: 400 clamp(3.2rem, 5.2vw, 5.8rem)/.97 var(--font-serif);
-  letter-spacing: -.045em;
-}
-.shop-footer__lead h2 em { color: #95511f; font-weight: 400; }
-.shop-footer__lead p {
-  max-width: 390px;
-  margin: 0 0 27px;
-  color: #6c5c4d;
-  font-size: .95rem;
-  line-height: 1.7;
-}
-.shop-footer__consult {
-  display: inline-flex;
-  align-items: center;
-  gap: 15px;
-  border-bottom: 1px solid #915b2e;
-  padding-bottom: 7px;
-  color: #84471f;
-  font: 600 .85rem var(--font-sans);
-  text-decoration: none;
-  transition: gap .25s ease, color .25s ease;
-}
-.shop-footer__consult:hover { gap: 20px; color: #482815; }
-.shop-footer__nav {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 35px;
-  padding-top: 6px;
-}
-.shop-footer__nav h3 {
-  margin: 0 0 20px;
-  color: #a66e3e;
-  font: 700 .68rem var(--font-sans);
-  letter-spacing: .18em;
-  text-transform: uppercase;
-}
-.shop-footer__nav a,
-.shop-footer__nav span {
-  display: block;
-  margin: 0 0 15px;
-  color: #443a32;
-  font-size: .87rem;
-  line-height: 1.4;
-  text-decoration: none;
-}
-.shop-footer__nav a:hover,
-.shop-footer__top-link:hover { color: #95511f; }
-.shop-footer__nav span { color: #817164; }
-.shop-footer__bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
   gap: 24px;
-  border-top: 1px solid #d9c9b6;
-  padding-top: 22px;
-  color: #817164;
-  font-size: .71rem;
+  padding: 24px 8px 0;
 }
 .shop-footer__mark {
   color: #382b22;
-  font: 500 1.08rem var(--font-serif);
-  letter-spacing: .17em;
+  font: 500 1.13rem var(--font-serif);
+  letter-spacing: .14em;
   text-decoration: none;
+  white-space: nowrap;
 }
 .shop-footer__mark span { color: #a66e3e; font-size: .8rem; }
-.shop-footer__top-link { color: #655144; text-decoration: none; }
+.shop-footer__brand p { margin: 5px 0 0; color: #887664; font: italic .76rem var(--font-serif); }
+.shop-footer__nav,
+.shop-footer__contact { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.shop-footer__nav strong,
+.shop-footer__contact strong { margin-bottom: 3px; color: #91704e; font-size: .61rem; letter-spacing: .14em; }
+.shop-footer__nav a,
+.shop-footer__contact a {
+  color: #675749;
+  font-size: .72rem;
+  text-decoration: none;
+}
+.shop-footer__contact small { margin-top: 6px; color: #9a8877; font-size: .61rem; }
+.shop-footer__nav a:hover,
+.shop-footer__contact a:hover { color: #95511f; }
 
 @media (max-width: 900px) {
-  .shop-footer__main { grid-template-columns: 1fr; gap: 48px; }
-  .shop-footer__nav { max-width: 510px; }
+  .shop-footer__benefit { gap: 8px; }
+  .shop-footer__benefit strong { font-size: .55rem; }
+  .shop-footer__benefit small { font-size: .54rem; }
 }
 @media (max-width: 640px) {
   .livora-hero-bar { margin-top: 78px; gap: 4px; }
@@ -1407,15 +1372,17 @@
   .livora-hero-bar__card-title svg { width: 14px; height: 14px; }
   .livora-hero-bar__floating-card strong { margin-bottom: 5px; font-size: .98rem; }
   .livora-hero-bar__card-detail { padding-top: 6px; font-size: .62rem; line-height: 1.25; }
-  .shop-footer { margin-top: 36px; }
-  .shop-footer__inner { padding: 38px 22px 22px; }
-  .shop-footer__eyebrow { padding-bottom: 16px; font-size: .63rem; }
-  .shop-footer__main { gap: 37px; padding: 38px 0 48px; }
-  .shop-footer__lead h2 { font-size: clamp(3rem, 13vw, 4.2rem); }
-  .shop-footer__lead p { max-width: 330px; font-size: .89rem; }
-  .shop-footer__nav { gap: 20px; padding-top: 0; }
-  .shop-footer__nav h3 { margin-bottom: 16px; }
-  .shop-footer__nav a, .shop-footer__nav span { font-size: .79rem; overflow-wrap: anywhere; }
-  .shop-footer__bottom { flex-wrap: wrap; gap: 13px; font-size: .66rem; }
-  .shop-footer__mark { width: 100%; }
+  .shop-footer__inner { padding: 15px 18px 22px; }
+  .shop-footer__benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 6px 0; }
+  .shop-footer__benefit { gap: 9px; padding: 9px 13px; }
+  .shop-footer__benefit:nth-child(3) { border-left: 0; }
+  .shop-footer__benefit:nth-child(-n+2) { border-bottom: 1px solid rgba(255, 255, 255, .18); }
+  .shop-footer__benefit strong { font-size: .56rem; }
+  .shop-footer__benefit small { font-size: .55rem; }
+  .shop-footer__body { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px 12px; padding: 20px 4px 0; }
+  .shop-footer__brand { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 11px; }
+  .shop-footer__mark { font-size: 1rem; }
+  .shop-footer__brand p { margin: 0; font-size: .68rem; }
+  .shop-footer__nav a,
+  .shop-footer__contact a { font-size: .68rem; }
 }

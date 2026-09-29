@@ -8,16 +8,21 @@
 
 ## 1. 📍 Executive Project Status
 
-- **Current Phase**: Phase 16 — Mobile shop polish and editorial footer
-- **Status**: The reference-based `/shop` redesign and follow-up mobile fixes are complete locally. The shop header now displays the full Younoya wordmark at a legible size, the hero copy and proof line are more balanced, the mobile Wild Poise card is smaller, and a warm editorial footer replaces the old icon row. Desktop and mobile browser views were checked; `npm run build` exits 0. No push or deployment has been performed for these shop phases.
+- **Current Phase**: Phase 17 — Equal mobile feature tiles and compact reference-style footer
+- **Status**: The `/shop` follow-up is complete locally. Both mobile feature tiles now use equal-height grid rows. The prior oversized footer has been replaced with a compact dark-green benefits band and light brand, navigation and contact columns based on the user's supplied reference. At 430px the tiles each measured 255px and the footer 279px, down from 600px; 360px mobile and 1440px desktop checks showed no horizontal overflow. `npm run build` exits 0. No push or deployment has been performed for these shop phases.
 - **Active Task**: Await explicit permission before pushing the verified local `main` commits to GitHub. Linked product detail pages retain their separate existing implementation and should be audited independently if requested.
-- **Last Updated**: 2026-09-29T22:40:20+05:30
+- **Last Updated**: 2026-09-29T22:53:20+05:30
 - **Last Agent**: Codex
 - **Primary URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 
 ---
 
 ## 2. 🏁 Consolidated Milestone History
+
+### [2026-09-29] Phase 17: Equal Mobile Tiles and Compact Footer (Codex)
+- Equalized both shop feature tile heights on mobile with shared grid row sizing while preserving their imagery and copy. Verified 255px/255px at both 430px and 360px widths.
+- Replaced the 600px editorial footer with the user's compact two-part reference structure: a dark-green four-value band over light Younoya, collection, gift guide, journal and care information. The values describe the actual brand approach instead of unverified delivery, pricing or customer claims.
+- Visually checked 430px and 360px mobile and 1440px desktop layouts, with no horizontal overflow. Footer height measured 279px at 430px, 301px at 360px and 215px at desktop. `npm run build` exited 0; the existing >500KB chunk warning remains non-blocking. Changes are local pending push permission.
 
 ### [2026-09-29] Phase 16: Mobile Shop Polish and Editorial Footer (Codex)
 - Increased the shop-only Younoya wordmark from a squeezed 32px image to a legible full logo with stronger contrast, while keeping the shared navbar on other routes untouched.
