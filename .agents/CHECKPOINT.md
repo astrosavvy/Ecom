@@ -3,8 +3,8 @@
 > **SSOT**: Mandatory turn start (Step 1) & turn finish (Step 4) reference for all agents (Codex, Antigravity, Claude Code).
 
 ## 1. 📍 Status & Topology
-- **Phase**: Phase 25 — Backend review items resolved: single item inventory link preservation, offer approval enforcement on liveProduct, filter-aware public product listing pagination, and order recovery for concurrent webhook/checkout payments. Unit tests expanded (14 passed) and typecheck clean.
-- **Last Update**: 2026-09-30T16:26:00+05:30 | **Agent**: Antigravity
+- **Phase**: Phase 26 — Corrected the rejected gift-guide avatar: removed the distorted procedural 3D figure and restored the established lady artwork with restrained animation, responsive framing and header clearance. Backend Phase 25 work preserved.
+- **Last Update**: 2026-09-30 | **Agent**: Codex
 - **URLs**: Dev `http://localhost:5173` | Preview `http://localhost:3000` | Prod `https://younoya.com` | API `https://api.younoya.com`
 - **Stack**: Frontend Vite 6 + React 19 + Framer Motion + Lenis (Cloudflare Worker `ecom` Static Assets). Backend Medusa 2.18 + PG 15 + Redis (VPS 140.245.7.165 headless REST API via CF Tunnel). Zero VPS admin builds (956MB RAM OOM ceiling).
 
@@ -28,6 +28,8 @@
   4. *Payment Concurrency & Recovery*: Added existing-order recovery in `payment-confirm/route.ts` (`GET` and `POST`) and updated `checkout.js` to recover existing orders on webhook-first or duplicate completion without duplicate charge or errors.
   5. *Webhook Lifecycle & Money Units*: Verified Medusa paise convention across the stack (₹2,499 = 249900 paise, Razorpay session amount is in paise); enriched webhook data with `payment_id` and `order_id`. Cross-platform unit tests now run without bash syntax.
 
+- **Phase 26 (Aster Visual Correction)**: Removed `Aster3D.jsx` and unused Three.js/React Three dependencies after the user rejected the primitive character. `AsterStage.jsx` now layers the existing transparent listen/speak/blink lady portraits with subtle breathing, occasional blinking and small pointer response; reduced motion uses a static portrait. The face retains the source artwork proportions. Reframed the warm ivory stage for desktop, tablet and mobile, added clearance beneath the fixed header, and removed the approximately 927KB avatar chunk. This is animated portrait artwork, not a rigged 3D model. Backend handoff updated to reflect that distinction. Visual checks at 1200px, 795px, 430px and 360px confirmed a fully visible face and next-question progression; DOM confirmed loaded portraits, no canvas and no horizontal overflow. Proof: `.tmp/aster-corrected-desktop.jpg` (local ignored artifact). Root build exited 0; existing main-bundle warning remains. One final local commit prepared; this correction needs new explicit permission before push. Unrelated `backend-update.tar.gz` preserved and excluded from the commit.
+
 ## 3. ⚠️ Inviolable System Rules
 1. **Explicit Git Push Permission**: NEVER run `git push` without explicit user approval. Always ask first.
 2. **Single Final Semantic Commit**: Group all edits, dist, configs, and checkpoint updates into ONE commit. No micro-commits.
@@ -41,6 +43,7 @@
 10. **Backend Direct SSH Deployment Law (Zero GitHub Involvement)**: Whenever updating the backend server: (1) Build updated backend code locally (`npm run build` in `backend/`), (2) Push via SSH (`scp`) to VPS (`ubuntu@140.245.7.165`), (3) Deploy and run on VPS (`npx medusa db:migrate`, restart service). NO GITHUB IS INVOLVED at any point in backend management.
 
 ## 4. 🛠️ Verification & Next Tasks
+- Latest frontend correction: root build passed; responsive visual verification passed. Preview runs at `http://127.0.0.1:5175/find-a-gift`. Ask permission to push the avatar correction; do not treat prior handoff push authorization as authorization for this new task.
 - `npm run build`: Exits 0 (frontend, 16 crawlable route shells, 11 admin shells, synced `dist/`; existing >500KB chunk warning remains).
 - Backend `npx tsc --noEmit`: Exits 0 with zero errors.
 - Backend Jest: 14 tests pass across `checkout.unit.spec.ts` and `gift-guide.unit.spec.ts` (gift paths, historical time zone, matrix, age boundary, fallback, signed token, query-filtered visibility, liveProduct approval enforcement, order recovery on completed cart, and idempotency).

@@ -19,7 +19,7 @@ The user requested this file for a backend agent to complete the remaining work 
 - Bundles are one independently priced Medusa variant with inventory links to component items. Checkout uses the backend variant and backend totals.
 - Saved records keep derived method, explanation and product references; do not retain raw birth date, time or place by default.
 - India-only INR checkout, OTP customer login and real Razorpay verification. No synthetic payment success or client-calculated promotions.
-- Keep the storefront light and conversational. Aster has no voice. Reduced motion/WebGL failure uses the portrait fallback.
+- Keep the storefront light and conversational. Aster has no voice. The current guide uses the established lady portrait assets with restrained motion and a static reduced-motion view; it requires no WebGL.
 - Medusa admin remains disabled on the VPS. Admin UI is the edge SPA. Build backend artifacts outside the 956MB VPS and deploy the runtime; preserve uploaded media.
 
 ## What is implemented
@@ -28,7 +28,7 @@ The user requested this file for a backend agent to complete the remaining work 
 
 - `younoya-web/src/pages/GiftFinder.jsx`: guest conversation, session result, authenticated save/reopen/order actions, login return to the current result, clearly labelled intention preview when the live API is unavailable. Raw birth details are cleared after reveal.
 - `younoya-web/src/components/gift-guide/`: animated conversation/reply controls, 120-year calendar, debounced place search, result cards, email OTP login, light guide stage.
-- `Aster3D.jsx`: lazy-loaded procedural articulated character with plum clothing, brown hair, eye blink, mouth/head/arm motion and pointer response. This is a stylized mesh built from primitives, not an artist-authored skinned model matching the film exactly. `AsterStage.jsx` supplies portrait/reduced-motion/WebGL fallback.
+- `AsterStage.jsx`: the procedural `Aster3D.jsx` was removed after the user rejected its distorted appearance. The guide now uses the existing transparent `guide-listen.webp`, `guide-speak.webp` and `guide-blink.webp` lady artwork, with bounded framing, subtle breathing, occasional blink and small pointer response. Reduced motion displays a static portrait. This is animated artwork, not a rigged 3D model; any future model must be artist-authored and visually approved before replacing it. Three.js and React Three dependencies were removed.
 - `younoya-web/src/lib/giftGuideApi.js`: Medusa requests, customer token, email OTP request/verify, customer registration/refresh.
 - `younoya-web/src/lib/checkout.js` and `pages/Checkout.jsx`: customer checkout, India region, current variant lookup, Medusa cart/address/shipping/promotion/totals, Razorpay window, server confirmation and cart completion. A received gateway receipt is retained in the browser session so a confirmation retry can reuse it; pending-cart ownership is checked before reopening.
 - `pages/PrivateOffer.jsx`: direct unlisted offer page. `/offer/:handle` and `/checkout` have `noindex` metadata.
@@ -129,7 +129,7 @@ No secret values are in this handoff. At the last implementation check, local Ge
 - Backend promotions, shipping and tax produce the exact total shown in Razorpay. India-only address and INR are enforced.
 - Razorpay test success/failure/cancel/retry, bad signature, wrong amount/order/cart/customer, webhook duplicates and concurrent callbacks are covered.
 - Paid-but-unconfirmed or already-completed carts recover an existing order without a second charge.
-- Mobile/desktop, keyboard, reduced motion and WebGL failure are visually checked; review Aster's procedural likeness separately from backend readiness.
+- Mobile/desktop and keyboard behavior are checked; reduced motion keeps the lady static. Aster no longer depends on WebGL. Preserve the approved character artwork while completing backend readiness.
 
 ## Verification already performed
 
@@ -139,8 +139,8 @@ No secret values are in this handoff. At the last implementation check, local Ge
 - Focused Jest: 11 tests passed across `gift-guide.unit.spec.ts` and `checkout.unit.spec.ts`. Tests cover rules/age/matrix/timezone/fallback/signing, public-list filtering and mocked payment verification/idempotency. They are not database or real-gateway tests.
 - `npx wrangler deploy --dry-run`: passed for 178 assets. No production deployment or payment was performed during implementation.
 - Backend lint unavailable: the project's `medusa lint` reported that `eslint` is not installed.
-- Visual browser verification was unavailable because the in-app browser blocked the local dev URL.
-- Existing frontend chunk warning remains; Aster is lazy-loaded, but its Three.js chunk is approximately 927KB uncompressed.
+- Original implementation browser verification was unavailable. The subsequent avatar correction was visually checked in the in-app browser at desktop, 430px and 360px widths, including progression to the next question. The full face remains visible below the header and all portrait assets load without a canvas.
+- Existing main frontend chunk warning remains. The approximately 927KB Three.js avatar chunk has been removed by the correction.
 
 ## Source references
 
