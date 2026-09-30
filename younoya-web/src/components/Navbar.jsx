@@ -10,7 +10,7 @@ export default function Navbar() {
   const shop = pathname === '/shop'
 
   return (
-    <header className={`navbar${light ? ' navbar--light' : ''}${shop ? ' navbar--shop' : ''}`}>
+    <header className={`navbar${light ? ' navbar--light' : ''}${shop ? ' navbar--shop' : ''}${pathname === '/find-a-gift' ? ' navbar--guide' : ''}`}>
       <div className="navbar__left">
         <Link className="navbar__brand" to="/" aria-label="Younoya home">
           <img src="/brand-legacy.webp" alt="Younoya" />
