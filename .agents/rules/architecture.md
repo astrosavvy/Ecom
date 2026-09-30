@@ -20,10 +20,17 @@
 - **Redirects**: `public/_redirects` must stay 2-3 lines only (e.g. `/gifts / 301`). NEVER add catch-all `/* /index.html 200` (causes infinite redirect loop 100324).
 - **Static Assets**: Edge cache rules pinned in `public/_headers` for `/assets/*` and `/media/*`.
 
-## 4. VPS Backend Production Rules
-- **ZERO BUILD ON VPS**: The VPS (140.245.7.165, Oracle 2vCPU / 956MB RAM) will OOM crash if `npm run build` is run on it.
-- **Local Packaging**: Always build locally (`npm run build` in `backend/`) -> package `.medusa`, `src`, `package.json`, `medusa-config.ts` into a tar archive -> transfer via `scp` -> extract on VPS -> run migrations -> restart PM2.
-- **Cloudflare Tunnel**: `api.younoya.com` connects via Cloudflare Tunnel to port 80/9000 on the VPS.
+## 4. VPS Backend Production & Deployment Law (Zero GitHub Involvement)
+> [!IMPORTANT]
+> **MANDATORY BACKEND UPDATE LIFECYCLE**: Whenever updating the Medusa backend server, execute this strict 3-step cycle. **DURING THIS WHOLE PROCESS NO GITHUB IS INVOLVED**:
+> 1. **Build the updated backend code**: Build locally outside the VPS (`npm run build` in `backend/`).
+> 2. **Push it via SSH to backend**: Package built artifacts (`.medusa`, `src`, `package.json`, `medusa-config.ts`) and transfer directly via `scp` to `ubuntu@140.245.7.165`.
+> 3. **Deploy and run it there**: Extract on VPS, run database migrations (`npx medusa db:migrate`), and restart the process (`pm2 restart` / `systemctl restart younoya-medusa`).
+>
+> **Hard Constraints**:
+> - **Zero GitHub Involvement**: Backend updates never trigger or depend on GitHub, GitHub Actions, or server-side `git pull`. All backend deployment is strictly local-to-VPS via direct SSH.
+> - **ZERO BUILD ON VPS**: The VPS (140.245.7.165, Oracle 2vCPU / 956MB RAM) will immediately OOM crash if `npm run build` or compilers run on it.
+> - **Cloudflare Tunnel**: `api.younoya.com` connects via Cloudflare Tunnel to port 80/9000 on the VPS.
 
 ## 5. Admin Console Hosting Law (Zero Admin UI on VPS Backend)
 - **Frontend-Hosted Console**: The Admin management dashboard (`/admin/*`) MUST ALWAYS be built and hosted exclusively on the Frontend edge (`younoya-web` on Cloudflare Workers Static Assets).

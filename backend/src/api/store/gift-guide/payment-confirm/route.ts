@@ -12,7 +12,12 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as any
   const { data } = await query.graph({ entity: "cart", fields: ["id", "customer_id", "completed_at"], filters: { id: cartId } })
   if (!data[0] || data[0].customer_id !== customerId) return res.status(403).json({ message: "Cart not found for this account" })
-  return res.json({ owned: true, completed: Boolean(data[0].completed_at) })
+  let order: any = null
+  if (data[0].completed_at) {
+    const { data: orders } = await query.graph({ entity: "order", fields: ["id", "display_id", "total"], filters: { cart_id: cartId } })
+    order = orders[0] ?? null
+  }
+  return res.json({ owned: true, completed: Boolean(data[0].completed_at), order })
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
@@ -30,9 +35,13 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as any
     const { data: carts } = await query.graph({ entity: "cart", fields: ["id", "customer_id", "total", "currency_code",
-      "shipping_address.country_code", "payment_collection.id"], filters: { id: cartId } })
+      "shipping_address.country_code", "payment_collection.id", "completed_at"], filters: { id: cartId } })
     const cart = carts[0]
     if (!cart || cart.customer_id !== customerId) return res.status(403).json({ message: "Cart not found for this account" })
+    if (cart.completed_at) {
+      const { data: orders } = await query.graph({ entity: "order", fields: ["id", "display_id", "total"], filters: { cart_id: cartId } })
+      return res.json({ verified: true, completed: true, order: orders[0] ?? null })
+    }
     if (cart.currency_code !== "inr" || cart.shipping_address?.country_code !== "in") {
       return res.status(400).json({ message: "Only India INR orders are supported" })
     }

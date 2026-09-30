@@ -79,9 +79,18 @@ export async function launchPayment(cart, session, address) {
     })
     sessionStorage.setItem(PENDING_KEY, JSON.stringify({ cartId: cart.id, session, receipt }))
   }
-  await storeRequest('/store/gift-guide/payment-confirm', { body: { cartId: cart.id, sessionId: session.id, ...receipt }, auth: true })
-  const completed = await storeRequest(`/store/carts/${cart.id}/complete`, { method: 'POST', auth: true })
-  if (completed.type !== 'order' || !completed.order?.id) throw new Error('Payment was verified, but order confirmation is pending. Please contact the atelier before trying again.')
+  const confirmed = await storeRequest('/store/gift-guide/payment-confirm', { body: { cartId: cart.id, sessionId: session.id, ...receipt }, auth: true })
+  let order = confirmed?.order
+  if (!order) {
+    try {
+      const completed = await storeRequest(`/store/carts/${cart.id}/complete`, { method: 'POST', auth: true })
+      if (completed.type === 'order' && completed.order?.id) order = completed.order
+    } catch {
+      const status = await storeRequest(`/store/gift-guide/payment-confirm?cartId=${encodeURIComponent(cart.id)}`, { auth: true })
+      if (status?.completed && status.order?.id) order = status.order
+    }
+  }
+  if (!order?.id) throw new Error('Payment was verified, but order confirmation is pending. Please contact the atelier before trying again.')
   sessionStorage.removeItem(PENDING_KEY)
-  return completed.order
+  return order
 }

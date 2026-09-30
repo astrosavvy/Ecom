@@ -16,16 +16,47 @@ const staffRead = requireRole("admin", "support")
 export async function hideRecommendationOffers(req: any, res: any, next: any) {
   try {
     const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as any
-    const { data } = await query.graph({ entity: "product", fields: ["id", "metadata"],
-      pagination: { take: 1000 } })
-    const hidden = new Set(data.filter((product: any) => product.metadata?.recommendation_only === true)
-      .map((product: any) => product.id))
+    const allHidden: any[] = []
+    let offset = 0
+    const batchSize = 1000
+    while (true) {
+      const { data, count } = await query.graph({
+        entity: "product", fields: ["id", "handle", "title", "metadata", "collection_id", "categories.id"],
+        pagination: { take: batchSize, skip: offset },
+      })
+      const items = data || []
+      for (const p of items) {
+        if (p.metadata?.recommendation_only === true) allHidden.push(p)
+      }
+      offset += items.length
+      if (!items.length || offset >= (count ?? items.length) || items.length < batchSize) break
+    }
+    const hiddenSet = new Set(allHidden.map((p) => p.id))
     const send = res.json.bind(res)
     res.json = (body: any) => {
       if (!Array.isArray(body?.products)) return send(body)
-      const products = body.products.filter((product: any) => !hidden.has(product.id))
-      return send({ ...body, products, count: Math.max(0, Number(body.count ?? products.length) - hidden.size),
-        ...(body.estimate_count === undefined ? {} : { estimate_count: Math.max(0, Number(body.estimate_count) - hidden.size) }) })
+      const products = body.products.filter((p: any) => !hiddenSet.has(p.id) && p.metadata?.recommendation_only !== true)
+      const queryParams = req.query ?? {}
+      let hiddenMatching = 0
+      for (const p of allHidden) {
+        if (queryParams.id && p.id !== queryParams.id && (!Array.isArray(queryParams.id) || !queryParams.id.includes(p.id))) continue
+        if (queryParams.handle && p.handle !== queryParams.handle) continue
+        if (queryParams.collection_id && p.collection_id !== queryParams.collection_id &&
+          (!Array.isArray(queryParams.collection_id) || !queryParams.collection_id.includes(p.collection_id))) continue
+        if (queryParams.category_id) {
+          const catIds = (p.categories || []).map((c: any) => c.id)
+          const target = Array.isArray(queryParams.category_id) ? queryParams.category_id : [queryParams.category_id]
+          if (!target.some((t: string) => catIds.includes(t))) continue
+        }
+        if (queryParams.q) {
+          const q = String(queryParams.q).toLowerCase()
+          if (!p.title?.toLowerCase().includes(q) && !p.handle?.toLowerCase().includes(q)) continue
+        }
+        hiddenMatching++
+      }
+      const adjustedCount = Math.max(0, Number(body.count ?? products.length) - hiddenMatching)
+      return send({ ...body, products, count: adjustedCount,
+        ...(body.estimate_count === undefined ? {} : { estimate_count: Math.max(0, Number(body.estimate_count) - hiddenMatching) }) })
     }
     next()
   } catch (error) { next(error) }

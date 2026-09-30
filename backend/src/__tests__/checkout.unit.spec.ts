@@ -3,7 +3,7 @@ import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 
 const fetchPayment = jest.fn()
 jest.mock("razorpay", () => ({ __esModule: true, default: jest.fn().mockImplementation(() => ({ payments: { fetch: fetchPayment } })) }))
-import { POST } from "../api/store/gift-guide/payment-confirm/route"
+import { GET, POST } from "../api/store/gift-guide/payment-confirm/route"
 
 function response() {
   const res: any = { code: 200, body: null }
@@ -50,5 +50,25 @@ describe("payment confirmation", () => {
     fetchPayment.mockResolvedValue({ order_id: "order_1", amount: 10000, currency: "INR", status: "failed" })
     const rejected = await POST(req, response()) as any
     expect(rejected.code).toBe(400)
+  })
+
+  test("already completed cart recovers order cleanly on duplicate confirmation or recovery GET", async () => {
+    const reqPost: any = { auth_context: { actor_id: "cus_1" }, body: { cartId: "cart_1", sessionId: "ps_1",
+      razorpay_order_id: "order_1", razorpay_payment_id: "pay_1",
+      razorpay_signature: crypto.createHmac("sha256", secret).update("order_1|pay_1").digest("hex") },
+      scope: { resolve: () => ({ graph: async ({ entity }: any) => ({
+        data: entity === "cart" ? [{ id: "cart_1", customer_id: "cus_1", completed_at: "2026-09-30T12:00:00Z" }]
+          : [{ id: "ord_123", display_id: 1, total: 249900 }]
+      }) }) } }
+    const postRes = await POST(reqPost, response()) as any
+    expect(postRes.body).toEqual({ verified: true, completed: true, order: { id: "ord_123", display_id: 1, total: 249900 } })
+
+    const reqGet: any = { auth_context: { actor_id: "cus_1" }, query: { cartId: "cart_1" },
+      scope: { resolve: () => ({ graph: async ({ entity }: any) => ({
+        data: entity === "cart" ? [{ id: "cart_1", customer_id: "cus_1", completed_at: "2026-09-30T12:00:00Z" }]
+          : [{ id: "ord_123", display_id: 1, total: 249900 }]
+      }) }) } }
+    const getRes = await GET(reqGet, response()) as any
+    expect(getRes.body).toEqual({ owned: true, completed: true, order: { id: "ord_123", display_id: 1, total: 249900 } })
   })
 })

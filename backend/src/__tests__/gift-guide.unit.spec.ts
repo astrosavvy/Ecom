@@ -7,6 +7,7 @@ import { computeDasha, DASHA_YEARS } from "../modules/younoya-astro/utils/dasha"
 import { signRecommendation, verifyRecommendation } from "../modules/younoya-astro/gift-guide-token"
 import RazorpayPaymentProvider, { validRazorpaySignature } from "../modules/younoya-razorpay/service"
 import { hideRecommendationOffers } from "../api/middlewares"
+import { liveProduct } from "../modules/younoya-astro/offers"
 
 const product = { id: "prod_one", handle: "wild-poise", title: "Wild Poise", thumbnail: "/wild.webp",
   metadata: {}, variants: [{ id: "variant_one", manage_inventory: false, allow_backorder: false,
@@ -127,4 +128,39 @@ test("recommendation-only offers never appear in public product listings", async
   expect(next).toHaveBeenCalledWith()
   res.json({ products: [{ id: "prod_hidden" }, { id: "prod_public" }], count: 2 })
   expect(output).toHaveBeenCalledWith(expect.objectContaining({ products: [{ id: "prod_public" }], count: 1 }))
+})
+
+test("hideRecommendationOffers does not decrement count when query filter does not match hidden products", async () => {
+  const req: any = {
+    query: { category_id: "cat_public_only" },
+    scope: { resolve: () => ({ graph: async () => ({ data: [
+      { id: "prod_hidden", metadata: { recommendation_only: true }, categories: [{ id: "cat_private" }] },
+    ] }) }) }
+  }
+  const output = jest.fn()
+  const res: any = { json: output }
+  const next = jest.fn()
+  await hideRecommendationOffers(req, res, next)
+  expect(next).toHaveBeenCalledWith()
+  res.json({ products: [{ id: "prod_pub_1" }, { id: "prod_pub_2" }], count: 2 })
+  expect(output).toHaveBeenCalledWith(expect.objectContaining({ count: 2 }))
+})
+
+test("liveProduct rejects unapproved private offers and unapproved public products", async () => {
+  const mockScope = (p: any) => ({ resolve: () => ({ graph: async () => ({ data: [p] }) }) })
+  const unapprovedPrivate = { id: "p1", handle: "p1", title: "P1", thumbnail: "/p1.webp",
+    metadata: { recommendation_only: true, gift_guide_approved: false },
+    variants: [{ id: "v1", manage_inventory: false, prices: [{ amount: 249900, currency_code: "inr" }] }] }
+  expect(await liveProduct(mockScope(unapprovedPrivate), "p1")).toBeNull()
+
+  const pendingPrivate = { ...unapprovedPrivate, metadata: { recommendation_only: true } }
+  expect(await liveProduct(mockScope(pendingPrivate), "p1")).toBeNull()
+
+  const approvedPrivate = { ...unapprovedPrivate, metadata: { recommendation_only: true, gift_guide_approved: true } }
+  expect((await liveProduct(mockScope(approvedPrivate), "p1"))?.id).toBe("p1")
+
+  const disapprovedPublic = { id: "p2", handle: "p2", title: "P2", thumbnail: "/p2.webp",
+    metadata: { gift_guide_approved: false },
+    variants: [{ id: "v2", manage_inventory: false, prices: [{ amount: 249900, currency_code: "inr" }] }] }
+  expect(await liveProduct(mockScope(disapprovedPublic), "p2")).toBeNull()
 })

@@ -33,7 +33,11 @@ export async function liveProduct(scope: any, id: string, salesChannelId?: strin
     fields: ["id", "handle", "title", "thumbnail", "metadata", "variants.id", "variants.manage_inventory",
       "variants.allow_backorder", "variants.prices.amount", "variants.prices.currency_code"] })
   const product = data[0]
-  return (await availableOffers(scope, product ? [product] : [], salesChannelId))[0] ?? null
+  if (!product) return null
+  const md = product.metadata ?? {}
+  if (md.gift_guide_approved === false) return null
+  if (md.recommendation_only === true && md.gift_guide_approved !== true) return null
+  return (await availableOffers(scope, [product], salesChannelId))[0] ?? null
 }
 
 export function presentOffer(product: any) {

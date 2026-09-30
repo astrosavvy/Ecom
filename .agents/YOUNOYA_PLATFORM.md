@@ -172,7 +172,7 @@ score = 20 base + 40 moon-rashi match + 25 sun-sign match + 15 ruling-planet + 1
 
 ## 7. Deployment (summary — full runbook in `docs/DEPLOYMENT.md`)
 
-- **Backend**: build locally (`npm run build` in backend/) → tar `.medusa src` → scp → extract on VPS → `npx medusa db:migrate` (+ seed if needed) → `systemctl restart younoya-medusa`. NEVER build on the VPS (1GB RAM).
+- **Backend (Zero GitHub Involvement)**: Whenever updating the backend: (1) build locally (`npm run build` in `backend/`) → (2) push via SSH (`scp` tar `.medusa src package.json medusa-config.ts` to `ubuntu@140.245.7.165`) → (3) deploy and run on VPS (`npx medusa db:migrate` → `sudo systemctl restart younoya-medusa`). NEVER build on the VPS (1GB RAM OOM). NO GITHUB IS INVOLVED at any point in backend management.
 - **Frontend**: commit `younoya-web/` → push `astrosavvy/Ecom main` → Cloudflare Pages auto-builds. Pages project must have **root directory `younoya-web`, build `npm run build`, output `dist`**.
 - **Gotchas**: see Troubleshooting section of docs/DEPLOYMENT.md (advisory locks, ts-node, price sets, paise).
 

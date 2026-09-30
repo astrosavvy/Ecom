@@ -100,7 +100,8 @@ class RazorpayPaymentProvider extends AbstractPaymentProvider {
     const action = event.event === "payment.captured" ? PaymentActions.SUCCESSFUL
       : event.event === "payment.authorized" ? PaymentActions.AUTHORIZED
       : event.event === "payment.failed" ? PaymentActions.FAILED : PaymentActions.NOT_SUPPORTED
-    return { action, data: { session_id: sessionId, amount: Number(payment.amount) } }
+    return { action, data: { session_id: sessionId, amount: Number(payment.amount),
+      payment_id: payment.id, order_id: payment.order_id } }
   }
 }
 
