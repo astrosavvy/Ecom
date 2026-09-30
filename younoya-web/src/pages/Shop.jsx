@@ -9,6 +9,7 @@ import ShopAmbientBanner from '../components/shop/ShopAmbientBanner'
 import ShopInspiration from '../components/shop/ShopInspiration'
 import ShopFooter from '../components/shop/ShopFooter'
 import '../styles/Shop.css'
+import '../styles/ShopFooter.css'
 
 const FILTERS = [
   { id: 'all', label: 'All pieces' },

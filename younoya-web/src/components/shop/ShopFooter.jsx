@@ -1,37 +1,43 @@
 import { Link } from 'react-router-dom'
-import { Heart, MessageCircle, Sparkles } from 'lucide-react'
+import { Gift, Heart, MessageCircle, Sparkles } from 'lucide-react'
+import ShopCommunity from './ShopCommunity'
 
 const BENEFITS = [
-  { icon: Heart, title: 'Meaningful symbols', detail: 'Motifs with a story' },
+  { icon: Heart, title: 'Meaningful motifs', detail: 'A story in every piece' },
   { icon: Sparkles, title: 'Guided selection', detail: 'Led by your intention' },
-  { icon: MessageCircle, title: 'Personal care', detail: 'Questions welcome' },
+  { icon: Gift, title: 'Personal gifting', detail: 'Add a note for someone' },
+  { icon: MessageCircle, title: 'Atelier care', detail: 'Questions are welcome' },
 ]
 
 export default function ShopFooter() {
   return (
-    <footer className="shop-footer">
-      <div className="shop-footer__inner">
-        <div className="shop-footer__benefits" aria-label="The Younoya approach">
+    <footer className="atelier-footer">
+      <div className="atelier-footer__lead">
+        <div className="atelier-footer__benefits" aria-label="The Younoya approach">
+          <h2>Why Younoya<span>?</span></h2>
           {BENEFITS.map(({ icon: Icon, title, detail }) => (
-            <div className="shop-footer__benefit" key={title}>
-              <Icon size={21} strokeWidth={1.3} aria-hidden="true" />
+            <div className="atelier-footer__benefit" key={title}>
+              <Icon size={25} strokeWidth={1.5} aria-hidden="true" />
               <span><strong>{title}</strong><small>{detail}</small></span>
             </div>
           ))}
         </div>
-        <div className="shop-footer__identity">
-          <Link to="/" className="shop-footer__mark" aria-label="Younoya home">YOUNOYA <span>✦</span></Link>
-          <span className="shop-footer__tagline">For every chapter.</span>
-        </div>
-        <div className="shop-footer__details">
-          <nav className="shop-footer__nav" aria-label="Footer navigation">
-            <a href="#pieces">Collection</a>
-            <Link to="/find-a-gift">Gift guide</Link>
-            <Link to="/blog">Journal</Link>
+        <ShopCommunity />
+      </div>
+
+      <div className="atelier-footer__base">
+        <div className="atelier-footer__main">
+          <div className="atelier-footer__brand">
+            <Link to="/" aria-label="Younoya home"><img src="/favicon.png" alt="" /><span>YOUNOYA</span></Link>
+            <p>For every chapter.<br />Gifts chosen with intention.</p>
+          </div>
+          <nav aria-label="Shop footer navigation" className="atelier-footer__links">
+            <div><h3>Shop</h3><Link to="/shop#pieces">The collection</Link><Link to="/shop?saved=1#pieces">Saved pieces</Link><Link to="/find-a-gift">Find your piece</Link></div>
+            <div><h3>Explore</h3><Link to="/blog">The journal</Link><Link to="/find-a-gift">Gift guide</Link><a href="#shop-top">Back to top</a></div>
+            <div><h3>Here to help</h3><a href="mailto:care@younoya.com">care@younoya.com</a><Link to="/find-a-gift">Personal guidance</Link><a href="mailto:care@younoya.com?subject=Younoya%20order%20question">Order questions</a></div>
           </nav>
-          <a className="shop-footer__email" href="mailto:care@younoya.com">care@younoya.com</a>
-          <small className="shop-footer__copyright">© {new Date().getFullYear()} Younoya</small>
         </div>
+        <div className="atelier-footer__bottom"><span>© {new Date().getFullYear()} Younoya Atelier. All rights reserved.</span><span>Made for moments that stay.</span></div>
       </div>
     </footer>
   )
