@@ -15,6 +15,7 @@ import JournalEdit from "./pages/JournalEdit"
 import ThemeManager from "./pages/ThemeManager"
 import RecommendationRules from "./pages/RecommendationRules"
 import ProductMetadata from "./pages/ProductMetadata"
+import OfferManager from "./pages/OfferManager"
 import "../styles/Admin.css"
 
 const MAIN_NAV: Array<{ to: string; label: string; icon: string; roles: Role[] }> = [
@@ -30,6 +31,7 @@ const PERS_NAV: Array<{ to: string; label: string; icon: string; roles: Role[] }
   { to: "/admin/themes", label: "Themes", icon: "✧", roles: ["admin"] },
   { to: "/admin/rules", label: "Rules", icon: "⍟", roles: ["admin"] },
   { to: "/admin/metadata", label: "Metadata", icon: "⎈", roles: ["admin"] },
+  { to: "/admin/gift-guide", label: "Guide offers", icon: "✦", roles: ["admin"] },
 ]
 
 export default function AdminApp() {
@@ -118,6 +120,7 @@ export default function AdminApp() {
           <Route path="/themes" element={<ThemeManager />} />
           <Route path="/rules" element={<RecommendationRules />} />
           <Route path="/metadata" element={<ProductMetadata />} />
+          <Route path="/gift-guide" element={<OfferManager />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </main>

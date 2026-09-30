@@ -163,6 +163,13 @@ export function getSeo(pathname) {
     noindex: true,
   }
 
+  if (path === '/checkout' || path.startsWith('/offer/')) return {
+    path,
+    title: path === '/checkout' ? 'Secure checkout | Younoya' : 'Private edition | Younoya',
+    description: 'A Younoya selection chosen with intention. Current price and availability are checked at checkout.',
+    noindex: true,
+  }
+
   return {
     path,
     title: 'Page not found | Younoya',

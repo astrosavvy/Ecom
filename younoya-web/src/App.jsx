@@ -8,6 +8,8 @@ import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
 import Shop from './pages/Shop'
 import GiftFinder from './pages/GiftFinder'
+import Checkout from './pages/Checkout'
+import PrivateOffer from './pages/PrivateOffer'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import NotFound from './pages/NotFound'
@@ -60,6 +62,8 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/find-a-gift" element={<GiftFinder />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/offer/:handle" element={<PrivateOffer />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/journal" element={<Navigate to="/blog" replace />} />

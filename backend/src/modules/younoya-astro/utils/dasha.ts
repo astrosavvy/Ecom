@@ -64,18 +64,20 @@ export function computeDasha(
   const startingLord = NAKSHATRA_LORDS[nakshatraIndex]
   const startingLordIndex = DASHA_LORDS.indexOf(startingLord)
 
-  // Balance of first dasha = (1 - fractionElapsed) * total years of that lord
-  const firstDashaBalance = (1 - fractionElapsed) * DASHA_YEARS[startingLord]
+  // The first Mahadasha began before birth. Starting it at birth also shifts
+  // every Antardasha, even if its remaining balance is calculated correctly.
+  const yearMs = 365.25 * 24 * 3600 * 1000
+  const firstDashaStart = new Date(birthDate.getTime() - fractionElapsed * DASHA_YEARS[startingLord] * yearMs)
 
-  // Build the full dasha sequence (120 years from birth)
+  // Include a second cycle for births close to the end of the first period.
   const sequence: DashaResult["sequence"] = []
-  let cursor = new Date(birthDate.getTime())
+  let cursor = firstDashaStart
   const now = new Date()
 
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 18; i++) {
     const lordIndex = (startingLordIndex + i) % 9
     const lord = DASHA_LORDS[lordIndex]
-    const years = i === 0 ? firstDashaBalance : DASHA_YEARS[lord]
+    const years = DASHA_YEARS[lord]
     const start = new Date(cursor.getTime())
     const end = new Date(cursor.getTime() + years * 365.25 * 24 * 3600 * 1000)
     const isCurrent = now >= start && now < end
@@ -89,8 +91,6 @@ export function computeDasha(
   // Calculate Antardasha within current Mahadasha
   const mahaLordIndex = DASHA_LORDS.indexOf(currentMaha.lord as typeof DASHA_LORDS[number])
   const mahaDurationMs = currentMaha.end.getTime() - currentMaha.start.getTime()
-  const totalDashaYears = DASHA_YEARS[currentMaha.lord]
-
   let antarCursor = new Date(currentMaha.start.getTime())
   let currentAntar = { lord: currentMaha.lord, start: currentMaha.start, end: currentMaha.end }
 
@@ -98,8 +98,7 @@ export function computeDasha(
     const antarLordIndex = (mahaLordIndex + i) % 9
     const antarLord = DASHA_LORDS[antarLordIndex]
     const antarYears = DASHA_YEARS[antarLord]
-    const antarFraction = antarYears / 120
-    const antarDuration = mahaDurationMs * (antarYears / totalDashaYears)
+    const antarDuration = mahaDurationMs * (antarYears / 120)
     const antarStart = new Date(antarCursor.getTime())
     const antarEnd = new Date(antarCursor.getTime() + antarDuration)
 
