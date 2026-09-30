@@ -13,8 +13,7 @@ export default function Navbar() {
     <header className={`navbar${light ? ' navbar--light' : ''}${shop ? ' navbar--shop' : ''}`}>
       <div className="navbar__left">
         <Link className="navbar__brand" to="/" aria-label="Younoya home">
-          <img src="/favicon.png" alt="Younoya" />
-          <span className="navbar__brand-name">YOUNOYA</span>
+          <img src="/brand-legacy.webp" alt="Younoya" />
         </Link>
       </div>
 

@@ -31,21 +31,9 @@
 }
 
 .navbar__brand img {
-  width: 32px;
-  height: 32px;
+  width: 115px;
+  height: 60px;
   object-fit: contain;
-}
-
-.navbar__brand-name {
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  letter-spacing: 0.14em;
-  font-weight: 500;
-  color: #FAF6EE;
-}
-
-.navbar--light .navbar__brand-name {
-  color: #1F1914;
 }
 
 .navbar__center {
@@ -165,9 +153,7 @@
   width: 115px;
   height: 66px;
   object-fit: contain;
-  filter: brightness(.72) contrast(1.45) saturate(1.2);
 }
-.navbar--shop .navbar__brand-name { display: none; }
 .navbar--shop .navbar__cta-btn { background: #d6b06a; color: #1e1c1a; box-shadow: none; }
 .navbar--shop .navbar__cta-btn:hover { background: #f0d08f; }
 .navbar--shop .navbar__cta-btn:active,
