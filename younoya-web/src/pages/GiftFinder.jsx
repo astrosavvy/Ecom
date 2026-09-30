@@ -89,14 +89,10 @@ export default function GiftFinder() {
   function restart() {
     setStep(0); setValues(EMPTY); setResult(null); setSaved(false); setSavedList(null); setNotice(''); setError('')
   }
-  const message = result ? 'A piece with a story of its own.' : savedList ? 'Your moments are here to revisit.' : [
-    'Let us begin with who matters.', 'Tell me about your connection.', 'Every story has a turning point.',
-    'I am listening for the meaning.', 'Only what you wish to share.',
-  ][step]
   return <section className="guide-page">
     <div className="guide-page__main">
       <nav className="guide-page__top" aria-label="Gift guide navigation"><Link to="/shop">← The collection</Link>{signedIn && <button type="button" onClick={showSaved}>Saved recommendations ↗</button>}</nav>
-      <AsterStage mood={busy ? 'thinking' : mood} message={message} />
+      <AsterStage intro={step === 0 && !result && !savedList} mood={busy ? 'thinking' : mood} />
       {savedList ? <div className="guide-saved"><span className="guide-eyebrow">YOUR PRIVATE EDIT</span><h1>Pieces worth <em>revisiting.</em></h1>
         {savedList.length ? savedList.map(item => <button key={item.id} type="button" onClick={() => openSaved(item.id)}><strong>{item.recipient_name}</strong><span>{item.occasion}</span><span>Open ↗</span></button>) : <p>Nothing saved yet. Let us begin with a new gift conversation.</p>}
         <button className="guide-primary" type="button" onClick={restart}>Begin a new conversation</button>

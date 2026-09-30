@@ -1,0 +1,35 @@
+# Aster supplied loop — production media
+
+Updated: 2026-09-30. The user supplied an eight-second, 1280 × 720, 24fps H.264/AAC MP4 and a 400 × 225 GIF. Originals remain untouched in D:/C Downloads.
+
+## Inputs
+
+- D:/C Downloads/Woman_gesturing_in_animation_style-clip-1_20260930214011_processed.mp4 (981,207 bytes)
+- D:/C Downloads/Woman_gesturing_in_animation_style-clip-1_20260930214011_processed.gif (4,000,535 bytes)
+
+## Website assets
+
+- younoya-web/public/media/aster-lady-loop-v2.mp4: 480 × 392, 24fps CFR, 191 frames, 7.958 seconds, 607,634 bytes; H.264/yuv420p, fast-start metadata, no audio stream.
+- younoya-web/public/media/aster-lady-loop-poster-v2.webp: matching first displayed frame, 14,916 bytes.
+
+The MP4 preserves smoother color and is substantially smaller than the GIF. The lady’s full hairstyle and hands remain visible. Native video playback requires no canvas or WebGL. The superseded crossfade derivative is excluded from production.
+
+## Processing recipe and seam correction
+
+Decode the original with OpenCV. Crop each frame to 880 × 720 at x=200/y=0 and resize to 480 × 392 using INTER_AREA. Send BGR24 raw frames to FFmpeg at a fixed 24fps: source frames 32–127 forward, then 126–32 in reverse. The return gesture ends on the same pose as the opening. One repeated boundary frame creates a brief, approximately 83ms rest at that pose.
+
+Encode the raw stream using libx264, slow preset, QP18, yuv420p and +faststart. Set x264 parameters ipratio=1:pbratio=1:aq-mode=0 and force keyframes at 0 and 7.9 seconds (the latter selects the final frame at 7.9167s). Remove audio. Export the first output frame as an 88-quality WebP poster. Versioned URLs prevent the earlier visible seam from remaining cached.
+
+Verification on decoded output: 191 frames, first and last frames are pixel-identical (mean absolute difference 0.0). The normal opening motion difference is 0.3000 on an 8-bit scale. This replaces the earlier crossfade that still showed a jump between different poses.
+
+## Runtime behavior
+
+AsterStage fetches the small MP4 into an object URL, aborts unfinished requests and revokes URLs when unmounted. The video uses muted autoplay, loop and playsInline. It pauses when hidden/offscreen; interrupted play requests are handled. Reduced motion prevents video mounting/fetching and shows the poster; load or autoplay failure also falls back to the poster.
+
+The opening stage is a large centered lady; subsequent steps use a compact portrait to preserve conversation space. The redundant welcome bubble is removed at the user’s request. The rounded progress panel names the current chapter and displays accessible step progress. Question prefaces use 14px text. All steps place history and the current question at the top of their available region, avoiding a large blank area above the name step. Chat and replies remain independently scrollable by touch, wheel and keyboard; scrollbar rails are hidden.
+
+## Verification
+
+Inspected twelve source frames plus opening/closing pairs. Checked encoded frame count, duration and absence of audio. Browser confirmed Blob URL, readyState 4, muted looping playback and full 0–7.958s seekable range. Desktop 1440 × 900 and mobile 430 × 932 and 390 × 844 checks show no horizontal overflow. Checked first reply/name progression, the compact name step, keyboard access to previous messages and the last reply, and hidden scrollbar computed styles. No captured console errors. Reduced-motion and media-failure handling checked in source; OS preferences were not changed. Root npm run build exited 0; the existing main-bundle size warning remains. No backend or live payment/auth tests were run for this UI/media change.
+
+Proof screenshots are ignored local artifacts: .tmp/aster-loop-desktop.jpg, .tmp/aster-loop-mobile.jpg, .tmp/aster-loop-name-mobile.jpg and .tmp/aster-loop-moment-mobile.jpg.

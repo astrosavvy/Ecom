@@ -10,6 +10,7 @@ export default function GuideConversation(props) {
   const scroll = useRef(null), question = useRef(null), replies = useRef(null)
   const self = values.forWhom === 'self'
   const titles = questions(self)
+  const chapter = ['Who it’s for', self ? 'A little about you' : 'Your connection', 'The moment', 'The intention', 'Optional birth details'][step]
   useEffect(() => {
     const region = scroll.current
     let atEnd = true
@@ -27,8 +28,8 @@ export default function GuideConversation(props) {
     })
     return () => cancelAnimationFrame(frame)
   }, [step, reducedMotion])
-  return <div className="guide-conversation">
-    <div className="guide-progress"><span>A little about your gift</span><div aria-label={`Step ${step + 1} of 5`}>{Array.from({ length: 5 }, (_, index) => <i key={index} className={index <= step ? 'is-active' : ''} />)}</div><span>{step + 1} of 5</span></div>
+  return <div className={`guide-conversation${step === 0 ? ' guide-conversation--intro' : ''}`}>
+    <div className="guide-progress"><div className="guide-progress__chapter"><span>Your gift journey</span><strong>{chapter}</strong></div><div className="guide-progress__track" role="progressbar" aria-label="Gift guide progress" aria-valuemin={0} aria-valuemax={5} aria-valuenow={step + 1} aria-valuetext={`Step ${step + 1} of 5 · ${chapter}`}><i style={{ width: `${(step + 1) * 20}%` }} /></div><span className="guide-progress__count">{step + 1} of 5</span></div>
     <div className="guide-chat-scroll" ref={scroll} role="region" tabIndex={0} aria-label="Scrollable gift conversation" data-lenis-prevent>
       <div className="guide-chat-content">
         <GuideHistory values={values} step={step} />

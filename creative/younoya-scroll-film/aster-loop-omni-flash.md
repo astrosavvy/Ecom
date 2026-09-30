@@ -1,6 +1,6 @@
 # Aster — silent seamless lady loop
 
-Target: Gemini Omni Flash image-to-video. One continuous clip, six seconds (proposed default; duration can be adjusted in the generation interface). This file supplies a prompt; no video has been generated.
+Target: Gemini Omni Flash image-to-video. One continuous clip, six seconds (proposed default; duration can be adjusted in the generation interface). This is the archived generation prompt. The user subsequently supplied an eight-second MP4; the website now uses an optimized 7.958-second silent forward-and-return derivative with pixel-identical first/last frames. See aster-loop-media.md for provenance and integration.
 
 ## Reference and setup
 
