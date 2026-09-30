@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { PRODUCTS } from '../data/products'
 import { getCustomerToken, storeRequest } from '../lib/giftGuideApi'
@@ -6,6 +6,7 @@ import AsterStage from '../components/gift-guide/AsterStage'
 import GuideConversation from '../components/gift-guide/GuideConversation'
 import GuideResult from '../components/gift-guide/GuideResult'
 import GuideLogin from '../components/gift-guide/GuideLogin'
+import useGuideLayout from '../components/gift-guide/useGuideLayout'
 import '../styles/GiftFinder.css'
 
 const EMPTY = { forWhom: '', name: '', relation: '', moment: '', intention: '', dob: '', tob: '', placeId: null, placeLabel: '' }
@@ -19,6 +20,7 @@ const preview = answers => ({ method: 'intention', previewOnly: true,
 
 export default function GiftFinder() {
   const navigate = useNavigate()
+  const main = useRef(null)
   const [step, setStep] = useState(0)
   const [values, setValues] = useState(() => readSession('yn_guide_answers') || EMPTY)
   const [result, setResult] = useState(() => readSession('yn_guide_result'))
@@ -31,6 +33,7 @@ export default function GiftFinder() {
   const [notice, setNotice] = useState('')
   const [mood, setMood] = useState('listening')
   const [signedIn, setSignedIn] = useState(false)
+  useGuideLayout(main, savedList ? 'saved' : result ? 'result' : step)
   useEffect(() => {
     if (getCustomerToken()) storeRequest('/store/customers/me', { auth: true }).then(() => setSignedIn(true)).catch(() => setSignedIn(false))
   }, [])
@@ -90,9 +93,9 @@ export default function GiftFinder() {
     setStep(0); setValues(EMPTY); setResult(null); setSaved(false); setSavedList(null); setNotice(''); setError('')
   }
   return <section className="guide-page">
-    <div className="guide-page__main">
+    <div className="guide-page__main" ref={main}>
       <nav className="guide-page__top" aria-label="Gift guide navigation"><Link to="/shop">← The collection</Link>{signedIn && <button type="button" onClick={showSaved}>Saved recommendations ↗</button>}</nav>
-      <AsterStage intro={step === 0 && !result && !savedList} mood={busy ? 'thinking' : mood} />
+      <AsterStage mood={busy ? 'thinking' : mood} />
       {savedList ? <div className="guide-saved"><span className="guide-eyebrow">YOUR PRIVATE EDIT</span><h1>Pieces worth <em>revisiting.</em></h1>
         {savedList.length ? savedList.map(item => <button key={item.id} type="button" onClick={() => openSaved(item.id)}><strong>{item.recipient_name}</strong><span>{item.occasion}</span><span>Open ↗</span></button>) : <p>Nothing saved yet. Let us begin with a new gift conversation.</p>}
         <button className="guide-primary" type="button" onClick={restart}>Begin a new conversation</button>

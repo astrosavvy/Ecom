@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
 
-export default function AsterStage({ mood, intro = false }) {
+export default function AsterStage({ mood }) {
   const reducedMotion = useReducedMotion()
   const video = useRef(null)
   const [failed, setFailed] = useState(false), [playing, setPlaying] = useState(false)
@@ -42,7 +42,8 @@ export default function AsterStage({ mood, intro = false }) {
     x.set(horizontal * 9); y.set(((event.clientY - bounds.top) / bounds.height - .5) * 5); tilt.set(horizontal * .8)
   }
   function resetPointer() { x.set(0); y.set(0); tilt.set(0) }
-  return <aside className={`guide-stage${intro ? ' guide-stage--intro' : ''}`} aria-label="Aster, your gift guide" onPointerMove={followPointer} onPointerLeave={resetPointer}>
+  return <aside className="guide-stage" aria-label="Aster, your gift guide" onPointerMove={followPointer} onPointerLeave={resetPointer}>
+    <div className="guide-stage__desktop-copy"><span>THE YOUNOYA GIFT GUIDE</span><h2>A little meaning.<br /><em>A lasting connection.</em></h2><p>Let’s find a piece that feels personal.</p></div>
     <motion.div className={`guide-stage__figure guide-stage__figure--video guide-stage__figure--${mood}`} style={{ x: portraitX, y: portraitY, rotate: portraitTilt }}>
       <div className={`guide-stage__portrait guide-stage__portrait--video${playing && !reducedMotion && !failed ? ' is-playing' : ''}`}>
         <img src="/media/aster-lady-loop-poster-v2.webp" width="480" height="392"
