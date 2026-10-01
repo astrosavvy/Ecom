@@ -10,32 +10,14 @@ import {
   AlertCircle,
   X,
   ExternalLink,
+  Edit3,
+  Package,
 } from "lucide-react"
 import { api, formatINR } from "../api"
-
-type Variant = {
-  id: string
-  title: string
-  sku?: string | null
-  prices?: Array<{ amount: number; currency_code: string }>
-  calculated_price?: { calculated_amount?: number }
-}
-
-type Product = {
-  id: string
-  title: string
-  handle: string
-  subtitle?: string | null
-  description?: string | null
-  status: string
-  thumbnail?: string | null
-  images?: Array<{ url: string }>
-  metadata?: Record<string, any> | null
-  variants: Variant[]
-}
+import ProductEditModal, { type Product } from "../components/ProductEditModal"
 
 const INTENTION_LABELS: Record<string, string> = {
-  "all": "All Intentions",
+  "all": "All Categories",
   "confidence-power": "Confidence & Power",
   "vitality-balance": "Vitality & Balance",
   "love-connection": "Love & Connection",
@@ -66,6 +48,9 @@ export default function Products() {
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
 
+  // Interactive Product Editor Drawer / Modal
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+
   const loadProducts = () => {
     setBusy(true)
     api<{ products: Product[] }>(`/admin/products?limit=50${q.trim() ? `&q=${encodeURIComponent(q.trim())}` : ""}`)
@@ -88,7 +73,7 @@ export default function Products() {
     setError(null)
     try {
       const res = await api<{ count: number; message: string }>("/admin/gift-guide/catalog", { method: "POST" })
-      setNotice(`Synchronized ${res.count} authentic brand heirlooms with Medusa.`)
+      setNotice(`Synchronized ${res.count} authentic brand products with Medusa.`)
       loadProducts()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Catalog synchronization failed.")
@@ -117,10 +102,10 @@ export default function Products() {
       {/* Editorial Header */}
       <header className="ad__head ad__head--row">
         <div>
-          <div className="ad-eyebrow">CATALOGUE & HEIRLOOMS</div>
-          <h1 className="ad-page-title">Heirloom Collection</h1>
+          <div className="ad-eyebrow">CATALOGUE & INVENTORY</div>
+          <h1 className="ad-page-title">Product Collection</h1>
           <p className="ad-page-subtitle">
-            Astrology-guided intentional keepsakes and brooches. Manage gallery presence, variants, and pricing.
+            Astrology-guided intentional keepsakes and brooches. Click any product to edit image, title, price, stock, and intention.
           </p>
         </div>
 
@@ -133,7 +118,7 @@ export default function Products() {
             title="Import or update authentic brooches into Medusa"
           >
             <RefreshCw size={14} className={syncing ? "ad-spin-icon" : ""} />
-            <span>{syncing ? "Syncing..." : "Sync Heirlooms"}</span>
+            <span>{syncing ? "Syncing..." : "Sync Catalog"}</span>
           </button>
 
           <div className="ad-view-toggle">
@@ -163,7 +148,7 @@ export default function Products() {
       <div className="ad-metrics-ribbon">
         <div className="ad-metric-pill">
           <span className="ad-metric-num">{rows.length}</span>
-          <span className="ad-metric-lbl">Total Heirlooms</span>
+          <span className="ad-metric-lbl">Total Products</span>
         </div>
         <div className="ad-metric-divider" />
         <div className="ad-metric-pill">
@@ -178,7 +163,7 @@ export default function Products() {
         <div className="ad-metric-divider" />
         <div className="ad-metric-pill">
           <span className="ad-metric-num">5</span>
-          <span className="ad-metric-lbl">Vedic Intentions</span>
+          <span className="ad-metric-lbl">Gift Categories</span>
         </div>
       </div>
 
@@ -209,7 +194,7 @@ export default function Products() {
           <Search size={16} className="ad-search-icon" />
           <input
             className="ad-search-input"
-            placeholder="Search heirlooms by name, handle, or motif…"
+            placeholder="Search products by name, handle, or motif…"
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
@@ -238,13 +223,13 @@ export default function Products() {
       {busy && rows.length === 0 ? (
         <div className="ad-stage-empty">
           <span className="ad-boot__ring" />
-          <p>Curating boutique collection…</p>
+          <p>Loading boutique collection…</p>
         </div>
       ) : filteredRows.length === 0 ? (
         <div className="ad-stage-empty">
           <Sparkles size={28} className="ad-empty-icon" />
-          <h3>No Heirlooms Found</h3>
-          <p>No products match your current search or intention filter.</p>
+          <h3>No Products Found</h3>
+          <p>No products match your current search or category filter.</p>
           {(q || intentionFilter !== "all") && (
             <button
               type="button"
@@ -259,7 +244,7 @@ export default function Products() {
           )}
         </div>
       ) : viewMode === "grid" ? (
-        /* Luxury Grid View */
+        /* Luxury Grid View with Click-to-Edit */
         <div className="ad-heirloom-grid">
           {filteredRows.map((p, idx) => {
             const meta = HEIRLOOM_METADATA[p.handle]
@@ -270,7 +255,13 @@ export default function Products() {
             const intentionText = intentionKey ? INTENTION_LABELS[intentionKey] : undefined
 
             return (
-              <div className="ad-heirloom-card" key={p.id}>
+              <div
+                className="ad-heirloom-card"
+                key={p.id}
+                onClick={() => setEditingProduct(p)}
+                style={{ cursor: "pointer", position: "relative" }}
+                title="Click to edit image, price, stock & details"
+              >
                 <div className="ad-heirloom-card__visual">
                   <span className="ad-heirloom-card__chapter">PIECE {chapter}</span>
                   <span
@@ -285,7 +276,6 @@ export default function Products() {
                     alt={p.title}
                     loading="lazy"
                     onError={(e) => {
-                      // Fallback to placeholder if webp fails
                       const img = e.currentTarget
                       if (!img.src.includes("placeholder")) {
                         img.src = "/media/shop-wild-poise-card.webp"
@@ -312,19 +302,35 @@ export default function Products() {
 
                   <div className="ad-heirloom-card__footer">
                     <div className="ad-heirloom-price">
-                      <small>Atelier Price</small>
+                      <small>Price</small>
                       <strong>{formatINR(priceOf(p))}</strong>
                     </div>
 
-                    <a
-                      href={`/shop`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ad-heirloom-view-btn"
-                      title="Inspect on storefront"
-                    >
-                      <ExternalLink size={13} />
-                    </a>
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                      <button
+                        type="button"
+                        className="ad-btn-luxury"
+                        style={{ padding: "6px 12px", fontSize: "11px" }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setEditingProduct(p)
+                        }}
+                      >
+                        <Edit3 size={12} />
+                        <span>Edit</span>
+                      </button>
+
+                      <a
+                        href="/shop"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ad-heirloom-view-btn"
+                        onClick={(e) => e.stopPropagation()}
+                        title="View on shop"
+                      >
+                        <ExternalLink size={13} />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -332,18 +338,18 @@ export default function Products() {
           })}
         </div>
       ) : (
-        /* Luxury Table View */
+        /* Luxury Table View with Click-to-Edit */
         <div className="ad-card ad-table-wrap">
           <table className="ad-table">
             <thead>
               <tr>
                 <th>Piece</th>
                 <th>Chapter & Motif</th>
-                <th>Intention</th>
+                <th>Category / Intention</th>
                 <th>Element</th>
                 <th>Status</th>
                 <th className="ad-right">Price</th>
-                <th className="ad-right">Storefront</th>
+                <th className="ad-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -356,7 +362,12 @@ export default function Products() {
                 const intentionText = intentionKey ? INTENTION_LABELS[intentionKey] : "—"
 
                 return (
-                  <tr key={p.id}>
+                  <tr
+                    key={p.id}
+                    onClick={() => setEditingProduct(p)}
+                    style={{ cursor: "pointer" }}
+                    title="Click to edit image, price, stock & details"
+                  >
                     <td>
                       <div className="ad-table-product">
                         <img
@@ -394,16 +405,34 @@ export default function Products() {
                     <td className="ad-right">
                       <strong className="ad-table-price">{formatINR(priceOf(p))}</strong>
                     </td>
-                    <td className="ad-right">
-                      <a
-                        href="/shop"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ad-link-icon-btn"
-                        title="View on shop"
-                      >
-                        <ExternalLink size={14} />
-                      </a>
+                    <td className="ad-right" onClick={(e) => e.stopPropagation()}>
+                      <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", alignItems: "center" }}>
+                        <button
+                          type="button"
+                          className="ad-btn-plain"
+                          style={{
+                            border: "1px solid var(--ad-border-gold)",
+                            borderRadius: "8px",
+                            padding: "4px 10px",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "5px",
+                          }}
+                          onClick={() => setEditingProduct(p)}
+                        >
+                          <Edit3 size={13} />
+                          <span>Edit</span>
+                        </button>
+                        <a
+                          href="/shop"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="ad-link-icon-btn"
+                          title="View on shop"
+                        >
+                          <ExternalLink size={14} />
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 )
@@ -412,6 +441,18 @@ export default function Products() {
           </table>
         </div>
       )}
+
+      {/* Interactive Product Editor Modal */}
+      <ProductEditModal
+        product={editingProduct}
+        isOpen={!!editingProduct}
+        onClose={() => setEditingProduct(null)}
+        onSaved={() => {
+          setEditingProduct(null)
+          setNotice("Product updated and synced with store successfully!")
+          loadProducts()
+        }}
+      />
     </div>
   )
 }

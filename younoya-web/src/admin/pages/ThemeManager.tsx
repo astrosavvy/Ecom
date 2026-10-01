@@ -1,23 +1,41 @@
-import { useState } from "react"
+import React, { useState } from "react"
+import { FolderHeart, Plus, Edit2, Trash2, X, Tag } from "lucide-react"
 
-const MOCK_THEMES = [
-  { id: '1', name: 'Love & Connection', slug: 'love-connection', category: 'relationship', description: 'Products associated with romantic relationships, partnerships, and emotional bonds.', productCount: 8, icon: '💕' },
-  { id: '2', name: 'Career & Growth', slug: 'career-growth', category: 'career', description: 'Products symbolizing professional advancement, ambition, and recognition.', productCount: 6, icon: '📈' },
-  { id: '3', name: 'Money & Prosperity', slug: 'money-prosperity', category: 'finance', description: 'Products associated with financial abundance, wealth retention, and opportunity.', productCount: 5, icon: '💰' },
-  { id: '4', name: 'Calm & Balance', slug: 'calm-balance', category: 'wellbeing', description: 'Products supporting emotional equilibrium, mindfulness, and inner peace.', productCount: 4, icon: '🧘' },
-  { id: '5', name: 'New Beginnings', slug: 'new-beginnings', category: 'growth', description: 'Products symbolizing transformation, fresh starts, and change.', productCount: 3, icon: '🌱' },
-  { id: '6', name: 'Confidence', slug: 'confidence', category: 'growth', description: 'Products associated with self-assurance, courage, and personal power.', productCount: 3, icon: '💪' },
-  { id: '7', name: 'Focus & Direction', slug: 'focus-direction', category: 'career', description: 'Products supporting clarity, decision-making, and purposeful action.', productCount: 4, icon: '🎯' },
-  { id: '8', name: 'Home & Harmony', slug: 'home-harmony', category: 'home_vastu', description: 'Products for creating balanced, positive living spaces.', productCount: 5, icon: '🏠' },
+type Theme = {
+  id: string
+  name: string
+  slug: string
+  category: string
+  description: string
+  productCount: number
+  icon: string
+}
+
+const INITIAL_THEMES: Theme[] = [
+  { id: "1", name: "Love & Connection", slug: "love-connection", category: "Relationship", description: "Products associated with romantic relationships, partnerships, and emotional bonds.", productCount: 8, icon: "💕" },
+  { id: "2", name: "Career & Growth", slug: "career-growth", category: "Career", description: "Products symbolizing professional advancement, ambition, and recognition.", productCount: 6, icon: "📈" },
+  { id: "3", name: "Money & Prosperity", slug: "money-prosperity", category: "Finance", description: "Products associated with financial abundance, wealth retention, and opportunity.", productCount: 5, icon: "💰" },
+  { id: "4", name: "Calm & Balance", slug: "calm-balance", category: "Wellbeing", description: "Products supporting emotional equilibrium, mindfulness, and inner peace.", productCount: 4, icon: "🧘" },
+  { id: "5", name: "New Beginnings", slug: "new-beginnings", category: "Growth", description: "Products symbolizing transformation, fresh starts, and change.", productCount: 3, icon: "🌱" },
+  { id: "6", name: "Confidence", slug: "confidence", category: "Self", description: "Products associated with self-assurance, courage, and personal power.", productCount: 3, icon: "💪" },
+  { id: "7", name: "Focus & Direction", slug: "focus-direction", category: "Mindset", description: "Products supporting clarity, decision-making, and purposeful action.", productCount: 4, icon: "🎯" },
+  { id: "8", name: "Home & Harmony", slug: "home-harmony", category: "Vastu & Living", description: "Products for creating balanced, positive, and blessed living spaces.", productCount: 5, icon: "🏠" },
 ]
 
 export default function ThemeManager() {
-  const [themes] = useState(MOCK_THEMES)
+  const [themes, setThemes] = useState<Theme[]>(INITIAL_THEMES)
   const [showModal, setShowModal] = useState(false)
-  const [editTheme, setEditTheme] = useState<any>(null)
+  const [editTheme, setEditTheme] = useState<Theme | null>(null)
+  const [form, setForm] = useState({ name: "", slug: "", category: "Relationship", description: "", icon: "✨" })
 
-  const openModal = (t: any = null) => {
-    setEditTheme(t)
+  const openModal = (t: Theme | null = null) => {
+    if (t) {
+      setEditTheme(t)
+      setForm({ name: t.name, slug: t.slug, category: t.category, description: t.description, icon: t.icon })
+    } else {
+      setEditTheme(null)
+      setForm({ name: "", slug: "", category: "Relationship", description: "", icon: "✨" })
+    }
     setShowModal(true)
   }
 
@@ -26,75 +44,250 @@ export default function ThemeManager() {
     setShowModal(false)
   }
 
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!form.name.trim()) return
+
+    if (editTheme) {
+      setThemes((prev) =>
+        prev.map((item) => (item.id === editTheme.id ? { ...item, ...form } : item))
+      )
+    } else {
+      const newTheme: Theme = {
+        id: String(Date.now()),
+        ...form,
+        slug: form.slug || form.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        productCount: 0,
+      }
+      setThemes((prev) => [...prev, newTheme])
+    }
+    closeModal()
+  }
+
+  const handleDelete = (id: string) => {
+    if (window.confirm("Remove this gift category?")) {
+      setThemes((prev) => prev.filter((t) => t.id !== id))
+    }
+  }
+
   return (
-    <div className="ad__page">
-      <header className="ad__head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+    <div className="ad__page ad__page--wide">
+      <header className="ad__head ad__head--row">
         <div>
-          <h1>Theme Manager</h1>
-          <p>Manage product themes for personalisation and recommendations.</p>
+          <div className="ad-eyebrow">GIFT CATEGORIES & INTENTIONS</div>
+          <h1 className="ad-page-title">Gift Categories</h1>
+          <p className="ad-page-subtitle">
+            Manage intention themes that categorize products for customer gifting and astrology recommendations.
+          </p>
         </div>
-        <button className="ad-btn" onClick={() => openModal()} style={{ background: 'rgba(212,175,55,0.15)', border: '1px solid #D4AF37', color: '#D4AF37', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>Create New Theme</button>
+
+        <button type="button" className="ad-btn-luxury" onClick={() => openModal()}>
+          <Plus size={15} />
+          <span>New Category</span>
+        </button>
       </header>
 
-      <div className="ad-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem', display: 'grid' }}>
-        {themes.map(t => (
-          <div className="ad-card" key={t.id} style={{ display: 'flex', flexDirection: 'column', padding: '1.5rem', background: 'rgba(8,10,16,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <span style={{ fontSize: '2rem' }}>{t.icon}</span>
-              <span className="ad-chip" style={{ background: 'rgba(255,255,255,0.05)', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', textTransform: 'uppercase' }}>{t.category}</span>
+      {/* Grid of Clean Luxury Cards */}
+      <div className="ad-grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px" }}>
+        {themes.map((t) => (
+          <div
+            key={t.id}
+            className="ad-card"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              padding: "20px 22px",
+              background: "#FFFFFF",
+              border: "1px solid var(--ad-border)",
+              borderRadius: "18px",
+              boxShadow: "0 4px 18px -10px rgba(44, 34, 28, 0.05)",
+              transition: "transform 0.2s ease, border-color 0.2s ease",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+              <span style={{ fontSize: "1.75rem", lineHeight: 1 }}>{t.icon}</span>
+              <span
+                className="ad-chip"
+                style={{
+                  background: "rgba(44, 34, 28, 0.04)",
+                  color: "var(--ad-ink-soft)",
+                  border: "1px solid var(--ad-border)",
+                  fontSize: "10px",
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                {t.category}
+              </span>
             </div>
-            <h3 style={{ margin: '0 0 0.5rem 0', color: '#F5F0E8' }}>{t.name}</h3>
-            <p style={{ color: '#9CA3AF', fontSize: '0.875rem', marginBottom: '1.5rem', flex: 1 }}>{t.description}</p>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
-              <small style={{ color: '#6B7280' }}>{t.productCount} products</small>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button onClick={() => openModal(t)} style={{ background: 'transparent', border: 'none', color: '#9CA3AF', cursor: 'pointer' }}>Edit</button>
-                <button style={{ background: 'transparent', border: 'none', color: '#EF4444', cursor: 'pointer' }}>Delete</button>
+
+            <h3 style={{ margin: "0 0 6px 0", fontFamily: "var(--font-display)", fontSize: "20px", color: "var(--ad-ink)", fontWeight: 500 }}>
+              {t.name}
+            </h3>
+
+            <p style={{ color: "var(--ad-ink-soft)", fontSize: "13px", lineHeight: 1.5, margin: "0 0 16px 0", flex: 1 }}>
+              {t.description}
+            </p>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderTop: "1px solid var(--ad-border-subtle)",
+                paddingTop: "12px",
+                marginTop: "auto",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "5px", color: "var(--ad-ink-faint)", fontSize: "12px" }}>
+                <Tag size={12} />
+                <span>{t.productCount} products</span>
+              </div>
+
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button
+                  type="button"
+                  onClick={() => openModal(t)}
+                  className="ad-btn-plain"
+                  style={{ padding: "4px 8px", fontSize: "12px", color: "var(--ad-gold-strong)" }}
+                  title="Edit category"
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(t.id)}
+                  className="ad-btn-plain"
+                  style={{ padding: "4px 8px", fontSize: "12px", color: "var(--ad-rose)" }}
+                  title="Delete category"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>
         ))}
       </div>
 
+      {/* Luxury Modal */}
       {showModal && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
-          <div style={{ background: '#080A10', padding: '2rem', borderRadius: '8px', border: '1px solid #D4AF37', width: '100%', maxWidth: '500px' }}>
-            <h2 style={{ marginTop: 0, marginBottom: '1.5rem' }}>{editTheme ? 'Edit Theme' : 'Create Theme'}</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', color: '#9CA3AF' }}>
-                Theme Name
-                <input type="text" className="ad-search" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.75rem', borderRadius: '4px' }} defaultValue={editTheme?.name} />
-              </label>
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', color: '#9CA3AF' }}>
-                Slug
-                <input type="text" className="ad-search" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.75rem', borderRadius: '4px' }} defaultValue={editTheme?.slug} />
-              </label>
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', color: '#9CA3AF' }}>
-                Category
-                <select className="ad-search" style={{ background: '#080A10', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.75rem', borderRadius: '4px' }} defaultValue={editTheme?.category}>
-                  <option value="relationship">Relationship</option>
-                  <option value="career">Career</option>
-                  <option value="finance">Finance</option>
-                  <option value="wellbeing">Wellbeing</option>
-                  <option value="home_vastu">Home Vastu</option>
-                  <option value="gifting">Gifting</option>
-                  <option value="lifestyle">Lifestyle</option>
-                  <option value="growth">Growth</option>
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(31, 25, 22, 0.45)",
+            backdropFilter: "blur(6px)",
+            display: "grid",
+            placeItems: "center",
+            zIndex: 100,
+            padding: "20px",
+          }}
+          onClick={closeModal}
+        >
+          <div
+            style={{
+              background: "#FFFFFF",
+              padding: "28px 32px",
+              borderRadius: "20px",
+              border: "1px solid var(--ad-border-gold)",
+              width: "100%",
+              maxWidth: "500px",
+              boxShadow: "0 20px 40px -15px rgba(31, 25, 22, 0.2)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+              <h2 style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: "24px", color: "var(--ad-ink)", fontWeight: 500 }}>
+                {editTheme ? "Edit Gift Category" : "New Gift Category"}
+              </h2>
+              <button
+                type="button"
+                onClick={closeModal}
+                style={{ background: "none", border: "none", color: "var(--ad-ink-soft)", cursor: "pointer", padding: "4px" }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div className="ad-field">
+                <span>Category Name</span>
+                <input
+                  type="text"
+                  required
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder="e.g. Love & Connection"
+                />
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <div className="ad-field">
+                  <span>Slug (URL identifier)</span>
+                  <input
+                    type="text"
+                    value={form.slug}
+                    onChange={(e) => setForm({ ...form, slug: e.target.value })}
+                    placeholder="e.g. love-connection"
+                  />
+                </div>
+
+                <div className="ad-field">
+                  <span>Icon / Symbol</span>
+                  <input
+                    type="text"
+                    value={form.icon}
+                    onChange={(e) => setForm({ ...form, icon: e.target.value })}
+                    placeholder="e.g. 💕 or ✨"
+                  />
+                </div>
+              </div>
+
+              <div className="ad-field">
+                <span>Group Classification</span>
+                <select
+                  value={form.category}
+                  onChange={(e) => setForm({ ...form, category: e.target.value })}
+                >
+                  <option value="Relationship">Relationship</option>
+                  <option value="Career">Career & Success</option>
+                  <option value="Finance">Finance & Wealth</option>
+                  <option value="Wellbeing">Wellbeing & Peace</option>
+                  <option value="Vastu & Living">Home & Vastu</option>
+                  <option value="Growth">Growth & Transformation</option>
+                  <option value="Self">Self & Confidence</option>
                 </select>
-              </label>
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', color: '#9CA3AF' }}>
-                Description
-                <textarea className="ad-search" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.75rem', borderRadius: '4px', minHeight: '100px' }} defaultValue={editTheme?.description} />
-              </label>
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', color: '#9CA3AF' }}>
-                Icon (Emoji)
-                <input type="text" className="ad-search" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.75rem', borderRadius: '4px' }} defaultValue={editTheme?.icon} />
-              </label>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
-              <button onClick={closeModal} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
-              <button onClick={closeModal} style={{ background: '#D4AF37', border: 'none', color: '#000', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Save</button>
-            </div>
+              </div>
+
+              <div className="ad-field">
+                <span>Description</span>
+                <textarea
+                  style={{
+                    background: "#FFFFFF",
+                    border: "1px solid var(--ad-border)",
+                    borderRadius: "12px",
+                    padding: "12px",
+                    color: "var(--ad-ink)",
+                    fontFamily: "var(--font-body)",
+                    fontSize: "14px",
+                    minHeight: "80px",
+                    outline: "none",
+                  }}
+                  value={form.description}
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  placeholder="Describe the intention and symbolism of this gift category…"
+                />
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "12px" }}>
+                <button type="button" onClick={closeModal} className="ad-btn-plain">
+                  Cancel
+                </button>
+                <button type="submit" className="ad-btn-luxury">
+                  Save Category
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

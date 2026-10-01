@@ -42,6 +42,16 @@
   3. *Luxury Design System (`Admin.css`)*: Upgraded design tokens to Cartier-grade spatial aesthetic: warm ivory canvas (`#FAF7F2`), crisp pearl panels (`#FFFFFF`), warm alabaster sidebar (`#F7F3EC`), hairline dividers (`rgba(44, 34, 28, 0.08)`), muted gold (`#C5A880`), deep espresso ink (`#1F1916`), and botanical sage status badges (`#4A6B56`).
   4. *Products View Redesign (`Products.tsx`)*: Rebuilt with editorial "Heirloom Collection" header, real-time metrics ribbon (Total Heirlooms, Published, Currency, Vedic Intentions), debounced search, 5 Vedic intention filter pills (`Confidence & Power`, `Vitality & Balance`, `Love & Connection`, `Wealth & Prosperity`, `Protection`), dual view switch (Jewellery Case Grid vs Atelier Table), and one-click "Sync Heirlooms" catalog sync.
   5. *Verification*: Root build exits 0 (16 crawlable shells, 11 admin shells, synced `dist/`). Live `GET /admin/products` verified with exactly 10 authentic heirlooms and legitimate prices.
+- **Phase 32 (Interactive Product Editor, Terminology Simplification & Light Theme Redesign)**:
+  1. *Simple Everyday Terminology*: Demystified and renamed confusing legacy terms across Admin navigation and headers: "Heirlooms" → "Products", "Themes" → "Gift Categories", "Astro Rules" → "Quiz Rules", "Metadata" → "Product Details".
+  2. *Black Theme Elimination*: Completely excised all pitch-black (`rgba(8,10,16,0.95)`, `#080A10`) cards and containers across `ThemeManager.tsx`, `RecommendationRules.tsx`, and `ProductMetadata.tsx`. Replaced with luxury Cartier-grade warm ivory (`#FAF7F2`), crisp pearl cards (`#FFFFFF`), hairline gold dividers, and deep espresso ink (`#1F1916`).
+  3. *Full Product Editor Modal (`ProductEditModal.tsx` & `Products.tsx`)*: Clicking any product card or row (or clicking the explicit "Edit" button) now opens an interactive luxury editor enabling:
+     - **Image Management**: Instant image preview, lossless WebP in-browser compression (`compressImage`) + direct file upload to `POST /admin/uploads`, direct image URL input, and multi-image gallery support.
+     - **Core Editorial**: Title, motif/subtitle, handle, rich description/story, and publication status (`published` / `draft`).
+     - **Price & Stock Adjustment**: Direct INR (₹) price editing (automatically synced in paise to Medusa variants) and live stock quantity adjustments (automatically fetched from and saved to Medusa inventory location-levels).
+     - **Vedic Gifting Tags**: Intention/Category selection (`Confidence & Power`, `Vitality & Balance`, `Love & Connection`, `Wealth & Prosperity`, `Protection`) and Elemental alignment.
+  4. *Product Details & Metadata (`ProductMetadata.tsx`)*: Rebuilt with live Medusa product selector (purging legacy mock products), 4 luxury tabs (Story & Significance, Gift Categories, Materials & Care, Search & SEO), and live metadata saving.
+  5. *Verification*: Root `npm run build` exited 0 (16 crawlable shells, 11 admin shells, synced `dist/`). Verified preview at `http://127.0.0.1:5175/admin/products`.
 
 ## 3. ⚠️ Inviolable System Rules
 1. **Explicit Git Push Permission**: NEVER run `git push` without explicit user approval. Always ask first.

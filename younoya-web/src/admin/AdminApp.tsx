@@ -44,16 +44,16 @@ const MAIN_NAV: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, roles: ["admin"] },
   { to: "/admin/orders", label: "Orders", icon: ShoppingBag, roles: ["admin", "support"] },
   { to: "/admin/customers", label: "Customers", icon: Users, roles: ["admin", "support"] },
-  { to: "/admin/products", label: "Heirlooms", icon: Sparkles, roles: ["admin"] },
+  { to: "/admin/products", label: "Products", icon: Sparkles, roles: ["admin"] },
   { to: "/admin/journal", label: "Journal", icon: BookOpen, roles: ["admin", "marketing"] },
-  { to: "/admin/team", label: "Atelier Team", icon: UserCheck, roles: ["admin"] },
+  { to: "/admin/team", label: "Team", icon: UserCheck, roles: ["admin"] },
 ]
 
 const PERS_NAV: NavItem[] = [
-  { to: "/admin/themes", label: "Themes", icon: Palette, roles: ["admin"] },
-  { to: "/admin/rules", label: "Astro Rules", icon: Scale, roles: ["admin"] },
-  { to: "/admin/metadata", label: "Metadata", icon: Tags, roles: ["admin"] },
-  { to: "/admin/gift-guide", label: "Guide Offers", icon: Gift, roles: ["admin"] },
+  { to: "/admin/themes", label: "Gift Categories", icon: Palette, roles: ["admin"] },
+  { to: "/admin/rules", label: "Quiz Rules", icon: Scale, roles: ["admin"] },
+  { to: "/admin/metadata", label: "Product Details", icon: Tags, roles: ["admin"] },
+  { to: "/admin/gift-guide", label: "Custom Gift Sets", icon: Gift, roles: ["admin"] },
 ]
 
 export default function AdminApp() {
