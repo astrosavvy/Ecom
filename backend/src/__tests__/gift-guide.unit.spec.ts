@@ -2,7 +2,7 @@ import crypto from "crypto"
 import matrix from "../modules/younoya-astro/data/matrix.json"
 import { buildGuideResult, numerology, validateAnswers } from "../modules/younoya-astro/gift-guide"
 import { birthInstant } from "../modules/younoya-astro/utils/chart"
-import { searchPlaces } from "../modules/younoya-astro/utils/geonames"
+import { searchPlaces } from "../modules/younoya-astro/utils/geocoding"
 import { computeDasha, DASHA_YEARS } from "../modules/younoya-astro/utils/dasha"
 import { signRecommendation, verifyRecommendation } from "../modules/younoya-astro/gift-guide-token"
 import RazorpayPaymentProvider, { validRazorpaySignature } from "../modules/younoya-razorpay/service"
@@ -36,17 +36,66 @@ describe("gift guide rules", () => {
 
   test("full details use worldwide historical time zone and chart guidance", async () => {
     const originalFetch = global.fetch
-    global.fetch = jest.fn(async (url: any) => ({ ok: true, json: async () => String(url).includes("timezoneJSON")
-      ? { timezoneId: "America/New_York" }
-      : { geonameId: 5128581, name: "New York City", countryName: "United States", adminName1: "New York", lat: 40.7143, lng: -74.006 } })) as any
+    global.fetch = jest.fn(async (url: any) => {
+      const u = String(url)
+      if (u.includes("DasaForNow")) {
+        return {
+          ok: true,
+          json: async () => ({
+            Status: "Pass",
+            Payload: {
+              DasaForNow: {
+                Jupiter: {
+                  Type: "Dasa",
+                  Lord: "Jupiter",
+                  SubDasas: {
+                    Mercury: { Type: "Bhukti", Lord: "Mercury" },
+                  },
+                },
+              },
+            },
+          }),
+        }
+      }
+      if (u.includes("MoonSignName")) {
+        return {
+          ok: true,
+          json: async () => ({
+            Status: "Pass",
+            Payload: { MoonSignName: "Gemini" },
+          }),
+        }
+      }
+      if (u.includes("timezoneJSON")) {
+        return { ok: true, json: async () => ({ timezoneId: "America/New_York" }) }
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          geonameId: 5128581,
+          name: "New York City",
+          countryName: "United States",
+          adminName1: "New York",
+          lat: 40.7143,
+          lng: -74.006,
+        }),
+      }
+    }) as any
     process.env.GEONAMES_USERNAME = "unit-test"
     try {
       const result = await buildGuideResult(scope, { ...answers, dob: "1994-09-30", tob: "09:30", placeId: 5128581 })
       expect(result.method).toBe("astrology")
-      expect(result.guide).toHaveProperty("moonSign")
-      expect(result.guide).toHaveProperty("antardasha")
+      expect(result.guide).toHaveProperty("moonSign", "Gemini")
+      expect(result.guide).toHaveProperty("antardasha", "Mercury")
     } finally { global.fetch = originalFetch; delete process.env.GEONAMES_USERNAME }
     expect(birthInstant("1970-01-01", "09:00", "America/New_York").toISOString()).toBe("1970-01-01T14:00:00.000Z")
+  })
+
+  test("OpenCage strictly suppresses queries under 4 characters", async () => {
+    process.env.OPENCAGE_API_KEY = "test-key"
+    const results = await searchPlaces("Del")
+    expect(results).toEqual([])
+    delete process.env.OPENCAGE_API_KEY
   })
 
   test("Mercury and Ketu matrix covers four intentions across twelve signs", () => {
@@ -68,23 +117,41 @@ describe("gift guide rules", () => {
 
   test("ambiguous cities remain distinct and AI errors keep the rule explanation", async () => {
     const originalFetch = global.fetch
-    global.fetch = jest.fn(async (url: any) => String(url).includes("searchJSON")
-      ? { ok: true, json: async () => ({ geonames: [
-        { geonameId: 1, name: "Springfield", countryName: "United States", adminName1: "Illinois", lat: 39.8, lng: -89.6 },
-        { geonameId: 2, name: "Springfield", countryName: "United States", adminName1: "Massachusetts", lat: 42.1, lng: -72.6 },
-      ] }) }
-      : Promise.reject(new Error("AI timed out"))) as any
-    process.env.GEONAMES_USERNAME = "unit-test"
+    global.fetch = jest.fn(async (url: any) => {
+      const u = String(url)
+      if (u.includes("opencagedata.com")) {
+        return {
+          ok: true,
+          json: async () => ({
+            results: [
+              {
+                geometry: { lat: 39.8, lng: -89.6 },
+                components: { city: "Springfield", state: "Illinois", country: "United States" },
+                annotations: { timezone: { name: "America/Chicago", offset_string: "-0500" } },
+              },
+              {
+                geometry: { lat: 42.1, lng: -72.6 },
+                components: { city: "Springfield", state: "Massachusetts", country: "United States" },
+                annotations: { timezone: { name: "America/New_York", offset_string: "-0400" } },
+              },
+            ],
+          }),
+        }
+      }
+      return Promise.reject(new Error("AI timed out"))
+    }) as any
+    process.env.OPENCAGE_API_KEY = "test-key"
     process.env.OPENROUTER_API_KEY = "test-key"
     process.env.OPENROUTER_MODEL = "test-model"
     try {
       const places = await searchPlaces("Springfield")
       expect(places.map((place) => place.region)).toEqual(["Illinois", "Massachusetts"])
+      expect(places[0].id).toBeGreaterThan(0)
       const result = await buildGuideResult(scope, answers)
       expect(result.explanation).toContain("Your intention")
       global.fetch = jest.fn(async () => ({ ok: true, json: async () => ({ choices: [{ message: { content: "not valid JSON" } }] }) })) as any
       expect((await buildGuideResult(scope, answers)).explanation).toContain("Your intention")
-    } finally { global.fetch = originalFetch; delete process.env.GEONAMES_USERNAME; delete process.env.OPENROUTER_API_KEY; delete process.env.OPENROUTER_MODEL }
+    } finally { global.fetch = originalFetch; delete process.env.OPENCAGE_API_KEY; delete process.env.OPENROUTER_API_KEY; delete process.env.OPENROUTER_MODEL }
   })
 })
 

@@ -1,8 +1,7 @@
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
-import { birthInstant, computeChart } from "./utils/chart"
-import { WESTERN_SIGNS } from "./utils/chart"
-import { computeDasha } from "./utils/dasha"
-import { resolvePlace } from "./utils/geonames"
+import { elementForSignIndex, WESTERN_SIGNS } from "./utils/chart"
+import { resolvePlace } from "./utils/geocoding"
+import { fetchVedAstroAstrology } from "./utils/vedastro"
 import matrix from "./data/matrix.json"
 import { availableOffers, presentOffer } from "./offers"
 
@@ -73,20 +72,33 @@ export function numerology(dob: string, now = new Date()) {
 export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?: string) {
   const answers = validateAnswers(raw)
   let method: "astrology" | "numerology" | "intention" = "intention"
-  let chart: ReturnType<typeof computeChart> | null = null
-  let period: ReturnType<typeof computeDasha> | null = null
+  let astrologyData: { moonSign: string; antardasha: string; mahadasha?: string; element?: string } | null = null
   let numbers: ReturnType<typeof numerology> | null = null
   if (answers.dob && answers.tob && answers.placeId) {
     const place = await resolvePlace(answers.placeId)
-    const born = birthInstant(answers.dob, answers.tob, place.timezone)
-    chart = computeChart({ dob: answers.dob, tob: answers.tob, pob_lat: place.lat, pob_lng: place.lng, pob_tz: place.timezone })
-    period = computeDasha(chart.nakshatra_index, chart.moon_longitude_sidereal, born)
+    const vedAstro = await fetchVedAstroAstrology({
+      dob: answers.dob,
+      tob: answers.tob,
+      lat: place.lat,
+      lng: place.lng,
+      timezone: place.timezone,
+      offsetString: place.offsetString,
+      placeName: place.name,
+    })
+    const signIndex = WESTERN_SIGNS.findIndex((s) => s.toLowerCase() === vedAstro.moonSign.toLowerCase())
+    const element = signIndex >= 0 ? elementForSignIndex(signIndex) : undefined
+    astrologyData = {
+      moonSign: vedAstro.moonSign,
+      antardasha: vedAstro.antardasha,
+      mahadasha: vedAstro.mahadasha,
+      element,
+    }
     method = "astrology"
   } else if (answers.dob) {
     numbers = numerology(answers.dob)
     method = "numerology"
   }
-  const matrixKey = chart && period ? `${WESTERN_SIGNS[chart.moon_sign_index].toUpperCase()}-${period.antardasha}-${answers.intention}` : ""
+  const matrixKey = astrologyData ? `${astrologyData.moonSign.toUpperCase()}-${astrologyData.antardasha}-${answers.intention}` : ""
   const setTitle = matrixKey && Object.prototype.hasOwnProperty.call(matrix, matrixKey)
     ? (matrix as Record<string, string>)[matrixKey] : null
   const query = scope.resolve(ContainerRegistrationKeys.QUERY) as any
@@ -108,22 +120,22 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
     const match = intentions.includes(answers.intention)
     if (!exact && !match) return null
     const element = BROOCHES[product.handle]?.element
-    const score = (exact ? 200 : 0) + (match ? 100 : 0) + (privateOffer ? 20 : 0) + (chart && element === chart.element ? 10 : 0)
+    const score = (exact ? 200 : 0) + (match ? 100 : 0) + (privateOffer ? 20 : 0) + (astrologyData && element === astrologyData.element ? 10 : 0)
     return { ...presentOffer(product), score, exact: Boolean(exact) }
   }).filter(Boolean).sort((a: any, b: any) => b.score - a.score)
   const recommended = offers.slice(0, 3)
   const exactOffer = recommended.some((offer: any) => offer.exact)
   const fallback = !recommended.length ? "No approved piece is currently in stock for this intention. Please check back with the atelier soon."
     : method === "astrology"
-    ? setTitle && exactOffer ? `For this ${chart!.moon_sign} Moon and ${period!.antardasha} period, the ${setTitle} gives shape to your ${answers.intention.replace("-", " and ")} intention.`
-      : setTitle ? `Your ${chart!.moon_sign} Moon and ${period!.antardasha} period have a dedicated set in our guide. Until that set is available, these pieces are chosen for your ${answers.intention.replace("-", " and ")} intention.`
-      : `Your ${chart!.moon_sign} Moon informs a broader selection for ${answers.intention.replace("-", " and ")}; this period has no dedicated set in our current guide.`
+    ? setTitle && exactOffer ? `For this ${astrologyData!.moonSign} Moon and ${astrologyData!.antardasha} period, the ${setTitle} gives shape to your ${answers.intention.replace("-", " and ")} intention.`
+      : setTitle ? `Your ${astrologyData!.moonSign} Moon and ${astrologyData!.antardasha} period have a dedicated set in our guide. Until that set is available, these pieces are chosen for your ${answers.intention.replace("-", " and ")} intention.`
+      : `Your ${astrologyData!.moonSign} Moon informs a broader selection for ${answers.intention.replace("-", " and ")}; this period has no dedicated set in our current guide.`
     : method === "numerology"
       ? `Your ${numbers!.kind} is ${numbers!.number} and your personal year is ${numbers!.personalYear}. With birth time or place unavailable, your chosen intention leads the selection.`
       : `Your intention of ${answers.intention.replace("-", " and ")} leads this selection.`
   const explanation = await narrate({ method, fallback, intention: answers.intention, titles: recommended.map((item: any) => item.title) })
   return { method, explanation, setTitle: exactOffer ? setTitle : null,
-    guide: chart ? { moonSign: chart.moon_sign, antardasha: period!.antardasha,
+    guide: astrologyData ? { moonSign: astrologyData.moonSign, antardasha: astrologyData.antardasha,
       coverage: exactOffer ? "matrix" : setTitle ? "matrix-fallback" : "broader" }
     : numbers ? { kind: numbers.kind, number: numbers.number, personalYear: numbers.personalYear } : null,
     offers: recommended.map(({ score, exact, ...offer }: any) => offer) }
