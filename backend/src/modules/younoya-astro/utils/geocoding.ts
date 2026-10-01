@@ -43,11 +43,14 @@ export function getGeocodingAttribution(): string {
   if (process.env.OPENCAGE_API_KEY) {
     return "Place data © OpenCage, OpenStreetMap contributors"
   }
-  return "Place data © GeoNames, CC BY 4.0"
+  if (process.env.GEONAMES_USERNAME) {
+    return "Place data © GeoNames, CC BY 4.0"
+  }
+  return "Place data © OpenStreetMap contributors"
 }
 
 /**
- * Searches places using OpenCage (or GeoNames if OpenCage key missing)
+ * Searches places using OpenCage (or GeoNames / OSM fallback)
  * Strictly requires at least 4 characters to preserve API quota.
  */
 export async function searchPlaces(query: string): Promise<Place[]> {
@@ -71,7 +74,7 @@ export async function searchPlaces(query: string): Promise<Place[]> {
   } else if (process.env.GEONAMES_USERNAME) {
     places = await searchGeoNames(trimmed, process.env.GEONAMES_USERNAME)
   } else {
-    throw new Error("Birth-place search is not configured. Please set OPENCAGE_API_KEY.")
+    places = await searchNominatim(trimmed)
   }
 
   searchCache.set(cacheKey, { until: Date.now() + 24 * 3600_000, places })
@@ -206,3 +209,50 @@ async function resolveGeoNames(id: number): Promise<ResolvedPlace> {
     timezone,
   }
 }
+
+async function searchNominatim(query: string): Promise<Place[]> {
+  const url = new URL("https://nominatim.openstreetmap.org/search")
+  url.searchParams.set("q", query)
+  url.searchParams.set("format", "json")
+  url.searchParams.set("limit", "8")
+  url.searchParams.set("addressdetails", "1")
+
+  const response = await fetch(url, {
+    headers: { "User-Agent": "YounoyaGifting/1.0 (info@younoya.com)" },
+    signal: AbortSignal.timeout(5000),
+  })
+  if (!response.ok) throw new Error("City search service is temporarily unavailable")
+  const data = ((await response.json()) as any[]) || []
+
+  const places: Place[] = []
+  for (const item of data) {
+    const lat = Number(item.lat)
+    const lng = Number(item.lon)
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue
+
+    const addr = item.address || {}
+    const name = addr.city || addr.town || addr.village || addr.municipality || item.name || query
+    const region = addr.state || addr.state_district || ""
+    const country = addr.country || ""
+    const isIndia = (addr.country_code || "").toLowerCase() === "in" || country.toLowerCase() === "india"
+    const timezone = isIndia ? "Asia/Kolkata" : "UTC"
+    const offsetString = isIndia ? "+05:30" : "+00:00"
+
+    const id = generatePlaceId(lat, lng)
+    const place: Place = { id, name: String(name), region: String(region), country: String(country), lat, lng }
+    places.push(place)
+
+    placeCache.set(id, {
+      until: Date.now() + 24 * 3600_000,
+      place: { ...place, timezone, offsetString },
+    })
+  }
+
+  if (placeCache.size > 2000) {
+    const firstKey = placeCache.keys().next().value
+    if (firstKey) placeCache.delete(firstKey)
+  }
+
+  return places
+}
+

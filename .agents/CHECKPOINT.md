@@ -76,7 +76,7 @@
   1. *VedAstro Integration (`vedastro.ts`)*: Integrated VedAstro Open API (`https://api.vedastro.org/api`) for Vimshottari Mahadasha/Bhukti (`DasaForNow`) and Moon Sign (`MoonSignName`) using Lahiri ayanamsa. Implemented strict mode without synthetic local fallback, in-memory sliding-window rate limiter (strictly max 5 calls/min), FIFO async queue, and 24-hour calculation cache.
   2. *OpenCage Geocoding (`geocoding.ts`)*: Built unified geocoder using OpenCage (2,500 req/day free). Enforced query suppression for queries < 4 characters (1–3 letters suppressed), 500ms keystroke debounce, 24-hour query cache, and deterministic 31-bit positive integer place IDs.
   3. *Gift Guide Pipeline Sync*: Updated `gift-guide.ts` to consume authentic VedAstro calculations and `places/route.ts` to return dynamic OpenCage attribution. Updated `BirthDetails.jsx` with 500ms debounce, min 4 characters, and removed third-party attribution text from the frontend UI.
-  4. *Verification*: 12/12 unit tests passed (`gift-guide.unit.spec.ts`), `npx medusa build` compiled successfully (exit code 0), and root `npm run build` generated 16 crawlable route shells + 11 admin shells and synced `dist/` (exit code 0).
+  4. *Production Deployment & Live Verification*: Transferred updated backend build via SSH (`scp`) to VPS (`ubuntu@140.245.7.165`) per the Backend Update Law. Configured `OPENCAGE_API_KEY=236df75c...` and `VEDASTRO_AYANAMSA=LAHIRI` on the VPS. Restarted PM2. Verified live city search (`Bengaluru` -> lat `12.97`, lng `77.59`) and live recommendation (`Cancer` Moon, `Rahu` Antardasha via VedAstro).
 
 ## 3. ⚠️ Inviolable System Rules
 1. **Explicit Git Push Permission**: NEVER run `git push` without explicit user approval. Always ask first.
@@ -91,9 +91,8 @@
 10. **Backend Direct SSH Deployment Law (Zero GitHub Involvement)**: Whenever updating the backend server: (1) Build updated backend code locally (`npm run build` in `backend/`), (2) Push via SSH (`scp`) to VPS (`ubuntu@140.245.7.165`), (3) Deploy and run on VPS (`npx medusa db:migrate`, restart service). NO GITHUB IS INVOLVED at any point in backend management.
 
 ## 4. 🛠️ Verification & Next Tasks
-- **Phase 36 Verified**: VedAstro & OpenCage integrations fully tested and verified. Unit tests and production builds all pass (exit code 0).
+- **Phase 36 Live on Production**: VedAstro & OpenCage integrations are live on `https://api.younoya.com`. City autocomplete and astrology recommendation verified working.
 - **Walkthrough Artifact**: Documented in `walkthrough.md`.
-- **Target environment credentials**: Add `OPENCAGE_API_KEY` to production environment on VPS.
 - **Git Push Law**: Ask user for explicit push permission before pushing to GitHub.
 
 
