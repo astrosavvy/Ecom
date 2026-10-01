@@ -33,13 +33,60 @@ export default function StockEditor({ offer }: { offer: OfferRow }) {
       setLevels((old) => ({ ...old, [id]: quantity })); setNotice("Stock saved at this location.")
     } catch (error) { setNotice(error instanceof Error ? error.message : "Could not save stock") }
   }
-  return <div className="offer-stock"><h3>Available stock</h3><p>Inventory is checked again before checkout. A set draws from the pieces it contains.</p>
-    <label>Stock location <select value={locationId} onChange={(event) => setLocationId(event.target.value)}>
-      {locations.map((location) => <option value={location.id} key={location.id}>{location.name}</option>)}</select></label>
-    {!locations.length && <p>Add a Medusa stock location before making this offer available.</p>}
-    {items.map((item) => <div className="offer-stock__row" key={item.inventory_item_id}><span>{item.inventory_item_id}</span>
-      <input type="number" min="0" step="1" aria-label={`Stock for ${item.inventory_item_id}`} value={values[item.inventory_item_id] ?? 0}
-        onChange={(event) => setValues((old) => ({ ...old, [item.inventory_item_id]: Number(event.target.value) }))} />
-      <button type="button" disabled={!locationId} onClick={() => save(item.inventory_item_id)}>Save stock</button></div>)}
-    {notice && <p role="status">{notice}</p>}</div>
+  return (
+    <div className="offer-stock">
+      <h3>Available Stock & Locations</h3>
+      <p>Inventory levels are validated in real-time. Sets draw their available quantities directly from the configured pieces.</p>
+      
+      <div className="offer-form__grid" style={{ marginBottom: 16 }}>
+        <label className="ad-field">
+          <span>Fulfillment Location</span>
+          <select value={locationId} onChange={(event) => setLocationId(event.target.value)}>
+            {locations.map((location) => <option value={location.id} key={location.id}>{location.name}</option>)}
+          </select>
+        </label>
+      </div>
+
+      {!locations.length && (
+        <p style={{ color: "#D97706", fontSize: 13, background: "#FFFBEB", padding: "10px 14px", borderRadius: 8 }}>
+          No Medusa fulfillment locations found. Please configure a stock location first.
+        </p>
+      )}
+
+      {items.map((item) => (
+        <div className="offer-stock__row" key={item.inventory_item_id}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: "var(--ad-ink)" }}>Inventory Piece</span>
+            <span style={{ fontSize: 11, color: "var(--ad-ink-muted)", fontFamily: "monospace" }}>{item.inventory_item_id}</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              style={{ width: 90, textAlign: "center", height: 38 }}
+              aria-label={`Stock for ${item.inventory_item_id}`}
+              value={values[item.inventory_item_id] ?? 0}
+              onChange={(event) => setValues((old) => ({ ...old, [item.inventory_item_id]: Number(event.target.value) }))}
+            />
+            <button
+              type="button"
+              className="ad-btn-luxury secondary"
+              style={{ padding: "8px 14px", fontSize: 12 }}
+              disabled={!locationId}
+              onClick={() => save(item.inventory_item_id)}
+            >
+              Update Stock
+            </button>
+          </div>
+        </div>
+      ))}
+
+      {notice && (
+        <div role="status" style={{ marginTop: 12, fontSize: 12, color: "var(--ad-gold-strong)", fontWeight: 500 }}>
+          {notice}
+        </div>
+      )}
+    </div>
+  )
 }

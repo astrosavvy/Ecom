@@ -57,6 +57,12 @@
   3. *Gift Hamper Recommendation Studio (`RecommendationRules.tsx`)*: Transformed `/admin/rules` into a recommendation studio allowing the store owner to choose **1 Primary Lead Hamper** + **2 Secondary Recommendations** (from top 3 categories), each with its own customized **Reason / Story**.
   4. *Category & Metadata Polish (`ThemeManager.tsx` & `ProductMetadata.tsx`)*: Upgraded Edit Category modal with clickable quick symbol presets (`💕 Love`, `📈 Career`, `💰 Wealth`, etc.) and full-width description. Fixed Product Details tabs so "Care Instructions", "Editorial Story", and "Materials" expand to the full container width with zero cramped horizontal collisions.
   5. *Verification*: Root `npm run build` exited 0 (16 crawlable route shells, 11 admin shells, synced `dist/`). Verified in preview.
+- **Phase 34 (Custom Gift Sets & Hampers Studio Redesign — `/admin/gift-guide`)**:
+  1. *Contrast & Typography Correction (`OfferManager.css`)*: Eliminated washed-out `#f8f2e8` text that made the header invisible against the warm ivory `#FAF7F2` canvas. Set high-contrast Cormorant Garamond serif headings, muted gold badges, and clean metadata indicators.
+  2. *Studio Usability & Catalog Sync (`OfferManager.tsx`)*: Added top summary ribbon (Hamper Catalog, Active Curation, Synchronization), one-click catalog sync banner, prominent `+ New Hamper` button, and visual status badges (`Approved` in sage green, `Draft` in amber).
+  3. *Hamper & Gift Set Form (`OfferForm.tsx`)*: Upgraded with automatic slugification for handles and SKUs, lossless WebP photo upload + preview (`compressImage`), component builder for multi-piece hampers with SKU and item title display, and luxury category checkboxes.
+  4. *Inventory & Fulfillment Locations (`StockEditor.tsx`)*: Rebuilt with luxury cards, location dropdowns, monospace inventory item badges, and instant stock update controls.
+  5. *Verification*: Root `npm run build` exited 0 (16 crawlable route shells, 11 admin shells, synced `dist/`). Verified clean production build.
 
 ## 3. ⚠️ Inviolable System Rules
 1. **Explicit Git Push Permission**: NEVER run `git push` without explicit user approval. Always ask first.

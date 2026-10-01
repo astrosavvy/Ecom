@@ -1,1 +1,320 @@
-.offer-admin { color:#30231c; }.offer-admin .ad__head h1,.offer-admin .ad__head p{color:#f8f2e8}.offer-admin__catalog,.offer-admin__list,.offer-form,.offer-stock{background:#fcf8f1;border:1px solid #e5d7c5;border-radius:22px;padding:24px;box-shadow:0 14px 35px #00000012}.offer-admin__catalog{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:22px 0}.offer-admin__catalog p,.offer-form p,.offer-stock p{color:#746459;line-height:1.5}.offer-admin button{cursor:pointer}.offer-admin__catalog button,.offer-form__submit{background:#865331;color:#fff;border:0;border-radius:30px;padding:13px 22px;white-space:nowrap}.offer-admin__notice{background:#f6ebda;color:#704a2f;padding:12px 18px;border-radius:12px}.offer-admin__layout{display:grid;grid-template-columns:minmax(230px,.3fr) minmax(0,.7fr);gap:20px}.offer-admin__list-head{display:flex;justify-content:space-between;align-items:center}.offer-admin__list-head h2,.offer-form h2{font-family:Georgia,serif;font-weight:400}.offer-admin__list-head button,.offer-form__add button,.offer-stock button{border:1px solid #bfa58d;color:#693d24;background:#fff9f1;border-radius:20px;padding:9px 14px}.offer-admin__list>button{display:flex;text-align:left;align-items:center;width:100%;gap:12px;border:1px solid transparent;border-radius:14px;background:transparent;padding:10px;color:#30231c}.offer-admin__list>button.is-selected{border-color:#c7a584;background:#f6ecdf}.offer-admin__list img{width:52px;height:52px;object-fit:cover;border-radius:10px}.offer-admin__list small{display:block;color:#846d5a;margin-top:5px}.offer-form__head span{font-size:11px;letter-spacing:.18em;color:#9d663b}.offer-form label,.offer-stock label{display:grid;gap:7px;font-size:13px;color:#634c3a;margin:13px 0}.offer-form input,.offer-form textarea,.offer-form select,.offer-stock input,.offer-stock select{min-width:0;width:100%;border:1px solid #dac7b2;border-radius:12px;background:#fff;color:#30231c;padding:12px;font:inherit}.offer-form__grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.offer-form fieldset{border:1px solid #dac7b2;border-radius:14px;margin:18px 0}.offer-form fieldset label{display:inline-flex;align-items:center;margin:8px 16px 8px 0}.offer-form input[type=checkbox]{width:auto}.offer-form__kit{border-top:1px solid #e5d7c5;padding:20px 0}.offer-form__component,.offer-form__add,.offer-stock__row{display:flex;align-items:center;gap:10px;margin:8px 0}.offer-form__component span,.offer-stock__row span{flex:1}.offer-form__component button{border:0;color:#9d4b37;background:transparent}.offer-form__approval{display:flex!important;align-items:center}.offer-stock{margin-top:20px}.offer-stock__row input{width:85px}.offer-stock__row span{font-size:12px;overflow-wrap:anywhere}@media(max-width:850px){.offer-admin__layout{grid-template-columns:1fr}.offer-admin__catalog{flex-wrap:wrap}}@media(max-width:550px){.offer-form__grid{grid-template-columns:1fr}.offer-form__add,.offer-stock__row{flex-wrap:wrap}.offer-admin__catalog,.offer-admin__list,.offer-form,.offer-stock{padding:18px}}
+/* ============================================================
+   YOUNOYA ATELIER CONSOLE — Custom Gift Sets & Hampers Studio
+   Cartier-grade Luxury Aesthetic
+   ============================================================ */
+
+.offer-admin {
+  color: var(--ad-ink);
+}
+
+.offer-admin .ad__head h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--ad-ink) !important;
+  font-weight: 500;
+  margin: 4px 0 8px;
+}
+
+.offer-admin .ad__head p {
+  color: var(--ad-ink-soft) !important;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Catalog Banner */
+.offer-admin__catalog {
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border-gold);
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 20px -8px rgba(44, 34, 28, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.offer-admin__catalog strong {
+  display: block;
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ad-gold-strong);
+  margin-bottom: 4px;
+}
+
+.offer-admin__catalog p {
+  margin: 0;
+  color: var(--ad-ink-soft);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Main Studio Layout */
+.offer-admin__layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Left Sidebar - Set List */
+.offer-admin__list {
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 4px 20px -8px rgba(44, 34, 28, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.offer-admin__list-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ad-border);
+  margin-bottom: 4px;
+}
+
+.offer-admin__list-head h2 {
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ad-ink);
+}
+
+.offer-admin__list > button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.offer-admin__list > button:hover {
+  background: var(--ad-gold-light);
+  border-color: var(--ad-border-gold);
+}
+
+.offer-admin__list > button.is-selected {
+  background: var(--ad-surface-soft);
+  border-color: var(--ad-gold);
+  box-shadow: 0 4px 12px -4px rgba(197, 168, 128, 0.25);
+}
+
+.offer-admin__list img {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--ad-border);
+}
+
+.offer-admin__list strong {
+  display: block;
+  font-size: 13px;
+  color: var(--ad-ink);
+  font-weight: 600;
+}
+
+.offer-admin__list small {
+  display: block;
+  font-size: 11px;
+  color: var(--ad-ink-soft);
+  margin-top: 2px;
+}
+
+/* Right Column - Set Editor Form */
+.offer-form {
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border-gold);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 6px 24px -10px rgba(44, 34, 28, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.offer-form__head span {
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ad-gold-strong);
+  font-weight: 700;
+  display: block;
+}
+
+.offer-form__head h2 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--ad-ink);
+  font-weight: 500;
+  margin: 4px 0 6px;
+}
+
+.offer-form__head p {
+  color: var(--ad-ink-soft);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.offer-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Kit Component Builder */
+.offer-form__kit {
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.offer-form__kit strong {
+  display: block;
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ad-ink);
+}
+
+.offer-form__kit p {
+  color: var(--ad-ink-soft);
+  font-size: 12px;
+  margin: 0;
+}
+
+.offer-form__component {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--ad-ink);
+}
+
+.offer-form__component button {
+  background: none;
+  border: none;
+  color: var(--ad-rose);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.offer-form__add {
+  display: flex;
+  gap: 10px;
+}
+
+.offer-form__add select {
+  flex: 1;
+}
+
+/* Category Checkboxes */
+.offer-form fieldset {
+  border: 1px solid var(--ad-border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.offer-form fieldset legend {
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ad-gold-strong);
+  font-weight: 700;
+  padding: 0 6px;
+}
+
+.offer-form fieldset label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ad-ink);
+  cursor: pointer;
+  margin: 0;
+}
+
+.offer-form__approval {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ad-ink);
+  cursor: pointer;
+}
+
+/* Stock Editor */
+.offer-stock {
+  margin-top: 24px;
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 20px -8px rgba(44, 34, 28, 0.05);
+}
+
+.offer-stock h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ad-ink);
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+
+.offer-stock p {
+  color: var(--ad-ink-soft);
+  font-size: 13px;
+  margin: 0 0 16px;
+}
+
+.offer-stock__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--ad-bg);
+  border-radius: 10px;
+  border: 1px solid var(--ad-border);
+  margin-bottom: 8px;
+}
+
+@media (max-width: 900px) {
+  .offer-admin__layout {
+    grid-template-columns: 1fr;
+  }
+}
