@@ -1,6 +1,23 @@
 import { useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
+import {
+  Plus,
+  Search,
+  LayoutGrid,
+  List as ListIcon,
+  ExternalLink,
+  Edit3,
+  Trash2,
+  FileText,
+  CheckCircle2,
+  AlertCircle,
+  BookOpen,
+  Clock,
+  Sparkles,
+  Tag,
+} from "lucide-react"
 import { api, fmtDate } from "../api"
+import "../styles/SanityJournal.css"
 
 type Post = {
   id: string
@@ -46,6 +63,7 @@ export default function Journal() {
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all")
   const [categoryFilter, setCategoryFilter] = useState("All")
+  const [viewMode, setViewMode] = useState<"grid" | "table">("grid")
 
   function loadPosts() {
     setBusy(true)
@@ -86,6 +104,9 @@ export default function Journal() {
     }
   }
 
+  const publishedCount = useMemo(() => posts.filter((p) => p.published).length, [posts])
+  const draftCount = useMemo(() => posts.filter((p) => !p.published).length, [posts])
+
   const filteredPosts = useMemo(() => {
     return posts.filter((p) => {
       // Status filter
@@ -120,358 +141,392 @@ export default function Journal() {
   }, [posts, statusFilter, categoryFilter, searchQuery])
 
   return (
-    <div style={{ maxWidth: "1080px", margin: "0 auto", paddingBottom: "5rem" }}>
-      {/* Top Header with + New Article Action (Zero ad- classes) */}
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "1.75rem",
-          flexWrap: "wrap",
-          gap: "16px",
-          background: "#fff",
-          padding: "20px 24px",
-          borderRadius: "16px",
-          border: "1px solid rgba(26,26,30,0.06)",
-          boxShadow: "0 4px 18px -6px rgba(0,0,0,0.06)",
-        }}
-      >
+    <div style={{ maxWidth: "1280px", margin: "0 auto", paddingBottom: "5rem" }}>
+      {/* ── Sanity Studio Desk Header ── */}
+      <header className="sanity-desk-header">
         <div>
-          <h1 style={{ fontSize: "1.875rem", margin: "0 0 6px", color: "#1a1a1e", fontWeight: 500, fontFamily: "var(--font-display, Georgia, serif)" }}>
-            Journal & Stories
-          </h1>
-          <p style={{ margin: 0, color: "#6b645c", fontSize: "0.9375rem" }}>
-            Publish rituals, keepsakes guides, and astrological chapters to the storefront.
-          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--ad-gold-strong)" }}>
+              YOUNOYA Studio
+            </span>
+            <span style={{ color: "var(--ad-border)" }}>/</span>
+            <span style={{ fontSize: 11, fontWeight: 600, color: "var(--ad-ink-soft)" }}>Journal Desk</span>
+          </div>
+          <h1>Journal & Stories</h1>
+          <p>Publish rituals, astrological chapters, and intentional gifting guides to the storefront.</p>
         </div>
-        <div>
-          <Link
-            to="/admin/journal/new"
-            style={{
-              background: "var(--yn-gold, #D4AF37)",
-              color: "#07080E",
-              fontWeight: 700,
-              padding: "12px 26px",
-              borderRadius: "10px",
-              textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              fontSize: "0.9375rem",
-              boxShadow: "0 4px 14px -2px rgba(212, 175, 55, 0.45)",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>+</span> Add New Article
-          </Link>
-        </div>
+
+        <Link
+          to="/admin/journal/new"
+          className="sanity-btn-primary"
+          style={{ padding: "10px 22px", fontSize: "14px", textDecoration: "none" }}
+        >
+          <Plus size={16} /> Create Story
+        </Link>
       </header>
+
+      {/* ── Studio KPI Metrics Ribbon ── */}
+      <div className="sanity-metrics-grid">
+        <div className="sanity-metric-card">
+          <span>Total Stories</span>
+          <strong>{posts.length}</strong>
+        </div>
+        <div className="sanity-metric-card">
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#10B981" }} />
+            Live on Storefront
+          </span>
+          <strong style={{ color: "#065F46" }}>{publishedCount}</strong>
+        </div>
+        <div className="sanity-metric-card">
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#F59E0B" }} />
+            Drafts in Progress
+          </span>
+          <strong style={{ color: "#92400E" }}>{draftCount}</strong>
+        </div>
+        <div className="sanity-metric-card">
+          <span>Editorial Chapters</span>
+          <strong>6 Chapters</strong>
+        </div>
+      </div>
 
       {/* Status Alerts */}
       {error && (
-        <div style={{ padding: "12px 16px", background: "rgba(220, 38, 38, 0.08)", border: "1px solid rgba(220, 38, 38, 0.25)", borderRadius: "10px", color: "#dc2626", marginBottom: "1.25rem", fontSize: "0.875rem" }}>
-          {error}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 18px", background: "var(--ad-rose-bg)", border: "1px solid var(--ad-rose)", borderRadius: "10px", color: "var(--ad-rose)", marginBottom: "1.25rem", fontSize: "13px" }}>
+          <AlertCircle size={16} /> {error}
         </div>
       )}
       {successMsg && (
-        <div style={{ padding: "12px 16px", background: "rgba(52, 211, 153, 0.12)", border: "1px solid #34d399", borderRadius: "10px", color: "#065f46", marginBottom: "1.25rem", fontSize: "0.875rem", fontWeight: 500 }}>
-          ✓ {successMsg}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 18px", background: "var(--ad-sage-bg)", border: "1px solid var(--ad-sage)", borderRadius: "10px", color: "var(--ad-sage)", marginBottom: "1.25rem", fontSize: "13px", fontWeight: 500 }}>
+          <CheckCircle2 size={16} /> {successMsg}
         </div>
       )}
 
-      {/* Search and Filters Bar (Zero ad- classes) */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: "14px",
-          padding: "14px 18px",
-          marginBottom: "1.5rem",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "14px",
-          justifyContent: "space-between",
-          alignItems: "center",
-          border: "1px solid rgba(26,26,30,0.06)",
-          boxShadow: "0 2px 10px -4px rgba(0,0,0,0.04)",
-        }}
-      >
+      {/* ── Filter & Search Bar (Sanity Studio style) ── */}
+      <div className="sanity-filter-bar">
         {/* Search Input */}
-        <div style={{ flex: "1", minWidth: "260px" }}>
+        <div className="sanity-search-wrap">
+          <Search size={14} color="var(--ad-ink-soft)" />
           <input
             type="text"
-            placeholder="Search stories by title, slug, or author…"
+            placeholder="Search stories by title, slug, or excerpt…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "10px 14px",
-              borderRadius: "8px",
-              border: "1px solid rgba(26,26,30,0.1)",
-              background: "#FFFBF0",
-              fontSize: "0.875rem",
-              outline: "none",
-              color: "#1a1a1e",
-            }}
           />
         </div>
 
-        {/* Status Dropdown */}
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <label style={{ fontSize: "0.8125rem", color: "#6b645c", fontWeight: 600 }}>Filter Status:</label>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
-            style={{
-              padding: "9px 14px",
-              borderRadius: "8px",
-              border: "1px solid rgba(26,26,30,0.1)",
-              background: "#FFFBF0",
-              fontSize: "0.8125rem",
-              color: "#1a1a1e",
-              outline: "none",
-              cursor: "pointer",
-            }}
+        {/* Status Tabs */}
+        <div className="sanity-status-tabs">
+          <button
+            type="button"
+            className={`sanity-status-tab ${statusFilter === "all" ? "is-active" : ""}`}
+            onClick={() => setStatusFilter("all")}
           >
-            <option value="all">All Articles ({posts.length})</option>
-            <option value="published">Live on Store ({posts.filter((p) => p.published).length})</option>
-            <option value="draft">Drafts ({posts.filter((p) => !p.published).length})</option>
-          </select>
+            All ({posts.length})
+          </button>
+          <button
+            type="button"
+            className={`sanity-status-tab ${statusFilter === "published" ? "is-active" : ""}`}
+            onClick={() => setStatusFilter("published")}
+          >
+            Live ({publishedCount})
+          </button>
+          <button
+            type="button"
+            className={`sanity-status-tab ${statusFilter === "draft" ? "is-active" : ""}`}
+            onClick={() => setStatusFilter("draft")}
+          >
+            Drafts ({draftCount})
+          </button>
+        </div>
+
+        {/* Category Dropdown */}
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          style={{
+            padding: "8px 12px",
+            borderRadius: "8px",
+            border: "1px solid var(--ad-border)",
+            background: "#FFFFFF",
+            fontSize: "12px",
+            color: "var(--ad-ink)",
+            outline: "none",
+            cursor: "pointer",
+          }}
+        >
+          {CATEGORIES.map((cat) => (
+            <option value={cat} key={cat}>
+              {cat === "All" ? "All Chapters" : cat}
+            </option>
+          ))}
+        </select>
+
+        {/* View Mode Toggle */}
+        <div className="sanity-view-tabs">
+          <button
+            type="button"
+            className={`sanity-view-tab ${viewMode === "grid" ? "is-active" : ""}`}
+            onClick={() => setViewMode("grid")}
+            title="Sanity Document Cards"
+          >
+            <LayoutGrid size={13} /> Grid
+          </button>
+          <button
+            type="button"
+            className={`sanity-view-tab ${viewMode === "table" ? "is-active" : ""}`}
+            onClick={() => setViewMode("table")}
+            title="Desk Table"
+          >
+            <ListIcon size={13} /> Table
+          </button>
         </div>
       </div>
 
-      {/* Category Pills Strip */}
-      <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "12px", marginBottom: "1.5rem" }}>
-        {CATEGORIES.map((cat) => {
-          const active = categoryFilter === cat
-          return (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setCategoryFilter(cat)}
-              style={{
-                padding: "8px 16px",
-                borderRadius: "20px",
-                fontSize: "0.8125rem",
-                fontWeight: active ? 700 : 500,
-                border: active ? "1px solid var(--yn-gold, #D4AF37)" : "1px solid rgba(26,26,30,0.08)",
-                background: active ? "rgba(212, 175, 55, 0.14)" : "#fff",
-                color: active ? "#B8860B" : "#5a534a",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-                transition: "all 0.15s ease",
-              }}
-            >
-              {cat}
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Articles Table (Zero ad- classes) */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: "16px",
-          padding: "20px 24px",
-          border: "1px solid rgba(26,26,30,0.06)",
-          boxShadow: "0 4px 18px -6px rgba(0,0,0,0.06)",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", borderBottom: "1px solid rgba(26,26,30,0.06)", paddingBottom: "14px" }}>
-          <div>
-            <h2 style={{ fontSize: "1.125rem", margin: 0, color: "#1a1a1e", fontWeight: 600 }}>
-              All Articles ({filteredPosts.length})
-            </h2>
-          </div>
+      {/* ── Document List Rendering ── */}
+      {busy && posts.length === 0 ? (
+        <div style={{ padding: "4rem 1rem", textAlign: "center", color: "var(--ad-ink-soft)" }}>
+          <p>Loading studio documents…</p>
+        </div>
+      ) : filteredPosts.length === 0 ? (
+        <div className="sanity-card" style={{ textAlign: "center", padding: "4rem 2rem" }}>
+          <BookOpen size={36} color="var(--ad-gold)" style={{ opacity: 0.8, marginBottom: 12 }} />
+          <h3 style={{ fontFamily: "var(--font-display)", fontSize: "22px", color: "var(--ad-ink)", margin: "0 0 6px" }}>
+            {searchQuery || categoryFilter !== "All" || statusFilter !== "all"
+              ? "No stories match your current filters."
+              : "No stories published yet."}
+          </h3>
+          <p style={{ color: "var(--ad-ink-soft)", fontSize: "14px", margin: "0 0 20px" }}>
+            {searchQuery || categoryFilter !== "All" || statusFilter !== "all"
+              ? "Try clearing your search query or changing chapter filters."
+              : "Start composing your first chapter, ritual, or keepsake guide."}
+          </p>
           <Link
             to="/admin/journal/new"
-            style={{
-              fontSize: "0.875rem",
-              color: "var(--yn-gold, #D4AF37)",
-              textDecoration: "none",
-              fontWeight: 700,
-            }}
+            className="sanity-btn-primary"
+            style={{ textDecoration: "none", padding: "10px 22px" }}
           >
-            + Add New Article →
+            <Plus size={14} /> Create First Story
           </Link>
         </div>
-
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.875rem" }}>
-          <thead>
-            <tr style={{ borderBottom: "1px solid rgba(26,26,30,0.08)", textAlign: "left" }}>
-              <th style={{ width: "56px", padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Media</th>
-              <th style={{ padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Title & URL Slug</th>
-              <th style={{ padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Author</th>
-              <th style={{ padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Date</th>
-              <th style={{ padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Status</th>
-              <th style={{ padding: "10px 8px", color: "#8a8175", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", textAlign: "right" }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {busy && posts.length === 0 && (
-              <tr>
-                <td colSpan={6} style={{ padding: "3rem 1rem", textAlign: "center", color: "#8a8175" }}>
-                  Loading articles…
-                </td>
-              </tr>
-            )}
-            {!busy && filteredPosts.length === 0 && (
-              <tr>
-                <td colSpan={6} style={{ padding: "3.5rem 1rem", textAlign: "center" }}>
-                  <p style={{ color: "#6b645c", fontSize: "0.9375rem", margin: "0 0 1.25rem" }}>
-                    {searchQuery || categoryFilter !== "All" || statusFilter !== "all"
-                      ? "No articles match the selected filters."
-                      : "No articles published yet. Ready to start your journal?"}
-                  </p>
-                  <Link
-                    to="/admin/journal/new"
-                    style={{
-                      background: "var(--yn-gold, #D4AF37)",
-                      color: "#07080E",
-                      fontWeight: 700,
-                      padding: "10px 22px",
-                      borderRadius: "8px",
-                      textDecoration: "none",
-                      display: "inline-block",
-                      fontSize: "0.875rem",
-                    }}
-                  >
-                    + Write Your First Article
-                  </Link>
-                </td>
-              </tr>
-            )}
-            {filteredPosts.map((p) => {
-              const displayImg = p.list_image || p.cover_image
-              return (
-                <tr key={p.id} style={{ borderBottom: "1px solid rgba(26,26,30,0.04)" }}>
-                  <td style={{ padding: "12px 8px" }}>
-                    {displayImg ? (
-                      <img
-                        src={normalizeImageUrl(displayImg)}
-                        alt=""
-                        style={{ width: "46px", height: "46px", objectFit: "cover", borderRadius: "8px", border: "1px solid rgba(26,26,30,0.08)" }}
-                        onError={(e) => { (e.currentTarget as HTMLElement).style.display = "none" }}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          width: "46px",
-                          height: "46px",
-                          borderRadius: "8px",
-                          background: "#FFFBF0",
-                          border: "1px dashed rgba(26,26,30,0.15)",
-                          display: "grid",
-                          placeItems: "center",
-                          fontSize: "14px",
-                          color: "#8a8175",
-                        }}
-                      >
-                        ✎
-                      </div>
-                    )}
-                  </td>
-                  <td style={{ padding: "12px 8px" }}>
-                    <strong style={{ display: "block", color: "#1a1a1e", fontSize: "0.9375rem" }}>
-                      {p.title}
-                    </strong>
-                    <div style={{ display: "flex", gap: "6px", alignItems: "center", marginTop: "4px" }}>
-                      <code style={{ fontSize: "0.75rem", color: "#8a8175", background: "rgba(26,26,30,0.04)", padding: "2px 8px", borderRadius: "4px" }}>
-                        /{p.slug}
-                      </code>
-                      {p.published && (
-                        <a
-                          href={`https://younoya.com/journal/${p.slug}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          style={{ fontSize: "0.75rem", color: "var(--yn-gold, #D4AF37)", textDecoration: "underline", marginLeft: "4px" }}
-                        >
-                          View Live ↗
-                        </a>
-                      )}
+      ) : viewMode === "grid" ? (
+        /* ── Grid View: Sanity Document Cards ── */
+        <div className="sanity-doc-grid">
+          {filteredPosts.map((p) => {
+            const displayImg = p.cover_image || p.list_image
+            return (
+              <div className="sanity-doc-card" key={p.id}>
+                <div className="sanity-doc-card__media">
+                  {displayImg ? (
+                    <img src={normalizeImageUrl(displayImg)} alt="" loading="lazy" />
+                  ) : (
+                    <div style={{ width: "100%", height: "100%", display: "grid", placeItems: "center", color: "var(--ad-ink-soft)" }}>
+                      <FileText size={24} style={{ opacity: 0.4 }} />
                     </div>
-                  </td>
-                  <td style={{ padding: "12px 8px", color: "#5a534a" }}>
-                    {p.author || "YOUNOYA"}
-                  </td>
-                  <td style={{ padding: "12px 8px", color: "#5a534a" }}>
-                    {fmtDate(p.created_at)}
-                  </td>
-                  <td style={{ padding: "12px 8px" }}>
-                    <span
+                  )}
+
+                  <div style={{ position: "absolute", top: 10, left: 10 }}>
+                    <span className={`sanity-bar__status-pill ${p.published ? "published" : "draft"}`}>
+                      <span className="sanity-bar__dot" />
+                      {p.published ? "Live" : "Draft"}
+                    </span>
+                  </div>
+
+                  {p.published && (
+                    <a
+                      href={`https://younoya.com/journal/${p.slug}`}
+                      target="_blank"
+                      rel="noreferrer"
                       style={{
-                        display: "inline-block",
-                        padding: "4px 10px",
-                        borderRadius: "20px",
-                        fontSize: "0.6875rem",
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.06em",
-                        background: p.published ? "rgba(52,211,153,0.12)" : "rgba(212,175,55,0.12)",
-                        color: p.published ? "#059669" : "#B8860B",
+                        position: "absolute",
+                        top: 10,
+                        right: 10,
+                        background: "rgba(31, 25, 22, 0.75)",
+                        backdropFilter: "blur(4px)",
+                        color: "#FFFFFF",
+                        padding: "4px 8px",
+                        borderRadius: "6px",
+                        fontSize: "11px",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 4,
+                        textDecoration: "none",
                       }}
                     >
-                      {p.published ? "● Live" : "○ Draft"}
-                    </span>
-                  </td>
-                  <td style={{ padding: "12px 8px", textAlign: "right" }}>
-                    <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
-                      <Link
-                        to={`/admin/journal/${p.id}`}
-                        style={{
-                          textDecoration: "none",
-                          fontSize: "0.8125rem",
-                          padding: "6px 12px",
-                          borderRadius: "6px",
-                          background: "#FFFBF0",
-                          border: "1px solid rgba(26,26,30,0.1)",
-                          color: "#1a1a1e",
-                          fontWeight: 500,
-                        }}
-                      >
-                        Edit
-                      </Link>
+                      View Live <ExternalLink size={10} />
+                    </a>
+                  )}
+                </div>
+
+                <div className="sanity-doc-card__body">
+                  <h3 className="sanity-doc-card__title">
+                    <Link to={`/admin/journal/${p.id}`} style={{ color: "inherit", textDecoration: "none" }}>
+                      {p.title}
+                    </Link>
+                  </h3>
+
+                  <span className="sanity-doc-card__slug">
+                    /{p.slug}
+                  </span>
+
+                  <p className="sanity-doc-card__excerpt">
+                    {p.excerpt || "No excerpt provided for this chapter..."}
+                  </p>
+
+                  <div className="sanity-doc-card__foot">
+                    <span>{fmtDate(p.created_at)}</span>
+
+                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                       <button
                         type="button"
                         onClick={() => togglePublish(p)}
                         style={{
-                          fontSize: "0.8125rem",
-                          padding: "6px 12px",
-                          borderRadius: "6px",
-                          background: "#fff",
-                          border: "1px solid rgba(26,26,30,0.1)",
-                          color: "#1a1a1e",
+                          background: "transparent",
+                          border: "none",
+                          fontSize: "12px",
+                          color: p.published ? "var(--ad-ink-soft)" : "var(--ad-gold-strong)",
                           cursor: "pointer",
+                          fontWeight: 600,
                         }}
                       >
                         {p.published ? "Unpublish" : "Publish"}
                       </button>
+
+                      <Link
+                        to={`/admin/journal/${p.id}`}
+                        className="sanity-btn-ghost"
+                        style={{ padding: "4px 10px", fontSize: "11px", textDecoration: "none" }}
+                      >
+                        <Edit3 size={11} /> Edit
+                      </Link>
+
                       <button
                         type="button"
                         onClick={() => removePost(p)}
                         style={{
-                          fontSize: "0.8125rem",
-                          padding: "6px 10px",
-                          borderRadius: "6px",
-                          background: "rgba(220,38,38,0.06)",
-                          border: "1px solid rgba(220,38,38,0.2)",
-                          color: "#dc2626",
+                          background: "transparent",
+                          border: "none",
+                          color: "var(--ad-rose)",
                           cursor: "pointer",
+                          padding: 4,
                         }}
                         title="Delete story"
                       >
-                        Delete
+                        <Trash2 size={13} />
                       </button>
                     </div>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
+        /* ── Table View: Sanity Desk Table ── */
+        <div className="sanity-card" style={{ padding: 0, overflow: "hidden" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+            <thead>
+              <tr style={{ background: "var(--ad-sidebar-bg)", borderBottom: "1px solid var(--ad-border)", textAlign: "left" }}>
+                <th style={{ width: 52, padding: "12px 14px", color: "var(--ad-ink-soft)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Media</th>
+                <th style={{ padding: "12px 14px", color: "var(--ad-ink-soft)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Title & URL Slug</th>
+                <th style={{ padding: "12px 14px", color: "var(--ad-ink-soft)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Author</th>
+                <th style={{ padding: "12px 14px", color: "var(--ad-ink-soft)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Date</th>
+                <th style={{ padding: "12px 14px", color: "var(--ad-ink-soft)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Status</th>
+                <th style={{ padding: "12px 14px", color: "var(--ad-ink-soft)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", textAlign: "right" }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPosts.map((p) => {
+                const displayImg = p.list_image || p.cover_image
+                return (
+                  <tr key={p.id} style={{ borderBottom: "1px solid var(--ad-border)" }}>
+                    <td style={{ padding: "12px 14px" }}>
+                      {displayImg ? (
+                        <img
+                          src={normalizeImageUrl(displayImg)}
+                          alt=""
+                          style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 8, border: "1px solid var(--ad-border)" }}
+                        />
+                      ) : (
+                        <div style={{ width: 44, height: 44, borderRadius: 8, background: "var(--ad-bg)", border: "1px dashed var(--ad-border)", display: "grid", placeItems: "center", color: "var(--ad-ink-soft)" }}>
+                          <FileText size={16} />
+                        </div>
+                      )}
+                    </td>
+                    <td style={{ padding: "12px 14px" }}>
+                      <Link to={`/admin/journal/${p.id}`} style={{ fontWeight: 600, color: "var(--ad-ink)", textDecoration: "none", fontSize: "14px" }}>
+                        {p.title}
+                      </Link>
+                      <div style={{ display: "flex", gap: 6, alignItems: "center", marginTop: 4 }}>
+                        <code style={{ fontSize: "11px", color: "var(--ad-ink-soft)", background: "var(--ad-bg)", padding: "2px 6px", borderRadius: 4 }}>
+                          /{p.slug}
+                        </code>
+                        {p.published && (
+                          <a
+                            href={`https://younoya.com/journal/${p.slug}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{ fontSize: "11px", color: "var(--ad-gold-strong)", textDecoration: "none" }}
+                          >
+                            View Live ↗
+                          </a>
+                        )}
+                      </div>
+                    </td>
+                    <td style={{ padding: "12px 14px", color: "var(--ad-ink-soft)" }}>
+                      {p.author || "YOUNOYA"}
+                    </td>
+                    <td style={{ padding: "12px 14px", color: "var(--ad-ink-soft)" }}>
+                      {fmtDate(p.created_at)}
+                    </td>
+                    <td style={{ padding: "12px 14px" }}>
+                      <span className={`sanity-bar__status-pill ${p.published ? "published" : "draft"}`}>
+                        <span className="sanity-bar__dot" />
+                        {p.published ? "Live" : "Draft"}
+                      </span>
+                    </td>
+                    <td style={{ padding: "12px 14px", textAlign: "right" }}>
+                      <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                        <Link
+                          to={`/admin/journal/${p.id}`}
+                          className="sanity-btn-ghost"
+                          style={{ padding: "6px 12px", fontSize: "12px", textDecoration: "none" }}
+                        >
+                          <Edit3 size={12} /> Edit
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => togglePublish(p)}
+                          className="sanity-btn-ghost"
+                          style={{ padding: "6px 12px", fontSize: "12px" }}
+                        >
+                          {p.published ? "Unpublish" : "Publish"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removePost(p)}
+                          style={{
+                            background: "var(--ad-rose-bg)",
+                            border: "1px solid var(--ad-rose)",
+                            color: "var(--ad-rose)",
+                            borderRadius: 8,
+                            padding: "6px 10px",
+                            cursor: "pointer",
+                          }}
+                          title="Delete story"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }

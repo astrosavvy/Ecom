@@ -1,0 +1,878 @@
+/* ═════════════════════════════════════════════════════════════════
+   YOUNOYA ATELIER — SANITY.IO STUDIO EDITORIAL DESIGN SYSTEM
+   Document Studio, Portable Text Editor & Desk Dashboard
+   ═════════════════════════════════════════════════════════════════ */
+
+/* ── Studio App Bar (Document Header) ── */
+.sanity-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: #FFFFFF;
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--ad-border);
+  box-shadow: 0 2px 10px -4px rgba(44, 34, 28, 0.05);
+  margin-bottom: 24px;
+  position: sticky;
+  top: 16px;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+}
+
+.sanity-bar__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sanity-bar__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ad-ink);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--ad-bg);
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--ad-border);
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.sanity-bar__back:hover {
+  background: #FFFFFF;
+  border-color: var(--ad-gold);
+  color: var(--ad-gold-strong);
+}
+
+.sanity-bar__doc-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: rgba(44, 34, 28, 0.04);
+  border: 1px solid var(--ad-border);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ad-ink-soft);
+}
+
+.sanity-bar__status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sanity-bar__status-pill.published {
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+.sanity-bar__status-pill.draft {
+  background: #FFFBEB;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+
+.sanity-bar__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.sanity-bar__status-pill.published .sanity-bar__dot {
+  background: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+.sanity-bar__status-pill.draft .sanity-bar__dot {
+  background: #F59E0B;
+}
+
+.sanity-bar__live-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ad-gold-strong);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.sanity-bar__live-link:hover {
+  background: var(--ad-gold-light);
+  text-decoration: underline;
+}
+
+/* Mode Switcher Tabs */
+.sanity-view-tabs {
+  display: flex;
+  align-items: center;
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-border);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.sanity-view-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--ad-ink-soft);
+  cursor: pointer;
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.sanity-view-tab:hover {
+  color: var(--ad-ink);
+}
+
+.sanity-view-tab.is-active {
+  background: #FFFFFF;
+  color: var(--ad-ink);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--ad-border);
+}
+
+.sanity-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sanity-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ad-ink);
+  cursor: pointer;
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.sanity-btn-ghost:hover:not(:disabled) {
+  background: var(--ad-bg);
+  border-color: var(--ad-border-gold);
+}
+
+.sanity-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ad-ink);
+  color: #FFFFFF;
+  border: 1px solid var(--ad-ink);
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--fc-dur-micro) ease;
+  box-shadow: 0 2px 8px -2px rgba(31, 25, 22, 0.3);
+}
+
+.sanity-btn-primary:hover:not(:disabled) {
+  background: #2D2420;
+  transform: translateY(-1px);
+}
+
+.sanity-btn-primary.is-published {
+  background: #065F46;
+  border-color: #065F46;
+}
+
+.sanity-btn-primary.is-published:hover:not(:disabled) {
+  background: #044E39;
+}
+
+.sanity-btn-primary .kbd-hint {
+  font-size: 10px;
+  opacity: 0.65;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+/* ── Sanity Studio Document Layout ── */
+.sanity-studio-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+.sanity-studio-layout.split-view {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Left / Main Document Canvas */
+.sanity-doc-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sanity-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid var(--ad-border);
+  padding: 24px;
+  box-shadow: 0 2px 12px -4px rgba(44, 34, 28, 0.04);
+}
+
+.sanity-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ad-border);
+}
+
+.sanity-card__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ad-ink-soft);
+  margin: 0;
+}
+
+.sanity-card__badge {
+  font-size: 11px;
+  color: var(--ad-ink-soft);
+  font-weight: 500;
+}
+
+/* Field Group */
+.sanity-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.sanity-field:last-child {
+  margin-bottom: 0;
+}
+
+.sanity-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ad-ink-soft);
+}
+
+.sanity-label .hint {
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--ad-ink-soft);
+}
+
+.sanity-input-title {
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ad-ink);
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  outline: none;
+  transition: all var(--fc-dur-micro) ease;
+  box-sizing: border-box;
+}
+
+.sanity-input-title:focus {
+  border-color: var(--ad-gold);
+  box-shadow: 0 0 0 3px var(--ad-gold-light);
+}
+
+/* Sanity Slug Box */
+.sanity-slug-box {
+  display: flex;
+  align-items: stretch;
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color var(--fc-dur-micro) ease;
+}
+
+.sanity-slug-box:focus-within {
+  border-color: var(--ad-gold);
+  box-shadow: 0 0 0 3px var(--ad-gold-light);
+}
+
+.sanity-slug-prefix {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  background: var(--ad-bg);
+  border-right: 1px solid var(--ad-border);
+  font-size: 12px;
+  color: var(--ad-ink-soft);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.sanity-slug-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--ad-ink);
+  outline: none;
+}
+
+.sanity-slug-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 12px;
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--ad-border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ad-gold-strong);
+  cursor: pointer;
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.sanity-slug-action:hover {
+  background: var(--ad-gold-light);
+}
+
+/* Excerpt Area */
+.sanity-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ad-ink);
+  outline: none;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 80px;
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.sanity-textarea:focus {
+  border-color: var(--ad-gold);
+  box-shadow: 0 0 0 3px var(--ad-gold-light);
+}
+
+/* ── Sanity Asset Dropzone / Card ── */
+.sanity-asset-box {
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.sanity-asset-preview {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--ad-border);
+  background: var(--ad-bg);
+}
+
+.sanity-asset-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.sanity-asset-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+.sanity-asset-action-btn {
+  background: rgba(31, 25, 22, 0.75);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background var(--fc-dur-micro) ease;
+}
+
+.sanity-asset-action-btn:hover {
+  background: rgba(31, 25, 22, 0.95);
+}
+
+.sanity-asset-action-btn.danger:hover {
+  background: #DC2626;
+}
+
+.sanity-asset-empty {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border: 1px dashed var(--ad-border-gold);
+  border-radius: 8px;
+  background: var(--ad-bg);
+  padding: 24px 16px;
+  color: var(--ad-ink-soft);
+  font-size: 12px;
+}
+
+.sanity-asset-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 9px 14px;
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-border);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ad-ink);
+  cursor: pointer;
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.sanity-asset-btn:hover:not(:disabled) {
+  background: #FFFFFF;
+  border-color: var(--ad-gold);
+  color: var(--ad-gold-strong);
+}
+
+.sanity-input-url {
+  width: 100%;
+  padding: 8px 10px;
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--ad-ink);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.sanity-input-url:focus {
+  border-color: var(--ad-gold);
+}
+
+/* ── Google Search SERP Snippet Preview ── */
+.sanity-serp-preview {
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.sanity-serp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1A73E8;
+  margin-bottom: 8px;
+}
+
+.sanity-serp-url {
+  font-size: 12px;
+  color: #202124;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sanity-serp-title {
+  font-size: 16px;
+  color: #1A0DAB;
+  font-weight: 500;
+  line-height: 1.3;
+  margin-bottom: 4px;
+  cursor: pointer;
+}
+
+.sanity-serp-title:hover {
+  text-decoration: underline;
+}
+
+.sanity-serp-desc {
+  font-size: 13px;
+  color: #4D5156;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Split-View Live Storefront Simulation ── */
+.sanity-live-preview {
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid var(--ad-border);
+  box-shadow: 0 4px 20px -8px rgba(44, 34, 28, 0.08);
+  overflow: hidden;
+  position: sticky;
+  top: 90px;
+  max-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+}
+
+.sanity-live-preview__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--ad-sidebar-bg);
+  border-bottom: 1px solid var(--ad-border);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ad-ink-soft);
+}
+
+.sanity-live-preview__scroll {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.sanity-live-preview__category {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ad-gold-strong);
+  margin-bottom: 10px;
+}
+
+.sanity-live-preview__title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ad-ink);
+  margin: 0 0 12px;
+}
+
+.sanity-live-preview__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--ad-ink-soft);
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ad-border);
+}
+
+.sanity-live-preview__cover {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.sanity-live-preview__excerpt {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--ad-gold-strong);
+  border-left: 3px solid var(--ad-gold);
+  padding-left: 16px;
+  margin: 0 0 24px;
+}
+
+/* ── Sanity Studio Desk (Journal.tsx) ── */
+.sanity-desk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sanity-desk-header h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--ad-ink);
+  margin: 0 0 4px;
+  font-weight: 500;
+}
+
+.sanity-desk-header p {
+  color: var(--ad-ink-soft);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Metrics Ribbon */
+.sanity-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sanity-metric-card {
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 2px 8px -4px rgba(44, 34, 28, 0.04);
+}
+
+.sanity-metric-card span {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ad-ink-soft);
+}
+
+.sanity-metric-card strong {
+  font-size: 26px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--ad-ink);
+}
+
+/* Search and Filters Bar */
+.sanity-filter-bar {
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 14px;
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px -4px rgba(44, 34, 28, 0.04);
+}
+
+.sanity-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  flex: 1;
+  min-width: 240px;
+}
+
+.sanity-search-wrap input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  color: var(--ad-ink);
+  width: 100%;
+}
+
+.sanity-status-tabs {
+  display: flex;
+  align-items: center;
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-border);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.sanity-status-tab {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--ad-ink-soft);
+  cursor: pointer;
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.sanity-status-tab.is-active {
+  background: #FFFFFF;
+  color: var(--ad-ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Document Grid Cards */
+.sanity-doc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.sanity-doc-card {
+  background: #FFFFFF;
+  border: 1px solid var(--ad-border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 10px -4px rgba(44, 34, 28, 0.04);
+  transition: all var(--fc-dur-micro) ease;
+}
+
+.sanity-doc-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--ad-border-gold);
+  box-shadow: 0 8px 24px -8px rgba(44, 34, 28, 0.1);
+}
+
+.sanity-doc-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--ad-bg);
+  overflow: hidden;
+}
+
+.sanity-doc-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.sanity-doc-card:hover__media img {
+  transform: scale(1.02);
+}
+
+.sanity-doc-card__body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.sanity-doc-card__title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--ad-ink);
+  margin: 0 0 8px;
+}
+
+.sanity-doc-card__slug {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--ad-ink-soft);
+  background: var(--ad-bg);
+  padding: 3px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+  margin-bottom: 12px;
+}
+
+.sanity-doc-card__excerpt {
+  font-size: 13px;
+  color: var(--ad-ink-soft);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.sanity-doc-card__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--ad-border);
+  font-size: 12px;
+  color: var(--ad-ink-soft);
+}
+
+@media (max-width: 900px) {
+  .sanity-studio-layout {
+    grid-template-columns: 1fr;
+  }
+}

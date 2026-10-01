@@ -63,6 +63,14 @@
   3. *Hamper & Gift Set Form (`OfferForm.tsx`)*: Upgraded with automatic slugification for handles and SKUs, lossless WebP photo upload + preview (`compressImage`), component builder for multi-piece hampers with SKU and item title display, and luxury category checkboxes.
   4. *Inventory & Fulfillment Locations (`StockEditor.tsx`)*: Rebuilt with luxury cards, location dropdowns, monospace inventory item badges, and instant stock update controls.
   5. *Verification*: Root `npm run build` exited 0 (16 crawlable route shells, 11 admin shells, synced `dist/`). Verified clean production build.
+- **Phase 35 (Sanity.io Studio Journal & Story Editor Redesign — `/admin/journal` & `/admin/journal/:id`)**:
+  1. *Sanity Studio Design System (`SanityJournal.css`)*: Built custom Sanity Studio UI layout replacing all yellowish `#FFFBF0` inputs and awkward borders with crisp white panels, clean hairline borders (`rgba(44,34,28,0.08)`), subtle focus rings, and high-contrast typography.
+  2. *Sanity Studio App Bar (`JournalEdit.tsx`)*: Pinned document action header with document type badge (`Story Document`), emerald live status indicator (`● Published`) with direct `Live on Site ↗` link, amber draft pill (`○ Draft`), view mode switcher (`Document`, `Split Preview`, `SEO & Social`), secondary `Save Draft`, and primary `Publish` with `⌘S` shortcut indicator.
+  3. *Sanity Slug Generator & Portable Text Editor*: Auto-generating slug input with `https://younoya.com/journal/` prefix pill, one-click `Generate` button (with `Wand2` icon), and copy link action. Word count and reading time meter (`X words · Y min read`). Modernized TipTap editor (`editor.css`) with clean toolbar and active states.
+  4. *Sanity Media Asset Cards & SEO Simulation*: 16:9 Cover and 1:1 Grid asset dropzones with WebP client-side compression (`compressImage`), hover actions (`Replace`, `Remove`), and live Google SERP snippet preview card + OpenGraph social share card simulation.
+  5. *Split-Screen Live Storefront Preview*: Instant toggle to 50/50 split screen showing the live rendered blog post layout side-by-side with real-time updates as the author types.
+  6. *Sanity Studio Desk Dashboard (`Journal.tsx`)*: Redesigned with breadcrumbs, KPI metrics ribbon (Total Stories, Live on Storefront, Drafts in Progress, Editorial Chapters), search input with instant filter, status tabs, chapter filter, and dual view switcher (Sanity Document Cards Grid vs Desk Table).
+  7. *Verification*: Root `npm run build` exited 0 (16 crawlable route shells, 11 admin shells, synced `dist/`).
 
 ## 3. ⚠️ Inviolable System Rules
 1. **Explicit Git Push Permission**: NEVER run `git push` without explicit user approval. Always ask first.
