@@ -5,7 +5,6 @@ import { storeRequest } from '../../lib/giftGuideApi'
 export default function BirthDetails({ values, setValues }) {
   const [query, setQuery] = useState(values.placeLabel || '')
   const [places, setPlaces] = useState([])
-  const [attribution, setAttribution] = useState('City data © OpenCage, OpenStreetMap contributors')
   const [error, setError] = useState('')
   useEffect(() => {
     if (query.trim().length < 4 || values.placeLabel === query) { setPlaces([]); return undefined }
@@ -13,7 +12,6 @@ export default function BirthDetails({ values, setValues }) {
       storeRequest(`/store/gift-guide/places?q=${encodeURIComponent(query)}`)
         .then(data => {
           setPlaces(data.places || [])
-          if (data.attribution) setAttribution(data.attribution)
           setError('')
         })
         .catch(() => { setPlaces([]); setError('City search is unavailable. Continue with your date for a numerology-led choice.') })
@@ -40,6 +38,5 @@ export default function BirthDetails({ values, setValues }) {
     </div>}
     {error && <p className="guide-note" role="status">{error}</p>}
     {values.placeId && <p className="guide-note">City selected · {values.placeLabel}</p>}
-    <small className="guide-credit">{attribution}</small>
   </div>
 }

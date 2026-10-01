@@ -75,7 +75,7 @@
 - **Phase 36 (VedAstro & OpenCage API Integration Complete & Verified)**:
   1. *VedAstro Integration (`vedastro.ts`)*: Integrated VedAstro Open API (`https://api.vedastro.org/api`) for Vimshottari Mahadasha/Bhukti (`DasaForNow`) and Moon Sign (`MoonSignName`) using Lahiri ayanamsa. Implemented strict mode without synthetic local fallback, in-memory sliding-window rate limiter (strictly max 5 calls/min), FIFO async queue, and 24-hour calculation cache.
   2. *OpenCage Geocoding (`geocoding.ts`)*: Built unified geocoder using OpenCage (2,500 req/day free). Enforced query suppression for queries < 4 characters (1–3 letters suppressed), 500ms keystroke debounce, 24-hour query cache, and deterministic 31-bit positive integer place IDs.
-  3. *Gift Guide Pipeline Sync*: Updated `gift-guide.ts` to consume authentic VedAstro calculations and `places/route.ts` to return dynamic OpenCage attribution. Updated `BirthDetails.jsx` with 500ms debounce, min 4 characters, and attribution credit.
+  3. *Gift Guide Pipeline Sync*: Updated `gift-guide.ts` to consume authentic VedAstro calculations and `places/route.ts` to return dynamic OpenCage attribution. Updated `BirthDetails.jsx` with 500ms debounce, min 4 characters, and removed third-party attribution text from the frontend UI.
   4. *Verification*: 12/12 unit tests passed (`gift-guide.unit.spec.ts`), `npx medusa build` compiled successfully (exit code 0), and root `npm run build` generated 16 crawlable route shells + 11 admin shells and synced `dist/` (exit code 0).
 
 ## 3. ⚠️ Inviolable System Rules
