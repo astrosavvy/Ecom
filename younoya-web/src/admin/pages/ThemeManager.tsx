@@ -169,47 +169,29 @@ export default function ThemeManager() {
         ))}
       </div>
 
-      {/* Luxury Modal */}
+      {/* Spacious Studio Modal */}
       {showModal && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(31, 25, 22, 0.45)",
-            backdropFilter: "blur(6px)",
-            display: "grid",
-            placeItems: "center",
-            zIndex: 100,
-            padding: "20px",
-          }}
-          onClick={closeModal}
-        >
-          <div
-            style={{
-              background: "#FFFFFF",
-              padding: "28px 32px",
-              borderRadius: "20px",
-              border: "1px solid var(--ad-border-gold)",
-              width: "100%",
-              maxWidth: "500px",
-              boxShadow: "0 20px 40px -15px rgba(31, 25, 22, 0.2)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-              <h2 style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: "24px", color: "var(--ad-ink)", fontWeight: 500 }}>
-                {editTheme ? "Edit Gift Category" : "New Gift Category"}
-              </h2>
+        <div className="ad-modal-backdrop" onClick={closeModal}>
+          <div className="ad-modal-card" style={{ maxWidth: "640px" }} onClick={(e) => e.stopPropagation()}>
+            <div className="ad-modal-header">
+              <div>
+                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--ad-gold-strong)", fontWeight: 700 }}>
+                  GIFT INTENTION CONFIGURATION
+                </span>
+                <h2 style={{ margin: "4px 0 0", fontFamily: "var(--font-display)", fontSize: "24px", color: "var(--ad-ink)", fontWeight: 500 }}>
+                  {editTheme ? "Edit Gift Category" : "New Gift Category"}
+                </h2>
+              </div>
               <button
                 type="button"
                 onClick={closeModal}
-                style={{ background: "none", border: "none", color: "var(--ad-ink-soft)", cursor: "pointer", padding: "4px" }}
+                style={{ background: "none", border: "none", color: "var(--ad-ink-soft)", cursor: "pointer", padding: "6px" }}
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            <form onSubmit={handleSave} className="ad-modal-body">
               <div className="ad-field">
                 <span>Category Name</span>
                 <input
@@ -221,9 +203,46 @@ export default function ThemeManager() {
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+              {/* Quick Symbol Picker */}
+              <div className="ad-field">
+                <span>Select Icon / Symbol</span>
+                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "8px" }}>
+                  {[
+                    { sym: "💕", label: "Love" },
+                    { sym: "📈", label: "Career" },
+                    { sym: "💰", label: "Wealth" },
+                    { sym: "🧘", label: "Calm" },
+                    { sym: "🌱", label: "Growth" },
+                    { sym: "🛡️", label: "Protection" },
+                    { sym: "✨", label: "Sacred" },
+                    { sym: "🏠", label: "Home" },
+                  ].map((item) => (
+                    <button
+                      key={item.sym}
+                      type="button"
+                      onClick={() => setForm({ ...form, icon: item.sym })}
+                      style={{
+                        background: form.icon === item.sym ? "var(--ad-gold-light)" : "var(--ad-bg)",
+                        border: form.icon === item.sym ? "1.5px solid var(--ad-gold)" : "1px solid var(--ad-border)",
+                        borderRadius: "8px",
+                        padding: "6px 10px",
+                        cursor: "pointer",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        fontSize: "13px",
+                      }}
+                    >
+                      <span>{item.sym}</span>
+                      <small style={{ fontSize: "11px", color: "var(--ad-ink)" }}>{item.label}</small>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "16px" }}>
                 <div className="ad-field">
-                  <span>Slug (URL identifier)</span>
+                  <span>URL Slug</span>
                   <input
                     type="text"
                     value={form.slug}
@@ -233,53 +252,32 @@ export default function ThemeManager() {
                 </div>
 
                 <div className="ad-field">
-                  <span>Icon / Symbol</span>
-                  <input
-                    type="text"
-                    value={form.icon}
-                    onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                    placeholder="e.g. 💕 or ✨"
-                  />
+                  <span>Group Classification</span>
+                  <select
+                    value={form.category}
+                    onChange={(e) => setForm({ ...form, category: e.target.value })}
+                  >
+                    <option value="Relationship">Relationship</option>
+                    <option value="Career">Career & Success</option>
+                    <option value="Finance">Finance & Wealth</option>
+                    <option value="Wellbeing">Wellbeing & Peace</option>
+                    <option value="Vastu & Living">Home & Vastu</option>
+                    <option value="Growth">Growth & Transformation</option>
+                    <option value="Self">Self & Confidence</option>
+                  </select>
                 </div>
               </div>
 
               <div className="ad-field">
-                <span>Group Classification</span>
-                <select
-                  value={form.category}
-                  onChange={(e) => setForm({ ...form, category: e.target.value })}
-                >
-                  <option value="Relationship">Relationship</option>
-                  <option value="Career">Career & Success</option>
-                  <option value="Finance">Finance & Wealth</option>
-                  <option value="Wellbeing">Wellbeing & Peace</option>
-                  <option value="Vastu & Living">Home & Vastu</option>
-                  <option value="Growth">Growth & Transformation</option>
-                  <option value="Self">Self & Confidence</option>
-                </select>
-              </div>
-
-              <div className="ad-field">
-                <span>Description</span>
+                <span>Description & Gifting Significance</span>
                 <textarea
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1px solid var(--ad-border)",
-                    borderRadius: "12px",
-                    padding: "12px",
-                    color: "var(--ad-ink)",
-                    fontFamily: "var(--font-body)",
-                    fontSize: "14px",
-                    minHeight: "80px",
-                    outline: "none",
-                  }}
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                   placeholder="Describe the intention and symbolism of this gift category…"
                 />
               </div>
 
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "12px" }}>
+              <div className="ad-modal-footer" style={{ margin: "10px -28px -28px", borderRadius: "0 0 20px 20px" }}>
                 <button type="button" onClick={closeModal} className="ad-btn-plain">
                   Cancel
                 </button>

@@ -12,6 +12,7 @@ import {
   ExternalLink,
   Edit3,
   Package,
+  Plus,
 } from "lucide-react"
 import { api, formatINR } from "../api"
 import ProductEditModal, { type Product } from "../components/ProductEditModal"
@@ -50,6 +51,7 @@ export default function Products() {
 
   // Interactive Product Editor Drawer / Modal
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [creatingProduct, setCreatingProduct] = useState(false)
 
   const loadProducts = () => {
     setBusy(true)
@@ -110,6 +112,19 @@ export default function Products() {
         </div>
 
         <div className="ad-head-actions">
+          <button
+            type="button"
+            className="ad-btn-luxury"
+            onClick={() => {
+              setCreatingProduct(true)
+              setEditingProduct(null)
+            }}
+            title="Create a new brand product or keepsake"
+          >
+            <Plus size={15} />
+            <span>Add Product</span>
+          </button>
+
           <button
             type="button"
             className={`ad-btn-luxury ${syncing ? "ad-btn--loading" : ""}`}
@@ -442,14 +457,19 @@ export default function Products() {
         </div>
       )}
 
-      {/* Interactive Product Editor Modal */}
+      {/* Interactive Product Editor Modal (Create or Edit) */}
       <ProductEditModal
         product={editingProduct}
-        isOpen={!!editingProduct}
-        onClose={() => setEditingProduct(null)}
-        onSaved={() => {
+        isNew={creatingProduct}
+        isOpen={!!editingProduct || creatingProduct}
+        onClose={() => {
           setEditingProduct(null)
-          setNotice("Product updated and synced with store successfully!")
+          setCreatingProduct(false)
+        }}
+        onSaved={() => {
+          setNotice(creatingProduct ? "New product created and synced successfully!" : "Product updated and synced with store successfully!")
+          setEditingProduct(null)
+          setCreatingProduct(false)
           loadProducts()
         }}
       />

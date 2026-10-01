@@ -51,7 +51,12 @@
      - **Price & Stock Adjustment**: Direct INR (₹) price editing (automatically synced in paise to Medusa variants) and live stock quantity adjustments (automatically fetched from and saved to Medusa inventory location-levels).
      - **Vedic Gifting Tags**: Intention/Category selection (`Confidence & Power`, `Vitality & Balance`, `Love & Connection`, `Wealth & Prosperity`, `Protection`) and Elemental alignment.
   4. *Product Details & Metadata (`ProductMetadata.tsx`)*: Rebuilt with live Medusa product selector (purging legacy mock products), 4 luxury tabs (Story & Significance, Gift Categories, Materials & Care, Search & SEO), and live metadata saving.
-  5. *Verification*: Root `npm run build` exited 0 (16 crawlable shells, 11 admin shells, synced `dist/`). Verified preview at `http://127.0.0.1:5175/admin/products`.
+- **Phase 33 (Admin Studio Modal Polish, Product Creation & Gift Hamper Recommendation Studio)**:
+  1. *Universal Form Layout Fix (`Admin.css`)*: Resolved squished 150px textareas and misaligned labels by converting `.ad-field` to an explicit flex-column with `width: 100%`, and setting all inputs, selects, and textareas to `box-sizing: border-box; width: 100% !important; min-height: 110px`. Introduced `.ad-modal-backdrop` and `.ad-modal-card` (`max-width: 880px`).
+  2. *Add Product Creation Flow (`Products.tsx` & `ProductEditModal.tsx`)*: Added prominent `+ Add Product` button. Enabled creating new brand products with auto-slugified handle, imagery (upload/URL), price, initial warehouse stock, and Vedic tags directly synced to Medusa (`POST /admin/products` + inventory items).
+  3. *Gift Hamper Recommendation Studio (`RecommendationRules.tsx`)*: Transformed `/admin/rules` into a recommendation studio allowing the store owner to choose **1 Primary Lead Hamper** + **2 Secondary Recommendations** (from top 3 categories), each with its own customized **Reason / Story**.
+  4. *Category & Metadata Polish (`ThemeManager.tsx` & `ProductMetadata.tsx`)*: Upgraded Edit Category modal with clickable quick symbol presets (`💕 Love`, `📈 Career`, `💰 Wealth`, etc.) and full-width description. Fixed Product Details tabs so "Care Instructions", "Editorial Story", and "Materials" expand to the full container width with zero cramped horizontal collisions.
+  5. *Verification*: Root `npm run build` exited 0 (16 crawlable route shells, 11 admin shells, synced `dist/`). Verified in preview.
 
 ## 3. ⚠️ Inviolable System Rules
 1. **Explicit Git Push Permission**: NEVER run `git push` without explicit user approval. Always ask first.
