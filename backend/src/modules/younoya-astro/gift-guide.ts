@@ -130,9 +130,31 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
   })
   const inStock = await availableOffers(scope, products, salesChannelId)
 
-  let offers: any[] = []
-  if (method !== "astrology" || isSupportedDasha) {
-    offers = inStock.map((product: any) => {
+  const INTENTION_META: Record<Intention, { label: string; subtitle: string; description: string }> = {
+    "love-connection": {
+      label: "Love & Passion",
+      subtitle: "Devotion, Empathy & Emotional Depth",
+      description: "Sacred talismans to soften emotional hesitation and deepen intimate resonance.",
+    },
+    "confidence-power": {
+      label: "Career & Confidence",
+      subtitle: "Conviction, Clarity & Executive Poise",
+      description: "Physical anchors designed to bolster discernment and professional conviction.",
+    },
+    "vitality-balance": {
+      label: "Peace & Inner Vitality",
+      subtitle: "Grounding, Harmony & Restful Alignment",
+      description: "Restorative keepsakes to calm sensory overload and restore inner quiet.",
+    },
+    "wealth-prosperity": {
+      label: "Abundance & Good Fortune",
+      subtitle: "Enduring Prosperity & Auspicious Growth",
+      description: "Timeless heirlooms honoring patient accumulation and deliberate enterprise.",
+    },
+  }
+
+  function getOffersForIntention(targetIntention: Intention) {
+    return inStock.map((product: any) => {
       const md = product.metadata ?? {}
       if (md.gift_guide_approved === false) return null
       const privateOffer = md.recommendation_only === true
@@ -141,7 +163,7 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
       const intentions = Array.isArray(md.gift_guide_intentions) ? md.gift_guide_intentions : [BROOCHES[product.handle]?.intention]
       const keys = Array.isArray(md.gift_guide_matrix_keys) ? md.gift_guide_matrix_keys : []
       const exact = matrixKey && keys.includes(matrixKey)
-      const match = intentions.includes(answers.intention)
+      const match = intentions.includes(targetIntention)
       if (!exact && !match) return null
       const element = BROOCHES[product.handle]?.element
       const score = (exact ? 200 : 0) + (match ? 100 : 0) + (privateOffer ? 20 : 0) + (astrologyData && element === astrologyData.element ? 10 : 0)
@@ -149,13 +171,12 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
     }).filter(Boolean).sort((a: any, b: any) => b.score - a.score)
   }
 
-  const secondaryOffers = offers.slice(0, 3)
-  const hasProducts = method === "astrology" ? isSupportedDasha && secondaryOffers.length > 0 : secondaryOffers.length > 0
+  // 1. Primary Category (Selected by User)
+  const primaryOffers = getOffersForIntention(answers.intention)
+  const primaryLead = primaryOffers[0] || (inStock[0] ? presentOffer(inStock[0]) : null)
 
-  // Build Primary Curated Hamper Offer if combination exists
   let primaryOffer: any = null
-  if (hasProducts && combination) {
-    const leadProduct = secondaryOffers[0]
+  if (combination) {
     primaryOffer = {
       id: combination.combinationId,
       isHamper: true,
@@ -173,60 +194,75 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
       challenge: combination.challenge,
       desiredShift: combination.desiredShift,
       components: [combination.keepsake?.name || "Sacred Keepsake", combination.ritual?.name || "Sensory Ritual"],
-      variantId: leadProduct?.variantId || "variant_curated_hamper",
-      image: leadProduct?.image || "/media/shop-wild-poise-card.webp",
+      variantId: primaryLead?.variantId || "variant_curated_hamper",
+      image: primaryLead?.image || "/media/shop-wild-poise-card.webp",
+      categoryName: INTENTION_META[answers.intention]?.label,
+    }
+  } else if (primaryLead) {
+    primaryOffer = {
+      ...primaryLead,
+      isHamper: false,
+      tagline: INTENTION_META[answers.intention]?.subtitle,
+      story: INTENTION_META[answers.intention]?.description,
+      categoryName: INTENTION_META[answers.intention]?.label,
     }
   }
 
-  const fallback = !hasProducts
-    ? method === "astrology" && !isSupportedDasha
-      ? `For your active ${astrologyData!.antardasha} period, no dedicated products are currently available in our portfolio / store.`
-      : "No approved piece is currently in stock for this intention. Please check back with the atelier soon."
-    : method === "astrology"
-    ? setTitle
-      ? `For your ${astrologyData!.moonSign} Moon and ${astrologyData!.antardasha} period, ${setTitle} gives shape to your ${answers.intention.replace("-", " and ")} intention.`
-      : `Your ${astrologyData!.moonSign} Moon informs this selection for ${answers.intention.replace("-", " and ")}.`
-    : method === "numerology"
-      ? `Your ${numbers!.kind} is ${numbers!.number} and your personal year is ${numbers!.personalYear}. With birth time or place unavailable, your chosen intention leads the selection.`
-      : `Your intention of ${answers.intention.replace("-", " and ")} leads this selection.`
+  // 2. Secondary & Tertiary Categories (The remaining 3 intentions)
+  const otherIntentions = INTENTIONS.filter(i => i !== answers.intention)
+  const secondaryCategories = otherIntentions.map(int => {
+    const meta = INTENTION_META[int]
+    const items = getOffersForIntention(int)
+    const featured = items[0] || null
+    return {
+      intention: int,
+      categoryName: meta.label,
+      subtitle: meta.subtitle,
+      description: meta.description,
+      leadProduct: featured,
+      products: items.slice(0, 2),
+    }
+  })
+
+  const returnedPrimaryOffers = [primaryOffer, ...primaryOffers.filter((o: any) => o.id !== primaryOffer?.id)].filter(Boolean)
 
   const narrative = await narrate({
     name: answers.name,
     relation: answers.forWhom === "self" ? "self" : answers.relation,
     intention: answers.intention,
+    intentionLabel: INTENTION_META[answers.intention]?.label || answers.intention,
     moonSign: astrologyData?.moonSign,
     dasha: astrologyData?.antardasha,
-    setTitle,
+    setTitle: primaryOffer?.title,
     combination,
-    hasProducts,
-    fallback,
-    titles: hasProducts ? [primaryOffer?.title, ...secondaryOffers.map((o: any) => o.title)].filter(Boolean) : [],
+    hasProducts: true,
+    fallback: `To support you through this chapter, these pieces have been curated to anchor your intention for ${INTENTION_META[answers.intention]?.label}.`,
+    titles: [primaryOffer?.title, ...primaryOffers.map((o: any) => o.title)].filter(Boolean),
   })
-
-  const returnedOffers = hasProducts
-    ? [primaryOffer, ...secondaryOffers.filter((o: any) => o.id !== primaryOffer?.id)].filter(Boolean)
-    : []
 
   return {
     method,
-    hasProducts,
+    hasProducts: true,
     whatYouMightBeGoingThrough: narrative.whatYouMightBeGoingThrough,
     whyChosen: narrative.whyChosen,
     explanation: narrative.explanation,
-    setTitle: isSupportedDasha ? setTitle : null,
-    combination: isSupportedDasha ? combination : null,
+    setTitle: primaryOffer?.title || null,
+    combination: combination || null,
+    primaryCategory: {
+      intention: answers.intention,
+      categoryName: INTENTION_META[answers.intention]?.label,
+      subtitle: INTENTION_META[answers.intention]?.subtitle,
+      description: INTENTION_META[answers.intention]?.description,
+    },
     guide: astrologyData ? {
       moonSign: astrologyData.moonSign,
       antardasha: astrologyData.antardasha,
       mahadasha: astrologyData.mahadasha,
-      coverage: isSupportedDasha ? (combination ? "matrix" : "matrix-fallback") : "unsupported-dasha",
-    } : numbers ? {
-      kind: numbers.kind,
-      number: numbers.number,
-      personalYear: numbers.personalYear,
+      coverage: "personalized-alignment",
     } : null,
     primaryOffer,
-    offers: returnedOffers.map(({ score, exact, ...offer }: any) => offer),
+    offers: returnedPrimaryOffers.map(({ score, exact, ...offer }: any) => offer),
+    secondaryCategories,
   }
 }
 
@@ -234,6 +270,7 @@ async function narrate(input: {
   name: string
   relation?: string
   intention: string
+  intentionLabel?: string
   moonSign?: string
   dasha?: string
   setTitle?: string | null
@@ -248,11 +285,11 @@ async function narrate(input: {
   let whatYouMightBeGoingThrough = input.combination?.whatYouMightBeGoingThrough || input.combination?.story || ""
   let whyChosen = input.combination?.whyChosen || ""
 
-  if (!whatYouMightBeGoingThrough && !input.hasProducts) {
-    whatYouMightBeGoingThrough = `Under your ${input.moonSign || "natal"} Moon, you may feel an inner transition between established paths and emerging priorities. This creates quiet hesitation precisely when your choices call for steady conviction.`
+  if (!whatYouMightBeGoingThrough) {
+    whatYouMightBeGoingThrough = `You may feel an inner transition where established routines no longer inspire, yet your next chapter calls for steady conviction. This is a moment of quiet recalibration, honoring your pace as true clarity emerges.`
   }
-  if (!whyChosen && !input.hasProducts) {
-    whyChosen = `This reading honors your intention for ${input.intention.replace("-", " and ")}. For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store.`
+  if (!whyChosen) {
+    whyChosen = `To support you through this experience, these pieces have been curated to anchor your intention for ${input.intentionLabel || input.intention}. Together with companion heirlooms across your other chapters, they provide tangible grounding for your journey.`
   }
 
   const defaultResult = {
@@ -264,21 +301,21 @@ async function narrate(input: {
   if (!key || !model) return defaultResult
 
   const systemPrompt = `You are Aster, the luxury Vedic astrology gifting oracle for YOUNOYA ("For every chapter").
-You combine Cartier-grade poise, quiet warmth, poetic clarity, and authentic Vedic insight.
+You combine Cartier-grade poise, quiet warmth, poetic clarity, and experiential human insight.
 
-CRITICAL LENGTH RULE: Each section must be concise and distilled — strictly 2 short sentences (maximum 35 to 45 words total per section). Do not write rambling or overly long paragraphs.
+CRITICAL INSTRUCTION:
+Do NOT say "we calculated your dasha is X and your zodiac sign is Y". Never use clinical calculation jargon.
+Instead, speak directly to what ${input.name || "the recipient"} is EXPERIENCING right now in their life chapter based on the subtle emotional landscape of their ${input.moonSign || "natal"} Moon and active ${input.dasha || "planetary"} chapter.
 
-Always structure your response into exactly TWO distinct labeled sections:
+CRITICAL LENGTH RULE: Each section must be concise and distilled — strictly 2 short sentences (maximum 35 to 45 words total per section).
+
+Structure your response into exactly TWO distinct labeled sections:
 
 WHAT YOU MIGHT BE GOING THROUGH:
-<Strictly 2 short sentences (max 40 words) speaking directly to ${input.name || "the recipient"}. Capture their emotional crossroad, internal hesitation, or life transition based on their ${input.moonSign || ""} Moon and active ${input.dasha || ""} period for their intention (${input.intention.replace("-", " and ")}). Never make fatalistic predictions.>
+<Strictly 2 short sentences (max 40 words). Speak directly and empathetically to ${input.name || "the recipient"}. Capture their psychological crossroad, emotional hesitation, or chapter transition. Never make fatalistic predictions.>
 
 WHY THIS WAS CHOSEN FOR YOU:
-<Strictly 2 short sentences (max 40 words). ${
-    input.hasProducts
-      ? `Explain how the Keepsake anchor (${input.combination?.keepsake?.name || "sacred keepsake"}) and Sensory Ritual (${input.combination?.ritual?.name || "daily ritual"}) ground their desired shift (${input.combination?.desiredShift || input.intention}) during their active ${input.dasha || ""} chapter.`
-      : `Explain how approaching this period with mindful intention brings clarity to their ${input.intention.replace("-", " and ")} chapter. You MUST conclude this section with this exact sentence: "For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store."`
-  }>`
+<Strictly 2 short sentences (max 40 words). Explain how these curated pieces are best suited to ground and support them through this experience, anchoring their chosen focus for ${input.intentionLabel || input.intention} alongside their surrounding life chapters.>`
 
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -300,6 +337,7 @@ WHY THIS WAS CHOSEN FOR YOU:
             moonSign: input.moonSign,
             dasha: input.dasha,
             intention: input.intention,
+            intentionLabel: input.intentionLabel,
             setTitle: input.setTitle,
             hasProducts: input.hasProducts,
             challenge: input.combination?.challenge,
@@ -319,18 +357,11 @@ WHY THIS WAS CHOSEN FOR YOU:
     const splitMatch = content.split(/WHY THIS WAS CHOSEN FOR YOU:?/i)
     if (splitMatch.length >= 2) {
       const p1 = splitMatch[0].replace(/WHAT YOU MIGHT BE GOING THROUGH:?/i, '').trim()
-      let p2 = splitMatch[1].trim()
-      if (!input.hasProducts && !p2.includes("portfolio / store")) {
-        p2 += ` For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store.`
-      }
+      const p2 = splitMatch[1].trim()
       if (p1) whatYouMightBeGoingThrough = p1
       if (p2) whyChosen = p2
     } else {
-      if (!input.hasProducts && !content.includes("portfolio / store")) {
-        whyChosen = `${content} For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store.`
-      } else {
-        whyChosen = content
-      }
+      whyChosen = content
     }
 
     return {

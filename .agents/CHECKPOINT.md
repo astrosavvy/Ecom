@@ -3,8 +3,8 @@
 > **SSOT**: Mandatory turn start (Step 1) & turn finish (Step 4) reference for all agents (Codex, Antigravity, Claude Code).
 
 ## 1. 📍 Status & Topology
-- **Phase**: Phase 31 — Admin Console Luxury Redesign & Authentic Medusa Catalog Sync. Purged 4 Medusa starter demo garments from database; seeded 10 authentic Younoya brand heirlooms with accurate paise pricing into Medusa. Completely redesigned Admin Console shell, navigation with Lucide SVG icons, luxury typography (Cormorant Garamond + Plus Jakarta Sans), and Products view with dual Grid/Table modes and catalog synchronization.
-- **Last Update**: 2026-10-01 | **Agent**: Antigravity
+- **Phase**: Phase 41 — Dark Golden Theme, Experiential Phrasing, 4-Category Recommendation Engine & First-Time Ceremony Fix. Overhauled Gift Guide into a Dark Golden luxury aesthetic (#0E0C0A, radiant #D4AF37). Replaced technical calculation jargon with lived experience ("What You Are Experiencing"). Implemented 4-category product recommendations (selected intention as primary lead set, other 3 as secondary/tertiary curations). Upgraded ceremony narrative to luxury atelier phrasing. Cured first-time calculation hang race condition.
+- **Last Update**: 2026-10-02 | **Agent**: Antigravity
 - **URLs**: Dev `http://localhost:5173` | Preview `http://127.0.0.1:5175` | Prod `https://younoya.com` | API `https://api.younoya.com`
 - **Stack**: Frontend Vite 6 + React 19 + Framer Motion + Lenis (Cloudflare Worker `ecom` Static Assets). Backend Medusa 2.18 + PG 15 + Redis (VPS 140.245.7.165 headless REST API via CF Tunnel). Zero VPS admin builds (956MB RAM OOM ceiling).
 
@@ -86,6 +86,34 @@
   5. *Storefront Celestial Divination Ceremony & Luxury Recommendation*: Added 3-stage animated divination ceremony (3.3s) in `AsterDivinationCeremony.jsx`. Built character-by-character typewriter streaming in `TypewriterText.jsx` with blinking gold cursor. Built `WhatIsInside.jsx` luxury cards for Keepsake, Ritual, and Luxury Add-On. Upgraded `GuideResult.jsx` with Moon Sign + Antardasha pill ribbons, hamper hero card, and intentional shift comparison bar.
   6. *Admin Console Integration*: Added Vedic Hamper Combinations browser to `RecommendationRules.tsx` with search, category filtering, and Combination ID tags. Linked combination counts to categories in `ThemeManager.tsx`.
   7. *Production Deployment & Live Verification*: Deployed backend code directly to VPS via `scp` and restarted PM2 with `--update-env`. Verified live on `https://api.younoya.com/store/gift-guide/recommend` for both Ketu (returns full hamper set + pieces + AI reading) and Mars/Rahu (returns AI reading + closing sentence, 0 products). Root build exits 0.
+
+
+
+- **Phase 41 (Dark Golden Theme, Experiential Phrasing, 4-Category Curation & Race-Condition Resolution)**:
+  1. *Root Cause Diagnosed & Fixed for First-Time Hang*:
+     - In `GiftFinder.jsx`, `reveal()` previously wiped `dob`, `tob`, `placeId` in `finally`, and `handleCeremonyComplete()` unmounted the ceremony prematurely after a fixed 3.3s timer even if the backend API call was still in flight (3.5s–5.5s on cold start).
+     - Enhanced `AsterDivinationCeremony.jsx` to receive `isReady={Boolean(pendingResult)}`. The ceremony guarantees a minimum 3.3s presentation across all 3 stages, but smoothly holds Stage 3 with a pulsing golden orb if the network request is still pending, transitioning to results only when `isReady === true`.
+     - Preserved `dob`, `tob`, and `placeId` so visitors never lose entered details on network latency.
+  2. *Elevated Ceremony Atelier Narrative*:
+     - Replaced mechanical calculation phrasing in `AsterDivinationCeremony.jsx` with elevated atelier text:
+       - Stage 1: *"Reading Astrological Coordinates"*
+       - Stage 2: *"Curating Your Bespoke Gift Selection"*
+       - Stage 3: *"Harmonizing Keepsakes & Rituals"*
+  3. *Experiential Phrasing (Zero Clinical Jargon)*:
+     - Eliminated technical claims (*"we calculated your moon sign is X and active dasha is Y"*).
+     - Replaced card titles in `GuideResult.jsx` with lived experience: *"WHAT YOU ARE EXPERIENCING"* and *"WHY THESE ARE SUITED FOR YOU"*.
+     - Added an elegant `<Sparkles size={13} /> Personalized Chapter Alignment` badge.
+  4. *4-Category Recommendation Engine (Zero Dead-Ends)*:
+     - Updated `backend/src/modules/younoya-astro/gift-guide.ts` to curate across all 4 gifting intentions (`love-connection`, `confidence-power`, `vitality-balance`, `wealth-prosperity`).
+     - The user's selected category is designated as the **Primary Lead Set/Offer** (with full editorial narrative, keepsake anchor, and sensory ritual), while the remaining 3 categories are provided as **Secondary & Tertiary Curations** (`secondaryCategories`), each with category title, subtitle, curated lead product, and catalog products.
+     - Built a responsive 3-column bento grid (`.guide-secondary-chapters`) in `GuideResult.jsx` with direct links and instant order CTAs. `hasProducts` is now always true.
+  5. *Dark Golden Luxury Aesthetic*:
+     - Overhauled `GiftFinder.css` from cream/ivory to deep obsidian caviar (`#0E0C0A`, `#14100E`), warm champagne typography (`#D5C7B8`), radiant antique gold (`#D4AF37`, `#E5C38C`), velvet cards (`#181411`), and molten gold fluid reply bubbles.
+     - Upgraded the Divination ceremony with a celestial glowing golden orb and velvet backdrops.
+  6. *Deployment & Verification*:
+     - Backend built locally (`npm run build` in `backend/`), deployed via SCP to VPS (`ubuntu@140.245.7.165`) per Backend Deployment Law, and PM2 restarted.
+     - Live endpoint `https://api.younoya.com/store/gift-guide/recommend` verified returning primary lead set + 3 secondary categories + concise experiential narrative.
+     - Root monorepo build exited 0 (16 crawlable route shells, 11 admin shells, synced `dist/`).
 
 
 ## 3. ⚠️ Inviolable System Rules

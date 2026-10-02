@@ -57,31 +57,21 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
       <div className="guide-result__message">
         <div className="guide-badges-ribbon">
           <span className="guide-eyebrow">
-            <img src="/favicon.png" alt="" /> Aster · {result.previewOnly ? 'Collection preview' : result.method === 'astrology' ? 'Vedic Astrology Alignment' : 'Personal Edit'}
+            <img src="/favicon.png" alt="" /> Aster · {result.previewOnly ? 'Collection preview' : 'Personal Atelier Curation'}
           </span>
-          {result.guide?.moonSign && (
-            <div className="astro-pill-tags">
-              <span className="astro-pill">
-                {ZodiacIcon && <ZodiacIcon size={14} className="astro-pill-icon" />}
-                <span>{result.guide.moonSign} Moon</span>
-              </span>
-              {result.guide.antardasha && (
-                <span className="astro-pill">
-                  {DashaIcon && <DashaIcon size={14} className="astro-pill-icon" />}
-                  <span>{result.guide.antardasha} Dasha</span>
-                </span>
-              )}
-            </div>
-          )}
+          <div className="astro-pill-tags">
+            <span className="astro-pill">
+              <Sparkles size={13} className="astro-pill-icon" />
+              <span>Personalized Chapter Alignment</span>
+            </span>
+          </div>
         </div>
 
         <h1 id="guide-result-title">
-          {combination?.setTitle ? (
+          {lead?.isHamper && combination?.setTitle ? (
             <><em>{combination.setTitle}</em></>
-          ) : hasProducts ? (
-            <>A little meaning, <em>chosen for you.</em></>
           ) : (
-            <>Your Celestial <em>Reading.</em></>
+            <>Your Personal <em>Gifting Edit.</em></>
           )}
         </h1>
 
@@ -89,14 +79,14 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
           <p className="guide-result__tagline">{combination.tagline}</p>
         )}
 
-        {/* RECTANGULAR EDITORIAL BOX 1: WHAT YOU MIGHT BE GOING THROUGH */}
+        {/* RECTANGULAR EDITORIAL BOX 1: WHAT YOU ARE EXPERIENCING */}
         {whatYouMightBeGoingThrough && (
           <div className="guide-editorial-card guide-editorial-card--experience">
             <div className="guide-editorial-card__header">
               <span className="guide-editorial-card__badge">
-                <Sparkles size={13} /> WHAT YOU MIGHT BE GOING THROUGH
+                <Sparkles size={13} /> WHAT YOU ARE EXPERIENCING
               </span>
-              <span className="guide-editorial-card__sub">The Emotional Crossroad & Life Chapter</span>
+              <span className="guide-editorial-card__sub">The Emotional & Life Chapter</span>
             </div>
             <div className="guide-editorial-card__body">
               <TypewriterText text={whatYouMightBeGoingThrough} speed={28} />
@@ -104,14 +94,14 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
           </div>
         )}
 
-        {/* RECTANGULAR EDITORIAL BOX 2: WHY THIS WAS CHOSEN FOR YOU */}
+        {/* RECTANGULAR EDITORIAL BOX 2: WHY THESE ARE SUITED FOR YOU */}
         {whyChosen && (
           <div className="guide-editorial-card guide-editorial-card--rationale">
             <div className="guide-editorial-card__header">
               <span className="guide-editorial-card__badge">
-                <Compass size={13} /> WHY THIS WAS CHOSEN FOR YOU
+                <Compass size={13} /> WHY THESE ARE SUITED FOR YOU
               </span>
-              <span className="guide-editorial-card__sub">The Physical Anchor & Intentional Rationale</span>
+              <span className="guide-editorial-card__sub">Your Intentional Keepsakes & Rituals</span>
             </div>
             <div className="guide-editorial-card__body">
               <TypewriterText text={whyChosen} speed={28} />
@@ -135,87 +125,77 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
         )}
       </div>
 
-      {/* Case A: Products are available (Mercury/Ketu Hamper) */}
-      {hasProducts && lead && (
-        <>
-          <article className="guide-result__lead guide-result__lead--hamper">
-            {image(lead) && (
-              <Link className="guide-result__image" to={destination(lead)}>
-                <img src={image(lead)} alt={lead.title} />
-              </Link>
-            )}
-            <div className="guide-result__copy">
-              <span className="guide-eyebrow">
-                <Compass size={13} /> {lead.isHamper ? 'Your Curated Set' : 'Your Chosen Piece'}
-              </span>
-              <h2><Link to={destination(lead)}>{title(lead.title)}</Link></h2>
-              {lead.story && <p className="guide-hamper-story">{lead.story}</p>}
-
-              {/* What's Inside (Keepsake + Ritual Breakdown) */}
-              <WhatIsInside combination={combination} offer={lead} />
-
-              <div className="guide-lead-footer">
-                <strong className="guide-result__price">{money(lead.price)}</strong>
-                <button
-                  className="guide-primary guide-lead-cta"
-                  type="button"
-                  disabled={!lead.variantId}
-                  onClick={() => onOrder(lead)}
-                >
-                  <ShoppingBag size={16} /> Order this Curated Set
-                </button>
-              </div>
-            </div>
-          </article>
-
-          {/* Secondary Companion Pieces */}
-          {secondaryOffers.length > 0 && (
-            <div className="guide-result__others">
-              <div className="guide-result__others-header">
-                <span className="guide-eyebrow">Companion Keepsakes</span>
-                <h3>Complementary Atelier Pieces</h3>
-              </div>
-              <div>
-                {secondaryOffers.map(offer => (
-                  <article key={offer.id}>
-                    <Link to={destination(offer)}>
-                      {image(offer) && <img src={image(offer)} alt="" />}
-                      <span>{title(offer.title)}<small>{money(offer.price)}</small></span>
-                      <ArrowUpRight size={16} />
-                    </Link>
-                    {offer.variantId && (
-                      <button type="button" aria-label={`Order ${offer.title}`} onClick={() => onOrder(offer)}>
-                        <ShoppingBag size={16} />
-                      </button>
-                    )}
-                  </article>
-                ))}
-              </div>
-            </div>
+      {/* Primary Category: The User's Selected Focus */}
+      {lead && (
+        <article className="guide-result__lead guide-result__lead--hamper">
+          {image(lead) && (
+            <Link className="guide-result__image" to={destination(lead)}>
+              <img src={image(lead)} alt={lead.title} />
+            </Link>
           )}
-        </>
-      )}
+          <div className="guide-result__copy">
+            <span className="guide-eyebrow">
+              <Compass size={13} /> Primary Chapter · {result.primaryCategory?.categoryName || 'Your Selected Intention'}
+            </span>
+            <h2><Link to={destination(lead)}>{title(lead.title)}</Link></h2>
+            {lead.story && <p className="guide-hamper-story">{lead.story}</p>}
 
-      {/* Case B: No products available for this Dasha period */}
-      {!hasProducts && (
-        <div className="guide-unsupported-dasha-container">
+            {/* What's Inside (Keepsake + Ritual Breakdown) */}
+            <WhatIsInside combination={combination} offer={lead} />
 
-          <div className="guide-unsupported-dasha-card">
-            <div className="guide-unsupported-dasha-card__icon">
-              <Compass size={24} />
-            </div>
-            <h3>A Note from the Atelier</h3>
-            <p className="guide-unsupported-dasha-card__desc">
-              Your personalized reading is complete above. For your active <strong>{result.guide?.antardasha || 'planetary'}</strong> period, dedicated curation sets are currently being prepared by our artisans for future releases. In the meantime, you are welcome to explore our foundational heirloom collection.
-            </p>
-            <div className="guide-unsupported-dasha-card__actions">
-              <Link to="/shop" className="guide-primary">
-                Explore All Products <ArrowUpRight size={15} />
-              </Link>
-              <button type="button" className="guide-btn-luxury-secondary" onClick={onRestart}>
-                <RotateCcw size={14} /> <span>Begin Again</span>
+            <div className="guide-lead-footer">
+              <strong className="guide-result__price">{money(lead.price)}</strong>
+              <button
+                className="guide-primary guide-lead-cta"
+                type="button"
+                disabled={!lead.variantId}
+                onClick={() => onOrder(lead)}
+              >
+                <ShoppingBag size={16} /> Order this Selection
               </button>
             </div>
+          </div>
+        </article>
+      )}
+
+      {/* Secondary & Tertiary Categories: Curations for the Other 3 Chapters */}
+      {result.secondaryCategories && result.secondaryCategories.length > 0 && (
+        <div className="guide-secondary-chapters">
+          <div className="guide-secondary-chapters__header">
+            <span className="guide-eyebrow">Complementary Curations</span>
+            <h3>Across Your Other Life Chapters</h3>
+            <p>Curated keepsakes tailored to accompany and ground your surrounding priorities.</p>
+          </div>
+          <div className="guide-secondary-chapters__grid">
+            {result.secondaryCategories.map(cat => (
+              <article key={cat.intention} className="guide-secondary-chapter-card">
+                <div className="guide-secondary-chapter-card__top">
+                  <span className="guide-secondary-chapter-card__badge">{cat.categoryName}</span>
+                  <span className="guide-secondary-chapter-card__sub">{cat.subtitle}</span>
+                </div>
+                {cat.leadProduct && (
+                  <div className="guide-secondary-chapter-card__body">
+                    <Link to={destination(cat.leadProduct)} className="guide-secondary-chapter-card__image-link">
+                      <img src={image(cat.leadProduct)} alt={cat.leadProduct.title} />
+                    </Link>
+                    <div className="guide-secondary-chapter-card__details">
+                      <h4><Link to={destination(cat.leadProduct)}>{title(cat.leadProduct.title)}</Link></h4>
+                      <strong className="guide-secondary-chapter-card__price">{money(cat.leadProduct.price)}</strong>
+                    </div>
+                    {cat.leadProduct.variantId && (
+                      <button
+                        type="button"
+                        className="guide-secondary-chapter-card__btn"
+                        onClick={() => onOrder(cat.leadProduct)}
+                        aria-label={`Order ${cat.leadProduct.title}`}
+                      >
+                        <ShoppingBag size={14} /> Order
+                      </button>
+                    )}
+                  </div>
+                )}
+              </article>
+            ))}
           </div>
         </div>
       )}

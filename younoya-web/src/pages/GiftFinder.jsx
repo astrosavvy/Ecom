@@ -45,7 +45,7 @@ export default function GiftFinder() {
   useEffect(() => { setMood('asking'); const timer = setTimeout(() => setMood('listening'), 1500); return () => clearTimeout(timer) }, [step, result])
 
   async function reveal() {
-    setBusy(true); setError(''); setIsDivining(true)
+    setBusy(true); setError(''); setPendingResult(null); setIsDivining(true)
     try {
       const res = await storeRequest('/store/gift-guide/recommend', { body: values })
       setPendingResult(res)
@@ -53,7 +53,6 @@ export default function GiftFinder() {
       setPendingResult(preview(values))
       setNotice(issue.message)
     } finally {
-      setValues(current => ({ ...current, dob: '', tob: '', placeId: null, placeLabel: '' }))
       setBusy(false)
     }
   }
@@ -115,7 +114,7 @@ export default function GiftFinder() {
       {savedList ? <div className="guide-saved"><span className="guide-eyebrow">YOUR PRIVATE EDIT</span><h1>Pieces worth <em>revisiting.</em></h1>
         {savedList.length ? savedList.map(item => <button key={item.id} type="button" onClick={() => openSaved(item.id)}><strong>{item.recipient_name}</strong><span>{item.occasion}</span><span>Open ↗</span></button>) : <p>Nothing saved yet. Let us begin with a new gift conversation.</p>}
         <button className="guide-primary" type="button" onClick={restart}>Begin a new conversation</button>
-      </div> : isDivining ? <AsterDivinationCeremony onComplete={handleCeremonyComplete} intention={values.intention} />
+      </div> : isDivining ? <AsterDivinationCeremony onComplete={handleCeremonyComplete} intention={values.intention} isReady={Boolean(pendingResult)} />
         : result ? <GuideResult values={values} result={result} onSave={save} onOrder={order} onRestart={restart} saved={saved} notice={notice} />
         : <GuideConversation step={step} setStep={setStep} values={values} setValues={setValues} onReveal={reveal} busy={busy} error={error} />}
       {error && savedList && <p className="guide-error" role="alert">{error}</p>}

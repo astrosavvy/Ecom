@@ -5,41 +5,51 @@ import { Sparkles } from 'lucide-react'
 const STAGES = [
   {
     step: 1,
-    title: 'Charting Celestial Coordinates',
-    caption: 'Aster is reading your natal planetary alignment…',
+    title: 'Reading Astrological Coordinates',
+    caption: 'Aligning the celestial landscape of your birth moment…',
   },
   {
     step: 2,
-    title: 'Calculating Moon Sign & Active Dasha',
-    caption: 'Mapping the subtle shifts of your present energetic climate…',
+    title: 'Curating Your Bespoke Gift Selection',
+    caption: 'Consulting the atelier archives based on your details and intentions…',
   },
   {
     step: 3,
-    title: 'Curating Sacred Keepsakes & Rituals',
-    caption: 'Consulting the atelier archives for your intention chapter…',
+    title: 'Harmonizing Keepsakes & Rituals',
+    caption: 'Aster is finalizing your signature pieces across all four chapters…',
   },
 ]
 
-export default function AsterDivinationCeremony({ onComplete, intention = '' }) {
+export default function AsterDivinationCeremony({ onComplete, intention = '', isReady = false }) {
   const reduced = useReducedMotion()
   const [currentStage, setCurrentStage] = useState(0)
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false)
 
   useEffect(() => {
     if (reduced) {
-      const quick = setTimeout(() => onComplete?.(), 800)
-      return () => clearTimeout(quick)
+      setMinTimeElapsed(true)
+      return
     }
 
     const t1 = setTimeout(() => setCurrentStage(1), 1100)
     const t2 = setTimeout(() => setCurrentStage(2), 2200)
-    const t3 = setTimeout(() => onComplete?.(), 3300)
+    const t3 = setTimeout(() => setMinTimeElapsed(true), 3300)
 
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
       clearTimeout(t3)
     }
-  }, [reduced, onComplete])
+  }, [reduced])
+
+  useEffect(() => {
+    if (minTimeElapsed && isReady) {
+      const exitTimer = setTimeout(() => {
+        onComplete?.()
+      }, 350)
+      return () => clearTimeout(exitTimer)
+    }
+  }, [minTimeElapsed, isReady, onComplete])
 
   const stage = STAGES[currentStage] || STAGES[0]
 
