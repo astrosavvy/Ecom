@@ -99,7 +99,7 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
               <span className="guide-editorial-card__sub">The Emotional Crossroad & Life Chapter</span>
             </div>
             <div className="guide-editorial-card__body">
-              <TypewriterText text={whatYouMightBeGoingThrough} speed={14} />
+              <TypewriterText text={whatYouMightBeGoingThrough} speed={28} />
             </div>
           </div>
         )}
@@ -114,7 +114,7 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
               <span className="guide-editorial-card__sub">The Physical Anchor & Intentional Rationale</span>
             </div>
             <div className="guide-editorial-card__body">
-              <TypewriterText text={whyChosen} speed={14} />
+              <TypewriterText text={whyChosen} speed={28} />
             </div>
           </div>
         )}
@@ -204,9 +204,9 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
             <div className="guide-unsupported-dasha-card__icon">
               <Compass size={24} />
             </div>
-            <h3>Atelier Crafting In Progress</h3>
+            <h3>A Note from the Atelier</h3>
             <p className="guide-unsupported-dasha-card__desc">
-              For your active <strong>{result.guide?.antardasha || 'planetary'}</strong> period, dedicated curation sets are not yet available in our portfolio / store. The atelier is currently handcrafting keepsakes and rituals for upcoming planetary chapters.
+              Your personalized reading is complete above. For your active <strong>{result.guide?.antardasha || 'planetary'}</strong> period, dedicated curation sets are currently being prepared by our artisans for future releases. In the meantime, you are welcome to explore our foundational heirloom collection.
             </p>
             <div className="guide-unsupported-dasha-card__actions">
               <Link to="/shop" className="guide-primary">

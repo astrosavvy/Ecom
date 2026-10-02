@@ -153,12 +153,12 @@
 @media(min-width:960px){
 .guide-page{padding:72px clamp(24px,4vw,64px) 28px}
 .guide-page__main{max-width:1240px;display:grid;grid-template-columns:minmax(310px,.95fr) minmax(430px,1.05fr);grid-template-rows:52px minmax(0,1fr);column-gap:clamp(24px,3vw,48px);transition:grid-template-columns 0.65s cubic-bezier(0.16,1,0.3,1),column-gap 0.65s cubic-bezier(0.16,1,0.3,1),max-width 0.65s cubic-bezier(0.16,1,0.3,1)}
-.guide-page__main--result{grid-template-columns:290px minmax(0,1fr);column-gap:36px;max-width:1380px}
+.guide-page__main--result{grid-template-columns:280px minmax(0,680px);column-gap:clamp(32px,3.5vw,52px);max-width:1060px;margin-left:auto;margin-right:auto;justify-content:center}
 .guide-page__top{grid-column:1/-1;min-height:0;padding:8px 0 17px;font-size:12px}
 .guide-stage{grid-column:1;grid-row:2;position:relative;height:100%;padding:22px 0 28px;gap:16px;border-radius:38px;background:radial-gradient(ellipse at 50% 57%,#ecdbbd94,transparent 67%);transition:padding 0.65s cubic-bezier(0.16,1,0.3,1),transform 0.65s cubic-bezier(0.16,1,0.3,1)}
 .guide-page__main--result .guide-stage{padding:10px 0 20px}
 .guide-page__main--result .guide-stage__desktop-copy{display:none}
-.guide-page__main--result .guide-result{padding:10px 0 20px;max-width:960px}
+.guide-page__main--result .guide-result{padding:10px 0 20px;max-width:680px;width:100%;margin:0 auto}
 .guide-stage__desktop-copy{display:block;width:100%;padding:0 22px;text-align:left;flex-shrink:0}
 .guide-stage__desktop-copy>span{font-size:10px;letter-spacing:.16em;color:#947046}
 .guide-stage__desktop-copy h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(35px,3.5vw,50px);letter-spacing:-.025em;line-height:1.08;margin:17px 0 12px}
@@ -508,7 +508,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20px 0 28px;
+  margin: 20px auto 28px;
+  max-width: 680px;
+  width: 100%;
   box-shadow: 0 6px 24px rgba(44, 34, 28, 0.03);
 }
 .guide-unsupported-dasha-card__icon {
@@ -532,7 +534,7 @@
   font-size: 13px;
   line-height: 1.7;
   color: #5C4A3C;
-  max-width: 480px;
+  max-width: 520px;
   margin: 0 0 24px;
 }
 .guide-unsupported-dasha-card__actions {
@@ -564,7 +566,9 @@
   border: 1px solid rgba(197, 168, 128, 0.32);
   border-radius: 20px;
   padding: 24px 26px;
-  margin: 18px 0 20px;
+  margin: 18px auto 20px;
+  max-width: 680px;
+  width: 100%;
   box-shadow: 0 4px 20px rgba(44, 34, 28, 0.035);
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }

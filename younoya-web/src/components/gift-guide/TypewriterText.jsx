@@ -3,7 +3,7 @@ import { useReducedMotion } from 'framer-motion'
 
 export default function TypewriterText({
   text = '',
-  speed = 18,
+  speed = 28,
   onComplete,
   className = '',
   cursorColor = '#C5A880',

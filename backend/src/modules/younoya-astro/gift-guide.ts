@@ -249,7 +249,7 @@ async function narrate(input: {
   let whyChosen = input.combination?.whyChosen || ""
 
   if (!whatYouMightBeGoingThrough && !input.hasProducts) {
-    whatYouMightBeGoingThrough = `As your ${input.moonSign || "natal"} Moon moves through this active ${input.dasha || "planetary"} chapter, you may feel an inner transition between past certainties and emerging priorities. This can create moments of quiet hesitation precisely when your decisions call for conviction.`
+    whatYouMightBeGoingThrough = `Under your ${input.moonSign || "natal"} Moon, you may feel an inner transition between established paths and emerging priorities. This creates quiet hesitation precisely when your choices call for steady conviction.`
   }
   if (!whyChosen && !input.hasProducts) {
     whyChosen = `This reading honors your intention for ${input.intention.replace("-", " and ")}. For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store.`
@@ -266,15 +266,17 @@ async function narrate(input: {
   const systemPrompt = `You are Aster, the luxury Vedic astrology gifting oracle for YOUNOYA ("For every chapter").
 You combine Cartier-grade poise, quiet warmth, poetic clarity, and authentic Vedic insight.
 
+CRITICAL LENGTH RULE: Each section must be concise and distilled — strictly 2 short sentences (maximum 35 to 45 words total per section). Do not write rambling or overly long paragraphs.
+
 Always structure your response into exactly TWO distinct labeled sections:
 
 WHAT YOU MIGHT BE GOING THROUGH:
-<One deep, empathetic paragraph (3-5 sentences) speaking directly and intimately to ${input.name || "the recipient"}. Explore their psychological crossroad, emotional hesitation, and life transition based on their ${input.moonSign || ""} Moon and active ${input.dasha || ""} period for their intention (${input.intention.replace("-", " and ")}). Never make fatalistic predictions.>
+<Strictly 2 short sentences (max 40 words) speaking directly to ${input.name || "the recipient"}. Capture their emotional crossroad, internal hesitation, or life transition based on their ${input.moonSign || ""} Moon and active ${input.dasha || ""} period for their intention (${input.intention.replace("-", " and ")}). Never make fatalistic predictions.>
 
 WHY THIS WAS CHOSEN FOR YOU:
-<One warm, intentional paragraph (3-5 sentences). ${
+<Strictly 2 short sentences (max 40 words). ${
     input.hasProducts
-      ? `Explain how the Keepsake anchor (${input.combination?.keepsake?.name || "sacred keepsake"}) and Sensory Ritual (${input.combination?.ritual?.name || "daily ritual"}) give physical shape to their desired shift (${input.combination?.desiredShift || input.intention}) and ground their active ${input.dasha || ""} chapter.`
+      ? `Explain how the Keepsake anchor (${input.combination?.keepsake?.name || "sacred keepsake"}) and Sensory Ritual (${input.combination?.ritual?.name || "daily ritual"}) ground their desired shift (${input.combination?.desiredShift || input.intention}) during their active ${input.dasha || ""} chapter.`
       : `Explain how approaching this period with mindful intention brings clarity to their ${input.intention.replace("-", " and ")} chapter. You MUST conclude this section with this exact sentence: "For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store."`
   }>`
 
@@ -289,6 +291,7 @@ WHY THIS WAS CHOSEN FOR YOU:
       body: JSON.stringify({
         model,
         temperature: 0.4,
+        max_tokens: 220,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: JSON.stringify({
