@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import {
   Sparkles,
   Plus,
@@ -13,9 +13,13 @@ import {
   Tag,
   BookOpen,
   Layers,
+  Search,
+  Compass,
+  Feather,
 } from "lucide-react"
 import { api, formatINR } from "../api"
 import type { Product } from "../components/ProductEditModal"
+import combinationsData from "../../data/combinations.json"
 
 export type RecommendationItem = {
   productId: string
@@ -173,6 +177,29 @@ export default function RecommendationRules() {
   const [sec2Product, setSec2Product] = useState("")
   const [sec2Category, setSec2Category] = useState("Wealth & Prosperity")
   const [sec2Reason, setSec2Reason] = useState("")
+
+  // View Switcher (Combinations Matrix vs Custom Rules)
+  const [viewTab, setViewTab] = useState<"combinations" | "custom">("combinations")
+  const [combSearch, setCombSearch] = useState("")
+  const [combCat, setCombCat] = useState("all")
+
+  const filteredCombinations = useMemo(() => {
+    return Object.values(combinationsData as Record<string, any>).filter((item: any) => {
+      const matchCat = combCat === "all" || item.category === combCat
+      const q = combSearch.toLowerCase().trim()
+      const matchQ = !q || (
+        item.combinationId?.toLowerCase().includes(q) ||
+        item.sign?.toLowerCase().includes(q) ||
+        item.dasha?.toLowerCase().includes(q) ||
+        item.setTitle?.toLowerCase().includes(q) ||
+        item.keepsake?.name?.toLowerCase().includes(q) ||
+        item.ritual?.name?.toLowerCase().includes(q) ||
+        item.challenge?.toLowerCase().includes(q) ||
+        item.desiredShift?.toLowerCase().includes(q)
+      )
+      return matchCat && matchQ
+    })
+  }, [combSearch, combCat])
 
   // Load available catalog products
   useEffect(() => {
@@ -345,15 +372,65 @@ export default function RecommendationRules() {
           <div className="ad-eyebrow">CURATION & GIFT RECOMMENDATIONS</div>
           <h1 className="ad-page-title">Gift Hampers & Recommendations</h1>
           <p className="ad-page-subtitle">
-            Configure the exact trio of recommendations (1 Primary Lead Hamper + 2 Alternative Hampers with distinct reasons) for Aster’s Gift Finder.
+            Configure Vedic Antardasha gift combinations and custom recommendation sets for Aster’s Gift Finder.
           </p>
         </div>
 
-        <button type="button" className="ad-btn-luxury" onClick={() => openModal()}>
-          <Plus size={15} />
-          <span>New Recommendation Rule</span>
-        </button>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          {viewTab === "custom" && (
+            <button type="button" className="ad-btn-luxury" onClick={() => openModal()}>
+              <Plus size={15} />
+              <span>New Recommendation Rule</span>
+            </button>
+          )}
+        </div>
       </header>
+
+      {/* View Switcher Tabs */}
+      <div style={{ display: "flex", gap: "12px", borderBottom: "1px solid var(--ad-border-gold)", paddingBottom: "12px", marginBottom: "20px" }}>
+        <button
+          type="button"
+          onClick={() => setViewTab("combinations")}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 16px",
+            borderRadius: "8px",
+            border: "none",
+            background: viewTab === "combinations" ? "var(--ad-ink)" : "transparent",
+            color: viewTab === "combinations" ? "#FFFFFF" : "var(--ad-ink-soft)",
+            fontFamily: "var(--font-label)",
+            fontSize: "12px",
+            fontWeight: 600,
+            cursor: "pointer",
+          }}
+        >
+          <BookOpen size={14} />
+          <span>Vedic Hamper Combinations ({Object.keys(combinationsData).length} Sets)</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setViewTab("custom")}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 16px",
+            borderRadius: "8px",
+            border: "none",
+            background: viewTab === "custom" ? "var(--ad-ink)" : "transparent",
+            color: viewTab === "custom" ? "#FFFFFF" : "var(--ad-ink-soft)",
+            fontFamily: "var(--font-label)",
+            fontSize: "12px",
+            fontWeight: 600,
+            cursor: "pointer",
+          }}
+        >
+          <Layers size={14} />
+          <span>Custom Rules ({rules.length})</span>
+        </button>
+      </div>
 
       {/* Alerts */}
       {notice && (
@@ -366,9 +443,171 @@ export default function RecommendationRules() {
         </div>
       )}
 
-      {/* Rules List */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-        {rules.map((rule) => (
+      {/* VIEW A: VEDIC HAMPER COMBINATIONS */}
+      {viewTab === "combinations" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          {/* Controls Bar: Search & Category Filter */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ position: "relative", minWidth: "280px" }}>
+              <Search size={14} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--ad-ink-soft)" }} />
+              <input
+                type="text"
+                placeholder="Search Combination ID, Sign, Dasha, Set..."
+                value={combSearch}
+                onChange={(e) => setCombSearch(e.target.value)}
+                style={{
+                  padding: "9px 12px 9px 34px",
+                  borderRadius: "8px",
+                  border: "1px solid var(--ad-border-gold)",
+                  fontSize: "13px",
+                  width: "100%",
+                  boxSizing: "border-box",
+                }}
+              />
+            </div>
+
+            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+              <button
+                type="button"
+                onClick={() => setCombCat("all")}
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: "6px",
+                  border: "1px solid var(--ad-border-gold)",
+                  background: combCat === "all" ? "var(--ad-ink)" : "#FFFFFF",
+                  color: combCat === "all" ? "#FFFFFF" : "var(--ad-ink)",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                All Intentions
+              </button>
+              {CATEGORY_OPTIONS.map((cat) => (
+                <button
+                  key={cat.value}
+                  type="button"
+                  onClick={() => setCombCat(cat.value)}
+                  style={{
+                    padding: "6px 12px",
+                    borderRadius: "6px",
+                    border: "1px solid var(--ad-border-gold)",
+                    background: combCat === cat.value ? "var(--ad-ink)" : "#FFFFFF",
+                    color: combCat === cat.value ? "#FFFFFF" : "var(--ad-ink)",
+                    fontSize: "11px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Combinations Grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "18px" }}>
+            {filteredCombinations.map((item: any) => (
+              <div
+                key={item.combinationId || item.matrixKey}
+                className="ad-card"
+                style={{
+                  background: "#FFFFFF",
+                  border: "1px solid var(--ad-border-gold)",
+                  borderRadius: "14px",
+                  padding: "20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "14px",
+                  boxShadow: "0 2px 12px rgba(44, 34, 28, 0.03)",
+                }}
+              >
+                {/* Combination Header */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+                  <span
+                    style={{
+                      fontFamily: "monospace",
+                      fontWeight: 700,
+                      fontSize: "11px",
+                      letterSpacing: "0.06em",
+                      color: "var(--ad-gold)",
+                      background: "var(--ad-gold-light)",
+                      padding: "3px 8px",
+                      borderRadius: "4px",
+                      border: "1px solid var(--ad-border-gold)",
+                    }}
+                  >
+                    {item.combinationId}
+                  </span>
+                  <div style={{ display: "flex", gap: "6px" }}>
+                    <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--ad-ink-soft)", background: "#F5EFE6", padding: "2px 8px", borderRadius: "999px" }}>
+                      {item.signSymbol || "✦"} {item.sign}
+                    </span>
+                    <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--ad-ink-soft)", background: "#F5EFE6", padding: "2px 8px", borderRadius: "999px" }}>
+                      {item.dasha} Dasha
+                    </span>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 style={{ margin: "0 0 4px", fontFamily: "var(--font-display)", fontSize: "19px", color: "var(--ad-ink)" }}>
+                    {item.setTitle}
+                  </h3>
+                  {item.tagline && (
+                    <p style={{ margin: 0, fontSize: "11px", color: "var(--ad-gold)", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                      {item.tagline}
+                    </p>
+                  )}
+                </div>
+
+                {/* Keepsake + Ritual Breakdown */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", background: "var(--ad-canvas)", padding: "12px", borderRadius: "10px", border: "1px solid var(--ad-border)" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: "6px", fontSize: "12px", color: "var(--ad-ink)" }}>
+                    <Compass size={14} style={{ color: "var(--ad-gold)", flexShrink: 0, marginTop: "2px" }} />
+                    <div>
+                      <strong>Keepsake:</strong> {item.keepsake?.name || "Sacred Keepsake"}
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: "6px", fontSize: "12px", color: "var(--ad-ink)" }}>
+                    <Feather size={14} style={{ color: "var(--ad-gold)", flexShrink: 0, marginTop: "2px" }} />
+                    <div>
+                      <strong>Ritual:</strong> {item.ritual?.name || "Daily Ritual"}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Shift Tags */}
+                {(item.challenge || item.desiredShift) && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "4px", fontSize: "11px", color: "var(--ad-ink-soft)" }}>
+                    {item.challenge && (
+                      <div>
+                        <strong style={{ color: "#8C4A3C" }}>Challenge:</strong> {item.challenge.replace(/_/g, " ")}
+                      </div>
+                    )}
+                    {item.desiredShift && (
+                      <div>
+                        <strong style={{ color: "#4A6B56" }}>Desired Shift:</strong> {item.desiredShift.replace(/_/g, " ")}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Architecture SKU */}
+                {item.architecture && (
+                  <div style={{ fontSize: "10px", color: "var(--ad-ink-soft)", fontFamily: "monospace", borderTop: "1px solid var(--ad-border)", paddingTop: "8px" }}>
+                    {item.architecture}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* VIEW B: CUSTOM CURATION RULES */}
+      {viewTab === "custom" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+          {rules.map((rule) => (
           <div
             key={rule.id}
             className="ad-card"
@@ -598,7 +837,8 @@ export default function RecommendationRules() {
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      )}
 
       {/* Spacious Studio Modal */}
       {showModal && (

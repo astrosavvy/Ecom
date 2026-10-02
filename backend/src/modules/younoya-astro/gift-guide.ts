@@ -69,11 +69,14 @@ export function numerology(dob: string, now = new Date()) {
   return { age, kind, number, personalYear }
 }
 
+import combinations from "./data/combinations.json"
+
 export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?: string) {
   const answers = validateAnswers(raw)
   let method: "astrology" | "numerology" | "intention" = "intention"
   let astrologyData: { moonSign: string; antardasha: string; mahadasha?: string; element?: string } | null = null
   let numbers: ReturnType<typeof numerology> | null = null
+
   if (answers.dob && answers.tob && answers.placeId) {
     const place = await resolvePlace(answers.placeId)
     const vedAstro = await fetchVedAstroAstrology({
@@ -98,67 +101,202 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
     numbers = numerology(answers.dob)
     method = "numerology"
   }
+
+  // Strict Dasha Gate: Only Mercury and Ketu have curated hampers in the portfolio
+  const isSupportedDasha = astrologyData
+    ? (astrologyData.antardasha === "Mercury" || astrologyData.antardasha === "Ketu")
+    : true
+
   const matrixKey = astrologyData ? `${astrologyData.moonSign.toUpperCase()}-${astrologyData.antardasha}-${answers.intention}` : ""
-  const setTitle = matrixKey && Object.prototype.hasOwnProperty.call(matrix, matrixKey)
-    ? (matrix as Record<string, string>)[matrixKey] : null
+  const combination = (matrixKey && Object.prototype.hasOwnProperty.call(combinations, matrixKey))
+    ? (combinations as Record<string, any>)[matrixKey]
+    : null
+  const setTitle = combination?.setTitle || (matrixKey && Object.prototype.hasOwnProperty.call(matrix, matrixKey)
+    ? (matrix as Record<string, string>)[matrixKey]
+    : null)
+
   const query = scope.resolve(ContainerRegistrationKeys.QUERY) as any
-  const { data: products } = await query.graph({ entity: "product", filters: { status: ["published"],
-      ...(salesChannelId ? { sales_channels: { id: salesChannelId } } : {}) },
-    fields: ["id", "handle", "title", "thumbnail", "metadata", "variants.id", "variants.manage_inventory",
-      "variants.allow_backorder", "variants.prices.amount", "variants.prices.currency_code"],
-    pagination: { take: 250 } })
+  const { data: products } = await query.graph({
+    entity: "product",
+    filters: {
+      status: ["published"],
+      ...(salesChannelId ? { sales_channels: { id: salesChannelId } } : {}),
+    },
+    fields: [
+      "id", "handle", "title", "thumbnail", "metadata", "variants.id", "variants.manage_inventory",
+      "variants.allow_backorder", "variants.prices.amount", "variants.prices.currency_code",
+    ],
+    pagination: { take: 250 },
+  })
   const inStock = await availableOffers(scope, products, salesChannelId)
-  const offers = inStock.map((product: any) => {
-    const md = product.metadata ?? {}
-    if (md.gift_guide_approved === false) return null
-    const privateOffer = md.recommendation_only === true
-    if (privateOffer && md.gift_guide_approved !== true) return null
-    if (!privateOffer && !BROOCHES[product.handle]) return null
-    const intentions = Array.isArray(md.gift_guide_intentions) ? md.gift_guide_intentions : [BROOCHES[product.handle]?.intention]
-    const keys = Array.isArray(md.gift_guide_matrix_keys) ? md.gift_guide_matrix_keys : []
-    const exact = matrixKey && keys.includes(matrixKey)
-    const match = intentions.includes(answers.intention)
-    if (!exact && !match) return null
-    const element = BROOCHES[product.handle]?.element
-    const score = (exact ? 200 : 0) + (match ? 100 : 0) + (privateOffer ? 20 : 0) + (astrologyData && element === astrologyData.element ? 10 : 0)
-    return { ...presentOffer(product), score, exact: Boolean(exact) }
-  }).filter(Boolean).sort((a: any, b: any) => b.score - a.score)
-  const recommended = offers.slice(0, 3)
-  const exactOffer = recommended.some((offer: any) => offer.exact)
-  const fallback = !recommended.length ? "No approved piece is currently in stock for this intention. Please check back with the atelier soon."
+
+  let offers: any[] = []
+  if (method !== "astrology" || isSupportedDasha) {
+    offers = inStock.map((product: any) => {
+      const md = product.metadata ?? {}
+      if (md.gift_guide_approved === false) return null
+      const privateOffer = md.recommendation_only === true
+      if (privateOffer && md.gift_guide_approved !== true) return null
+      if (!privateOffer && !BROOCHES[product.handle]) return null
+      const intentions = Array.isArray(md.gift_guide_intentions) ? md.gift_guide_intentions : [BROOCHES[product.handle]?.intention]
+      const keys = Array.isArray(md.gift_guide_matrix_keys) ? md.gift_guide_matrix_keys : []
+      const exact = matrixKey && keys.includes(matrixKey)
+      const match = intentions.includes(answers.intention)
+      if (!exact && !match) return null
+      const element = BROOCHES[product.handle]?.element
+      const score = (exact ? 200 : 0) + (match ? 100 : 0) + (privateOffer ? 20 : 0) + (astrologyData && element === astrologyData.element ? 10 : 0)
+      return { ...presentOffer(product), score, exact: Boolean(exact) }
+    }).filter(Boolean).sort((a: any, b: any) => b.score - a.score)
+  }
+
+  const secondaryOffers = offers.slice(0, 3)
+  const hasProducts = method === "astrology" ? isSupportedDasha && secondaryOffers.length > 0 : secondaryOffers.length > 0
+
+  // Build Primary Curated Hamper Offer if combination exists
+  let primaryOffer: any = null
+  if (hasProducts && combination) {
+    const leadProduct = secondaryOffers[0]
+    primaryOffer = {
+      id: combination.combinationId,
+      isHamper: true,
+      combinationId: combination.combinationId,
+      handle: `hamper-${combination.combinationId.toLowerCase()}`,
+      title: combination.setTitle,
+      tagline: combination.tagline,
+      story: combination.story,
+      price: 549900, // ₹5,499 in paise
+      currency: "inr",
+      privateOffer: true,
+      keepsake: combination.keepsake,
+      ritual: combination.ritual,
+      luxuryAddOn: combination.luxuryAddOn,
+      challenge: combination.challenge,
+      desiredShift: combination.desiredShift,
+      components: [combination.keepsake?.name || "Sacred Keepsake", combination.ritual?.name || "Sensory Ritual"],
+      variantId: leadProduct?.variantId || "variant_curated_hamper",
+      image: leadProduct?.image || "/media/shop-wild-poise-card.webp",
+    }
+  }
+
+  const fallback = !hasProducts
+    ? method === "astrology" && !isSupportedDasha
+      ? `For your active ${astrologyData!.antardasha} period, no dedicated products are currently available in our portfolio / store.`
+      : "No approved piece is currently in stock for this intention. Please check back with the atelier soon."
     : method === "astrology"
-    ? setTitle && exactOffer ? `For this ${astrologyData!.moonSign} Moon and ${astrologyData!.antardasha} period, the ${setTitle} gives shape to your ${answers.intention.replace("-", " and ")} intention.`
-      : setTitle ? `Your ${astrologyData!.moonSign} Moon and ${astrologyData!.antardasha} period have a dedicated set in our guide. Until that set is available, these pieces are chosen for your ${answers.intention.replace("-", " and ")} intention.`
-      : `Your ${astrologyData!.moonSign} Moon informs a broader selection for ${answers.intention.replace("-", " and ")}; this period has no dedicated set in our current guide.`
+    ? setTitle
+      ? `For your ${astrologyData!.moonSign} Moon and ${astrologyData!.antardasha} period, ${setTitle} gives shape to your ${answers.intention.replace("-", " and ")} intention.`
+      : `Your ${astrologyData!.moonSign} Moon informs this selection for ${answers.intention.replace("-", " and ")}.`
     : method === "numerology"
       ? `Your ${numbers!.kind} is ${numbers!.number} and your personal year is ${numbers!.personalYear}. With birth time or place unavailable, your chosen intention leads the selection.`
       : `Your intention of ${answers.intention.replace("-", " and ")} leads this selection.`
-  const explanation = await narrate({ method, fallback, intention: answers.intention, titles: recommended.map((item: any) => item.title) })
-  return { method, explanation, setTitle: exactOffer ? setTitle : null,
-    guide: astrologyData ? { moonSign: astrologyData.moonSign, antardasha: astrologyData.antardasha,
-      coverage: exactOffer ? "matrix" : setTitle ? "matrix-fallback" : "broader" }
-    : numbers ? { kind: numbers.kind, number: numbers.number, personalYear: numbers.personalYear } : null,
-    offers: recommended.map(({ score, exact, ...offer }: any) => offer) }
+
+  const explanation = await narrate({
+    name: answers.name,
+    relation: answers.forWhom === "self" ? "self" : answers.relation,
+    intention: answers.intention,
+    moonSign: astrologyData?.moonSign,
+    dasha: astrologyData?.antardasha,
+    setTitle,
+    combination,
+    hasProducts,
+    fallback,
+    titles: hasProducts ? [primaryOffer?.title, ...secondaryOffers.map((o: any) => o.title)].filter(Boolean) : [],
+  })
+
+  const returnedOffers = hasProducts
+    ? [primaryOffer, ...secondaryOffers.filter((o: any) => o.id !== primaryOffer?.id)].filter(Boolean)
+    : []
+
+  return {
+    method,
+    hasProducts,
+    explanation,
+    setTitle: isSupportedDasha ? setTitle : null,
+    combination: isSupportedDasha ? combination : null,
+    guide: astrologyData ? {
+      moonSign: astrologyData.moonSign,
+      antardasha: astrologyData.antardasha,
+      mahadasha: astrologyData.mahadasha,
+      coverage: isSupportedDasha ? (combination ? "matrix" : "matrix-fallback") : "unsupported-dasha",
+    } : numbers ? {
+      kind: numbers.kind,
+      number: numbers.number,
+      personalYear: numbers.personalYear,
+    } : null,
+    primaryOffer,
+    offers: returnedOffers.map(({ score, exact, ...offer }: any) => offer),
+  }
 }
 
-async function narrate(input: { method: string; fallback: string; intention: string; titles: string[] }) {
-  const key = process.env.OPENROUTER_API_KEY
-  const model = process.env.OPENROUTER_MODEL
-  if (!key || !model || !input.titles.length) return input.fallback
+async function narrate(input: {
+  name: string
+  relation?: string
+  intention: string
+  moonSign?: string
+  dasha?: string
+  setTitle?: string | null
+  combination?: any
+  hasProducts: boolean
+  fallback: string
+  titles: string[]
+}) {
+  const key = process.env.OPENROUTER_API_KEY || ""
+  const model = process.env.OPENROUTER_MODEL || "inclusionai/ling-3.0-flash-sante:free"
+  if (!key || !model) return input.fallback
+
+  const systemPrompt = `You are Aster, the luxury Vedic astrology gifting oracle for YOUNOYA ("For every chapter").
+You combine Cartier-grade poise, quiet warmth, poetic clarity, and authentic Vedic insight.
+
+Guidelines:
+1. Speak directly and intimately to ${input.name || "the recipient"}.
+2. Never make fatalistic predictions, medical claims, or guaranteed outcomes. Frame astrology around psychological shifts, emotional presence, and intentional daily rituals.
+3. ${input.hasProducts
+    ? `Ground their ${input.moonSign || ""} Moon in their active ${input.dasha || ""} period. Articulate how their specific challenge moves into their desired shift (${input.combination?.desiredShift || input.intention}), and explain how the keepsake (${input.combination?.keepsake?.name || "sacred keepsake"}) and sensory ritual (${input.combination?.ritual?.name || "daily ritual"}) provide the physical grounding anchor this chapter calls for. Write exactly one warm, evocative, deeply relatable paragraph (4-6 sentences).`
+    : `Acknowledge their ${input.moonSign || ""} Moon and active ${input.dasha || ""} period with reverence and deep psychological nuance for their chosen intention (${input.intention.replace("-", " and ")}). Conclude your reading with this exact sentence: "For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store." Write exactly one warm, poetic paragraph (3-4 sentences).`
+  }`
+
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST", signal: AbortSignal.timeout(6500),
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model, temperature: 0.35,
-        messages: [{ role: "system", content: "Write one warm, concise Younoya gift-guide paragraph. The rules already selected the products. Do not change them, promise outcomes, claim medical or financial effects, or mention unprovided product facts." },
-          { role: "user", content: JSON.stringify(input) }],
-        response_format: { type: "json_schema", json_schema: { name: "gift_explanation", strict: true,
-          schema: { type: "object", additionalProperties: false, required: ["paragraph"], properties: { paragraph: { type: "string" } } } } } }),
+      method: "POST",
+      signal: AbortSignal.timeout(7500),
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        temperature: 0.4,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: JSON.stringify({
+            name: input.name,
+            forWhom: input.relation || "self",
+            moonSign: input.moonSign,
+            dasha: input.dasha,
+            intention: input.intention,
+            setTitle: input.setTitle,
+            hasProducts: input.hasProducts,
+            challenge: input.combination?.challenge,
+            desiredShift: input.combination?.desiredShift,
+            keepsake: input.combination?.keepsake?.name,
+            ritual: input.combination?.ritual?.name,
+          }) },
+        ],
+      }),
     })
+
     if (!response.ok) return input.fallback
     const payload = await response.json() as any
-    const parsed = JSON.parse(payload.choices?.[0]?.message?.content ?? "{}")
-    const paragraph = String(parsed.paragraph ?? "").trim()
-    return paragraph.length >= 30 && paragraph.length <= 650 ? paragraph : input.fallback
-  } catch { return input.fallback }
+    const content = payload.choices?.[0]?.message?.content?.trim()
+    if (!content) return input.fallback
+
+    // Ensure closing line if no products
+    if (!input.hasProducts && !content.includes("portfolio / store")) {
+      return `${content} For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store.`
+    }
+    return content
+  } catch {
+    return input.fallback
+  }
 }
+

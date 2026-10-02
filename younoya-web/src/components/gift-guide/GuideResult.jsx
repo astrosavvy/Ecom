@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { ArrowUpRight, Bookmark, ShoppingBag } from 'lucide-react'
+import { ArrowUpRight, Bookmark, ShoppingBag, Sparkles, Compass, ArrowRight, RotateCcw } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { getProductByHandle } from '../../data/products'
 import GuideHistory from './GuideHistory'
+import TypewriterText from './TypewriterText'
+import WhatIsInside from './WhatIsInside'
 
 const money = value => `₹${((value || 0) / 100).toLocaleString('en-IN')}`
 const destination = offer => `${offer.privateOffer ? '/offer/' : '/product/'}${offer.handle}`
@@ -12,39 +14,182 @@ const title = value => value === value.toUpperCase() ? value.toLowerCase().repla
 
 export default function GuideResult({ values, result, onSave, onOrder, onRestart, saved, notice }) {
   const reduced = useReducedMotion(), region = useRef(null)
-  const [lead, ...others] = result.offers || []
+  const lead = result.primaryOffer || result.offers?.[0]
+  const secondaryOffers = result.offers?.filter(o => o.id !== lead?.id) || []
+  const hasProducts = Boolean(result.hasProducts && lead)
+  const combination = result.combination
+
   useEffect(() => {
     const frame = requestAnimationFrame(() => region.current?.querySelector('.guide-result__message')?.scrollIntoView({ block: 'start', behavior: reduced ? 'instant' : 'smooth' }))
     return () => cancelAnimationFrame(frame)
   }, [result, reduced])
-  return <motion.section ref={region} className="guide-result" aria-labelledby="guide-result-title" tabIndex={0} data-lenis-prevent initial={reduced ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? 0 : .25 }}>
-    {values.forWhom && <GuideHistory values={values} step={4} />}
-    <div className="guide-result__message">
-      <span className="guide-eyebrow"><img src="/favicon.png" alt="" /> Aster · {result.previewOnly ? 'Collection preview' : result.method || 'Your personal edit'}</span>
-      <h1 id="guide-result-title">A little meaning, <em>chosen for you.</em></h1>
-      <p className="guide-result__note">{result.explanation}</p>
-      {result.guide?.coverage === 'broader' && <p className="guide-note">This is broader chart guidance. A dedicated set for this planetary period is not yet available.</p>}
-      {result.guide?.coverage === 'matrix-fallback' && <p className="guide-note">The dedicated set is not yet available. These in-stock pieces follow your chosen intention.</p>}
-    </div>
-    {lead && <article className="guide-result__lead">
-      <Link className="guide-result__image" to={destination(lead)}>{image(lead) && <img src={image(lead)} alt={lead.title} />}</Link>
-      <div className="guide-result__copy"><span className="guide-eyebrow">{lead.components?.length ? 'Your curated set' : 'Your chosen piece'}</span><h2><Link to={destination(lead)}>{title(lead.title)}</Link></h2>
-        {result.setTitle && <p>Inspired by {result.setTitle}</p>}
-        {lead.components?.length > 0 && <div className="guide-components"><strong>In this set</strong><ul>{lead.components.map((part, index) => <li key={index}>{typeof part === 'string' ? part : part.title}</li>)}</ul></div>}
-        <strong className="guide-result__price">{money(lead.price)}</strong>
-        <Link className="guide-result__details" to={destination(lead)}>Discover the piece <ArrowUpRight size={15} /></Link>
+
+  return (
+    <motion.section
+      ref={region}
+      className="guide-result"
+      aria-labelledby="guide-result-title"
+      tabIndex={0}
+      data-lenis-prevent
+      initial={reduced ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduced ? 0 : 0.3 }}
+    >
+      {values.forWhom && <GuideHistory values={values} step={4} />}
+
+      <div className="guide-result__message">
+        <div className="guide-badges-ribbon">
+          <span className="guide-eyebrow">
+            <img src="/favicon.png" alt="" /> Aster · {result.previewOnly ? 'Collection preview' : result.method === 'astrology' ? 'Vedic Astrology Alignment' : 'Personal Edit'}
+          </span>
+          {result.guide?.moonSign && (
+            <div className="astro-pill-tags">
+              <span className="astro-pill">☽ {result.guide.moonSign} Moon</span>
+              {result.guide.antardasha && (
+                <span className="astro-pill">☿ {result.guide.antardasha} Dasha</span>
+              )}
+            </div>
+          )}
+        </div>
+
+        <h1 id="guide-result-title">
+          {combination?.setTitle ? (
+            <><em>{combination.setTitle}</em></>
+          ) : hasProducts ? (
+            <>A little meaning, <em>chosen for you.</em></>
+          ) : (
+            <>Your Celestial <em>Reading.</em></>
+          )}
+        </h1>
+
+        {combination?.tagline && (
+          <p className="guide-result__tagline">{combination.tagline}</p>
+        )}
+
+        <div className="guide-result__note-card">
+          <span className="guide-result__note-label">
+            <Sparkles size={13} /> Aster’s Bespoke Guidance
+          </span>
+          <p className="guide-result__note">
+            <TypewriterText text={result.explanation || ''} speed={18} />
+          </p>
+        </div>
+
+        {/* Intentional Shift Bar (Challenge -> Desired Shift) */}
+        {combination && (combination.challenge || combination.desiredShift) && (
+          <div className="guide-shift-bar">
+            <div className="guide-shift-item challenge-tag">
+              <span className="shift-label">Active Challenge</span>
+              <span className="shift-val">{combination.challenge.replace(/_/g, ' ')}</span>
+            </div>
+            <ArrowRight size={14} className="shift-arrow" />
+            <div className="guide-shift-item shift-tag">
+              <span className="shift-label">Intentional Shift</span>
+              <span className="shift-val">{combination.desiredShift.replace(/_/g, ' ')}</span>
+            </div>
+          </div>
+        )}
       </div>
-    </article>}
-    {others.length > 0 && <div className="guide-result__others"><h3>A few more possibilities</h3><div>{others.map(offer => <article key={offer.id}>
-      <Link to={destination(offer)}>{image(offer) && <img src={image(offer)} alt="" />}<span>{title(offer.title)}<small>{money(offer.price)}</small></span><ArrowUpRight size={16} /></Link>
-      {offer.variantId && <button type="button" aria-label={`Order ${offer.title}`} onClick={() => onOrder(offer)}><ShoppingBag size={16} /></button>}
-    </article>)}</div></div>}
-    {!lead && <p className="guide-note">No approved piece is available yet. <Link to="/shop">Explore the collection</Link> while the atelier prepares more.</p>}
-    <div className="guide-result__actions">
-      {lead && <button className="guide-primary" type="button" disabled={!lead.variantId} onClick={() => onOrder(lead)}><ShoppingBag size={16} /> Order this selection</button>}
-      <button type="button" onClick={onSave} disabled={!lead?.variantId || saved}><Bookmark size={16} /> {saved ? 'Saved to your account' : 'Save this edit'}</button>
-      <button type="button" onClick={onRestart}>Begin again</button>
-    </div>
-    {notice && <p className="guide-note" role="status">{notice}</p>}
-  </motion.section>
+
+      {/* Case A: Products are available (Mercury/Ketu Hamper) */}
+      {hasProducts && lead && (
+        <>
+          <article className="guide-result__lead guide-result__lead--hamper">
+            {image(lead) && (
+              <Link className="guide-result__image" to={destination(lead)}>
+                <img src={image(lead)} alt={lead.title} />
+              </Link>
+            )}
+            <div className="guide-result__copy">
+              <span className="guide-eyebrow">
+                <Compass size={13} /> {lead.isHamper ? 'Your Curated Set' : 'Your Chosen Piece'}
+              </span>
+              <h2><Link to={destination(lead)}>{title(lead.title)}</Link></h2>
+              {lead.story && <p className="guide-hamper-story">{lead.story}</p>}
+
+              {/* What's Inside (Keepsake + Ritual Breakdown) */}
+              <WhatIsInside combination={combination} offer={lead} />
+
+              <div className="guide-lead-footer">
+                <strong className="guide-result__price">{money(lead.price)}</strong>
+                <button
+                  className="guide-primary guide-lead-cta"
+                  type="button"
+                  disabled={!lead.variantId}
+                  onClick={() => onOrder(lead)}
+                >
+                  <ShoppingBag size={16} /> Order this Curated Set
+                </button>
+              </div>
+            </div>
+          </article>
+
+          {/* Secondary Products Rail */}
+          {secondaryOffers.length > 0 && (
+            <div className="guide-result__others">
+              <div className="guide-result__others-header">
+                <span className="guide-eyebrow">Companion Keepsakes</span>
+                <h3>Complementary Atelier Pieces</h3>
+              </div>
+              <div>
+                {secondaryOffers.map(offer => (
+                  <article key={offer.id}>
+                    <Link to={destination(offer)}>
+                      {image(offer) && <img src={image(offer)} alt="" />}
+                      <span>{title(offer.title)}<small>{money(offer.price)}</small></span>
+                      <ArrowUpRight size={16} />
+                    </Link>
+                    {offer.variantId && (
+                      <button type="button" aria-label={`Order ${offer.title}`} onClick={() => onOrder(offer)}>
+                        <ShoppingBag size={16} />
+                      </button>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Case B: No products available for this Dasha period */}
+      {!hasProducts && (
+        <div className="guide-unsupported-dasha-card">
+          <div className="guide-unsupported-dasha-card__icon">
+            <Compass size={24} />
+          </div>
+          <h3>Atelier Crafting In Progress</h3>
+          <p className="guide-unsupported-dasha-card__desc">
+            For your active <strong>{result.guide?.antardasha || 'planetary'}</strong> period, dedicated curation sets are not yet available in our portfolio / store. The atelier is currently handcrafting keepsakes and rituals for upcoming planetary chapters.
+          </p>
+          <div className="guide-unsupported-dasha-card__actions">
+            <Link to="/shop" className="guide-primary">
+              Explore Available Collection <ArrowUpRight size={15} />
+            </Link>
+            <button type="button" onClick={onRestart}>
+              <RotateCcw size={14} /> Begin Again
+            </button>
+          </div>
+        </div>
+      )}
+
+      {hasProducts && (
+        <div className="guide-result__actions">
+          {lead && (
+            <button className="guide-primary" type="button" disabled={!lead.variantId} onClick={() => onOrder(lead)}>
+              <ShoppingBag size={16} /> Order this selection
+            </button>
+          )}
+          <button type="button" onClick={onSave} disabled={!lead?.variantId || saved}>
+            <Bookmark size={16} /> {saved ? 'Saved to your account' : 'Save this edit'}
+          </button>
+          <button type="button" onClick={onRestart}>
+            Begin again
+          </button>
+        </div>
+      )}
+
+      {notice && <p className="guide-note" role="status">{notice}</p>}
+    </motion.section>
+  )
 }

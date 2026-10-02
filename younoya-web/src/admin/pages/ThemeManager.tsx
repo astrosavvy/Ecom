@@ -1,5 +1,6 @@
-import React, { useState } from "react"
-import { FolderHeart, Plus, Edit2, Trash2, X, Tag } from "lucide-react"
+import React, { useState, useMemo } from "react"
+import { FolderHeart, Plus, Edit2, Trash2, X, Tag, Sparkles } from "lucide-react"
+import combinationsData from "../../data/combinations.json"
 
 type Theme = {
   id: string
@@ -14,10 +15,10 @@ type Theme = {
 const INITIAL_THEMES: Theme[] = [
   { id: "1", name: "Love & Connection", slug: "love-connection", category: "Relationship", description: "Products associated with romantic relationships, partnerships, and emotional bonds.", productCount: 8, icon: "💕" },
   { id: "2", name: "Career & Growth", slug: "career-growth", category: "Career", description: "Products symbolizing professional advancement, ambition, and recognition.", productCount: 6, icon: "📈" },
-  { id: "3", name: "Money & Prosperity", slug: "money-prosperity", category: "Finance", description: "Products associated with financial abundance, wealth retention, and opportunity.", productCount: 5, icon: "💰" },
-  { id: "4", name: "Calm & Balance", slug: "calm-balance", category: "Wellbeing", description: "Products supporting emotional equilibrium, mindfulness, and inner peace.", productCount: 4, icon: "🧘" },
-  { id: "5", name: "New Beginnings", slug: "new-beginnings", category: "Growth", description: "Products symbolizing transformation, fresh starts, and change.", productCount: 3, icon: "🌱" },
-  { id: "6", name: "Confidence", slug: "confidence", category: "Self", description: "Products associated with self-assurance, courage, and personal power.", productCount: 3, icon: "💪" },
+  { id: "3", name: "Wealth & Prosperity", slug: "wealth-prosperity", category: "Finance", description: "Products associated with financial abundance, wealth retention, and opportunity.", productCount: 5, icon: "💰" },
+  { id: "4", name: "Vitality & Balance", slug: "vitality-balance", category: "Wellbeing", description: "Products supporting emotional equilibrium, mindfulness, and inner peace.", productCount: 4, icon: "🧘" },
+  { id: "5", name: "Confidence & Power", slug: "confidence-power", category: "Self", description: "Products associated with self-assurance, courage, and personal power.", productCount: 3, icon: "💪" },
+  { id: "6", name: "New Beginnings", slug: "new-beginnings", category: "Growth", description: "Products symbolizing transformation, fresh starts, and change.", productCount: 3, icon: "🌱" },
   { id: "7", name: "Focus & Direction", slug: "focus-direction", category: "Mindset", description: "Products supporting clarity, decision-making, and purposeful action.", productCount: 4, icon: "🎯" },
   { id: "8", name: "Home & Harmony", slug: "home-harmony", category: "Vastu & Living", description: "Products for creating balanced, positive, and blessed living spaces.", productCount: 5, icon: "🏠" },
 ]
@@ -27,6 +28,16 @@ export default function ThemeManager() {
   const [showModal, setShowModal] = useState(false)
   const [editTheme, setEditTheme] = useState<Theme | null>(null)
   const [form, setForm] = useState({ name: "", slug: "", category: "Relationship", description: "", icon: "✨" })
+
+  const combinationCounts = useMemo(() => {
+    const counts: Record<string, number> = {}
+    Object.values(combinationsData).forEach((c: any) => {
+      if (c.category) {
+        counts[c.category] = (counts[c.category] || 0) + 1
+      }
+    })
+    return counts
+  }, [])
 
   const openModal = (t: Theme | null = null) => {
     if (t) {
@@ -139,9 +150,33 @@ export default function ThemeManager() {
                 marginTop: "auto",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "5px", color: "var(--ad-ink-faint)", fontSize: "12px" }}>
-                <Tag size={12} />
-                <span>{t.productCount} products</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", color: "var(--ad-ink-faint)", fontSize: "12px" }}>
+                  <Tag size={12} />
+                  <span>{t.productCount} products</span>
+                </div>
+                {combinationCounts[t.slug] ? (
+                  <a
+                    href="/admin/rules"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      background: "rgba(197, 168, 128, 0.12)",
+                      color: "var(--ad-gold-strong)",
+                      border: "1px solid rgba(197, 168, 128, 0.25)",
+                      borderRadius: "999px",
+                      padding: "2px 8px",
+                      fontSize: "11px",
+                      fontWeight: 600,
+                      textDecoration: "none",
+                    }}
+                    title="View linked astrological combinations in Quiz Rules"
+                  >
+                    <Sparkles size={10} />
+                    <span>{combinationCounts[t.slug]} Combinations</span>
+                  </a>
+                ) : null}
               </div>
 
               <div style={{ display: "flex", gap: "8px" }}>

@@ -78,6 +78,16 @@
   3. *Gift Guide Pipeline Sync*: Updated `gift-guide.ts` to consume authentic VedAstro calculations and `places/route.ts` to return dynamic OpenCage attribution. Updated `BirthDetails.jsx` with 500ms debounce, min 4 characters, and removed third-party attribution text from the frontend UI.
   4. *Production Deployment & Live Verification*: Transferred updated backend build via SSH (`scp`) to VPS (`ubuntu@140.245.7.165`) per the Backend Update Law. Configured `OPENCAGE_API_KEY=236df75c...` and `VEDASTRO_AYANAMSA=LAHIRI` on the VPS. Restarted PM2. Verified live city search (`Bengaluru` -> lat `12.97`, lng `77.59`) and live recommendation (`Cancer` Moon, `Rahu` Antardasha via VedAstro).
 
+- **Phase 37 (Mercury & Ketu 96-Combination Vedic Recommendation Architecture, OpenRouter Integration & Celestial Divination Ceremony)**:
+  1. *48 Mercury & 48 Ketu Combinations*: Extracted and cataloged all 96 bespoke combinations from `F:/Savvy_Ecom/YOUNOYA_Mercury_Antardasha_x_Zodiacs_Revised (1).md` with Combination IDs (e.g. `ARI-MER-LOV-01`), Profile, Set Title, Chapter Story, Keepsake anchor, Sensory Ritual modifier, Luxury Add-on, and internal tags (`Challenge`, `Desired Shift`, `Architecture`).
+  2. *Medusa Inventory Stocking*: Stocked 30 units across all 10 authentic products in Medusa database location `sloc_01M1BRNJ25CACX2636BXMGT0GV`.
+  3. *OpenRouter AI Astrology Synthesis*: Integrated OpenRouter model `inclusionai/ling-3.0-flash-sante:free` into `gift-guide.ts` with Aster deep astrological persona prompt.
+  4. *Strict Dasha Gating Law*: If active Antardasha is Mercury or Ketu, returns primary curated hamper + secondary pieces + deep AI narrative. If user is in the other 7 Antardashas (Sun, Moon, Mars, Rahu, Jupiter, Saturn, Venus), returns personalized astrological reading and concludes strictly with: *"For your active [Dasha] period, no dedicated products are currently available in our portfolio / store."* and zero products.
+  5. *Storefront Celestial Divination Ceremony & Luxury Recommendation*: Added 3-stage animated divination ceremony (3.3s) in `AsterDivinationCeremony.jsx`. Built character-by-character typewriter streaming in `TypewriterText.jsx` with blinking gold cursor. Built `WhatIsInside.jsx` luxury cards for Keepsake, Ritual, and Luxury Add-On. Upgraded `GuideResult.jsx` with Moon Sign + Antardasha pill ribbons, hamper hero card, and intentional shift comparison bar.
+  6. *Admin Console Integration*: Added Vedic Hamper Combinations browser to `RecommendationRules.tsx` with search, category filtering, and Combination ID tags. Linked combination counts to categories in `ThemeManager.tsx`.
+  7. *Production Deployment & Live Verification*: Deployed backend code directly to VPS via `scp` and restarted PM2 with `--update-env`. Verified live on `https://api.younoya.com/store/gift-guide/recommend` for both Ketu (returns full hamper set + pieces + AI reading) and Mars/Rahu (returns AI reading + closing sentence, 0 products). Root build exits 0.
+
+
 ## 3. ⚠️ Inviolable System Rules
 1. **Explicit Git Push Permission**: NEVER run `git push` without explicit user approval. Always ask first.
 2. **Single Final Semantic Commit**: Group all edits, dist, configs, and checkpoint updates into ONE commit. No micro-commits.
@@ -104,3 +114,5 @@
 - Verified 1920 × 1000 and 1024 × 768 desktop playback, 430 × 932 mobile asset selection and self/name/back progression. No horizontal overflow or captured console warnings/errors. Browser confirmed muted loop and full seekable duration. Reduced-motion and failed-load fallback checked in source, not simulated at OS/network level.
 - Root build passed with the existing >500KB bundle warning. Updated media provenance. Proof: .tmp/aster-rounded-desktop.jpg. Local Vite running on http://127.0.0.1:5175 (session 38689).
 - No backend/API changes. Batch into one final local commit; no push without new explicit permission. Preserve unrelated untracked .agents/skills/prompt-master/.
+
+- Push follow-up (2026-10-02): User explicitly authorized push. Successfully pushed verified commit 9b578c1 to origin/main (1422922..9b578c1). No additional commit created for this status update.

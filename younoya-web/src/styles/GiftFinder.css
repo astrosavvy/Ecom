@@ -185,3 +185,357 @@
 .guide-result__lead{gap:13px}.guide-result__image{flex-basis:115px;height:145px}.guide-result__copy h2{font-size:28px}
 .guide-result__others>div{grid-template-columns:1fr}
 }
+
+/* ==========================================================================
+   LUXURY ASTROLOGY & BESPOKE RECOMMENDATION STYLES
+   ========================================================================== */
+
+/* Typewriter & Blinking Cursor */
+.typewriter-text {
+  display: inline;
+  position: relative;
+  line-height: 1.75;
+}
+.typewriter-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  font-weight: 300;
+  animation: typewriterBlink 0.9s infinite ease-in-out;
+}
+@keyframes typewriterBlink {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0; transform: scaleY(0.85); }
+}
+
+/* Astrological Badges Ribbon */
+.guide-badges-ribbon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.astro-pill-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.astro-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #8C6A3C;
+  background: #F5EFE6;
+  border: 1px solid rgba(197, 168, 128, 0.35);
+  border-radius: 999px;
+}
+
+.guide-result__tagline {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #A07844;
+  margin: -6px 0 16px;
+}
+
+/* Note Card / AI Guidance */
+.guide-result__note-card {
+  background: #FFFDF9;
+  border: 1px solid rgba(197, 168, 128, 0.28);
+  border-radius: 20px;
+  padding: 20px 24px;
+  margin: 16px 0 20px;
+  box-shadow: 0 4px 20px rgba(44, 34, 28, 0.03);
+}
+.guide-result__note-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9E7A4A;
+  margin-bottom: 10px;
+}
+.guide-result__note {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #382D26;
+  margin: 0;
+}
+
+/* Intentional Shift Bar */
+.guide-shift-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #FAF6EF;
+  border: 1px solid rgba(44, 34, 28, 0.06);
+  border-radius: 16px;
+  padding: 12px 18px;
+  margin-bottom: 24px;
+}
+.guide-shift-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.shift-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8C7864;
+}
+.shift-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: #261E1A;
+}
+.shift-arrow {
+  color: #C5A880;
+  flex-shrink: 0;
+}
+
+/* What's Inside Cards */
+.what-is-inside {
+  margin: 20px 0 16px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(44, 34, 28, 0.08);
+}
+.what-is-inside__header {
+  margin-bottom: 14px;
+}
+.what-is-inside__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9C7844;
+}
+.what-is-inside__title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #1F1916;
+  margin: 3px 0 0;
+}
+.what-is-inside__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media(min-width: 600px) {
+  .what-is-inside__grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+.what-is-inside__card {
+  background: #FAF7F2;
+  border: 1px solid rgba(44, 34, 28, 0.06);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.what-is-inside__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8C6A3C;
+}
+.what-is-inside__item-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1F1916;
+  margin: 0;
+}
+.what-is-inside__item-desc {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #6B5745;
+  margin: 0;
+}
+.what-is-inside__price-note {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9C7844;
+}
+
+/* Lead Hamper Presentation */
+.guide-result__lead--hamper {
+  background: #FFFFFF;
+  border: 1px solid rgba(197, 168, 128, 0.35);
+  border-radius: 28px;
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 8px 32px rgba(44, 34, 28, 0.04);
+}
+.guide-hamper-story {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #594738;
+  margin: 8px 0 14px;
+}
+.guide-lead-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(44, 34, 28, 0.08);
+}
+.guide-lead-cta {
+  min-height: 48px;
+  padding: 0 26px;
+  font-size: 13px;
+  border-radius: 999px;
+}
+
+/* Divination Ceremony Transition */
+.divination-ceremony {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  min-height: 380px;
+}
+.divination-ceremony__orb-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin-bottom: 28px;
+  display: grid;
+  place-items: center;
+}
+.divination-ceremony__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.divination-ceremony__ring--outer {
+  border: 1px dashed rgba(197, 168, 128, 0.5);
+}
+.divination-ceremony__ring--inner {
+  inset: 16px;
+  border: 1px solid rgba(197, 168, 128, 0.3);
+}
+.divination-ceremony__center {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FAF3E8 30%, #EFE1CC 100%);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 24px rgba(197, 168, 128, 0.35);
+}
+.divination-ceremony__monogram {
+  width: 32px;
+  height: 32px;
+  opacity: 0.85;
+}
+.divination-ceremony__content {
+  max-width: 440px;
+  width: 100%;
+}
+.divination-ceremony__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #A07844;
+  margin-bottom: 12px;
+}
+.divination-ceremony__title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 500;
+  color: #1F1916;
+  margin: 0 0 8px;
+}
+.divination-ceremony__caption {
+  font-size: 13px;
+  color: #7A634D;
+  margin: 0 0 24px;
+}
+.divination-ceremony__progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(44, 34, 28, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.divination-ceremony__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #C5A880, #E4C89D);
+  border-radius: 999px;
+}
+
+/* Unsupported Dasha / Atelier Crafting Notice */
+.guide-unsupported-dasha-card {
+  background: #FFFDF9;
+  border: 1px solid rgba(197, 168, 128, 0.35);
+  border-radius: 24px;
+  padding: 36px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0 28px;
+  box-shadow: 0 6px 24px rgba(44, 34, 28, 0.03);
+}
+.guide-unsupported-dasha-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #F7EFE4;
+  color: #9C7844;
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+}
+.guide-unsupported-dasha-card h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: #1F1916;
+  margin: 0 0 10px;
+}
+.guide-unsupported-dasha-card__desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #5C4A3C;
+  max-width: 480px;
+  margin: 0 0 24px;
+}
+.guide-unsupported-dasha-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
