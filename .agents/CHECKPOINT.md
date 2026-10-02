@@ -97,3 +97,10 @@
 
 
 
+
+## Codex follow-up — Aster rounded edges and desktop detail (2026-10-02)
+- Implemented native 880 × 720 desktop loop and matching poster from the supplied original; retained the smaller 480 × 392 mobile media. Desktop output is 1,493,759 bytes, 191 frames, 7.958333 seconds, with decoded first/last pixel difference 0.0.
+- Rounded and fitted the actual video surface; added broad four-edge feathering and a subtle 20-second mask-opacity cycle confined to the edges. Center remains opaque. Reduced motion disables the cycle. Corrected a mobile height override to retain the media aspect ratio.
+- Verified 1920 × 1000 and 1024 × 768 desktop playback, 430 × 932 mobile asset selection and self/name/back progression. No horizontal overflow or captured console warnings/errors. Browser confirmed muted loop and full seekable duration. Reduced-motion and failed-load fallback checked in source, not simulated at OS/network level.
+- Root build passed with the existing >500KB bundle warning. Updated media provenance. Proof: .tmp/aster-rounded-desktop.jpg. Local Vite running on http://127.0.0.1:5175 (session 38689).
+- No backend/API changes. Batch into one final local commit; no push without new explicit permission. Preserve unrelated untracked .agents/skills/prompt-master/.

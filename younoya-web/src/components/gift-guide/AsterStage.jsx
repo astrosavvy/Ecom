@@ -6,6 +6,14 @@ export default function AsterStage({ mood }) {
   const video = useRef(null)
   const [failed, setFailed] = useState(false), [playing, setPlaying] = useState(false)
   const [source, setSource] = useState('')
+  const [desktop, setDesktop] = useState(() => window.matchMedia('(min-width: 960px)').matches)
+  const poster = desktop ? '/media/aster-lady-loop-poster-desktop-v3.webp' : '/media/aster-lady-loop-poster-v2.webp'
+  useEffect(() => {
+    const query = window.matchMedia('(min-width: 960px)')
+    const update = () => { setPlaying(false); setDesktop(query.matches) }
+    query.addEventListener('change', update)
+    return () => query.removeEventListener('change', update)
+  }, [])
   const x = useMotionValue(0), y = useMotionValue(0), tilt = useMotionValue(0)
   const spring = { stiffness: 65, damping: 22 }
   const portraitX = useSpring(x, spring), portraitY = useSpring(y, spring), portraitTilt = useSpring(tilt, spring)
@@ -14,12 +22,12 @@ export default function AsterStage({ mood }) {
     if (reducedMotion !== false || failed) return undefined
     const controller = new AbortController()
     let url
-    fetch('/media/aster-lady-loop-v2.mp4', { signal: controller.signal })
+    fetch(desktop ? '/media/aster-lady-loop-desktop-v3.mp4' : '/media/aster-lady-loop-v2.mp4', { signal: controller.signal })
       .then(response => { if (!response.ok) throw new Error('Animation unavailable'); return response.blob() })
       .then(blob => { if (!controller.signal.aborted) { url = URL.createObjectURL(blob); setSource(url) } })
       .catch(issue => { if (issue.name !== 'AbortError' && !controller.signal.aborted) setFailed(true) })
     return () => { controller.abort(); if (url) URL.revokeObjectURL(url); setSource('') }
-  }, [reducedMotion, failed])
+  }, [reducedMotion, failed, desktop])
   useEffect(() => {
     const element = video.current
     if (!element || reducedMotion || failed) return undefined
@@ -46,11 +54,11 @@ export default function AsterStage({ mood }) {
     <div className="guide-stage__desktop-copy"><span>THE YOUNOYA GIFT GUIDE</span><h2>A little meaning.<br /><em>A lasting connection.</em></h2><p>Let’s find a piece that feels personal.</p></div>
     <motion.div className={`guide-stage__figure guide-stage__figure--video guide-stage__figure--${mood}`} style={{ x: portraitX, y: portraitY, rotate: portraitTilt }}>
       <div className={`guide-stage__portrait guide-stage__portrait--video${playing && !reducedMotion && !failed ? ' is-playing' : ''}`}>
-        <img src="/media/aster-lady-loop-poster-v2.webp" width="480" height="392"
+        <img src={poster} width={desktop ? 880 : 480} height={desktop ? 720 : 392}
           alt="Aster, Younoya’s guide, in her plum jacket with a welcoming open-palm gesture."
           decoding="async" draggable="false" />
         {source && reducedMotion === false && !failed && <video ref={video} src={source}
-          poster="/media/aster-lady-loop-poster-v2.webp" width="480" height="392" autoPlay muted loop playsInline
+          poster={poster} width={desktop ? 880 : 480} height={desktop ? 720 : 392} autoPlay muted loop playsInline
           preload="metadata" aria-hidden="true" onPlaying={() => setPlaying(true)} onPause={() => setPlaying(false)} onError={() => setFailed(true)} />}
       </div>
     </motion.div>
