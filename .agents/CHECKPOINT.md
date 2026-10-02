@@ -116,3 +116,15 @@
 - No backend/API changes. Batch into one final local commit; no push without new explicit permission. Preserve unrelated untracked .agents/skills/prompt-master/.
 
 - Push follow-up (2026-10-02): User explicitly authorized push. Successfully pushed verified commit 9b578c1 to origin/main (1422922..9b578c1). No additional commit created for this status update.
+
+- **Phase 38 (Cartier-Grade Begin Again Button, Bespoke Astrological SVG Icons, 2-Part Editorial Architecture & Desktop Sliding Animation)**:
+  1. *Bespoke Astrological SVG Icons (`AstroIcons.jsx`)*: Replaced cheap/plain unicode glyphs with hand-tuned geometric 1.6px line-art SVGs for all 12 Zodiac Moon Signs (`Aries` through `Pisces`) and all 9 Planetary Dasha Lords (`Sun`, `MoonLord`, `Mars`, `Mercury`, `Jupiter`, `Venus`, `Saturn`, `Rahu`, `Ketu`). Dynamic resolvers `getZodiacIcon` and `getDashaIcon` display exact SVGs inside `.astro-pill`.
+  2. *Mandatory 2-Part Editorial Architecture*:
+     - **`WHAT YOU MIGHT BE GOING THROUGH`**: The emotional crossroad, internal hesitation, and psychological chapter.
+     - **`WHY THIS WAS CHOSEN FOR YOU`**: The intentional rationale connecting the keepsake anchor, sensory ritual cue, or planetary chapter shift.
+     - Extracted authentic texts across all 48 Mercury and 48 Ketu combinations (`build-combinations.js`), updated Aster's OpenRouter prompt structure, and rendered both in distinct rectangular cards (`.guide-editorial-card--experience` and `.guide-editorial-card--rationale`) with typewriter streaming.
+  3. *Universal Category Bento Grid on Unsupported Dashas*: When a user's Dasha is outside Mercury/Ketu (or no dedicated sets in stock), the system renders personalized astrological guidance and displays the 4 Core Gifting Chapters (`Love & Connection`, `Career & Confidence`, `Vitality & Inner Balance`, `Wealth & Prosperity`) linking directly to curated boutique views (`/shop?intention=...`).
+  4. *Cartier-Grade "Begin Again" Pill Button*: Redesigned with warm ivory background (`#FFFDF9`), hairline gold border (`#DFCBB0`), subtle gold drop shadow, Plus Jakarta Sans typography, and smooth hover glow with -45° icon rotation.
+  5. *Smooth Desktop Sliding Transition*: On desktop screens (min-width 960px), `.guide-page__main--result` smoothly slides the Aster portrait into a compact 290px left rail with `transition: 0.65s cubic-bezier(0.16, 1, 0.3, 1)`, expanding the right recommendation column into full-width rectangular boxes.
+  6. *VPS Deployment & Verification*: Backend built locally (`npm run build` in `backend/`), deployed to VPS (`140.245.7.165`) via SCP per Backend Deployment Law, and PM2 restarted. Live endpoint `https://api.younoya.com/store/gift-guide/recommend` verified returning both editorial sections and authentic VedAstro calculations. Root monorepo build exits 0.
+

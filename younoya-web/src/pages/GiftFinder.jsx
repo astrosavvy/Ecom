@@ -109,7 +109,7 @@ export default function GiftFinder() {
     setStep(0); setValues(EMPTY); setResult(null); setPendingResult(null); setIsDivining(false); setSaved(false); setSavedList(null); setNotice(''); setError('')
   }
   return <section className="guide-page">
-    <div className="guide-page__main" ref={main}>
+    <div className={`guide-page__main ${result ? 'guide-page__main--result' : ''}`} ref={main}>
       <nav className="guide-page__top" aria-label="Gift guide navigation"><Link to="/shop">← The collection</Link>{signedIn && <button type="button" onClick={showSaved}>Saved recommendations ↗</button>}</nav>
       <AsterStage mood={busy || isDivining ? 'thinking' : mood} />
       {savedList ? <div className="guide-saved"><span className="guide-eyebrow">YOUR PRIVATE EDIT</span><h1>Pieces worth <em>revisiting.</em></h1>

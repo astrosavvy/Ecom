@@ -190,7 +190,7 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
       ? `Your ${numbers!.kind} is ${numbers!.number} and your personal year is ${numbers!.personalYear}. With birth time or place unavailable, your chosen intention leads the selection.`
       : `Your intention of ${answers.intention.replace("-", " and ")} leads this selection.`
 
-  const explanation = await narrate({
+  const narrative = await narrate({
     name: answers.name,
     relation: answers.forWhom === "self" ? "self" : answers.relation,
     intention: answers.intention,
@@ -210,7 +210,9 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
   return {
     method,
     hasProducts,
-    explanation,
+    whatYouMightBeGoingThrough: narrative.whatYouMightBeGoingThrough,
+    whyChosen: narrative.whyChosen,
+    explanation: narrative.explanation,
     setTitle: isSupportedDasha ? setTitle : null,
     combination: isSupportedDasha ? combination : null,
     guide: astrologyData ? {
@@ -239,21 +241,42 @@ async function narrate(input: {
   hasProducts: boolean
   fallback: string
   titles: string[]
-}) {
+}): Promise<{ whatYouMightBeGoingThrough: string; whyChosen: string; explanation: string }> {
   const key = process.env.OPENROUTER_API_KEY || ""
   const model = process.env.OPENROUTER_MODEL || "inclusionai/ling-3.0-flash-sante:free"
-  if (!key || !model) return input.fallback
+
+  let whatYouMightBeGoingThrough = input.combination?.whatYouMightBeGoingThrough || input.combination?.story || ""
+  let whyChosen = input.combination?.whyChosen || ""
+
+  if (!whatYouMightBeGoingThrough && !input.hasProducts) {
+    whatYouMightBeGoingThrough = `As your ${input.moonSign || "natal"} Moon moves through this active ${input.dasha || "planetary"} chapter, you may feel an inner transition between past certainties and emerging priorities. This can create moments of quiet hesitation precisely when your decisions call for conviction.`
+  }
+  if (!whyChosen && !input.hasProducts) {
+    whyChosen = `This reading honors your intention for ${input.intention.replace("-", " and ")}. For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store.`
+  }
+
+  const defaultResult = {
+    whatYouMightBeGoingThrough,
+    whyChosen,
+    explanation: `${whatYouMightBeGoingThrough}\n\n${whyChosen}`.trim() || input.fallback
+  }
+
+  if (!key || !model) return defaultResult
 
   const systemPrompt = `You are Aster, the luxury Vedic astrology gifting oracle for YOUNOYA ("For every chapter").
 You combine Cartier-grade poise, quiet warmth, poetic clarity, and authentic Vedic insight.
 
-Guidelines:
-1. Speak directly and intimately to ${input.name || "the recipient"}.
-2. Never make fatalistic predictions, medical claims, or guaranteed outcomes. Frame astrology around psychological shifts, emotional presence, and intentional daily rituals.
-3. ${input.hasProducts
-    ? `Ground their ${input.moonSign || ""} Moon in their active ${input.dasha || ""} period. Articulate how their specific challenge moves into their desired shift (${input.combination?.desiredShift || input.intention}), and explain how the keepsake (${input.combination?.keepsake?.name || "sacred keepsake"}) and sensory ritual (${input.combination?.ritual?.name || "daily ritual"}) provide the physical grounding anchor this chapter calls for. Write exactly one warm, evocative, deeply relatable paragraph (4-6 sentences).`
-    : `Acknowledge their ${input.moonSign || ""} Moon and active ${input.dasha || ""} period with reverence and deep psychological nuance for their chosen intention (${input.intention.replace("-", " and ")}). Conclude your reading with this exact sentence: "For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store." Write exactly one warm, poetic paragraph (3-4 sentences).`
-  }`
+Always structure your response into exactly TWO distinct labeled sections:
+
+WHAT YOU MIGHT BE GOING THROUGH:
+<One deep, empathetic paragraph (3-5 sentences) speaking directly and intimately to ${input.name || "the recipient"}. Explore their psychological crossroad, emotional hesitation, and life transition based on their ${input.moonSign || ""} Moon and active ${input.dasha || ""} period for their intention (${input.intention.replace("-", " and ")}). Never make fatalistic predictions.>
+
+WHY THIS WAS CHOSEN FOR YOU:
+<One warm, intentional paragraph (3-5 sentences). ${
+    input.hasProducts
+      ? `Explain how the Keepsake anchor (${input.combination?.keepsake?.name || "sacred keepsake"}) and Sensory Ritual (${input.combination?.ritual?.name || "daily ritual"}) give physical shape to their desired shift (${input.combination?.desiredShift || input.intention}) and ground their active ${input.dasha || ""} chapter.`
+      : `Explain how approaching this period with mindful intention brings clarity to their ${input.intention.replace("-", " and ")} chapter. You MUST conclude this section with this exact sentence: "For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store."`
+  }>`
 
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -285,18 +308,36 @@ Guidelines:
       }),
     })
 
-    if (!response.ok) return input.fallback
+    if (!response.ok) return defaultResult
     const payload = await response.json() as any
     const content = payload.choices?.[0]?.message?.content?.trim()
-    if (!content) return input.fallback
+    if (!content) return defaultResult
 
-    // Ensure closing line if no products
-    if (!input.hasProducts && !content.includes("portfolio / store")) {
-      return `${content} For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store.`
+    const splitMatch = content.split(/WHY THIS WAS CHOSEN FOR YOU:?/i)
+    if (splitMatch.length >= 2) {
+      const p1 = splitMatch[0].replace(/WHAT YOU MIGHT BE GOING THROUGH:?/i, '').trim()
+      let p2 = splitMatch[1].trim()
+      if (!input.hasProducts && !p2.includes("portfolio / store")) {
+        p2 += ` For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store.`
+      }
+      if (p1) whatYouMightBeGoingThrough = p1
+      if (p2) whyChosen = p2
+    } else {
+      if (!input.hasProducts && !content.includes("portfolio / store")) {
+        whyChosen = `${content} For your active ${input.dasha || "planetary"} period, no dedicated products are currently available in our portfolio / store.`
+      } else {
+        whyChosen = content
+      }
     }
-    return content
+
+    return {
+      whatYouMightBeGoingThrough,
+      whyChosen,
+      explanation: `${whatYouMightBeGoingThrough}\n\n${whyChosen}`.trim()
+    }
   } catch {
-    return input.fallback
+    return defaultResult
   }
 }
+
 

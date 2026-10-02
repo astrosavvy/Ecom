@@ -1,16 +1,44 @@
 import { useEffect, useRef } from 'react'
-import { ArrowUpRight, Bookmark, ShoppingBag, Sparkles, Compass, ArrowRight, RotateCcw } from 'lucide-react'
+import { ArrowUpRight, Bookmark, ShoppingBag, Sparkles, Compass, ArrowRight, RotateCcw, Feather } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { getProductByHandle } from '../../data/products'
 import GuideHistory from './GuideHistory'
 import TypewriterText from './TypewriterText'
 import WhatIsInside from './WhatIsInside'
+import { getZodiacIcon, getDashaIcon } from './AstroIcons'
 
 const money = value => `₹${((value || 0) / 100).toLocaleString('en-IN')}`
 const destination = offer => `${offer.privateOffer ? '/offer/' : '/product/'}${offer.handle}`
 const image = offer => !offer.privateOffer && getProductByHandle(offer.handle)?.shopCardImage || offer.image
 const title = value => value === value.toUpperCase() ? value.toLowerCase().replace(/\b\w/g, letter => letter.toUpperCase()) : value
+
+const GIFT_CHAPTERS = [
+  {
+    slug: 'love-connection',
+    title: 'Love & Connection',
+    desc: 'Listening, emotional presence, and deepening intimate bonds.',
+    icon: '💕',
+  },
+  {
+    slug: 'confidence-power',
+    title: 'Career & Confidence',
+    desc: 'Conviction, strategic focus, and unwavering self-trust.',
+    icon: '🔥',
+  },
+  {
+    slug: 'vitality-balance',
+    title: 'Vitality & Inner Balance',
+    desc: 'Grounding, calm rituals, and mindful emotional reset.',
+    icon: '🧘',
+  },
+  {
+    slug: 'wealth-prosperity',
+    title: 'Wealth & Prosperity',
+    desc: 'Discipline, strategic abundance, and discerning value.',
+    icon: '💰',
+  },
+]
 
 export default function GuideResult({ values, result, onSave, onOrder, onRestart, saved, notice }) {
   const reduced = useReducedMotion(), region = useRef(null)
@@ -18,6 +46,22 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
   const secondaryOffers = result.offers?.filter(o => o.id !== lead?.id) || []
   const hasProducts = Boolean(result.hasProducts && lead)
   const combination = result.combination
+
+  const ZodiacIcon = getZodiacIcon(result.guide?.moonSign)
+  const DashaIcon = getDashaIcon(result.guide?.antardasha)
+
+  // Extract the 2 mandatory editorial sections
+  const whatYouMightBeGoingThrough = 
+    result.whatYouMightBeGoingThrough || 
+    combination?.whatYouMightBeGoingThrough || 
+    combination?.story || 
+    result.explanation || 
+    ''
+
+  const whyChosen = 
+    result.whyChosen || 
+    combination?.whyChosen || 
+    (!hasProducts ? result.explanation || '' : '')
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => region.current?.querySelector('.guide-result__message')?.scrollIntoView({ block: 'start', behavior: reduced ? 'instant' : 'smooth' }))
@@ -44,9 +88,15 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
           </span>
           {result.guide?.moonSign && (
             <div className="astro-pill-tags">
-              <span className="astro-pill">☽ {result.guide.moonSign} Moon</span>
+              <span className="astro-pill">
+                {ZodiacIcon && <ZodiacIcon size={14} className="astro-pill-icon" />}
+                <span>{result.guide.moonSign} Moon</span>
+              </span>
               {result.guide.antardasha && (
-                <span className="astro-pill">☿ {result.guide.antardasha} Dasha</span>
+                <span className="astro-pill">
+                  {DashaIcon && <DashaIcon size={14} className="astro-pill-icon" />}
+                  <span>{result.guide.antardasha} Dasha</span>
+                </span>
               )}
             </div>
           )}
@@ -66,14 +116,35 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
           <p className="guide-result__tagline">{combination.tagline}</p>
         )}
 
-        <div className="guide-result__note-card">
-          <span className="guide-result__note-label">
-            <Sparkles size={13} /> Aster’s Bespoke Guidance
-          </span>
-          <p className="guide-result__note">
-            <TypewriterText text={result.explanation || ''} speed={18} />
-          </p>
-        </div>
+        {/* RECTANGULAR EDITORIAL BOX 1: WHAT YOU MIGHT BE GOING THROUGH */}
+        {whatYouMightBeGoingThrough && (
+          <div className="guide-editorial-card guide-editorial-card--experience">
+            <div className="guide-editorial-card__header">
+              <span className="guide-editorial-card__badge">
+                <Sparkles size={13} /> WHAT YOU MIGHT BE GOING THROUGH
+              </span>
+              <span className="guide-editorial-card__sub">The Emotional Crossroad & Life Chapter</span>
+            </div>
+            <div className="guide-editorial-card__body">
+              <TypewriterText text={whatYouMightBeGoingThrough} speed={14} />
+            </div>
+          </div>
+        )}
+
+        {/* RECTANGULAR EDITORIAL BOX 2: WHY THIS WAS CHOSEN FOR YOU */}
+        {whyChosen && (
+          <div className="guide-editorial-card guide-editorial-card--rationale">
+            <div className="guide-editorial-card__header">
+              <span className="guide-editorial-card__badge">
+                <Compass size={13} /> WHY THIS WAS CHOSEN FOR YOU
+              </span>
+              <span className="guide-editorial-card__sub">The Physical Anchor & Intentional Rationale</span>
+            </div>
+            <div className="guide-editorial-card__body">
+              <TypewriterText text={whyChosen} speed={14} />
+            </div>
+          </div>
+        )}
 
         {/* Intentional Shift Bar (Challenge -> Desired Shift) */}
         {combination && (combination.challenge || combination.desiredShift) && (
@@ -124,7 +195,7 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
             </div>
           </article>
 
-          {/* Secondary Products Rail */}
+          {/* Secondary Companion Pieces */}
           {secondaryOffers.length > 0 && (
             <div className="guide-result__others">
               <div className="guide-result__others-header">
@@ -154,21 +225,44 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
 
       {/* Case B: No products available for this Dasha period */}
       {!hasProducts && (
-        <div className="guide-unsupported-dasha-card">
-          <div className="guide-unsupported-dasha-card__icon">
-            <Compass size={24} />
+        <div className="guide-unsupported-dasha-container">
+          {/* Always Show the 4 Gifting Chapters / Categories */}
+          <div className="guide-categories-bento">
+            <div className="guide-categories-bento__header">
+              <span className="guide-eyebrow">EXPLORE ATELIER CHAPTERS</span>
+              <h3>Curated Pieces by Gifting Intention</h3>
+              <p>While dedicated hampers for your {result.guide?.antardasha || 'current'} period are being handcrafted, explore authentic pieces curated for your life chapter:</p>
+            </div>
+            <div className="guide-categories-grid">
+              {GIFT_CHAPTERS.map(ch => (
+                <Link key={ch.slug} to={`/shop?intention=${ch.slug}`} className="guide-chapter-card">
+                  <div className="guide-chapter-card__top">
+                    <span className="guide-chapter-card__icon">{ch.icon}</span>
+                    <ArrowUpRight size={14} className="guide-chapter-card__arrow" />
+                  </div>
+                  <h4>{ch.title}</h4>
+                  <p>{ch.desc}</p>
+                </Link>
+              ))}
+            </div>
           </div>
-          <h3>Atelier Crafting In Progress</h3>
-          <p className="guide-unsupported-dasha-card__desc">
-            For your active <strong>{result.guide?.antardasha || 'planetary'}</strong> period, dedicated curation sets are not yet available in our portfolio / store. The atelier is currently handcrafting keepsakes and rituals for upcoming planetary chapters.
-          </p>
-          <div className="guide-unsupported-dasha-card__actions">
-            <Link to="/shop" className="guide-primary">
-              Explore Available Collection <ArrowUpRight size={15} />
-            </Link>
-            <button type="button" onClick={onRestart}>
-              <RotateCcw size={14} /> Begin Again
-            </button>
+
+          <div className="guide-unsupported-dasha-card">
+            <div className="guide-unsupported-dasha-card__icon">
+              <Compass size={24} />
+            </div>
+            <h3>Atelier Crafting In Progress</h3>
+            <p className="guide-unsupported-dasha-card__desc">
+              For your active <strong>{result.guide?.antardasha || 'planetary'}</strong> period, dedicated curation sets are not yet available in our portfolio / store. The atelier is currently handcrafting keepsakes and rituals for upcoming planetary chapters.
+            </p>
+            <div className="guide-unsupported-dasha-card__actions">
+              <Link to="/shop" className="guide-primary">
+                Explore All Products <ArrowUpRight size={15} />
+              </Link>
+              <button type="button" className="guide-btn-luxury-secondary" onClick={onRestart}>
+                <RotateCcw size={14} /> <span>Begin Again</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -183,8 +277,8 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
           <button type="button" onClick={onSave} disabled={!lead?.variantId || saved}>
             <Bookmark size={16} /> {saved ? 'Saved to your account' : 'Save this edit'}
           </button>
-          <button type="button" onClick={onRestart}>
-            Begin again
+          <button type="button" className="guide-btn-luxury-secondary" onClick={onRestart}>
+            <RotateCcw size={14} /> <span>Begin Again</span>
           </button>
         </div>
       )}
