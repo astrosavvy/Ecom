@@ -55,8 +55,8 @@ export function getGeocodingAttribution(): string {
  */
 export async function searchPlaces(query: string): Promise<Place[]> {
   const trimmed = query.trim().slice(0, 90)
-  // Strictly suppress API calls for queries shorter than 4 characters
-  if (trimmed.length < 4) {
+  // Strictly suppress API calls for queries shorter than 3 characters
+  if (trimmed.length < 3) {
     return []
   }
 

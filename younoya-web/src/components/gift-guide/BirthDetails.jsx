@@ -7,7 +7,7 @@ export default function BirthDetails({ values, setValues }) {
   const [places, setPlaces] = useState([])
   const [error, setError] = useState('')
   useEffect(() => {
-    if (query.trim().length < 4 || values.placeLabel === query) { setPlaces([]); return undefined }
+    if (query.trim().length < 3 || values.placeLabel === query) { setPlaces([]); return undefined }
     const timer = setTimeout(() => {
       storeRequest(`/store/gift-guide/places?q=${encodeURIComponent(query)}`)
         .then(data => {
@@ -27,7 +27,7 @@ export default function BirthDetails({ values, setValues }) {
         <label htmlFor="guide-place-input">City of birth <span>Optional</span></label>
         <input id="guide-place-input" autoComplete="off" value={query} onChange={event => {
           setQuery(event.target.value); setValues(current => ({ ...current, placeId: null, placeLabel: '' }))
-        }} placeholder="Start typing a city (min. 4 letters)" />
+        }} placeholder="Start typing a city (min. 3 letters)" />
         {places.length > 0 && <ul role="listbox" aria-label="Birth cities">{places.map(place => <li key={place.id}>
           <button type="button" onClick={() => {
             const label = [place.name, place.region, place.country].filter(Boolean).join(', ')

@@ -64,9 +64,32 @@ export default function AsterDivinationCeremony({ onComplete, intention = '' }) 
           animate={{ rotate: -360 }}
           transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
         />
-        <div className="divination-ceremony__center">
-          <img src="/favicon.png" alt="" className="divination-ceremony__monogram" />
-        </div>
+        <motion.div
+          className="divination-ceremony__center"
+          animate={reduced ? false : {
+            scale: [1, 1.26, 0.94, 1.15, 1],
+            boxShadow: [
+              '0 0 20px rgba(197, 168, 128, 0.35)',
+              '0 0 45px rgba(228, 200, 157, 0.75), 0 0 12px rgba(255, 255, 255, 0.8)',
+              '0 0 18px rgba(197, 168, 128, 0.25)',
+              '0 0 38px rgba(228, 200, 157, 0.65)',
+              '0 0 20px rgba(197, 168, 128, 0.35)',
+            ],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        >
+          <motion.img
+            src="/favicon.png"
+            alt=""
+            className="divination-ceremony__monogram"
+            animate={reduced ? false : { scale: [0.94, 1.08, 0.9, 1.04, 0.94] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </motion.div>
       </div>
 
       <div className="divination-ceremony__content">

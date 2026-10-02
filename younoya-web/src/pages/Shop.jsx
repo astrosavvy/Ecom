@@ -21,7 +21,12 @@ const FILTERS = [
 ]
 
 export default function Shop() {
-  const [activeFilter, setActiveFilter] = useState('all')
+  const [searchParams] = useSearchParams()
+  const intentionParam = searchParams.get('intention')
+  const [activeFilter, setActiveFilter] = useState(() => {
+    const match = FILTERS.find(f => f.id === intentionParam)
+    return match ? match.id : 'all'
+  })
   const [wishlist, setWishlist] = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('younoya-saved-pieces') || '[]')
@@ -31,10 +36,15 @@ export default function Shop() {
   })
   const [expanded, setExpanded] = useState(false)
   const [query, setQuery] = useState('')
-  const [searchParams] = useSearchParams()
   const reducedMotion = useReducedMotion()
   const searchActive = searchParams.has('search')
   const savedOnly = searchParams.has('saved')
+
+  useEffect(() => {
+    if (intentionParam && FILTERS.some(f => f.id === intentionParam)) {
+      setActiveFilter(intentionParam)
+    }
+  }, [intentionParam])
 
   useEffect(() => {
     localStorage.setItem('younoya-saved-pieces', JSON.stringify(wishlist))

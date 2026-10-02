@@ -7,7 +7,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const q = String(req.query.q ?? "")
     if (q.length > 90) return res.status(400).json({ message: "Search is too long" })
-    if (q.trim().length < 4) {
+    if (q.trim().length < 3) {
       return res.json({ places: [], attribution: getGeocodingAttribution() })
     }
     const ip = String(req.ip || req.headers["cf-connecting-ip"] || "unknown")

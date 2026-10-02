@@ -13,33 +13,6 @@ const destination = offer => `${offer.privateOffer ? '/offer/' : '/product/'}${o
 const image = offer => !offer.privateOffer && getProductByHandle(offer.handle)?.shopCardImage || offer.image
 const title = value => value === value.toUpperCase() ? value.toLowerCase().replace(/\b\w/g, letter => letter.toUpperCase()) : value
 
-const GIFT_CHAPTERS = [
-  {
-    slug: 'love-connection',
-    title: 'Love & Connection',
-    desc: 'Listening, emotional presence, and deepening intimate bonds.',
-    icon: '💕',
-  },
-  {
-    slug: 'confidence-power',
-    title: 'Career & Confidence',
-    desc: 'Conviction, strategic focus, and unwavering self-trust.',
-    icon: '🔥',
-  },
-  {
-    slug: 'vitality-balance',
-    title: 'Vitality & Inner Balance',
-    desc: 'Grounding, calm rituals, and mindful emotional reset.',
-    icon: '🧘',
-  },
-  {
-    slug: 'wealth-prosperity',
-    title: 'Wealth & Prosperity',
-    desc: 'Discipline, strategic abundance, and discerning value.',
-    icon: '💰',
-  },
-]
-
 export default function GuideResult({ values, result, onSave, onOrder, onRestart, saved, notice }) {
   const reduced = useReducedMotion(), region = useRef(null)
   const lead = result.primaryOffer || result.offers?.[0]
@@ -226,26 +199,6 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
       {/* Case B: No products available for this Dasha period */}
       {!hasProducts && (
         <div className="guide-unsupported-dasha-container">
-          {/* Always Show the 4 Gifting Chapters / Categories */}
-          <div className="guide-categories-bento">
-            <div className="guide-categories-bento__header">
-              <span className="guide-eyebrow">EXPLORE ATELIER CHAPTERS</span>
-              <h3>Curated Pieces by Gifting Intention</h3>
-              <p>While dedicated hampers for your {result.guide?.antardasha || 'current'} period are being handcrafted, explore authentic pieces curated for your life chapter:</p>
-            </div>
-            <div className="guide-categories-grid">
-              {GIFT_CHAPTERS.map(ch => (
-                <Link key={ch.slug} to={`/shop?intention=${ch.slug}`} className="guide-chapter-card">
-                  <div className="guide-chapter-card__top">
-                    <span className="guide-chapter-card__icon">{ch.icon}</span>
-                    <ArrowUpRight size={14} className="guide-chapter-card__arrow" />
-                  </div>
-                  <h4>{ch.title}</h4>
-                  <p>{ch.desc}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
 
           <div className="guide-unsupported-dasha-card">
             <div className="guide-unsupported-dasha-card__icon">
