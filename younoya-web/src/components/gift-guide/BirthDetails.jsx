@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import BirthCalendar from './BirthCalendar'
+import BirthTime from './BirthTime'
 import { storeRequest } from '../../lib/giftGuideApi'
 
 export default function BirthDetails({ values, setValues }) {
@@ -22,7 +23,7 @@ export default function BirthDetails({ values, setValues }) {
     <p>A date offers numerology. Include time and city for an astrology reading.</p>
     <BirthCalendar value={values.dob} onChange={dob => setValues(current => ({ ...current, dob }))} />
     <div className="guide-birth__more">
-      <label>Time of birth <span>Optional</span><input type="time" value={values.tob} onChange={event => setValues(current => ({ ...current, tob: event.target.value }))} /></label>
+      <BirthTime value={values.tob} onChange={tob => setValues(current => ({ ...current, tob }))} />
       <div className="guide-place">
         <label htmlFor="guide-place-input">City of birth <span>Optional</span></label>
         <input id="guide-place-input" autoComplete="off" value={query} onKeyDown={event => { if (event.key === 'Escape') setPlaces([]) }} onChange={event => {

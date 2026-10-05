@@ -7,19 +7,6 @@
   --qna-surface: #1c1813;
 }
 
-.navbar--guide.navbar--light {
-  background: #100e0bea;
-  border-bottom-color: #cfb68a20;
-}
-.navbar--guide .navbar__nav-link { color: #bbae9e; }
-.navbar--guide .navbar__brand img { filter: brightness(1.4); }
-.navbar--guide .navbar__nav-link:hover,
-.navbar--guide .navbar__nav-link.is-active { color: #f3eee5; background: #cfb68a12; }
-.navbar--guide .navbar__icon-link,
-.navbar--guide .navbar__cart { color: #e1cba5; }
-.navbar--guide .navbar__cta-btn { background: #cfb68a; color: #20190f; box-shadow: none; }
-.navbar--guide .navbar__cta-btn:hover { background: #dfcaa8; }
-
 .guide-conversation { gap: 0; }
 .guide-conversation .guide-progress {
   display: block;

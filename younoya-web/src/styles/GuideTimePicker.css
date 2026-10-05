@@ -1,0 +1,49 @@
+.guide-time { min-width: 0; }
+.guide-conversation .guide-time__trigger { padding-inline: 10px; gap: 8px; }
+.guide-time__trigger > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.guide-time__trigger svg { flex-shrink: 0; }
+.guide-dialog--time { width: min(500px, calc(100vw - 32px)); }
+.guide-time-picker { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 22px; align-items: center; }
+.guide-time-picker__hint { margin: 0 0 12px; text-align: center; font-size: 12px; color: var(--qna-muted); }
+.guide-time-picker__units { display: flex; align-items: flex-end; gap: 7px; }
+.guide-time-picker__units label { flex: 1; min-width: 0; font-size: 11px !important; color: var(--qna-muted) !important; }
+.guide-time-picker__units > span { padding-bottom: 14px; color: var(--qna-muted); font-size: 24px; }
+.guide-time-picker__units select { width: 100%; height: 58px; margin-top: 7px; padding: 8px 4px; border: 1px solid var(--qna-line); border-radius: 12px; background: #110f0c; color: var(--qna-text); font-size: 25px; font-variant-numeric: tabular-nums; cursor: pointer; }
+.guide-time-picker__units select.is-active { border-color: var(--qna-accent); color: var(--qna-accent); }
+.guide-time-picker__period { display: flex; gap: 4px; margin-top: 18px; padding: 4px; border: 1px solid var(--qna-line); border-radius: 12px; background: #110f0c; }
+.guide-time-picker__period button { flex: 1; min-height: 44px; padding: 6px; border: 0; border-radius: 8px; background: none; color: var(--qna-muted); font-size: 13px; cursor: pointer; }
+.guide-time-picker__period button[aria-pressed="true"] { background: #cfb68a; color: #241b10; }
+.guide-time-picker__note { margin: 14px 0 0; font-size: 11px; line-height: 1.7; color: var(--qna-muted); }
+.guide-clock { position: relative; width: 100%; aspect-ratio: 1; max-width: 260px; margin: auto; border: 1px solid var(--qna-line); border-radius: 50%; background: #110f0c; touch-action: none; user-select: none; }
+.guide-clock svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.guide-clock__ring { fill: none; stroke: #cfb68a12; stroke-width: .5; }
+.guide-clock__hand { stroke: var(--qna-accent); stroke-width: .9; stroke-linecap: round; }
+.guide-clock__tip, .guide-clock__center { fill: var(--qna-accent); }
+.guide-clock__number { position: absolute; left: var(--clock-x); top: var(--clock-y); transform: translate(-50%, -50%); width: 44px; height: 44px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%; background: #110f0c; color: var(--qna-text); font-size: 14px !important; font-variant-numeric: tabular-nums; cursor: pointer; }
+.guide-clock__number:hover { background: #30281c; }
+.guide-clock__number[aria-pressed="true"] { background: #cfb68a; color: #241b10; }
+.guide-time-picker__actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--qna-line); }
+.guide-time-picker__actions button { min-height: 48px; padding: 12px 18px; border-radius: 13px; font-size: 13px; cursor: pointer; }
+.guide-time-picker__clear { border: 1px solid var(--qna-line); background: none; color: var(--qna-muted); }
+.guide-time-picker__confirm { border: 1px solid #cfb68a; background: #cfb68a; color: #241b10; }
+.guide-time-picker__confirm:hover { background: #dfc9a3; }
+.guide-time-picker__units select:focus-visible { outline: 2px solid var(--qna-accent); outline-offset: 3px; }
+@media (max-width: 600px) {
+  .guide-time-picker { display: flex; flex-direction: column-reverse; gap: 16px; }
+  .guide-time-picker__controls { width: min(100%, 240px); }
+  .guide-time-picker__units label { font-size: 12px !important; }
+  .guide-time-picker__units select { height: 54px; font-size: 24px; padding-inline: 12px; }
+  .guide-time-picker__period { margin-top: 12px; }
+  .guide-time-picker__note { display: none; }
+  .guide-time-picker__dial { width: min(100%, 240px); }
+  .guide-time-picker__hint { margin-bottom: 10px; }
+  .guide-time-picker__actions { margin-top: 18px; padding-top: 14px; }
+}
+@media (max-width: 600px) and (max-height: 700px) {
+  .guide-time-picker { gap: 10px; }
+  .guide-time-picker__dial { width: min(100%, 200px); }
+  .guide-time-picker__actions { margin-top: 12px; }
+}
+@media (min-width: 601px) and (max-height: 550px) {
+  .guide-clock { max-width: 200px; }
+}

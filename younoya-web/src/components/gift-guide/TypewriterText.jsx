@@ -3,7 +3,7 @@ import { useReducedMotion } from 'framer-motion'
 
 export default function TypewriterText({
   text = '',
-  speed = 28,
+  duration = 2500,
   onComplete,
   className = '',
   cursorColor = '#C5A880',
@@ -11,43 +11,42 @@ export default function TypewriterText({
   const reduced = useReducedMotion()
   const [displayedLength, setDisplayedLength] = useState(reduced ? text.length : 0)
   const [isTyping, setIsTyping] = useState(!reduced)
-  const timerRef = useRef(null)
+  const frameRef = useRef(null)
+  const completeRef = useRef(onComplete)
+  useEffect(() => { completeRef.current = onComplete }, [onComplete])
 
   useEffect(() => {
-    if (reduced) {
+    if (reduced || !text || duration <= 0) {
       setDisplayedLength(text.length)
       setIsTyping(false)
-      onComplete?.()
+      completeRef.current?.()
       return
     }
 
     setDisplayedLength(0)
     setIsTyping(true)
-    let currentIdx = 0
-
-    function typeNext() {
-      if (currentIdx < text.length) {
-        currentIdx += 1
-        setDisplayedLength(currentIdx)
-        timerRef.current = setTimeout(typeNext, speed)
-      } else {
+    const start = performance.now()
+    function typeNext(now) {
+      const progress = Math.min(1, (now - start) / duration)
+      setDisplayedLength(Math.floor(text.length * progress))
+      if (progress === 1) {
+        frameRef.current = null
         setIsTyping(false)
-        onComplete?.()
-      }
+        completeRef.current?.()
+      } else frameRef.current = requestAnimationFrame(typeNext)
     }
 
-    timerRef.current = setTimeout(typeNext, speed)
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-    }
-  }, [text, speed, reduced, onComplete])
+    frameRef.current = requestAnimationFrame(typeNext)
+    return () => cancelAnimationFrame(frameRef.current)
+  }, [text, duration, reduced])
 
   const handleSkip = () => {
     if (isTyping) {
-      if (timerRef.current) clearTimeout(timerRef.current)
+      cancelAnimationFrame(frameRef.current)
+      frameRef.current = null
       setDisplayedLength(text.length)
       setIsTyping(false)
-      onComplete?.()
+      completeRef.current?.()
     }
   }
 
@@ -55,10 +54,19 @@ export default function TypewriterText({
     <span
       className={`typewriter-text ${className}`}
       onClick={handleSkip}
+      onKeyDown={event => {
+        if (isTyping && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault(); handleSkip()
+        }
+      }}
+      role={isTyping ? 'button' : undefined}
+      tabIndex={isTyping ? 0 : undefined}
       title={isTyping ? 'Click to show full reading' : undefined}
-      style={{ cursor: isTyping ? 'pointer' : 'default' }}
+      data-typing={isTyping}
     >
-      {text.slice(0, displayedLength)}
+      <span className="typewriter-text__measure" aria-hidden="true">{text}</span>
+      <span className="sr-only">{text}</span>
+      <span className="typewriter-text__visible" aria-hidden="true">{text.slice(0, displayedLength)}
       {isTyping && (
         <span
           className="typewriter-cursor"
@@ -68,6 +76,7 @@ export default function TypewriterText({
           ▍
         </span>
       )}
+      </span>
     </span>
   )
 }

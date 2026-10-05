@@ -1,0 +1,80 @@
+/* One editorial flow connects the reading to its live catalog selections. */
+.guide-page .guide-result--fluid { --reading-accent:#cfb68a; --reading-text:#f3eee5; --reading-muted:#bbae9e; scrollbar-width:none; }
+.guide-result--fluid::-webkit-scrollbar { display:none; }
+.guide-result--fluid .guide-reading { padding:0 2px; margin:0 0 26px; border:0; border-radius:0; background:none; box-shadow:none; }
+.guide-reading__intro { margin-bottom:32px; }
+.guide-result--fluid .guide-eyebrow { color:var(--reading-accent); font-size:10px; font-weight:500; letter-spacing:.1em; }
+.guide-result--fluid .guide-reading h1 { margin:16px 0 12px; font-size:clamp(34px,3.8vw,46px); line-height:1.06; color:var(--reading-text); }
+.guide-result--fluid .guide-reading h1 em { color:var(--reading-accent); }
+.guide-reading__intention { margin:0; color:var(--reading-muted); font-size:12px; line-height:1.6; }
+.guide-reading__intention span { color:var(--reading-accent); }
+.guide-reading__preview { display:flex; align-items:center; gap:14px; margin-top:24px; color:var(--reading-text); text-decoration:none; }
+.guide-reading__preview img { width:60px; height:72px; border-radius:8px; object-fit:cover; flex-shrink:0; }
+.guide-reading__preview > span { flex:1; min-width:0; }
+.guide-reading__preview small { display:block; color:var(--reading-muted); font-size:10px; line-height:1.6; margin-bottom:4px; }
+.guide-reading__preview strong { font-family:'Cormorant Garamond',Georgia,serif; font-size:25px; font-weight:500; line-height:1.15; }
+.guide-reading__preview svg { color:var(--reading-accent); flex-shrink:0; }
+.guide-reading__preview:hover strong { color:var(--reading-accent); }
+.guide-result--fluid .guide-result__tagline { margin:12px 0 0; font-size:12px; letter-spacing:0; text-transform:none; color:var(--reading-muted); }
+.guide-reading__chapter { padding:22px 0 0; margin:24px 0 0; border-top:1px solid #cfb68a28; }
+.guide-reading__heading { display:flex; align-items:flex-start; gap:14px; }
+.guide-reading__number { padding-top:4px; color:var(--reading-accent); opacity:.7; font-size:11px; font-variant-numeric:tabular-nums; }
+.guide-reading__subtitle { display:block; margin-bottom:6px; color:var(--reading-muted); font-size:10px; letter-spacing:.02em; }
+.guide-reading__chapter h2 { margin:0; color:var(--reading-text); font-family:'Cormorant Garamond',Georgia,serif; font-size:27px; font-weight:500; line-height:1.15; letter-spacing:-.02em; text-wrap:balance; }
+.guide-reading__text { max-width:62ch; margin:18px 0 0; color:#ddd3c5; font-size:14px; line-height:1.8; text-wrap:pretty; }
+.guide-result--fluid .typewriter-text { display:grid; line-height:inherit; }
+.typewriter-text__measure,.typewriter-text__visible { grid-area:1 / 1; align-self:start; }
+.typewriter-text__measure { visibility:hidden; pointer-events:none; }
+.typewriter-text[data-typing="true"] { cursor:pointer; }
+.typewriter-text:focus-visible { outline:2px solid #cfb68a; outline-offset:4px; }
+.guide-reading__shift { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:24px; color:var(--reading-muted); font-size:11px; line-height:1.6; }
+.guide-reading__shift svg { color:var(--reading-accent); flex-shrink:0; }
+.guide-reading__connection { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:48px; margin-top:22px; color:var(--reading-accent); font-size:12px; text-decoration:none; border-bottom:1px solid #cfb68a38; }
+.guide-reading__connection:hover { color:var(--reading-text); }
+.guide-result--fluid a:focus-visible,.guide-result--fluid button:focus-visible { outline:2px solid #cfb68a; outline-offset:4px; }
+.guide-result--fluid .guide-selection { display:grid; grid-template-columns:minmax(0, .85fr) minmax(0, 1fr); gap:24px; align-items:center; margin:0 0 38px; padding:0; border:0; border-radius:0; background:none; box-shadow:none; scroll-margin-top:20px; }
+.guide-result--fluid .guide-selection .guide-result__image { width:100%; height:auto; aspect-ratio:4 / 5; border-radius:14px; background:#1c1813; }
+.guide-result--fluid .guide-selection .guide-result__copy { padding:0; }
+.guide-result--fluid .guide-selection h2 { margin:12px 0; font-size:clamp(28px,3vw,36px); color:var(--reading-text); }
+.guide-result--fluid .guide-selection .guide-hamper-story { color:var(--reading-muted); }
+.guide-result--fluid .guide-result__price { display:block; margin:14px 0 18px; color:var(--reading-text); font-family:Arial,Helvetica,sans-serif; font-size:19px; font-weight:500; font-variant-numeric:tabular-nums; }
+.guide-result--fluid .guide-lead-cta { min-height:48px; padding:12px 16px; border:1px solid #cfb68a; background:#cfb68a; color:#211b14; box-shadow:none; font-size:12px; gap:8px; }
+.guide-result--fluid .guide-lead-cta:hover:not(:disabled) { background:#e1cba5; box-shadow:none; }
+.guide-result--fluid .guide-lead-cta:disabled { opacity:.45; }
+.guide-selection__composition { grid-column:1 / -1; }
+.guide-selection__composition:has(.what-is-inside) { padding-top:22px; border-top:1px solid #cfb68a28; }
+.guide-selection__composition:empty { display:none; }
+.guide-result--fluid .what-is-inside { margin:0; padding:0; border:0; }
+.guide-result--fluid .what-is-inside__card { padding:16px 0; background:none; border:0; border-top:1px solid #cfb68a28; border-radius:0; box-shadow:none; }
+.guide-result--fluid .what-is-inside__badge { color:var(--reading-accent); }
+.guide-result--fluid .what-is-inside__item-desc { color:var(--reading-muted); }
+.guide-result--fluid .guide-companions { margin:0 0 32px; padding-top:26px; border-top:1px solid #cfb68a28; }
+.guide-result--fluid .guide-secondary-chapters__header { text-align:left; margin-bottom:22px; }
+.guide-result--fluid .guide-secondary-chapters__header h3 { color:var(--reading-text); font-size:30px; }
+.guide-result--fluid .guide-secondary-chapters__header p { color:var(--reading-muted); font-size:12px; }
+.guide-result--fluid .guide-secondary-chapters__grid { display:grid; grid-template-columns:1fr; gap:0; }
+.guide-result--fluid .guide-secondary-chapter-card { padding:22px 0; border:0; border-top:1px solid #cfb68a20; border-radius:0; background:none; box-shadow:none; transform:none; }
+.guide-result--fluid .guide-secondary-chapter-card:hover { border-color:#cfb68a20; box-shadow:none; transform:none; }
+.guide-result--fluid .guide-secondary-chapter-card__top { padding:0; border:0; }
+.guide-result--fluid .guide-secondary-chapter-card__badge { color:var(--reading-accent); font-size:11px; }
+.guide-result--fluid .guide-secondary-chapter-card__sub { color:var(--reading-muted); }
+.guide-result--fluid .guide-secondary-chapter-card__body { display:grid; grid-template-columns:84px minmax(0,1fr) auto; align-items:center; gap:16px; }
+.guide-result--fluid .guide-secondary-chapter-card__details h4 { color:var(--reading-text); }
+.guide-result--fluid .guide-secondary-chapter-card__price { color:var(--reading-text); font-size:15px; }
+.guide-result--fluid .guide-secondary-chapter-card__btn { width:auto; min-height:44px; padding:10px 14px; color:var(--reading-accent); border-color:#cfb68a40; background:none; }
+.guide-result--fluid .guide-result__actions { padding:18px 0 24px; border-top:1px solid #cfb68a28; }
+@media(max-width:600px) {
+  .guide-reading__intro { margin-bottom:24px; }
+  .guide-result--fluid .guide-reading h1 { font-size:36px; }
+  .guide-reading__chapter { padding-top:20px; margin-top:24px; }
+  .guide-reading__chapter h2 { font-size:26px; }
+  .guide-reading__text { font-size:14px; margin-top:16px; }
+  .guide-result--fluid .guide-selection { grid-template-columns:minmax(0,.85fr) minmax(0,1fr); gap:16px; }
+  .guide-result--fluid .guide-selection h2 { font-size:28px; }
+  .guide-result--fluid .guide-lead-cta { width:100%; padding:12px 8px; font-size:11px; }
+  .guide-result--fluid .guide-selection .guide-eyebrow { font-size:9px; letter-spacing:.06em; }
+  .guide-result--fluid .guide-secondary-chapter-card__body { grid-template-columns:72px minmax(0,1fr) auto; gap:12px; }
+  .guide-result--fluid .guide-secondary-chapter-card__image-link { width:72px; height:84px; }
+  .guide-result--fluid .guide-secondary-chapter-card__btn { padding:10px; font-size:11px; }
+}
+@media(prefers-reduced-motion:reduce) { .typewriter-cursor { animation:none; } }

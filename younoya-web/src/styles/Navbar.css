@@ -112,7 +112,7 @@
   cursor: pointer;
 }
 
-.navbar__cart span {
+.navbar__cart-count {
   position: absolute;
   right: 2px;
   top: 2px;
@@ -159,5 +159,17 @@
 .navbar--shop .navbar__cta-btn:active,
 .navbar--shop .navbar__icon-link:active { transform: scale(.97); }
 .navbar--shop :is(a, button):focus-visible { outline: 2px solid #a37b24; outline-offset: 3px; }
-.navbar--guide{height:72px;padding-block:10px}
-.navbar--guide .navbar__brand img{width:98px;height:48px}
+.navbar--guide { height: 72px; padding: 8px max(24px, calc((100vw - 1240px) / 2)); }
+.navbar--guide.navbar--light { background: #100e0bf2; border-bottom-color: #cfb68a20; }
+.navbar--guide .navbar__brand img { width: 116px; height: 54px; filter: brightness(1.4); }
+.navbar--guide .navbar__cart { display: inline-flex; align-items: center; justify-content: center; gap: 9px; width: auto; min-width: 84px; height: 44px; padding: 0 15px; border: 1px solid #cfb68a40; border-radius: 14px; color: #e1cba5; background: #cfb68a08; transition: border-color .2s ease, background .2s ease; }
+.navbar--guide .navbar__cart:hover { background: #cfb68a15; border-color: #cfb68a80; }
+.navbar--guide .navbar__cart-label { position: static; font-size: 12px; font-weight: 500; }
+.navbar--guide .navbar__cart-count { right: -5px; top: -5px; min-width: 20px; height: 20px; border: 2px solid #100e0b; background: #cfb68a; color: #211a10; }
+.navbar--guide :is(a, button):focus-visible { outline: 2px solid #cfb68a; outline-offset: 4px; }
+@media (max-width: 600px) {
+  .navbar--guide { padding-inline: 19px; }
+  .navbar--guide .navbar__brand img { width: 98px; height: 48px; }
+  .navbar--guide .navbar__cart { width: 44px; min-width: 44px; padding: 0; }
+  .navbar--guide .navbar__cart-label { display: none; }
+}

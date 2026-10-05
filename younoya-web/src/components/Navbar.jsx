@@ -8,16 +8,18 @@ export default function Navbar() {
   const { totalItems, setIsOpen } = useCart()
   const light = pathname === '/shop' || pathname === '/find-a-gift' || pathname.startsWith('/product/') || pathname.startsWith('/blog')
   const shop = pathname === '/shop'
+  const guide = pathname === '/find-a-gift'
+  const fullNavigation = light && !guide
 
   return (
-    <header className={`navbar${light ? ' navbar--light' : ''}${shop ? ' navbar--shop' : ''}${pathname === '/find-a-gift' ? ' navbar--guide' : ''}`}>
+    <header className={`navbar${light ? ' navbar--light' : ''}${shop ? ' navbar--shop' : ''}${guide ? ' navbar--guide' : ''}`}>
       <div className="navbar__left">
         <Link className="navbar__brand" to="/" aria-label="Younoya home">
           <img src="/brand-legacy.webp" alt="Younoya" />
         </Link>
       </div>
 
-      {light && (
+      {fullNavigation && (
         <nav className="navbar__center" aria-label="Main navigation">
           <Link to="/" className="navbar__nav-link">Home</Link>
           <Link to="/shop#pieces" className={`navbar__nav-link ${pathname === '/shop' ? 'is-active' : ''}`}>Shop</Link>
@@ -32,7 +34,7 @@ export default function Navbar() {
       )}
 
       <div className="navbar__right">
-        {light && (
+        {fullNavigation && (
           <>
             <Link to="/shop?search=1#pieces" className="navbar__icon-link" aria-label="Search collection">
               <Search size={18} strokeWidth={1.5} />
@@ -48,9 +50,10 @@ export default function Navbar() {
           aria-label={`Open shopping bag with ${totalItems} items`}
         >
           <ShoppingBag size={20} strokeWidth={1.5} />
-          {totalItems > 0 && <span>{totalItems}</span>}
+          {guide && <span className="navbar__cart-label">Bag</span>}
+          {totalItems > 0 && <span className="navbar__cart-count">{totalItems}</span>}
         </button>
-        {light && (
+        {fullNavigation && (
           <Link to="/shop#pieces" className="navbar__cta-btn">
             Shop Now
           </Link>
