@@ -6,11 +6,11 @@ export default function useGuideLayout(main, screen) {
     if (!root) return undefined
     const conversation = root.querySelector('.guide-conversation')
     const content = root.querySelector('.guide-chat-content')
-    const dock = root.querySelector('.guide-reply-dock')
-    const question = root.querySelector('.guide-question')
     let frame
     function measure() {
-      if (question) root.style.setProperty('--guide-question-height', `${question.offsetHeight + 10}px`)
+      const viewportHeight = window.visualViewport?.height || window.innerHeight
+      const page = root.closest('.guide-page')
+      page.style.setProperty('--guide-viewport-height', `${viewportHeight}px`)
       if (window.matchMedia('(min-width: 960px)').matches) {
         root.style.removeProperty('--guide-stage-height')
         return
@@ -19,16 +19,21 @@ export default function useGuideLayout(main, screen) {
       const progress = root.querySelector('.guide-progress')
       const available = root.clientHeight - nav.offsetHeight
       const wide = root.clientWidth > 600
-      const minimum = wide ? 144 : 116
+      const minimum = viewportHeight < 550 ? 0 : wide ? 120 : 80
       const maximum = Math.min(root.clientWidth * 392 / 480 + 38, 520)
-      const needed = conversation ? progress.offsetHeight + content.scrollHeight + dock.scrollHeight + 42 : available
+      const spacing = element => {
+        const css = getComputedStyle(element)
+        return ['paddingTop', 'paddingBottom', 'marginTop', 'marginBottom'].reduce((sum, key) => sum + (parseFloat(css[key]) || 0), 0)
+      }
+      const needed = conversation ? progress.offsetHeight + spacing(conversation) + parseFloat(getComputedStyle(progress).marginBottom) + content.scrollHeight + 4 : available
       const height = Math.max(minimum, Math.min(maximum, available - needed))
       root.style.setProperty('--guide-stage-height', `${height}px`)
     }
     function schedule() { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure) }
     const observer = new ResizeObserver(schedule)
-    ;[root, content, question, ...(dock ? [...dock.children] : [])].filter(Boolean).forEach(element => observer.observe(element))
+    ;[root, content].filter(Boolean).forEach(element => observer.observe(element))
+    window.visualViewport?.addEventListener('resize', schedule)
     measure()
-    return () => { observer.disconnect(); cancelAnimationFrame(frame) }
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); window.visualViewport?.removeEventListener('resize', schedule) }
   }, [main, screen])
 }

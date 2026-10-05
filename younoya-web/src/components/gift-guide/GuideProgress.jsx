@@ -2,12 +2,12 @@ import { Check } from 'lucide-react'
 
 const chapters = ['Recipient', 'Connection', 'Occasion', 'Intention', 'Details']
 
-export default function GuideProgress({ step, self }) {
+export default function GuideProgress({ step, self, onHistory }) {
   const chapter = ['Who it’s for', self ? 'A little about you' : 'Your connection', 'The moment', 'The intention', 'A personal touch'][step]
   return <div className="guide-progress">
     <div className="guide-progress__heading">
       <div className="guide-progress__chapter"><span>Your personal edit</span><strong>{chapter}</strong></div>
-      <span className="guide-progress__count"><b>{String(step + 1).padStart(2, '0')}</b><span aria-hidden="true"> / </span><span className="sr-only"> of </span>05</span>
+      <div className="guide-progress__actions">{step > 0 && <button className="guide-history-trigger" type="button" onClick={onHistory} aria-haspopup="dialog">Your replies <span aria-hidden="true">↗</span></button>}<span className="guide-progress__count"><b>{String(step + 1).padStart(2, '0')}</b><span aria-hidden="true"> / </span><span className="sr-only"> of </span>05</span></div>
     </div>
     <ol className="guide-progress__chapters" aria-label="Gift guide chapters">
       {chapters.map((label, index) => <li key={label} aria-label={`${index === 1 && self ? 'You' : label}${index < step ? ' · completed' : index === step ? ' · current' : ''}`} className={index < step ? 'is-complete' : index === step ? 'is-current' : ''} aria-current={index === step ? 'step' : undefined}>

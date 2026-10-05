@@ -19,13 +19,13 @@ export default function BirthDetails({ values, setValues }) {
     return () => clearTimeout(timer)
   }, [query, values.placeLabel])
   return <div className="guide-birth">
-    <p>Birth details are optional. A date offers numerology; date, time and place allow a fuller astrology reading.</p>
+    <p>A date offers numerology. Include time and city for an astrology reading.</p>
     <BirthCalendar value={values.dob} onChange={dob => setValues(current => ({ ...current, dob }))} />
-    {values.dob && <div className="guide-birth__more">
+    <div className="guide-birth__more">
       <label>Time of birth <span>Optional</span><input type="time" value={values.tob} onChange={event => setValues(current => ({ ...current, tob: event.target.value }))} /></label>
       <div className="guide-place">
         <label htmlFor="guide-place-input">City of birth <span>Optional</span></label>
-        <input id="guide-place-input" autoComplete="off" value={query} onChange={event => {
+        <input id="guide-place-input" autoComplete="off" value={query} onKeyDown={event => { if (event.key === 'Escape') setPlaces([]) }} onChange={event => {
           setQuery(event.target.value); setValues(current => ({ ...current, placeId: null, placeLabel: '' }))
         }} placeholder="Start typing a city (min. 3 letters)" />
         {places.length > 0 && <ul role="listbox" aria-label="Birth cities">{places.map(place => <li key={place.id}>
@@ -35,8 +35,8 @@ export default function BirthDetails({ values, setValues }) {
           }}>{place.name} <small>{place.region}, {place.country}</small></button>
         </li>)}</ul>}
       </div>
-    </div>}
+    </div>
     {error && <p className="guide-note" role="status">{error}</p>}
-    {values.placeId && <p className="guide-note">City selected · {values.placeLabel}</p>}
+    {values.placeId && <p className="sr-only" role="status">City selected · {values.placeLabel}</p>}
   </div>
 }
