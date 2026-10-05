@@ -9,6 +9,7 @@ import GuideLogin from '../components/gift-guide/GuideLogin'
 import AsterDivinationCeremony from '../components/gift-guide/AsterDivinationCeremony'
 import useGuideLayout from '../components/gift-guide/useGuideLayout'
 import '../styles/GiftFinder.css'
+import '../styles/GuideConversation.css'
 
 const EMPTY = { forWhom: '', name: '', relation: '', moment: '', intention: '', dob: '', tob: '', placeId: null, placeLabel: '' }
 const readSession = key => { try { return JSON.parse(sessionStorage.getItem(key)) } catch { return null } }

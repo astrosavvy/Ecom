@@ -18,10 +18,10 @@ export const moments = {
 }
 
 export const intentions = [
-  { id: 'love-connection', name: 'Love & Connection', note: 'Warmth, affection, and deepening intimate bonds' },
-  { id: 'confidence-power', name: 'Career & Confidence', note: 'Ambition, clarity, and bold self-trust' },
-  { id: 'vitality-balance', name: 'Peace & Inner Balance', note: 'Grounding calm and mindful stillness' },
-  { id: 'wealth-prosperity', name: 'Abundance & Good Fortune', note: 'Fruitful progress, prosperity, and discerning growth' },
+  { id: 'love-connection', name: 'Love & Connection', note: 'Affection and closeness' },
+  { id: 'confidence-power', name: 'Career & Confidence', note: 'Clarity and self-belief' },
+  { id: 'vitality-balance', name: 'Peace & Inner Balance', note: 'Calm and grounding' },
+  { id: 'wealth-prosperity', name: 'Abundance & Good Fortune', note: 'Growth and possibility' },
 ]
 
 export const questions = self => [
@@ -29,12 +29,12 @@ export const questions = self => [
   self ? 'What may I call you?' : 'What may I call them?',
   self ? 'What moment are we celebrating?' : 'What occasion are we celebrating?',
   'What feeling would you like this gift to carry?',
-  'Shall we look at your astrological chart?',
+  self ? 'Shall we make it more personal?' : 'Shall we make their gift more personal?',
 ]
 
 export const prefaces = [
   'Every thoughtful gift begins with someone.',
-  'A name makes this reading personal.',
+  'Let’s put a name to this chapter.',
   'Tell me a little about the moment.',
   'Choose the intention behind your gift.',
   'Birth details are completely optional.',

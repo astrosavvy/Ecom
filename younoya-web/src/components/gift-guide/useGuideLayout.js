@@ -7,8 +7,10 @@ export default function useGuideLayout(main, screen) {
     const conversation = root.querySelector('.guide-conversation')
     const content = root.querySelector('.guide-chat-content')
     const dock = root.querySelector('.guide-reply-dock')
+    const question = root.querySelector('.guide-question')
     let frame
     function measure() {
+      if (question) root.style.setProperty('--guide-question-height', `${question.offsetHeight + 10}px`)
       if (window.matchMedia('(min-width: 960px)').matches) {
         root.style.removeProperty('--guide-stage-height')
         return
@@ -25,7 +27,7 @@ export default function useGuideLayout(main, screen) {
     }
     function schedule() { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure) }
     const observer = new ResizeObserver(schedule)
-    ;[root, content, ...(dock ? [...dock.children] : [])].filter(Boolean).forEach(element => observer.observe(element))
+    ;[root, content, question, ...(dock ? [...dock.children] : [])].filter(Boolean).forEach(element => observer.observe(element))
     measure()
     return () => { observer.disconnect(); cancelAnimationFrame(frame) }
   }, [main, screen])

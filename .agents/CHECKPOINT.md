@@ -171,3 +171,10 @@
   5. *Deployment & Verification*: Backend built locally (`npm run build` in `backend/`), deployed to VPS (`140.245.7.165`) via SCP per Backend Deployment Law, and PM2 restarted. Live endpoint `https://api.younoya.com/store/gift-guide/recommend` verified returning concise 28-word texts. Root monorepo build exited 0 (16 crawlable route shells, 11 admin shells, synced `dist/`).
 
 
+
+## Codex follow-up — Luxury gift-guide Q&A (2026-10-06)
+- User selected the existing dark champagne-and-gold palette. Added a named five-chapter progress rail, editorial question hierarchy, numbered matte answer rows with concise supporting copy, selected checkmarks, restrained pointer illumination, calmer entrance transitions and a matching guide-only dark navbar.
+- Unified name/optional birth field styling and visible back/focus controls. Corrected recipient phrasing on the final question. Measured the complete question height to avoid clipping on smaller screens; retained independently scrollable history and replies with hidden rails, adaptive portrait sizing and existing high-resolution loop assets.
+- Root build exited 0 with the existing bundle-size warning. Checked desktop 1440 x 900 / 1024 x 768 and mobile 430 x 932 / 360 x 800, both gifting branches, keyboard input/selection, relationship validation, back/selected states, optional date/time/city fields and scrolling. No horizontal overflow. Guest recommendation returned successfully from the live API; Save opened login without sending an OTP or persisting a saved record.
+- Reduced motion checked in source rather than simulated at OS level. A transient Vite import error during file creation was resolved by reload. Proof: .tmp/gift-guide-luxury-desktop.jpg and .tmp/gift-guide-luxury-mobile.jpg. Full design/verification notes: .agents/memory/gift_guide_ui.md.
+- Frontend-only change; recommendation rules/API/auth/payment behavior retained. Local preview running on 127.0.0.1:5175 (session 91634). One final local commit; await explicit push permission.
