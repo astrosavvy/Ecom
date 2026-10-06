@@ -205,3 +205,10 @@
 - Explicitly matched the guide name input to its dark champagne surface, ivory text and gold caret. Added standard/WebKit autofill inset fill and text-color override so browser autofill cannot introduce the pale blue/white rectangle; text selection also uses muted champagne.
 - Verified typed/focused input in the local browser: background rgb(28,24,19), text rgb(243,238,229), dark color scheme and gold caret. Autofill rules source-reviewed; an actual browser-saved name was not selected. Shared styling applies to both recipient/self fields and all breakpoints.
 - Root build exited 0; existing bundle-size warning remains. Proof: .tmp/gift-guide-dark-name.jpg. Temporary test tab closed; local Vite remains on port 5175. One final local commit; no push without fresh explicit permission.
+
+- Push follow-up (2026-10-06): User explicitly authorized push. Successfully pushed the verified name-field/autofill fix to origin/main (5967ecf..506b456). No additional commit created solely for push status; this local checkpoint note will accompany the next implementation commit.
+
+## Codex follow-up — Collection navigation button (2026-10-06)
+- Styled The collection link as a matching champagne-outline pill with muted dark fill, 44px touch target, hover/pressed feedback and visible keyboard focus. Kept its real /shop destination and link semantics.
+- Adjusted navigation padding and desktop row height so the larger control sits entirely below the fixed header. Verified laptop 1024 x 768 and mobile 360 x 800: all five occasion choices and Go back remain visible after responsive layout settles, with no horizontal overflow. Clicking the collection button opened /shop.
+- Root build exited 0; existing bundle warning remains. Proof: .tmp/gift-guide-collection-button.jpg. Temporary tab closed and viewport restored. One final local commit; push requires fresh user permission.

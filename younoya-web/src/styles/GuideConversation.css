@@ -6,6 +6,12 @@
   --qna-line: #cfb68a33;
   --qna-surface: #1c1813;
 }
+.guide-page .guide-page__top > a { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:10px 16px; border:1px solid #cfb68a45; border-radius:999px; background:#cfb68a09; color:#d3bea0; font-size:12px; font-weight:500; line-height:1.5; text-decoration:none; transition:background .2s ease,border-color .2s ease,color .2s ease; }
+.guide-page .guide-page__top > a:hover { background:#cfb68a18; border-color:#cfb68a; color:#f3eee5; }
+.guide-page .guide-page__top > a:focus-visible { outline:2px solid #cfb68a; outline-offset:4px; }
+.guide-page .guide-page__top > a:active { background:#cfb68a25; }
+.guide-page .guide-page__top { padding-block:0; }
+@media(min-width:960px) { .guide-page .guide-page__main:has(.guide-conversation) { grid-template-rows:52px minmax(0,1fr); } }
 
 .guide-conversation { gap: 0; }
 .guide-conversation .guide-progress {
