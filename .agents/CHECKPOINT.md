@@ -198,3 +198,10 @@
 - Observed both 214/232-character narratives complete in approximately 2.5 seconds after the reveal began, with stable paragraph heights. Reduced motion was source-reviewed, not changed at OS level. A transient Vite import warning during new stylesheet creation resolved after the file was present and the page reloaded.
 - Final root npm run build exited 0 (16 route shells, 11 admin shells, synced dist); source diff whitespace check passed. Existing >500KB bundle warning remains. Proof: .tmp/gift-guide-reading-desktop.jpg, .tmp/gift-guide-selection-mobile.jpg, .tmp/gift-guide-clock-desktop.jpg and .tmp/gift-guide-clock-mobile.jpg.
 - Local preview remains http://127.0.0.1:5175/find-a-gift (Vite session 91634). Temporary test tab closed and viewport reset. Frontend-only; no backend deployment required. Include source, generated dist and documentation in one final local commit; ask for fresh explicit permission before pushing.
+
+- Push follow-up (2026-10-06): User explicitly authorized GitHub push. Successfully pushed origin/main from d3c621e to 5967ecf, including the verified Q&A, space-allocation, header, clock and reading changes. No additional commit created solely for push status; this checkpoint note remains local for the next implementation commit. No backend deployment performed.
+
+## Codex follow-up — Dark name field and autofill (2026-10-06)
+- Explicitly matched the guide name input to its dark champagne surface, ivory text and gold caret. Added standard/WebKit autofill inset fill and text-color override so browser autofill cannot introduce the pale blue/white rectangle; text selection also uses muted champagne.
+- Verified typed/focused input in the local browser: background rgb(28,24,19), text rgb(243,238,229), dark color scheme and gold caret. Autofill rules source-reviewed; an actual browser-saved name was not selected. Shared styling applies to both recipient/self fields and all breakpoints.
+- Root build exited 0; existing bundle-size warning remains. Proof: .tmp/gift-guide-dark-name.jpg. Temporary test tab closed; local Vite remains on port 5175. One final local commit; no push without fresh explicit permission.
