@@ -9,7 +9,7 @@ export default function ShopCommunity() {
     if (!address) return
     const subject = encodeURIComponent('Younoya atelier updates')
     const body = encodeURIComponent(`Please add ${address} to Younoya atelier updates.`)
-    window.location.href = `mailto:care@younoya.com?subject=${subject}&body=${body}`
+    window.location.href = `mailto:support@younoya.com?subject=${subject}&body=${body}`
   }
 
   return (

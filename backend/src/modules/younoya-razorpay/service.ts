@@ -1,6 +1,8 @@
 import crypto from "crypto"
 import { AbstractPaymentProvider, PaymentActions, PaymentSessionStatus } from "@medusajs/framework/utils"
 import Razorpay from "razorpay"
+import { persistedOrder, refundOnce, refundContext } from "../younoya-commerce/razorpay"
+import { minor } from "../younoya-commerce/db"
 
 export function validRazorpaySignature(orderId: string, paymentId: string, signature: string, secret: string) {
   const expected = crypto.createHmac("sha256", secret).update(`${orderId}|${paymentId}`).digest("hex")
@@ -16,7 +18,7 @@ class RazorpayPaymentProvider extends AbstractPaymentProvider {
     super(container, options)
     const keyId = options?.key_id || process.env.RAZORPAY_KEY_ID
     this.secret = options?.key_secret || process.env.RAZORPAY_KEY_SECRET || ""
-    if (keyId && this.secret) this.razorpay = new Razorpay({ key_id: keyId, key_secret: this.secret })
+    if (keyId && this.secret) this.razorpay = new Razorpay({ key_id: keyId, key_secret: this.secret, timeout: 12000 } as any)
   }
 
   private client() {
@@ -25,31 +27,41 @@ class RazorpayPaymentProvider extends AbstractPaymentProvider {
   }
 
   async initiatePayment(input: any): Promise<any> {
-    const amount = Number(input.amount)
-    if (!Number.isInteger(amount) || amount < 100 || input.currency_code?.toLowerCase() !== "inr") {
+    const amount = minor(input.amount)
+    if (amount < 100 || amount > 100000000 || input.currency_code?.toLowerCase() !== "inr") {
       throw new Error("Invalid INR payment amount")
     }
     const sessionId = String(input.data?.session_id ?? input.context?.idempotency_key ?? "")
-    const order: any = await this.client().orders.create({
+    const order: any = await persistedOrder(sessionId, amount, () => this.client().orders.create({
       amount, currency: "INR", receipt: sessionId.slice(0, 40), notes: { medusa_session_id: sessionId },
-    })
+    }), async () => (await this.client().orders.all({ count: 100 } as any)).items as any[])
     return { id: order.id, data: { id: order.id, amount, currency: "INR", session_id: sessionId } }
   }
 
   async authorizePayment(input: any): Promise<any> {
     const data = input.data ?? input
     const orderId = String(data.id ?? "")
-    const paymentId = String(data.razorpay_payment_id ?? "")
+    let paymentId = String(data.razorpay_payment_id ?? "")
     const signature = String(data.razorpay_signature ?? "")
-    if (!orderId || !paymentId || !this.secret || !validRazorpaySignature(orderId, paymentId, signature, this.secret)) {
+    if (!orderId || !this.secret || (signature && !validRazorpaySignature(orderId, paymentId, signature, this.secret))) {
       return { status: PaymentSessionStatus.ERROR, data }
+    }
+    const order: any = await this.client().orders.fetch(orderId)
+    if (!data.session_id || order.notes?.medusa_session_id !== data.session_id || Number(order.amount) !== Number(data.amount))
+      return { status: PaymentSessionStatus.ERROR, data }
+    if (!paymentId) {
+      const payments: any = await this.client().orders.fetchPayments(orderId)
+      const eligible = payments.items?.filter((p: any) => ["authorized", "captured"].includes(p.status)) || []
+      if (eligible.length !== 1) return { status: PaymentSessionStatus.PENDING, data }
+      paymentId = eligible[0].id
     }
     const payment: any = await this.client().payments.fetch(paymentId)
     if (payment.order_id !== orderId || Number(payment.amount) !== Number(data.amount) || payment.currency !== "INR") {
       return { status: PaymentSessionStatus.ERROR, data }
     }
-    const status = payment.status === "captured" ? PaymentSessionStatus.CAPTURED
-      : payment.status === "authorized" ? PaymentSessionStatus.AUTHORIZED : PaymentSessionStatus.ERROR
+    const captured: any = payment.status === "authorized" ? await this.client().payments.capture(paymentId, payment.amount, "INR") : payment
+    const status = captured.status === "captured" && captured.order_id === orderId && Number(captured.amount) === Number(data.amount) && captured.currency === "INR"
+      ? PaymentSessionStatus.CAPTURED : PaymentSessionStatus.ERROR
     return { status, data: { ...data, razorpay_payment_id: paymentId } }
   }
 
@@ -57,6 +69,7 @@ class RazorpayPaymentProvider extends AbstractPaymentProvider {
     const data = input.data ?? input
     if (!data.razorpay_payment_id) return PaymentSessionStatus.PENDING
     const payment: any = await this.client().payments.fetch(data.razorpay_payment_id)
+    if (payment.order_id !== data.id || Number(payment.amount) !== Number(data.amount) || payment.currency !== "INR") return PaymentSessionStatus.ERROR
     return payment.status === "captured" ? PaymentSessionStatus.CAPTURED
       : payment.status === "authorized" ? PaymentSessionStatus.AUTHORIZED : PaymentSessionStatus.ERROR
   }
@@ -65,15 +78,19 @@ class RazorpayPaymentProvider extends AbstractPaymentProvider {
     const data = input.data ?? input
     if (!data.razorpay_payment_id) throw new Error("Missing Razorpay payment")
     const payment: any = await this.client().payments.fetch(data.razorpay_payment_id)
-    if (payment.status !== "captured") await this.client().payments.capture(data.razorpay_payment_id, payment.amount, "INR")
+    if (payment.order_id !== data.id || Number(payment.amount) !== Number(data.amount) || payment.currency !== "INR") throw new Error("Payment does not match")
+    if (!["authorized","captured"].includes(payment.status)) throw new Error("Payment cannot be captured")
+    const captured: any = payment.status === "captured" ? payment : await this.client().payments.capture(data.razorpay_payment_id, payment.amount, "INR")
+    if (captured.status !== "captured" || captured.order_id !== data.id || Number(captured.amount) !== Number(data.amount) || captured.currency !== "INR") throw new Error("Capture confirmation is pending")
     return { data }
   }
 
   async refundPayment(input: any): Promise<any> {
     const data = input.data ?? input
     if (!data.razorpay_payment_id) throw new Error("Missing Razorpay payment")
-    await this.client().payments.refund(data.razorpay_payment_id, { amount: Number(input.amount) })
-    return { data }
+    const refund = await refundOnce(data.razorpay_payment_id, minor(input.amount), refundContext.getStore() || input.context?.idempotency_key)
+    if (refund.status === "failed") throw new Error("Refund was rejected")
+    return { data: { ...data, last_refund_id: refund.id } }
   }
 
   async cancelPayment(input: any): Promise<any> { return { data: input.data ?? input } }

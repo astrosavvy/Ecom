@@ -30,6 +30,7 @@ import ThemeManager from "./pages/ThemeManager"
 import RecommendationRules from "./pages/RecommendationRules"
 import ProductMetadata from "./pages/ProductMetadata"
 import OfferManager from "./pages/OfferManager"
+import LaunchSettings from "./pages/LaunchSettings"
 import "../styles/Admin.css"
 
 type NavItem = {
@@ -50,6 +51,7 @@ const MAIN_NAV: NavItem[] = [
 ]
 
 const PERS_NAV: NavItem[] = [
+  { to: "/admin/launch", label: "Launch Settings", icon: Scale, roles: ["admin"] },
   { to: "/admin/themes", label: "Gift Categories", icon: Palette, roles: ["admin"] },
   { to: "/admin/rules", label: "Quiz Rules", icon: Scale, roles: ["admin"] },
   { to: "/admin/metadata", label: "Product Details", icon: Tags, roles: ["admin"] },
@@ -177,6 +179,7 @@ export default function AdminApp() {
           <Route path="/rules" element={<RecommendationRules />} />
           <Route path="/metadata" element={<ProductMetadata />} />
           <Route path="/gift-guide" element={<OfferManager />} />
+          <Route path="/launch" element={me.role === 'admin' ? <LaunchSettings /> : <Navigate to="/admin" replace />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </main>

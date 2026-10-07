@@ -6,8 +6,8 @@ import '../styles/Navbar.css'
 export default function Navbar() {
   const { pathname } = useLocation()
   const { totalItems, setIsOpen } = useCart()
-  const light = pathname === '/shop' || pathname === '/find-a-gift' || pathname.startsWith('/product/') || pathname.startsWith('/blog')
-  const shop = pathname === '/shop'
+  const light = !pathname.startsWith('/admin')
+  const shop = pathname === '/shop' || pathname === '/'
   const guide = pathname === '/find-a-gift'
   const fullNavigation = light && !guide
 
@@ -29,7 +29,7 @@ export default function Navbar() {
           <Link to="/blog" className={`navbar__nav-link ${pathname.startsWith('/blog') ? 'is-active' : ''}`}>
             Journal
           </Link>
-          <a href="mailto:care@younoya.com" className="navbar__nav-link">Contact</a>
+          <Link to="/contact" className="navbar__nav-link">Contact</Link>
         </nav>
       )}
 

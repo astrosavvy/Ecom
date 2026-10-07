@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { api, formatINR, fmtDate, type Role } from "../api"
+import OrderOperations from './commerce/OrderOperations'
 
 type OrderItem = { id: string; title: string; quantity: number; unit_price: number; total?: number; thumbnail?: string | null }
 type Order = {
@@ -74,6 +75,7 @@ export default function OrderDetail({ role }: { role: Role }) {
         </div>
       </section>
 
+      <OrderOperations id={order.id} role={role} />
       <section className="ad-card">
         <div className="ad-card__head"><h2>Delivery</h2></div>
         {addr ? (

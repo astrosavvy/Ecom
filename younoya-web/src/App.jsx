@@ -1,6 +1,10 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
+import { SiteConfigProvider, useSiteConfig } from './context/SiteConfigContext'
+import { POLICY_ROUTES } from './data/policies'
+import PolicyPage from './pages/PolicyPage'
+import CustomerOrders from './pages/CustomerOrders'
 import SmoothScroll from './components/SmoothScroll'
 import Navbar from './components/Navbar'
 import CartDrawer from './components/CartDrawer'
@@ -40,19 +44,21 @@ function JournalRedirect() {
 
 function StoreNavigation() {
   const { pathname } = useLocation()
-  const lightStorefront = pathname !== '/' && !pathname.startsWith('/admin')
+  const { storefrontMode } = useSiteConfig()
+  const comingSoon = pathname === '/' && storefrontMode === 'coming-soon'
+  const lightStorefront = !comingSoon && !pathname.startsWith('/admin')
   useEffect(() => {
     document.documentElement.classList.toggle('store-light', lightStorefront)
     return () => document.documentElement.classList.remove('store-light')
   }, [lightStorefront])
-  if (pathname === '/' || pathname.startsWith('/admin')) return null
+  if (comingSoon || pathname.startsWith('/admin')) return null
   return <><Navbar /><CartDrawer /></>
 }
 
 export default function App() {
   return (
     <BrowserRouter>
-      <CartProvider>
+      <SiteConfigProvider><CartProvider>
         <SmoothScroll>
           <ScrollToTop />
           <SeoHead />
@@ -63,6 +69,9 @@ export default function App() {
               <Route path="/shop" element={<Shop />} />
               <Route path="/find-a-gift" element={<GiftFinder />} />
               <Route path="/checkout" element={<Checkout />} />
+              {Object.keys(POLICY_ROUTES).map(path => <Route key={path} path={path} element={<PolicyPage />} />)}
+              <Route path="/account/orders" element={<CustomerOrders />} />
+              <Route path="/account/orders/:id" element={<CustomerOrders />} />
               <Route path="/offer/:handle" element={<PrivateOffer />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
@@ -75,7 +84,7 @@ export default function App() {
             </Routes>
           </main>
         </SmoothScroll>
-      </CartProvider>
+      </CartProvider></SiteConfigProvider>
     </BrowserRouter>
   )
 }

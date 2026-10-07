@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { getSeo, SITE_URL } from './metadata'
+import { useSiteConfig } from '../context/SiteConfigContext'
 
 function setMeta(attribute, key, content) {
   let element = document.head.querySelector(`meta[${attribute}="${key}"]`)
@@ -14,8 +15,9 @@ function setMeta(attribute, key, content) {
 
 export default function SeoHead() {
   const { pathname } = useLocation()
+  const { storefrontMode } = useSiteConfig()
   useEffect(() => {
-    const seo = getSeo(pathname)
+    const seo = getSeo(pathname,storefrontMode)
     document.title = seo.title
     setMeta('name', 'description', seo.description)
     setMeta('name', 'robots', seo.noindex ? 'noindex,follow' : 'index,follow')
@@ -39,6 +41,6 @@ export default function SeoHead() {
       script.textContent = JSON.stringify(seo.schema).replace(/</g, '\\u003c')
       document.head.appendChild(script)
     }
-  }, [pathname])
+  }, [pathname,storefrontMode])
   return null
 }

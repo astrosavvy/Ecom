@@ -2,6 +2,7 @@ import crypto from "crypto"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 
 const fetchPayment = jest.fn()
+jest.mock("../modules/younoya-commerce/db",() => ({ ...jest.requireActual("../modules/younoya-commerce/db"), exclusive: async (_key: string,run: any) => run() }))
 jest.mock("razorpay", () => ({ __esModule: true, default: jest.fn().mockImplementation(() => ({ payments: { fetch: fetchPayment } })) }))
 import { GET, POST } from "../api/store/gift-guide/payment-confirm/route"
 
@@ -58,7 +59,7 @@ describe("payment confirmation", () => {
       razorpay_signature: crypto.createHmac("sha256", secret).update("order_1|pay_1").digest("hex") },
       scope: { resolve: () => ({ graph: async ({ entity }: any) => ({
         data: entity === "cart" ? [{ id: "cart_1", customer_id: "cus_1", completed_at: "2026-09-30T12:00:00Z" }]
-          : [{ id: "ord_123", display_id: 1, total: 249900 }]
+          : entity === "order_cart" ? [{ order_id: "ord_123" }] : [{ id: "ord_123", display_id: 1, total: 249900 }]
       }) }) } }
     const postRes = await POST(reqPost, response()) as any
     expect(postRes.body).toEqual({ verified: true, completed: true, order: { id: "ord_123", display_id: 1, total: 249900 } })
@@ -66,7 +67,7 @@ describe("payment confirmation", () => {
     const reqGet: any = { auth_context: { actor_id: "cus_1" }, query: { cartId: "cart_1" },
       scope: { resolve: () => ({ graph: async ({ entity }: any) => ({
         data: entity === "cart" ? [{ id: "cart_1", customer_id: "cus_1", completed_at: "2026-09-30T12:00:00Z" }]
-          : [{ id: "ord_123", display_id: 1, total: 249900 }]
+          : entity === "order_cart" ? [{ order_id: "ord_123" }] : [{ id: "ord_123", display_id: 1, total: 249900 }]
       }) }) } }
     const getRes = await GET(reqGet, response()) as any
     expect(getRes.body).toEqual({ owned: true, completed: true, order: { id: "ord_123", display_id: 1, total: 249900 } })

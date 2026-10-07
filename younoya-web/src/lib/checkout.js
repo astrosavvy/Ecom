@@ -8,9 +8,8 @@ export function getPendingPayment() {
 export async function createCheckoutCart(offer, bag, customer) {
   const { regions } = await storeRequest('/store/regions')
   const region = regions?.find(item => item.currency_code === 'inr' && item.countries?.some(country => country.iso_2 === 'in'))
-    || regions?.find(item => item.currency_code === 'inr')
   if (!region) throw new Error('India checkout is not configured')
-  const { cart } = await storeRequest('/store/carts', { body: { region_id: region.id, email: customer.email } })
+  const { cart } = await storeRequest('/store/carts', { auth: true, body: { region_id: region.id, ...(customer.email ? { email: customer.email } : {}) } })
   const items = offer ? [{ variantId: offer.variantId, quantity: 1 }] : await Promise.all(bag.map(async item => {
     const data = await storeRequest(`/store/products?handle=${encodeURIComponent(item.handle || item.id)}&region_id=${encodeURIComponent(region.id)}`)
     const product = data.products?.find(product => product.handle === (item.handle || item.id))
@@ -23,16 +22,18 @@ export async function createCheckoutCart(offer, bag, customer) {
   return (await storeRequest(`/store/carts/${cart.id}`)).cart
 }
 
-export async function preparePayment(cartId, address, note, promo) {
+export async function preparePayment(cartId, address, note, promo, policyRevision) {
   await storeRequest(`/store/carts/${cartId}`, { body: {
     email: address.email, metadata: { gift_note: note.slice(0, 180) },
     shipping_address: { first_name: address.firstName, last_name: address.lastName, address_1: address.street,
       city: address.city, province: address.state, postal_code: address.pincode, country_code: 'in', phone: address.phone },
   } })
   if (promo.trim()) await storeRequest(`/store/carts/${cartId}/promotions`, { body: { promo_codes: [promo.trim()] } })
+  const delivery = await storeRequest('/store/commerce/prepare', { auth: true, body: { cart_id: cartId, policy_revision: policyRevision } })
   const { shipping_options: options } = await storeRequest(`/store/shipping-options?cart_id=${encodeURIComponent(cartId)}`)
-  if (!options?.length) throw new Error('No shipping option is available for this address')
-  await storeRequest(`/store/carts/${cartId}/shipping-methods`, { body: { option_id: options[0].id } })
+  const option = options?.find(item => item.id === delivery.shipping_option_id)
+  if (!option || Number(option.amount) !== 0) throw new Error('Free India delivery is not available for this selection')
+  await storeRequest(`/store/carts/${cartId}/shipping-methods`, { body: { option_id: option.id } })
   const { cart } = await storeRequest(`/store/carts/${cartId}`)
   if (!cart?.total || cart.currency_code !== 'inr') throw new Error('Could not calculate an INR order total')
   const { payment_collection: collection } = cart.payment_collection
@@ -47,14 +48,19 @@ export async function preparePayment(cartId, address, note, promo) {
   return { cart, session }
 }
 
+let razorpayLoading
 function loadRazorpay() {
   if (window.Razorpay) return Promise.resolve()
-  return new Promise((resolve, reject) => {
+  if (razorpayLoading) return razorpayLoading
+  razorpayLoading = new Promise((resolve, reject) => {
     const script = document.createElement('script')
     script.src = 'https://checkout.razorpay.com/v1/checkout.js'; script.async = true
-    script.onload = resolve; script.onerror = () => reject(new Error('Payment window could not load'))
+    const timeout = setTimeout(() => { script.remove(); reject(new Error('Payment window took too long to load')) }, 12000)
+    script.onload = () => { clearTimeout(timeout); window.Razorpay ? resolve() : reject(new Error('Payment window is unavailable')) }
+    script.onerror = () => { clearTimeout(timeout); script.remove(); reject(new Error('Payment window could not load')) }
     document.head.appendChild(script)
-  })
+  }).catch(error => { razorpayLoading = null; throw error })
+  return razorpayLoading
 }
 
 export async function launchPayment(cart, session, address) {
@@ -67,6 +73,7 @@ export async function launchPayment(cart, session, address) {
     const { razorpayKeyId } = await storeRequest('/store/gift-guide/checkout-config')
     if (!razorpayKeyId) throw new Error('Razorpay is not configured yet')
     await loadRazorpay()
+    sessionStorage.setItem(PENDING_KEY, JSON.stringify({ cartId: cart.id, session }))
     receipt = await new Promise((resolve, reject) => {
       const checkout = new window.Razorpay({ key: razorpayKeyId, order_id: session.data.id,
         amount: Number(session.data.amount), currency: 'INR', name: 'YOUNOYA', description: 'A gift chosen with intention',

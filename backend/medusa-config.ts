@@ -29,6 +29,7 @@ module.exports = defineConfig({
     disable: true,
   },
   modules: [
+    { resolve: "./src/modules/younoya-commerce" },
     { resolve: "./src/modules/younoya-otp" },
     { resolve: "./src/modules/younoya-blog" },
     { resolve: "./src/modules/younoya-astro" },
@@ -61,6 +62,10 @@ module.exports = defineConfig({
             },
           }] : [],
       },
+    },
+    {
+      resolve: "@medusajs/medusa/fulfillment",
+      options: { providers: [{ resolve: "./src/modules/younoya-shiprocket", id: "shiprocket" }, { resolve: "@medusajs/fulfillment-manual", id: "manual" }] },
     },
     {
       resolve: "@medusajs/medusa/file",

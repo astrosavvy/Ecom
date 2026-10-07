@@ -29,7 +29,7 @@ export default function ShopUspBar() {
           <span className="livora-usp__icon"><MessageCircle size={22} strokeWidth={1.5} /></span>
           <div>
             <strong>Here to help</strong>
-            <small>Write to care@younoya.com</small>
+            <small>Write to support@younoya.com</small>
           </div>
         </div>
       </div>

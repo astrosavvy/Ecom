@@ -1,0 +1,17 @@
+export const groups = [
+  ['Business and support', [['legalName','Legal business name'],['address','Public business address'],['supportEmail','Support email'],['supportPhone','Support phone'],['grievanceName','Grievance officer name'],['grievanceEmail','Grievance email'],['grievancePhone','Grievance phone']]],
+  ['Delivery and after-sales', [['dispatchHours','Dispatch after payment (hours)','number'],['deliveryMinDays','Minimum delivery after dispatch (working days)','number'],['deliveryMaxDays','Maximum delivery after dispatch (working days)','number'],['damageReportHours','Issue reporting window (hours)','number'],['refundInitiationDays','Refund initiation after approval (working days)','number']]],
+  ['Pickup and invoice', [['pickupName','Exact Shiprocket pickup location name'],['pickupPincode','Pickup PIN code'],['pickupAddress','Actual pickup address'],['gstin','GSTIN (if registered)'],['hsn','Default HSN for invoices (variant overrides below)']]],
+] as const
+export const approvals = [['consumerReviewComplete','Business, policies and applicable consumer obligations reviewed'],['packagingReviewed','Parcel compatibility, capacity and weights physically verified'],['taxInvoiceReviewed','Applicable HSN, Medusa tax rates and seller invoices verified'],['razorpayApproved','Razorpay account approved for payment acceptance'],['captureConfigured','Automatic capture and signed webhook configured'],['shiprocketReady','Shiprocket pickup location, account and wallet ready'],['liveTestComplete','Controlled provider verification completed']] as const
+export default function LaunchFields({ value, setValue, locations, channels }: any) {
+  const set = (key: string, v: any) => setValue({ ...value, [key]: v })
+  return <>{groups.map(([name,fields]) => <section className="ad-card" key={name}><h2>{name}</h2><div className="launch-grid">{fields.map(field => <label key={field[0]}>{field[1]}<input type={field[2] || (field[0].includes('Email') ? 'email' : 'text')} min={field[2] ? 1 : undefined} value={value[field[0]] || ''} onChange={e => set(field[0],field[2] ? Number(e.target.value) : e.target.value)} /></label>)}</div></section>)}
+    <section className="ad-card"><h2>Store and fulfillment</h2><div className="launch-grid">
+      <label>Homepage<select value={value.storefrontMode} onChange={e => set('storefrontMode',e.target.value)}><option value="shop">Shop — temporary homepage</option><option value="coming-soon">Restore Coming Soon</option></select></label>
+      <label>Tax registration<select value={value.taxStatus} onChange={e => set('taxStatus',e.target.value)}><option value="unconfirmed">Not confirmed</option><option value="registered">GST registered</option><option value="not_registered">Not GST registered</option></select></label>
+      <label>Inventory stock location<select value={value.stockLocationId} onChange={e => set('stockLocationId',e.target.value)}><option value="">Select actual inventory location</option>{locations.map((l: any) => <option key={l.id} value={l.id}>{l.name}</option>)}</select></label>
+      <label>Storefront sales channel<select value={value.salesChannelId} onChange={e => set('salesChannelId',e.target.value)}><option value="">Select storefront channel</option>{channels.map((c: any) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></label>
+    </div><p>Customer shipping is free. Courier charges remain a merchant cost. Only prepaid India / INR orders are supported.</p></section>
+  </>
+}

@@ -1,13 +1,23 @@
 # Younoya
 
-> Intentional gifting and considered keepsakes inspired by astrology. Younoya helps visitors explore meaningful objects for people, occasions and new beginnings.
+> Intentional gifting and considered keepsakes inspired by astrology. Operated by YOUNOYA HOUSE OF ASTRO PRIVATE LIMITED.
 
 ## Explore
 
-- [The boutique story](https://younoya.com/): a scroll-led visit to Younoya.
-- [The collection](https://younoya.com/shop): eight keepsakes with product details and displayed prices.
-- [Let Younoya choose](https://younoya.com/find-a-gift): an interactive, local gift-selection preview. The current preview is not a full Vedic astrology or AI reading.
+- [Younoya](https://younoya.com/): the current collection.
+- [The collection](https://younoya.com/shop): keepsakes with product details and displayed prices.
+- [Let Younoya choose](https://younoya.com/find-a-gift): optional astrology-inspired guidance and intentional gift curation.
 - [The Journal](https://younoya.com/blog): stories of intention, ritual and astrology-backed gifting.
+
+## Policies and support
+
+- [Terms and Conditions](https://younoya.com/terms-and-conditions)
+- [Privacy Policy](https://younoya.com/privacy-policy)
+- [Shipping Policy](https://younoya.com/shipping-policy)
+- [Contact Us](https://younoya.com/contact)
+- [Cancellation and Refunds](https://younoya.com/cancellation-and-refunds)
+
+Support: support@younoya.com. Policy information is in draft while online ordering is prepared.
 
 ## The collection
 
@@ -24,4 +34,4 @@
 
 ## Notes
 
-Product pages describe each object’s displayed price, materials, intentions and care. Prices and availability should be confirmed on the storefront before purchasing.
+Product pages describe displayed prices, materials, intentions and care. Prices, serviceability, availability and the final payable total are confirmed at checkout when ordering is enabled.

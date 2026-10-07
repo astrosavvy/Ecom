@@ -1,4 +1,5 @@
 import { PRODUCTS } from '../data/products.js'
+import { POLICY_ROUTES } from '../data/policies.js'
 
 export const SITE_URL = 'https://younoya.com'
 
@@ -22,13 +23,13 @@ export const KNOWN_POSTS = [
 const absolute = path => `${SITE_URL}${path}`
 const cleanPath = path => path === '/' ? '/' : path.replace(/\/+$/, '')
 
-export function getSeo(pathname) {
+export function getSeo(pathname, storefrontMode = 'shop') {
   const path = cleanPath(pathname)
 
   if (path === '/') return {
     path,
-    title: 'YOUNOYA — Coming Soon | Astrology-Backed Gifting',
-    description: 'Younoya is preparing to open its doors. Astrology-backed gifting, curated gift hampers, and consecrated Vedic keepsakes for every chapter.',
+    title: storefrontMode === 'coming-soon' ? 'YOUNOYA — Coming Soon | Astrology-Backed Gifting' : 'YOUNOYA | Meaningful Gifts & Keepsakes',
+    description: storefrontMode === 'coming-soon' ? 'Younoya is preparing to open its doors. Astrology-backed gifting for every chapter.' : 'Explore the Younoya collection of meaningful keepsakes and considered gifts, with personal guidance for every chapter.',
     image: '/media/diorama-arrival-desktop.webp',
     schema: [
       { '@context': 'https://schema.org', '@type': 'Organization', name: 'Younoya', url: SITE_URL, logo: absolute('/brand.webp') },
@@ -36,6 +37,10 @@ export function getSeo(pathname) {
     ],
   }
 
+  if (POLICY_ROUTES[path]) return { path, title: `${POLICY_ROUTES[path]} | Younoya`,
+    description: `${POLICY_ROUTES[path]} for YOUNOYA HOUSE OF ASTRO PRIVATE LIMITED. Shipping, order care and assistance at support@younoya.com.`,
+    schema: { '@context': 'https://schema.org', '@type': path === '/contact' ? 'ContactPage' : 'WebPage', name: POLICY_ROUTES[path], url: absolute(path) } }
+  if (path.startsWith('/account/')) return { path, title: 'Your orders | Younoya', description: 'Your private Younoya order history and atelier support.', noindex: true }
   if (path === '/shop') return {
     path,
     title: 'Explore Meaningful Gifts & Keepsakes | Younoya',
@@ -184,6 +189,7 @@ export function indexableRoutes() {
     '/shop',
     '/find-a-gift',
     '/blog',
+    ...Object.keys(POLICY_ROUTES),
     ...KNOWN_POSTS.map(post => `/blog/${post.slug}`),
     ...PRODUCTS.map(product => `/product/${product.handle}`),
   ]

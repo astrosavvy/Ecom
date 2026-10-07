@@ -1,5 +1,10 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { publicSettings } from "../../../../modules/younoya-commerce/settings"
 
 export async function GET(_req: MedusaRequest, res: MedusaResponse) {
-  return res.json({ razorpayKeyId: process.env.RAZORPAY_KEY_ID || null, currency: "INR", country: "IN" })
+  try {
+    const config = await publicSettings()
+    return res.json({ razorpayKeyId: config.checkoutEnabled ? process.env.RAZORPAY_KEY_ID : null,
+      checkoutEnabled: config.checkoutEnabled, policyRevision: config.policyRevision, currency: "INR", country: "IN" })
+  } catch { return res.status(503).json({ message: "Checkout configuration is unavailable" }) }
 }

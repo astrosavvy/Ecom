@@ -13,6 +13,7 @@ export async function getAdminRole(req: MedusaRequest): Promise<AdminRole | null
   if (!actorId) return null
   const userModule = req.scope.resolve(Modules.USER) as any
   const users = await userModule.listUsers({ id: actorId })
+  if (!users?.[0]) return null
   const role = users?.[0]?.metadata?.role
   if (role === "support" || role === "marketing") return role
   return "admin"

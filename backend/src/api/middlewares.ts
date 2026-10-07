@@ -1,5 +1,7 @@
 import { authenticate, defineMiddlewares } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { checkoutGuard, completionGuard, operationGuard } from "./utils/commerce-guards"
+import { POST as durableRazorpayWebhook } from './hooks/younoya-razorpay/route'
 import {
   blogRoleGuard,
   fileGuard,
@@ -63,6 +65,15 @@ export async function hideRecommendationOffers(req: any, res: any, next: any) {
 }
 
 export default defineMiddlewares([
+  { matcher: "/hooks/younoya-razorpay", method: ["POST"], bodyParser: { preserveRawBody: true } },
+  { matcher: /^\/hooks\/payment\/(?:pp_)?razorpay(?:_razorpay)?$/, method: ["POST"], bodyParser: { preserveRawBody: true }, middlewares: [async (req, res) => { await durableRazorpayWebhook(req,res) }] },
+  { matcher: /^\/store\/account(?:\/|$)/, middlewares: [customerAuth] },
+  { matcher: "/store/commerce/prepare", method: ["POST"], middlewares: [customerAuth] },
+  { matcher: /^\/store\/payment-collections\/[^/]+\/payment-sessions$/, method: ["POST"], middlewares: [customerAuth, checkoutGuard] },
+  { matcher: /^\/store\/carts\/[^/]+\/complete$/, method: ["POST"], middlewares: [customerAuth, completionGuard] },
+  { matcher: /^\/admin\/commerce(?:\/|$)/, middlewares: [adminAuth, readStaffWriteAdmin] },
+  { matcher: /^\/admin\/commerce\/(settings|provision)(?:\/|$)/, middlewares: [adminOnly] },
+  { matcher: /^\/admin\/(payments\/[^/]+\/refund|orders\/[^/]+\/cancel|orders\/[^/]+\/fulfillments(?:\/.*)?)$/, method: ["POST"], middlewares: [adminAuth, adminOnly, operationGuard] },
   {
     matcher: "/store/products",
     method: ["GET"],

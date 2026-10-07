@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { PRODUCTS } from '../src/data/products.js'
 import { getSeo, indexableRoutes, SITE_URL } from '../src/seo/metadata.js'
+import { POLICY_ROUTES, policySections } from '../src/data/policies.js'
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const publicRoot = path.join(appRoot, 'public')
@@ -10,6 +11,11 @@ const distRoot = path.join(appRoot, 'dist')
 const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character])
 const escapeXml = escapeHtml
 const routes = indexableRoutes()
+let site = { storefrontMode: 'shop', policiesPublished: false, business: { legalName: 'YOUNOYA HOUSE OF ASTRO PRIVATE LIMITED', supportEmail: 'support@younoya.com', dispatchHours: 24, deliveryMinDays: 3, deliveryMaxDays: 5 } }
+try {
+  const response = await fetch(`${process.env.SEO_API_BASE || 'https://api.younoya.com'}/store/site-config`, { signal: AbortSignal.timeout(4000), headers: { 'x-publishable-api-key': process.env.VITE_PUBLISHABLE_KEY || 'pk_d4577228b532cf8c81a5b63e898652da2dbaf9730acd3f8f449ccda1f8482c75' } })
+  if (response.ok) { const value = await response.json(); if (value.business?.legalName && value.business?.supportEmail) site = value }
+} catch { /* Use confirmed draft information if the backend cannot be reached during a build. */ }
 
 const ADMIN_SHELL_ROUTES = [
   '/admin',
@@ -23,13 +29,14 @@ const ADMIN_SHELL_ROUTES = [
   '/admin/themes',
   '/admin/rules',
   '/admin/metadata',
+  '/admin/launch',
 ]
 
 async function writeDiscoveryFiles() {
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map(route => `  <url><loc>${escapeXml(`${SITE_URL}${route}`)}</loc></url>`).join('\n')}\n</urlset>\n`
   const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`
   const listing = PRODUCTS.map(product => `- [${product.name}](${SITE_URL}/product/${product.handle}): ${product.tagline}. Displayed price ${product.price}.`).join('\n')
-  const llms = `# Younoya\n\n> Intentional gifting and considered keepsakes inspired by astrology. Younoya helps visitors explore meaningful objects for people, occasions and new beginnings.\n\n## Explore\n\n- [The boutique story](${SITE_URL}/): a scroll-led visit to Younoya.\n- [The collection](${SITE_URL}/shop): eight keepsakes with product details and displayed prices.\n- [Let Younoya choose](${SITE_URL}/find-a-gift): an interactive, local gift-selection preview. The current preview is not a full Vedic astrology or AI reading.\n- [The Journal](${SITE_URL}/blog): stories of intention, ritual and astrology-backed gifting.\n\n## The collection\n\n${listing}\n\n## Notes\n\nProduct pages describe each object’s displayed price, materials, intentions and care. Prices and availability should be confirmed on the storefront before purchasing.\n`
+  const llms = `# Younoya\n\n> Intentional gifting and considered keepsakes inspired by astrology. Operated by ${site.business.legalName}.\n\n## Explore\n\n- [Younoya](${SITE_URL}/): ${site.storefrontMode === 'coming-soon' ? 'the coming-soon introduction' : 'the current collection'}.\n- [The collection](${SITE_URL}/shop): keepsakes with product details and displayed prices.\n- [Let Younoya choose](${SITE_URL}/find-a-gift): optional astrology-inspired guidance and intentional gift curation.\n- [The Journal](${SITE_URL}/blog): stories of intention, ritual and astrology-backed gifting.\n\n## Policies and support\n\n${Object.entries(POLICY_ROUTES).map(([route,title]) => `- [${title}](${SITE_URL}${route})`).join('\n')}\n\nSupport: ${site.business.supportEmail}. ${site.policiesPublished ? 'Published policy information is available at the links above.' : 'Policy information is in draft while online ordering is prepared.'}\n\n## The collection\n\n${listing}\n\n## Notes\n\nProduct pages describe displayed prices, materials, intentions and care. Prices, serviceability, availability and the final payable total are confirmed at checkout when ordering is enabled.\n`
   await Promise.all([
     writeFile(path.join(publicRoot, 'sitemap.xml'), sitemap, 'utf8'),
     writeFile(path.join(publicRoot, 'robots.txt'), robots, 'utf8'),
@@ -41,7 +48,8 @@ async function writeDiscoveryFiles() {
 
 function fallbackContent(route, seo) {
   if (route.startsWith('/admin')) return `<main><h1>Younoya Console</h1><p>Administrative portal for the Younoya team.</p></main>`
-  if (route === '/') return `<main><h1>YOUNOYA — Coming Soon</h1><p>${escapeHtml(seo.description)}</p></main>`
+  if (POLICY_ROUTES[route]) return `<main><h1>${escapeHtml(POLICY_ROUTES[route])}</h1><p>${site.policiesPublished ? 'Published policy' : 'Draft information. Online ordering is being prepared.'}</p>${policySections(route,site.business).map(([title,text]) => `<section><h2>${escapeHtml(title)}</h2><p>${escapeHtml(text)}</p></section>`).join('')}<a href="mailto:${escapeHtml(site.business.supportEmail)}">Contact support</a></main>`
+  if (route === '/') return `<main><h1>${site.storefrontMode === 'coming-soon' ? 'YOUNOYA — Coming Soon' : 'The Younoya collection'}</h1><p>${escapeHtml(seo.description)}</p><a href="/shop">Explore the collection</a></main>`
   if (route === '/shop') return `<main><h1>The Younoya collection</h1><p>${escapeHtml(seo.description)}</p><ul>${PRODUCTS.map(product => `<li><a href="/product/${product.handle}">${escapeHtml(product.name)}</a> — ${escapeHtml(product.price)}</li>`).join('')}</ul></main>`
   if (route === '/find-a-gift') return `<main><h1>Let Younoya help you choose</h1><p>${escapeHtml(seo.description)}</p><p><a href="/shop">Explore the collection</a>.</p></main>`
   if (route === '/blog') return `<main><h1>The Younoya Journal</h1><p>${escapeHtml(seo.description)}</p><p><a href="/shop">Explore keepsakes</a> or read our stories.</p></main>`
@@ -52,7 +60,7 @@ function fallbackContent(route, seo) {
 }
 
 function routeHtml(template, route) {
-  const seo = getSeo(route)
+  const seo = getSeo(route,site.storefrontMode)
   const tagList = [
     `<meta name="robots" content="${seo.noindex ? 'noindex,follow' : 'index,follow'}">`,
   ]

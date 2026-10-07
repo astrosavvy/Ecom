@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Sparkles, Check } from 'lucide-react'
 import '../styles/ComingSoon.css'
+import PolicyLinks from '../components/PolicyLinks'
+import '../styles/Policies.css'
 
 export default function ComingSoon() {
   const [email, setEmail] = useState('')
@@ -10,6 +12,7 @@ export default function ComingSoon() {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (email.trim()) {
+      window.location.href = `mailto:support@younoya.com?subject=Younoya%20preview%20request&body=${encodeURIComponent(`Please contact me about the Younoya launch at ${email.trim()}.`)}`
       setSubmitted(true)
     }
   }
@@ -63,17 +66,18 @@ export default function ComingSoon() {
                   aria-label="Email address for launch invitation"
                 />
                 <button type="submit" className="coming-soon__btn">
-                  <span>Notify Me</span>
+                  <span>Request an invitation</span>
                   <Sparkles size={14} />
                 </button>
               </form>
             ) : (
               <div className="coming-soon__subscribed">
                 <Check size={18} className="text-[#D6B06A]" />
-                <span>You are on the private invitation list. We shall notify you at twilight.</span>
+                <span>Your email app has opened. Send the request there to contact the atelier.</span>
               </div>
             )}
           </div>
+          <div style={{ marginTop: 24 }}><PolicyLinks /></div>
         </motion.div>
       </div>
     </main>
