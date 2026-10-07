@@ -36,11 +36,20 @@ export default function ShopFooter() {
           <nav aria-label="Shop footer navigation" className="atelier-footer__links">
             <div><h3>Shop</h3><Link to="/shop#pieces">The collection</Link><Link to="/shop?saved=1#pieces">Saved pieces</Link><Link to="/find-a-gift">Find your piece</Link></div>
             <div><h3>Explore</h3><Link to="/blog">The journal</Link><Link to="/find-a-gift">Gift guide</Link><a href="#shop-top">Back to top</a></div>
-            <div><h3>Here to help</h3><a href="mailto:support@younoya.com">support@younoya.com</a><Link to="/contact">Contact the atelier</Link><Link to="/account/orders">Order questions</Link></div>
+            <div className="atelier-footer__care">
+              <h3>Here to help</h3>
+              <Link to="/account/orders">Your orders</Link>
+              <Link to="/shipping-policy">Shipping Policy</Link>
+              <Link to="/cancellation-and-refunds">Cancellation and Refunds</Link>
+              <Link to="/contact">Contact Us</Link>
+              <a className="atelier-footer__email" href="mailto:support@younoya.com">support@younoya.com</a>
+            </div>
           </nav>
         </div>
-        <PolicyLinks />
-        <div className="atelier-footer__bottom"><span>© {new Date().getFullYear()} Younoya Atelier. All rights reserved.</span><span>Made for moments that stay.</span></div>
+        <div className="atelier-footer__fineprint">
+          <PolicyLinks paths={['/terms-and-conditions', '/privacy-policy']} includeOrders={false} className="atelier-footer__legal" />
+          <div className="atelier-footer__bottom"><span>© {new Date().getFullYear()} Younoya Atelier. All rights reserved.</span><span>Made for moments that stay.</span></div>
+        </div>
       </div>
     </footer>
   )
