@@ -1,7 +1,7 @@
 import crypto from "crypto"
 
 export function generateOtp(): string {
-  return crypto.randomInt(100000, 999999).toString()
+  return crypto.randomInt(100000, 1000000).toString()
 }
 
 export function hashOtp(otp: string): { hash: string; salt: string } {
@@ -12,7 +12,9 @@ export function hashOtp(otp: string): { hash: string; salt: string } {
 
 export function verifyOtp(otp: string, salt: string, storedHash: string): boolean {
   const hash = crypto.pbkdf2Sync(otp, salt, 100000, 64, "sha512").toString("hex")
-  return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(storedHash))
+  const expected = Buffer.from(storedHash, "hex")
+  const candidate = Buffer.from(hash, "hex")
+  return expected.length === candidate.length && crypto.timingSafeEqual(candidate, expected)
 }
 
 export function isExpired(expiresAt: Date): boolean {

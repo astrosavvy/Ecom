@@ -169,6 +169,62 @@
           "enumItems": [],
           "mappedType": "text"
         },
+        "channel": {
+          "name": "channel",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "'email'",
+          "comment": null,
+          "enumItems": [
+            "email",
+            "whatsapp",
+            "sms"
+          ],
+          "mappedType": "enum"
+        },
+        "delivery_status": {
+          "name": "delivery_status",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "'accepted'",
+          "comment": null,
+          "enumItems": [
+            "queued",
+            "accepted",
+            "failed"
+          ],
+          "mappedType": "enum"
+        },
+        "provider_message_id": {
+          "name": "provider_message_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [],
+          "mappedType": "text"
+        },
         "status": {
           "name": "status",
           "type": "text",

@@ -11,6 +11,9 @@ const OtpChallenge = model.define("otp_challenge", {
   expires_at: model.dateTime(),
   consumed_at: model.dateTime().nullable(),
   ip_address: model.text().nullable(),
+  channel: model.enum(["email", "whatsapp", "sms"]).default("email"),
+  delivery_status: model.enum(["queued", "accepted", "failed"]).default("accepted"),
+  provider_message_id: model.text().nullable(),
   status: model.enum(["pending", "verified", "expired", "rate_limited"]).default("pending"),
 })
 

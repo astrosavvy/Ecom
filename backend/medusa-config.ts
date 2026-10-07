@@ -1,6 +1,13 @@
 import { loadEnv, defineConfig } from '@medusajs/framework/utils'
+import crypto from 'crypto'
 
 loadEnv(process.env.NODE_ENV || 'production', process.cwd())
+
+function authSecret(name: string) {
+  if (process.env[name]) return process.env[name]!
+  if (process.env.NODE_ENV === 'production') throw new Error(`${name} must be configured in the private backend environment`)
+  return crypto.randomBytes(48).toString('hex')
+}
 
 module.exports = defineConfig({
   projectConfig: {
@@ -14,8 +21,8 @@ module.exports = defineConfig({
       storeCors: process.env.STORE_CORS || 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:5175,http://127.0.0.1:5175,https://younoya.com,https://www.younoya.com,https://api.younoya.com',
       adminCors: process.env.ADMIN_CORS || 'http://localhost:5173,http://localhost:9000,https://api.younoya.com,https://younoya.com',
       authCors: process.env.AUTH_CORS || 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:5175,http://127.0.0.1:5175,https://younoya.com,https://www.younoya.com,https://api.younoya.com',
-      jwtSecret: process.env.JWT_SECRET || 'supersecret_jwt_key_younoya_production_2026',
-      cookieSecret: process.env.COOKIE_SECRET || 'supersecret_cookie_key_younoya_production_2026',
+      jwtSecret: authSecret('JWT_SECRET'),
+      cookieSecret: authSecret('COOKIE_SECRET'),
     },
   },
   admin: {

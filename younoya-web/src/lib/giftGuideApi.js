@@ -19,17 +19,21 @@ export async function storeRequest(path, { body, method = body ? 'POST' : 'GET',
   if (!response.ok) {
     const issue = new Error(data.message || `Request failed (${response.status})`)
     issue.status = response.status
+    issue.retryAfter = Number(data.retry_after || response.headers.get('Retry-After')) || 0
     throw issue
   }
   return data
 }
 
-export async function requestEmailCode(email) {
-  return storeRequest('/store/otp/request', { body: { email } })
-}
+export const requestEmailCode = email => requestLoginCode({ email })
+export const requestLoginCode = (contact, resend = false) => storeRequest(`/store/otp/${resend ? 'resend' : 'request'}`, { body: contact })
+export const getLoginConfig = () => storeRequest('/store/otp/config')
 
-export async function verifyEmailCode(email, otp) {
-  const { ticket } = await storeRequest('/store/otp/verify', { body: { email, otp } })
+export const verifyEmailCode = (email, otp) => verifyLoginCode({ email }, otp)
+
+export async function verifyLoginCode(contact, otp, challengeId) {
+  const { ticket, identifier, identifier_type: type } = await storeRequest('/store/otp/verify', {
+    body: { ...contact, otp, ...(challengeId ? { challenge_id: challengeId } : {}) } })
   const { token } = await storeRequest('/auth/customer/younoya-mobile-otp', { body: { ticket } })
   if (!token) throw new Error('Could not start your account session')
   sessionStorage.setItem(TOKEN_KEY, token)
@@ -37,7 +41,8 @@ export async function verifyEmailCode(email, otp) {
     return (await storeRequest('/store/customers/me', { auth: true })).customer
   } catch (issue) {
     if (issue.status !== 401 && issue.status !== 404) throw issue
-    await storeRequest('/store/customers', { body: { email }, auth: true })
+    const verifiedContact = type === 'mobile' ? { phone: identifier } : { email: identifier || contact.email }
+    await storeRequest('/store/customers', { body: verifiedContact, auth: true })
     const refreshed = await storeRequest('/auth/token/refresh', { method: 'POST', auth: true })
     if (refreshed.token) sessionStorage.setItem(TOKEN_KEY, refreshed.token)
     return (await storeRequest('/store/customers/me', { auth: true })).customer

@@ -35,7 +35,8 @@ export class YounoyaMobileOtpProvider extends AbstractAuthModuleProvider {
         ticket,
         process.env.JWT_SECRET
       ) as TicketPayload
-      if (payload.purpose !== "otp-login" || !payload.identifier) return null
+      if (payload.purpose !== "otp-login" || typeof payload.identifier !== "string" || !payload.identifier ||
+        !["mobile", "email"].includes(payload.identifier_type)) return null
       return payload
     } catch {
       return null
