@@ -93,8 +93,9 @@ export default function Checkout() {
         <section className="checkout-payment" aria-label="Payment method"><h2>Payment method</h2><div><img src="/razorpay-logo.svg" alt="Razorpay" width="106" height="23"/><span>UPI, cards &amp; net banking<small>Choose your method securely in Razorpay.</small></span><CircleCheck size={20} aria-label="Selected payment provider"/></div></section>
         <details className="checkout-promo"><summary>Have a promotion code?</summary><label>Promotion code<input value={promo} readOnly={pending} onChange={e => { setPromo(e.target.value); setSession(null) }} placeholder="Applied to your final total" /></label></details>
         <div className="checkout-action"><PolicyConsent accepted={accepted} onChange={setAccepted} disabled={!site.policiesPublished || pending} />
+        {!pending&&(!site.policiesPublished||!site.checkoutEnabled)&&<p className="checkout-availability" role="status">{!site.policiesPublished?'Policy confirmation and payment will be available once the store policies and ordering setup are complete.':'Online payments will be available once the ordering setup is complete.'}</p>}
         {error && <p className="checkout-error" role="alert">{error}</p>}
-        <button className="checkout-continue" type="submit" disabled={!cart || busy || (!pending && (!site.checkoutEnabled || !accepted))}>{busy ? 'One moment…' : pending ? 'Confirm your order' : session ? `Pay ${money(cart.total)} securely` : 'Continue to payment'}<ArrowRight size={18}/></button><p className="checkout-no-login">Guest checkout · No OTP or account required</p></div>
+        <button className="checkout-continue" type="submit" disabled={!cart || busy || (!pending && (!site.checkoutEnabled || !accepted))}>{busy ? 'One moment…' : pending ? 'Confirm your order' : session ? `Pay ${money(cart.total)} securely` : 'Continue to payment'}<ArrowRight size={18}/></button></div>
       </form><CheckoutSummary cart={cart} bag={bag} session={session} offer={offer} />
     </div><PolicyLinks />
   </section>

@@ -6,25 +6,24 @@ const fields = [
  ['phone','Mobile number','tel'],['firstName','Full name','name'],['street','Address line 1','address-line1'],['street2','Address line 2 (optional)','address-line2'],['pincode','PIN code','postal-code'],
 ]
 export default function CheckoutFields({address,onChange,locked}) {
- const [status,setStatus]=useState(''),[manual,setManual]=useState(false),[loading,setLoading]=useState(false)
+ const [status,setStatus]=useState(''),[loading,setLoading]=useState(false)
  const [editing,setEditing]=useState(true)
  const container=useRef(null)
  function saveAddress(){
   const invalid=[...container.current.querySelectorAll('input')].find(input=>!input.checkValidity())
   if(invalid){invalid.reportValidity();return}
-  if(!address.city||!address.state){setManual(true);setStatus('Please enter your city and state.');return}
+  if(!address.city||!address.state){setStatus('Please enter your city and state.');return}
   setEditing(false)
  }
  const change=useRef(onChange);change.current=onChange
  useEffect(()=>{
   if(locked||!/^[1-9]\d{5}$/.test(address.pincode)){setStatus('');setLoading(false);return}
   const controller=new AbortController()
-  setLoading(true);setStatus('Finding your delivery location…')
+  setLoading(true);setStatus('')
   storeRequest(`/store/commerce/pincode?pincode=${address.pincode}`,{signal:controller.signal}).then(result=>{
    if(controller.signal.aborted)return
-   change.current('city',result.city);change.current('state',result.state);setManual(false)
-   setStatus('City / district and state filled from your PIN. Please check your delivery address.')
-  }).catch(error=>{if(!controller.signal.aborted){setManual(true);setStatus(error.message==='Failed to fetch'?'Location lookup is unavailable. Enter your city and state below.':error.message||'Enter your city and state below.')}})
+   change.current('city',result.city);change.current('state',result.state)
+  }).catch(error=>{if(!controller.signal.aborted)setStatus(error.message==='Failed to fetch'?'Enter your city and state to continue.':error.message||'Enter your city and state to continue.')})
    .finally(()=>{if(!controller.signal.aborted)setLoading(false)})
   return ()=>controller.abort()
  },[address.pincode,locked])
@@ -40,11 +39,7 @@ export default function CheckoutFields({address,onChange,locked}) {
  <div className="checkout-address__fields">
  <fieldset className="checkout-fieldset"><legend>Contact information</legend><div className="checkout-fields">{fields.slice(0,2).map(field)}</div></fieldset>
  <fieldset className="checkout-fieldset"><legend>Shipping address</legend><div className="checkout-fields">{fields.slice(2).map(field)}<label>Country<span className="checkout-country">India</span></label>
-  <div className="checkout-location" aria-busy={loading}>
-   <p role="status">{status||'Enter your PIN code to fill city and state automatically.'}</p>
-   {!manual&&address.city&&<p><strong>{address.city}, {address.state} · India</strong></p>}
-   {!locked&&<button type="button" onClick={()=>setManual(!manual)}>{manual?'Use PIN lookup':'Edit city / state'}</button>}
-   {(manual||locked)&&<div className="checkout-fields">{[['city','City / district','address-level2'],['state','State','address-level1']].map(([key,label,autoComplete])=><label key={key}>{label}<input required value={address[key]} autoComplete={autoComplete} readOnly={locked} onChange={event=>onChange(key,event.target.value)}/></label>)}</div>}
-  </div>
+  {['city','state'].map(key=><label key={key}>{key==='city'?'City':'State'}<input required value={address[key]} autoComplete={key==='city'?'address-level2':'address-level1'} readOnly={locked} aria-busy={loading} onChange={event=>onChange(key,event.target.value)}/></label>)}
+  {status&&<p className="checkout-location" role="status">{status}</p>}
  </div></fieldset><button className="checkout-address__save" type="button" disabled={locked||loading} onClick={saveAddress}>Use this address</button></div></section>
 }

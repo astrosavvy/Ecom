@@ -27,3 +27,5 @@
 - `/` defaults to ComingSoon; Shop remains `/shop`. Match SEO generator and public backend setting. Keep archived hero film unchanged.
 - Checkout uses an ivory two-column desktop form/summary and mobile stack: saved address/edit, free shipping, official Razorpay SVG, promotion, totals, consent and action. Guest ordering has no OTP. PIN lookup goes through Younoya's backend with manual fallback.
 - Shared GuideLogin remains a native account modal, now ivory/champagne. Preserve email OTP, exact state/action return handlers, focus restoration and keyboard-aware height. Do not add passwords or enable mobile delivery providers.
+
+- Checkout City and State are always visible required inputs, silently filled by PIN lookup and bound to the checkout shipping address. Retain editing fallback and stale-request abort; do not restore Guest checkout copy, manual edit toggles or search/success messages. Explain unpublished policy/payment readiness beside disabled controls without bypassing backend launch checks.
