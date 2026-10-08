@@ -66,7 +66,7 @@ export default function OfferForm({
         sku: selected.variant?.sku || "",
         description: selected.description || "",
         thumbnail: selected.thumbnail || "",
-        price: selected.variant?.price ? String(Math.round(selected.variant.price / 100)) : "4999",
+        price: selected.variant?.price ? String(selected.variant.price) : "4999",
         approved: selected.metadata?.gift_guide_approved === true,
         intentions: selected.metadata?.gift_guide_intentions || ["confidence-power"],
         matrixKeys: (selected.metadata?.gift_guide_matrix_keys || []).join(", "),

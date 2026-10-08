@@ -22,7 +22,7 @@ export default function PrivateOffer() {
     {offer && <div className="private-offer__grid"><img src={offer.image} alt={offer.title} /><div><span>YOUNOYA · PRIVATE EDITION</span>
       <h1>{offer.title}</h1><p>{offer.description}</p>{offer.components?.length > 0 && <section><h2>Inside this edition</h2>
         <ul>{offer.components.map((part, index) => <li key={index}>{part.quantity} × {part.title}</li>)}</ul></section>}
-      <strong>₹{(offer.price / 100).toLocaleString('en-IN')}</strong>
+      <strong>₹{(offer.price).toLocaleString('en-IN')}</strong>
       <button type="button" disabled={!offer.available} onClick={order}>{offer.available ? 'Order this edition ↗' : 'Currently unavailable'}</button>
       <small>Price and availability are checked again at checkout.</small></div></div>}</div></main>
 }

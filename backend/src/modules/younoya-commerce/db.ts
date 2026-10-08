@@ -70,4 +70,28 @@ export function minor(value: unknown) {
   return amount
 }
 export const rupees = (value: unknown) => minor(value) / 100
+// Medusa 2 amounts are INR rupees. Razorpay alone uses integer paise.
+export function toPaise(value: unknown) {
+  const raw = value && typeof value === "object" && "value" in value ? (value as any).value : value
+  if (raw === null || raw === undefined || raw === "" || typeof raw === "boolean") throw new CommerceError("Invalid INR amount")
+  const number = Number(raw)
+  if (!Number.isFinite(number) || number < 0) throw new CommerceError("Invalid INR amount")
+  const decimal = String(raw).includes("e") ? number.toFixed(8) : String(raw)
+  if (!/^\d+(?:\.\d+)?$/.test(decimal)) throw new CommerceError("Invalid INR amount")
+  const [whole, fraction = ""] = decimal.split(".")
+  const paise = BigInt(whole) * 100n + BigInt((fraction + "00").slice(0,2)) + (Number(fraction[2] || 0) >= 5 ? 1n : 0n)
+  if (paise > BigInt(Number.MAX_SAFE_INTEGER)) throw new CommerceError("Invalid INR amount")
+  return Number(paise)
+}
+export function sessionPaise(value: unknown, data: any) {
+  if (data?.money_unit === "inr-major-v2") return toPaise(value)
+  if (data?.money_unit === "inr-paise-v1") return minor(value)
+  throw new CommerceError("Payment amount units require review",409)
+}
+export function orderUnit(order: any) {
+  const unit = order.metadata?.commerce_approval?.money_unit || order.metadata?.money_unit
+  if (["inr-major-v2","inr-paise-v1"].includes(unit)) return unit
+  throw new CommerceError("Historical order amounts require review",409)
+}
+export const orderPaise = (value: unknown, order: any) => sessionPaise(value,{ money_unit: orderUnit(order) })
 export async function closeDatabase() { if (pool) await pool.end(); if (lockPool) await lockPool.end() }

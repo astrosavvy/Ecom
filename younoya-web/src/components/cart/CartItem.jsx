@@ -17,7 +17,7 @@ export default function CartItem({ item, onUpdateQuantity, onRemove }) {
       </div>
       <div className="cart-item__details">
         <div className="cart-item__top">
-          <span className="cart-item__sign">{item.sign || item.tag || 'Consecrated'}</span>
+          <span className="cart-item__sign">{product?.kind === 'ritual-box' ? 'Nine-day ritual set' : item.sign || item.tag || 'Personal selection'}</span>
           <button
             type="button"
             className="cart-item__remove"

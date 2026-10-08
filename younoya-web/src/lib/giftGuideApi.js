@@ -5,15 +5,16 @@ const TOKEN_KEY = 'younoya_customer_token'
 export const getCustomerToken = () => sessionStorage.getItem(TOKEN_KEY)
 export const clearCustomerToken = () => sessionStorage.removeItem(TOKEN_KEY)
 
-export async function storeRequest(path, { body, method = body ? 'POST' : 'GET', auth = false } = {}) {
+export async function storeRequest(path, { body, method = body ? 'POST' : 'GET', auth = false, signal, checkoutToken } = {}) {
   const token = getCustomerToken()
   if (auth && !token) throw new Error('Sign in to continue')
   const response = await fetch(`${API}${path}`, {
     method,
     headers: { 'content-type': 'application/json', 'x-publishable-api-key': PUBLISHABLE_KEY,
-      ...(token ? { authorization: `Bearer ${token}` } : {}) },
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
+      ...(checkoutToken ? { 'x-younoya-checkout-token': checkoutToken } : {}) },
     ...(body ? { body: JSON.stringify(body) } : {}),
-    signal: AbortSignal.timeout(12000),
+    signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(12000)]) : AbortSignal.timeout(12000),
   })
   const data = await response.json().catch(() => ({}))
   if (!response.ok) {

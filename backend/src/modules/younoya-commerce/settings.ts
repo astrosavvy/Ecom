@@ -19,14 +19,16 @@ export const settingsSchema = z.object({
   parcels: z.array(parcel).max(100), storefrontMode: z.enum(["shop", "coming-soon"]),
   razorpayApproved: z.boolean(), captureConfigured: z.boolean(), shiprocketReady: z.boolean(),
   packagingReviewed: z.boolean(), consumerReviewComplete: z.boolean(), liveTestComplete: z.boolean(), taxInvoiceReviewed:z.boolean().default(false),
+  catalogMoneyVersion: z.string().default(''),
 })
 export const defaults = {
   legalName: "YOUNOYA HOUSE OF ASTRO PRIVATE LIMITED", supportEmail: "support@younoya.com", address: "", supportPhone: "",
   grievanceName: "", grievanceEmail: "", grievancePhone: "", dispatchHours: 24, deliveryMinDays: 3, deliveryMaxDays: 5,
   damageReportHours: 0, refundInitiationDays: 0, pickupName: "", pickupPincode: "", pickupAddress: "", taxStatus: "unconfirmed",
   gstin: "", hsn: "", stockLocationId: "", salesChannelId: "", shippingOptionId: "", variants: [], parcels: [],
-  storefrontMode: "shop", razorpayApproved: false, captureConfigured: false, shiprocketReady: false,
+  storefrontMode: "coming-soon", razorpayApproved: false, captureConfigured: false, shiprocketReady: false,
   packagingReviewed: false, consumerReviewComplete: false, liveTestComplete: false, taxInvoiceReviewed:false,
+  catalogMoneyVersion: '',
 }
 export async function settings() {
   const row = (await database().query("select * from commerce_setting where id='launch'")).rows[0]
@@ -44,6 +46,7 @@ export function policyBlockers(s: any) {
 }
 export function readiness(s: any, published: any, revision: string | null) {
   const blockers = policyBlockers(s)
+  if (s.catalogMoneyVersion !== 'inr-major-v2') blockers.push('catalogMoneyMigration')
   if (!published || !revision) blockers.push("approvedPolicies")
   else if (Object.entries(publicFields(s)).some(([key,value]) => published[key] !== value)) blockers.push("unpublishedPolicyChanges")
   for (const key of ["pickupName", "pickupAddress", "stockLocationId", "salesChannelId", "shippingOptionId"])
@@ -73,6 +76,8 @@ export async function saveSettings(input: unknown, publish = false) {
   if (publish && policyBlockers(data).length) throw new CommerceError(`Complete before publishing: ${policyBlockers(data).join(", ")}`)
   return transaction("commerce:settings", async client => {
     const current = (await client.query("select * from commerce_setting where id='launch'")).rows[0]
+    // Only the audited server migration may set this marker; owner UI cannot bypass it.
+    data.catalogMoneyVersion = current?.data?.catalogMoneyVersion || ''
     const published = publish ? publicFields(data) : current?.published || null
     const revision = publish ? crypto.createHash("sha256").update(JSON.stringify({ documentVersion:"2026-10-07",business:published })).digest("hex").slice(0, 16) : current?.revision || null
     if (publish) await client.query("insert into commerce_setting(id,data,published,revision) values ($1,$2,$2,$3) on conflict(id) do nothing",

@@ -1,5 +1,5 @@
 import crypto from "crypto"
-import { CommerceError, database, enqueue, transaction, operationId } from "./db"
+import { CommerceError, database, enqueue, transaction, operationId, toPaise } from "./db"
 import { readOrder, shipment } from "./orders"
 import { settings } from "./settings"
 import { queueEmail } from "./emails"
@@ -43,9 +43,9 @@ export async function decideRequest(scope: any, orderId: string, input: any, act
       if (input.action === "cancel" && request.kind !== "cancellation") throw new CommerceError("Use refund for a product issue")
       const id = `request:${request.id}`
       await client.query("insert into commerce_operation(id,kind,order_id,payload) values ($1,$2,$3,$4) on conflict(id) do nothing",
-        [operationId(id),input.action === "cancel" ? "cancel_refund" : "refund",orderId,JSON.stringify({ requestId: request.id, actor, amount: input.amount, received: input.received === true })])
-      if (input.action === "refund" && (!Number.isSafeInteger(input.amount) || input.amount <= 0 || input.received !== true))
-        throw new CommerceError("Enter the refund amount in paise and confirm the issue/return was verified")
+        [operationId(id),input.action === "cancel" ? "cancel_refund" : "refund",orderId,JSON.stringify({ requestId: request.id, actor, amount: input.amount, money_unit: 'inr-major-v2', received: input.received === true })])
+      if (input.action === "refund" && (toPaise(input.amount) <= 0 || input.received !== true))
+        throw new CommerceError("Enter the refund amount in INR and confirm the issue/return was verified")
     }
     await client.query("update commerce_request set status=$2,data=$3,updated_at=now() where id=$1",[request.id,status,JSON.stringify(data)])
     return { id: request.id, status, data }

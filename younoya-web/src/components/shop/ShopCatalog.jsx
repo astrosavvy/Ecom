@@ -26,7 +26,7 @@ export default function ShopCatalog({
           <h2>✦ The chosen pieces ✦</h2>
           <span className="livora-trending-line" />
         </div>
-        <p>Ten symbolic brooches, each with a story of its own.</p>
+        <p>Festive rituals and symbolic keepsakes, each with a story of its own.</p>
       </div>
 
       {showTools && (
@@ -60,7 +60,7 @@ export default function ShopCatalog({
         </AnimatePresence>
       </motion.div>
       {visibleProducts.length === 0 && <p className="livora-catalog__empty">{savedOnly ? 'No saved pieces yet. Tap the heart on a piece to keep it here.' : 'No pieces match this search. Try another name or intention.'}</p>}
-      {!showTools && <button className="livora-catalog__more" type="button" onClick={onExpand}>Explore all ten pieces <span aria-hidden="true">↗</span></button>}
+      {!showTools && <button className="livora-catalog__more" type="button" onClick={onExpand}>Explore all {products.length} pieces <span aria-hidden="true">↗</span></button>}
     </section>
   )
 }

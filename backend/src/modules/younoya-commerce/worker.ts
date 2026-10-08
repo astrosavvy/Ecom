@@ -1,7 +1,7 @@
 import { ContainerRegistrationKeys, Modules, PaymentActions } from "@medusajs/framework/utils"
 import { cancelOrderWorkflow, cancelOrderFulfillmentWorkflow, createOrderFulfillmentWorkflow, createOrderShipmentWorkflow,
   markOrderFulfillmentAsDeliveredWorkflow, processPaymentWorkflow, refundPaymentWorkflow } from "@medusajs/medusa/core-flows"
-import { claim, CommerceError, database, enqueue, finish, minor, operationId, exclusive } from "./db"
+import { claim, CommerceError, database, enqueue, finish, minor, rupees, sessionPaise, operationId, exclusive } from "./db"
 import { validApproval, cartFingerprint } from './checkout'
 import { readOrder, readCart, setShipment, shipment } from "./orders"
 import { assignAwb, bookPickup, cancelShipping, createShipping, documents, providerOrder, trackingStatus } from "./shipping-operations"
@@ -18,7 +18,7 @@ async function paymentEvent(scope: any, op: any) {
   if (payment.status !== "captured") return { ignored: true }
   const module = scope.resolve(Modules.PAYMENT)
   const session = await module.retrievePaymentSession(order.notes.medusa_session_id)
-  if (session.data?.id !== order.id || session.currency_code !== "inr" || minor(session.amount) !== minor(payment.amount)) throw new CommerceError("Payment session mismatch")
+  if (session.data?.id !== order.id || session.currency_code !== "inr" || sessionPaise(session.amount, session.data) !== minor(payment.amount)) throw new CommerceError("Payment session mismatch")
   await exclusive(`session:${session.id}`,async () => {
     const current = await module.retrievePaymentSession(session.id)
     if (current.data?.razorpay_payment_id && current.data.razorpay_payment_id !== payment.id) throw new CommerceError("Payment is already bound to another transaction",409)
@@ -31,7 +31,7 @@ async function paymentEvent(scope: any, op: any) {
     const cart = await readCart(scope,links[0].cart_id)
     if (!cart.completed_at && (!validApproval(cart.metadata?.commerce_approval) || cart.metadata.commerce_approval.fingerprint !== cartFingerprint(cart)))
       throw new CommerceError("Paid cart changed after delivery approval; manual resolution required",409)
-    await processPaymentWorkflow(scope).run({ input: { action: PaymentActions.SUCCESSFUL, data: { session_id: session.id, amount: payment.amount } } })
+    await processPaymentWorkflow(scope).run({ input: { action: PaymentActions.SUCCESSFUL, data: { session_id: session.id, amount: session.data?.money_unit === "inr-major-v2" ? rupees(payment.amount) : payment.amount } } })
     if (!cart.completed_at) await completeApprovedCart(scope,cart.id)
   })
   return { captured: true }
@@ -76,18 +76,18 @@ async function afterSale(scope: any, op: any) {
   }
   const payment = order.payment_collections?.flatMap((c: any) => c.payments || []).find((p: any) => p.captured_at)
   if (!payment) throw new CommerceError("Captured payment is required")
-  const amount = op.kind === "cancel_refund" ? minor(payment.amount)-(payment.refunds || []).reduce((n: number,r: any) => n+minor(r.amount),0) : minor(op.payload.amount)
+  const amount = op.kind === "cancel_refund" ? sessionPaise(payment.amount,payment.data)-(payment.refunds || []).reduce((n: number,r: any) => n+sessionPaise(r.amount,payment.data),0) : sessionPaise(op.payload.amount,op.payload)
   const recorded = payment.refunds?.find((r: any) => r.note === op.id)
   if (!recorded) {
     if (amount <= 0) throw new CommerceError("There is no remaining refundable amount")
     await refundContext.run(op.id,() => refundPaymentWorkflow(scope).run({ context: { transactionId: operationId(`medusa-refund:${op.id}`) },
-      input: { payment_id: payment.id, amount, created_by: op.payload.actor, note: op.id } }))
+      input: { payment_id: payment.id, amount: payment.data?.money_unit === "inr-major-v2" ? rupees(amount) : amount, created_by: op.payload.actor, note: op.id } }))
   }
   const refundOp = (await database().query("select * from commerce_operation where id=$1",[operationId(`refund:${op.id}`)])).rows[0]
   if (!refundOp?.result?.id) throw new CommerceError("Refund confirmation is pending",409)
   const refund = await razorpayRequest(`/refunds/${refundOp.result.id}`)
   const status = refund.status === "processed" ? "refunded" : refund.status === "failed" ? "refund_failed" : "refund_pending"
-  const data = { ...request.data, refundId: refund.id, refundAmount: amount || refund.amount, refundStatus: refund.status }
+  const data = { ...request.data, refundId: refund.id, refundAmount: (payment.data?.money_unit === "inr-major-v2" ? rupees(amount) : amount) || (payment.data?.money_unit === "inr-major-v2" ? rupees(refund.amount) : refund.amount), refundStatus: refund.status }
   await database().query("update commerce_request set status=$2,data=$3,updated_at=now() where id=$1",[request.id,status,JSON.stringify(data)])
   if (op.kind === "cancel_refund" && order.status !== "canceled") {
     // The refund is already recorded, so the standard cancellation workflow cannot submit it a second time.

@@ -9,10 +9,11 @@ export default function Navbar() {
   const light = !pathname.startsWith('/admin')
   const shop = pathname === '/shop' || pathname === '/'
   const guide = pathname === '/find-a-gift'
-  const fullNavigation = light && !guide
+  const checkout = pathname === '/checkout'
+  const fullNavigation = light && !guide && !checkout
 
   return (
-    <header className={`navbar${light ? ' navbar--light' : ''}${shop ? ' navbar--shop' : ''}${guide ? ' navbar--guide' : ''}`}>
+    <header className={`navbar${light ? ' navbar--light' : ''}${shop ? ' navbar--shop' : ''}${guide ? ' navbar--guide' : ''}${checkout ? ' navbar--checkout' : ''}`}>
       <div className="navbar__left">
         <Link className="navbar__brand" to="/" aria-label="Younoya home">
           <img src="/brand-legacy.webp" alt="Younoya" />

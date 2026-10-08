@@ -9,7 +9,7 @@ export async function storefrontSalesChannel(scope: any) {
 
 export function inrPrice(product: any): number | null {
   const price = product.variants?.[0]?.prices?.find((entry: any) => entry.currency_code === "inr")
-  return Number.isInteger(price?.amount) && price.amount > 0 ? price.amount : null
+  return Number.isFinite(price?.amount) && price.amount > 0 ? price.amount : null
 }
 
 export async function availableOffers(scope: any, products: any[], salesChannelId?: string) {

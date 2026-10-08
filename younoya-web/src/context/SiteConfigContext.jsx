@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { storeRequest } from '../lib/giftGuideApi'
-export const initialSiteConfig = { storefrontMode: 'shop', checkoutEnabled: false, policiesPublished: false, policyRevision: null,
+export const initialSiteConfig = { storefrontMode: 'coming-soon', checkoutEnabled: false, policiesPublished: false, policyRevision: null,
   shippingFee: 0, currency: 'INR', country: 'IN', business: { legalName: 'YOUNOYA HOUSE OF ASTRO PRIVATE LIMITED',
     supportEmail: 'support@younoya.com', dispatchHours: 24, deliveryMinDays: 3, deliveryMaxDays: 5 } }
 const Context = createContext({ ...initialSiteConfig, loading: true })

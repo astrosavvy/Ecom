@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { api, formatINR, fmtDate, type Role } from "../api"
+import { api, formatOrderINR, fmtDate, type Role } from "../api"
 
 type OrderRow = {
   id: string
@@ -8,6 +8,7 @@ type OrderRow = {
   created_at: string
   email?: string
   total?: number
+  metadata?: any
   payment_status: string
   fulfillment_status: string
 }
@@ -25,7 +26,7 @@ export default function Orders({ role }: { role: Role }) {
   useEffect(() => {
     const id = window.setTimeout(() => {
       setBusy(true)
-      api(`/admin/orders?limit=${PAGE}&offset=${offset}${q.trim() ? `&q=${encodeURIComponent(q.trim())}` : ""}`)
+      api(`/admin/orders?limit=${PAGE}&offset=${offset}&fields=%2Bmetadata${q.trim() ? `&q=${encodeURIComponent(q.trim())}` : ""}`)
         .then((d: any) => {
           setOrders(d.orders ?? [])
           setCount(d.count ?? 0)
@@ -69,7 +70,7 @@ export default function Orders({ role }: { role: Role }) {
                 <td>{o.email ?? "—"}</td>
                 <td><span className={`ad-chip ad-chip--${o.payment_status === "captured" ? "ok" : o.payment_status === "awaiting" ? "wait" : "mut"}`}>{o.payment_status}</span></td>
                 <td><span className={`ad-chip ad-chip--${o.fulfillment_status === "fulfilled" || o.fulfillment_status === "shipped" ? "ok" : o.fulfillment_status === "not_fulfilled" ? "wait" : "mut"}`}>{o.fulfillment_status.replace(/_/g, " ")}</span></td>
-                <td className="ad-right">{formatINR(o.total)}</td>
+                <td className="ad-right">{formatOrderINR(o)}</td>
               </tr>
             ))}
           </tbody>

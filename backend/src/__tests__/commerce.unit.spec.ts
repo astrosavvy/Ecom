@@ -12,7 +12,7 @@ const packing = { ...defaults, packagingReviewed: true, hsn:'7117', variants:[{ 
 const complete = { ...packing,address:'QA business address',supportPhone:'QA phone',grievanceName:'QA officer',grievanceEmail:'qa@example.invalid',grievancePhone:'QA phone',
   damageReportHours:48,refundInitiationDays:3,consumerReviewComplete:true,pickupName:'QA pickup',pickupAddress:'QA address',pickupPincode:'110001',
   taxStatus:'not_registered',stockLocationId:'sloc_qa',salesChannelId:'sc_qa',shippingOptionId:'so_qa',
-  razorpayApproved:true,captureConfigured:true,shiprocketReady:true,liveTestComplete:true,taxInvoiceReviewed:true }
+  razorpayApproved:true,captureConfigured:true,shiprocketReady:true,liveTestComplete:true,taxInvoiceReviewed:true,catalogMoneyVersion:"inr-major-v2" }
 afterEach(() => { process.env = { ...original } })
 test('launch fails closed without complete settings, approved policies, credentials and activation', () => {
   expect(policyBlockers(defaults)).toContain('address')
@@ -58,8 +58,8 @@ test('webhook signatures bind the exact raw payload and fail closed without secr
   expect(verifyWebhook(raw,signature)).toBe(false)
 })
 test('Shiprocket payload balances discounted fractional unit prices without 100x conversion mistakes', () => {
-  const order = { id:'order_qa',created_at:'2026-10-07T10:00:00Z',email:'qa@example.invalid',total:10001,
-    items:[{ id:'item_qa',title:'QA item',variant_id:'variant_one',quantity:3,total:10001 }],
+  const order = { metadata:{money_unit:'inr-major-v2'},id:'order_qa',created_at:'2026-10-07T10:00:00Z',email:'qa@example.invalid',total:100.01,
+    items:[{ id:'item_qa',title:'QA item',variant_id:'variant_one',quantity:3,total:100.01 }],
     shipping_address:{ country_code:'in',phone:'9876543210',first_name:'QA',address_1:'QA address',city:'Delhi',province:'Delhi',postal_code:'110001' } }
   const payload=orderPayload(order,packing)
   expect(payload.sub_total).toBe(100.01)

@@ -1,4 +1,4 @@
-import { CommerceError, rupees, database } from "./db"
+import { CommerceError, rupees, database, orderPaise } from "./db"
 import { pack } from "./packing"
 import { readOrder, setShipment, shipment } from "./orders"
 import { razorpayRequest } from "./razorpay"
@@ -25,7 +25,7 @@ export async function shipOrder(scope: any, id: string) {
   const payment = order.payment_collections?.flatMap((p: any) => p.payments || []).find((p: any) => p.captured_at)
   if (!payment?.data?.razorpay_payment_id) throw new CommerceError("Captured payment is required",409)
   const verified = await razorpayRequest(`/payments/${payment.data.razorpay_payment_id}`)
-  if (verified.status !== "captured" || verified.currency !== "INR" || Number(verified.amount) !== Number(order.total) || Number(verified.amount_refunded))
+  if (verified.status !== "captured" || verified.currency !== "INR" || Number(verified.amount) !== orderPaise(order.total,order) || Number(verified.amount_refunded))
     throw new CommerceError("Payment needs review before dispatch",409)
   return order
 }
@@ -44,7 +44,7 @@ export function orderPayload(order: any, s: any) {
   for (const item of order.items) {
     const hsn = s.variantHsns?.[item.variant_id] || s.variants?.find((v: any) => v.id===item.variant_id)?.hsn || s.hsn
     if (!/^(?:\d{4}|\d{6}|\d{8})$/.test(hsn || "")) throw new CommerceError("Verified invoice classification is required")
-    const total = Number(item.total), quantity = Number(item.quantity)
+    const total = orderPaise(item.total,order), quantity = Number(item.quantity)
     if (!Number.isSafeInteger(total) || !Number.isInteger(quantity) || quantity < 1) throw new CommerceError("Invalid shipping item amount")
     // Split a remainder across two lines rather than introduce rounding errors when converting paise to rupees.
     const base = Math.floor(total/quantity), extra = total%quantity
@@ -53,13 +53,13 @@ export function orderPayload(order: any, s: any) {
     })
   }
   const sum = items.reduce((n,i) => n+Math.round(i.selling_price*100)*i.units,0)
-  if (sum !== Number(order.total)) throw new CommerceError("Shipping invoice total does not match the paid order")
+  if (sum !== orderPaise(order.total,order)) throw new CommerceError("Shipping invoice total does not match the paid order")
   return { order_id: externalOrderId(order.id), order_date: new Date(new Date(order.created_at).getTime()+19800000).toISOString().slice(0,16).replace("T"," "),
     pickup_location: s.pickupName, billing_customer_name: a.first_name, billing_last_name: a.last_name || "",
     billing_address: a.address_1, billing_address_2: a.address_2 || "", billing_city: a.city, billing_pincode: a.postal_code,
     billing_state: a.province, billing_country: "India", billing_email: order.email, billing_phone: a.phone,
     shipping_is_billing: true, order_items: items, payment_method: "Prepaid", shipping_charges: 0,
-    sub_total: rupees(order.total), length: parcel.lengthCm, breadth: parcel.widthCm, height: parcel.heightCm, weight: parcel.weightKg }
+    sub_total: rupees(orderPaise(order.total,order)), length: parcel.lengthCm, breadth: parcel.widthCm, height: parcel.heightCm, weight: parcel.weightKg }
 }
 export async function createShipping(scope: any, op: any) {
   const existing = await shipment(op.order_id)

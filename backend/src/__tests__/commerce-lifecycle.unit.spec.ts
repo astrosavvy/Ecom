@@ -21,7 +21,7 @@ const order: any = { id:'order_qa',total:10000,currency_code:'inr',shipping_addr
   payment_collections:[{ payments:[{ captured_at:'2026-10-07',data:{ razorpay_payment_id:'pay_qa' } }] }] }
 beforeEach(() => {
   process.env.JWT_SECRET='test-only'
-  order.metadata.commerce_approval={ parcel:{ weightKg:.5 },shipping:{ pickupPincode:'110001' } }
+  order.metadata.commerce_approval={ money_unit:'inr-paise-v1',parcel:{ weightKg:.5 },shipping:{ pickupPincode:'110001' } }
   order.metadata.commerce_approval.signature=approvalSignature(order.metadata.commerce_approval)
 })
 test('out-of-order failed notification uses captured provider state and recovers the cart once',async () => {
@@ -32,7 +32,7 @@ test('out-of-order failed notification uses captured provider state and recovers
   jest.spyOn(rz,'razorpayRequest').mockResolvedValueOnce({ id:'pay_qa',order_id:'rzorder_qa',amount:10000,currency:'INR',status:'captured' })
     .mockResolvedValueOnce({ id:'rzorder_qa',amount:10000,notes:{ medusa_session_id:'ps_qa' } })
   jest.spyOn(orders,'readCart').mockResolvedValue({ id:'cart_qa',completed_at:'2026-10-07' })
-  const session={ id:'ps_qa',amount:10000,currency_code:'inr',payment_collection_id:'pc_qa',data:{ id:'rzorder_qa' } }
+  const session={ id:'ps_qa',amount:10000,currency_code:'inr',payment_collection_id:'pc_qa',data:{ id:'rzorder_qa',money_unit:'inr-paise-v1' } }
   const update=jest.fn()
   const scope={ resolve:(key: string) => key===Modules.PAYMENT ? { retrievePaymentSession:async () => session, updatePaymentSession:update }
     : { graph:async () => ({ data:[{ cart_id:'cart_qa' }] }) } }

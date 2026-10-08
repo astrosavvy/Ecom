@@ -23,7 +23,7 @@ export const KNOWN_POSTS = [
 const absolute = path => `${SITE_URL}${path}`
 const cleanPath = path => path === '/' ? '/' : path.replace(/\/+$/, '')
 
-export function getSeo(pathname, storefrontMode = 'shop') {
+export function getSeo(pathname, storefrontMode = 'coming-soon') {
   const path = cleanPath(pathname)
 
   if (path === '/') return {
@@ -44,7 +44,7 @@ export function getSeo(pathname, storefrontMode = 'shop') {
   if (path === '/shop') return {
     path,
     title: 'Explore Meaningful Gifts & Keepsakes | Younoya',
-    description: 'Explore ten sculptural Younoya brooches for courage, connection, renewal and possibility. Discover each piece’s story, dimensions and price.',
+    description: 'Discover the nine-day Navratri Shringaar Box and the Younoya brooch collection. Considered rituals and symbolic keepsakes for every chapter.',
     image: PRODUCTS[0].primaryImage,
     schema: {
       '@context': 'https://schema.org',
@@ -136,7 +136,7 @@ export function getSeo(pathname, storefrontMode = 'shop') {
   if (product) return {
     path,
     title: `${product.name} | Younoya`,
-    description: `${product.name} — ${product.tagline}. Explore its symbolism, measured details and price at Younoya.`,
+    description: product.kind === 'ritual-box' ? 'Nine individually packed Navratri daily kits in one outer box. Discover the complete nine-day Shringaar set for ₹1,499, including 18% GST.' : `${product.name} — ${product.tagline}. Explore its symbolism, measured details and price at Younoya.`,
     image: product.primaryImage,
     product,
     schema: [
@@ -147,7 +147,7 @@ export function getSeo(pathname, storefrontMode = 'shop') {
         image: absolute(product.primaryImage),
         description: product.intentionStory,
         brand: { '@type': 'Brand', name: 'Younoya' },
-        offers: { '@type': 'Offer', url: absolute(path), priceCurrency: 'INR', price: product.priceNum },
+        ...(product.kind === 'ritual-box' ? { sku: product.sku } : { offers: { '@type': 'Offer', url: absolute(path), priceCurrency: 'INR', price: product.priceNum } }),
       },
       {
         '@context': 'https://schema.org',

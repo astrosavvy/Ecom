@@ -160,7 +160,7 @@ export default function ProductEditModal({ product, isNew = false, isOpen, onClo
 
     const variant = product.variants?.[0]
     const inr = variant?.prices?.find((p) => p.currency_code === "inr")?.amount
-      ? Math.round(variant.prices.find((p) => p.currency_code === "inr")!.amount / 100)
+      ? variant.prices.find((p) => p.currency_code === "inr")!.amount
       : 2499
     setPriceINR(inr)
     setIntention(product.metadata?.gift_guide_intentions?.[0] || "confidence-power")
@@ -273,7 +273,7 @@ export default function ProductEditModal({ product, isNew = false, isOpen, onClo
     setSuccess(null)
 
     const finalHandle = handle.trim() ? slugify(handle) : slugify(title)
-    const amountPaise = Math.round(Number(priceINR || 0) * 100)
+    const amountINR = Number(priceINR || 0)
     const stockQty = Math.max(0, Math.round(Number(stock || 0)))
 
     try {
@@ -318,11 +318,12 @@ export default function ProductEditModal({ product, isNew = false, isOpen, onClo
               manage_inventory: true,
               allow_backorder: false,
               options: { Edition: "Standard" },
-              prices: [{ amount: amountPaise, currency_code: "inr" }],
+              prices: [{ amount: amountINR, currency_code: "inr" }],
               inventory_items: [{ inventory_item_id: newInvId, required_quantity: 1 }],
             },
           ],
           metadata: {
+            money_unit: "inr-major-v2",
             gift_guide_intentions: [intention],
             element,
             motif: subtitle.trim(),
@@ -345,6 +346,7 @@ export default function ProductEditModal({ product, isNew = false, isOpen, onClo
           thumbnail: thumbnail.trim() || undefined,
           images: images.filter((img) => img.url.trim()).map((img) => ({ url: img.url.trim() })),
           metadata: {
+            money_unit: "inr-major-v2",
             ...(product.metadata || {}),
             gift_guide_intentions: [intention],
             element,
@@ -359,11 +361,11 @@ export default function ProductEditModal({ product, isNew = false, isOpen, onClo
 
         // Update variant price
         const variant = product.variants?.[0]
-        if (variant?.id && amountPaise > 0) {
+        if (variant?.id && amountINR > 0) {
           await api(`/admin/products/${product.id}/variants/${variant.id}`, {
             method: "POST",
             body: JSON.stringify({
-              prices: [{ amount: amountPaise, currency_code: "inr" }],
+              prices: [{ amount: amountINR, currency_code: "inr" }],
             }),
           })
         }

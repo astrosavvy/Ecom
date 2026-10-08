@@ -2,7 +2,7 @@ import crypto from "crypto"
 import { AbstractPaymentProvider, PaymentActions, PaymentSessionStatus } from "@medusajs/framework/utils"
 import Razorpay from "razorpay"
 import { persistedOrder, refundOnce, refundContext } from "../younoya-commerce/razorpay"
-import { minor } from "../younoya-commerce/db"
+import { minor, toPaise, rupees, sessionPaise } from "../younoya-commerce/db"
 
 export function validRazorpaySignature(orderId: string, paymentId: string, signature: string, secret: string) {
   const expected = crypto.createHmac("sha256", secret).update(`${orderId}|${paymentId}`).digest("hex")
@@ -27,15 +27,15 @@ class RazorpayPaymentProvider extends AbstractPaymentProvider {
   }
 
   async initiatePayment(input: any): Promise<any> {
-    const amount = minor(input.amount)
+    const amount = toPaise(input.amount)
     if (amount < 100 || amount > 100000000 || input.currency_code?.toLowerCase() !== "inr") {
       throw new Error("Invalid INR payment amount")
     }
     const sessionId = String(input.data?.session_id ?? input.context?.idempotency_key ?? "")
     const order: any = await persistedOrder(sessionId, amount, () => this.client().orders.create({
-      amount, currency: "INR", receipt: sessionId.slice(0, 40), notes: { medusa_session_id: sessionId },
+      amount, currency: "INR", receipt: sessionId.slice(0, 40), notes: { medusa_session_id: sessionId, money_unit: "inr-major-v2" },
     }), async () => (await this.client().orders.all({ count: 100 } as any)).items as any[])
-    return { id: order.id, data: { id: order.id, amount, currency: "INR", session_id: sessionId } }
+    return { id: order.id, data: { id: order.id, amount, currency: "INR", session_id: sessionId, money_unit: "inr-major-v2" } }
   }
 
   async authorizePayment(input: any): Promise<any> {
@@ -88,7 +88,7 @@ class RazorpayPaymentProvider extends AbstractPaymentProvider {
   async refundPayment(input: any): Promise<any> {
     const data = input.data ?? input
     if (!data.razorpay_payment_id) throw new Error("Missing Razorpay payment")
-    const refund = await refundOnce(data.razorpay_payment_id, minor(input.amount), refundContext.getStore() || input.context?.idempotency_key)
+    const refund = await refundOnce(data.razorpay_payment_id, sessionPaise(input.amount, data), refundContext.getStore() || input.context?.idempotency_key)
     if (refund.status === "failed") throw new Error("Refund was rejected")
     return { data: { ...data, last_refund_id: refund.id } }
   }
@@ -96,7 +96,13 @@ class RazorpayPaymentProvider extends AbstractPaymentProvider {
   async cancelPayment(input: any): Promise<any> { return { data: input.data ?? input } }
   async deletePayment(input: any): Promise<any> { return { data: input.data ?? input } }
   async retrievePayment(input: any): Promise<any> { return { data: input.data ?? input } }
-  async updatePayment(input: any): Promise<any> { return { data: input.data ?? input } }
+  async updatePayment(input: any): Promise<any> {
+    const data = input.data ?? input
+    if (input.currency_code?.toLowerCase() !== "inr" || sessionPaise(input.amount, data) !== minor(data.amount)) {
+      throw new Error("Payment total changed; create a fresh payment session")
+    }
+    return { data }
+  }
 
   async getWebhookActionAndData(input: any): Promise<any> {
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET
@@ -117,7 +123,8 @@ class RazorpayPaymentProvider extends AbstractPaymentProvider {
     const action = event.event === "payment.captured" ? PaymentActions.SUCCESSFUL
       : event.event === "payment.authorized" ? PaymentActions.AUTHORIZED
       : event.event === "payment.failed" ? PaymentActions.FAILED : PaymentActions.NOT_SUPPORTED
-    return { action, data: { session_id: sessionId, amount: Number(payment.amount),
+    if (order.notes?.money_unit !== "inr-major-v2") return { action: PaymentActions.NOT_SUPPORTED }
+    return { action, data: { session_id: sessionId, amount: rupees(payment.amount),
       payment_id: payment.id, order_id: payment.order_id } }
   }
 }

@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { PRODUCTS } from '../src/data/products.js'
+import { NAVRATRI_DAYS } from '../src/data/navratri.js'
 import { getSeo, indexableRoutes, SITE_URL } from '../src/seo/metadata.js'
 import { POLICY_ROUTES, policySections } from '../src/data/policies.js'
 
@@ -11,7 +12,7 @@ const distRoot = path.join(appRoot, 'dist')
 const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character])
 const escapeXml = escapeHtml
 const routes = indexableRoutes()
-let site = { storefrontMode: 'shop', policiesPublished: false, business: { legalName: 'YOUNOYA HOUSE OF ASTRO PRIVATE LIMITED', supportEmail: 'support@younoya.com', dispatchHours: 24, deliveryMinDays: 3, deliveryMaxDays: 5 } }
+let site = { storefrontMode: 'coming-soon', policiesPublished: false, business: { legalName: 'YOUNOYA HOUSE OF ASTRO PRIVATE LIMITED', supportEmail: 'support@younoya.com', dispatchHours: 24, deliveryMinDays: 3, deliveryMaxDays: 5 } }
 try {
   const response = await fetch(`${process.env.SEO_API_BASE || 'https://api.younoya.com'}/store/site-config`, { signal: AbortSignal.timeout(4000), headers: { 'x-publishable-api-key': process.env.VITE_PUBLISHABLE_KEY || 'pk_d4577228b532cf8c81a5b63e898652da2dbaf9730acd3f8f449ccda1f8482c75' } })
   if (response.ok) { const value = await response.json(); if (value.business?.legalName && value.business?.supportEmail) site = value }
@@ -55,6 +56,7 @@ function fallbackContent(route, seo) {
   if (route === '/blog') return `<main><h1>The Younoya Journal</h1><p>${escapeHtml(seo.description)}</p><p><a href="/shop">Explore keepsakes</a> or read our stories.</p></main>`
   if (route.startsWith('/blog/')) return `<main><nav><a href="/blog">The Journal</a></nav><h1>${escapeHtml(seo.title)}</h1><p>${escapeHtml(seo.description)}</p><p><a href="/shop">Explore keepsakes</a>.</p></main>`
   const product = seo.product
+  if (product?.kind === 'ritual-box') return `<main><nav><a href="/shop">The collection</a></nav><h1>${escapeHtml(product.name)}</h1><p>₹1,499 including 18% GST · complete nine-day set</p><p>${escapeHtml(product.intentionStory)}</p><p>Photographs show individual daily kit details. Online ordering is being prepared.</p>${NAVRATRI_DAYS.map(day => `<section><h2>Day ${day.day}: ${escapeHtml(day.deity)}</h2><p lang="hi">${escapeHtml(day.hindi)}</p><p>${escapeHtml(day.colour)}</p><ul>${day.contents.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul></section>`).join('')}</main>`
   if (product) return `<main><nav><a href="/shop">The collection</a></nav><h1>${escapeHtml(product.name)}</h1><p>${escapeHtml(product.subtitle)}</p><p>${escapeHtml(product.price)}</p><p>${escapeHtml(product.intentionStory)}</p><h2>Piece details</h2><ul><li>Dimensions: ${escapeHtml(product.specs.dimensions)}</li><li>Weight: ${escapeHtml(product.specs.weight)}</li><li>Colour: ${escapeHtml(product.specs.color)}</li></ul></main>`
   return `<main><h1>${escapeHtml(seo.title)}</h1><p>${escapeHtml(seo.description)}</p></main>`
 }

@@ -1,19 +1,17 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
 import Razorpay from "razorpay"
-import { getCustomerId } from "../../../utils/auth"
 import { validRazorpaySignature } from "../../../../modules/younoya-razorpay/service"
 import { completedOrder } from "../../../../modules/younoya-commerce/orders"
-import { exclusive, minor } from "../../../../modules/younoya-commerce/db"
+import { exclusive, sessionPaise } from "../../../../modules/younoya-commerce/db"
+import { checkoutOwner } from '../../../../modules/younoya-commerce/guest'
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const customerId = getCustomerId(req)
-  if (!customerId) return res.status(401).json({ message: "Sign in to continue" })
   const cartId = String(req.query.cartId ?? "")
   if (!/^cart_[a-zA-Z0-9]+$/.test(cartId)) return res.status(400).json({ message: "Invalid cart" })
   const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as any
   const { data } = await query.graph({ entity: "cart", fields: ["id", "customer_id", "completed_at"], filters: { id: cartId } })
-  if (!data[0] || data[0].customer_id !== customerId) return res.status(403).json({ message: "Cart not found for this account" })
+  try { await checkoutOwner(req,cartId) } catch { return res.status(403).json({ message:'Checkout session not found' }) }
   let order: any = null
   if (data[0].completed_at) {
     order = await completedOrder(req.scope,cartId)
@@ -22,8 +20,6 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const customerId = getCustomerId(req)
-  if (!customerId) return res.status(401).json({ message: "Sign in before ordering" })
   const body = (req.body ?? {}) as Record<string, string>
   const { cartId, sessionId, razorpay_order_id: orderId, razorpay_payment_id: paymentId, razorpay_signature: signature } = body
   if (![cartId, sessionId, orderId, paymentId, signature].every((value) => typeof value === "string" && value.length < 150)) {
@@ -33,11 +29,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const secret = process.env.RAZORPAY_KEY_SECRET
   if (!keyId || !secret) return res.status(503).json({ message: "Payments are not configured" })
   try {
+    try { await checkoutOwner(req,cartId) } catch { return res.status(403).json({ message:'Checkout session not found' }) }
     const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as any
     const { data: carts } = await query.graph({ entity: "cart", fields: ["id", "customer_id", "total", "currency_code",
       "shipping_address.country_code", "payment_collection.id", "completed_at"], filters: { id: cartId } })
     const cart = carts[0]
-    if (!cart || cart.customer_id !== customerId) return res.status(403).json({ message: "Cart not found for this account" })
+    if (!cart) return res.status(403).json({ message: "Checkout session not found" })
     if (cart.completed_at) {
       return res.json({ verified: true, completed: true, order: await completedOrder(req.scope,cartId) })
     }
@@ -47,7 +44,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const paymentModule = req.scope.resolve(Modules.PAYMENT) as any
     const session = await paymentModule.retrievePaymentSession(sessionId)
     if (session.provider_id !== "pp_razorpay_razorpay" || session.payment_collection_id !== cart.payment_collection?.id ||
-        session.data?.id !== orderId || minor(session.amount) !== minor(cart.total)) {
+        session.data?.id !== orderId || sessionPaise(session.amount, session.data) !== sessionPaise(cart.total, session.data)) {
       return res.status(400).json({ message: "Payment does not match this cart" })
     }
     if (!validRazorpaySignature(String(session.data.id), paymentId, signature, secret)) return res.status(400).json({ message: "Payment verification failed" })
@@ -56,7 +53,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
     const razorpay = new Razorpay({ key_id: keyId, key_secret: secret, timeout: 12000 } as any)
     const payment: any = await razorpay.payments.fetch(paymentId)
-    if (payment.order_id !== orderId || payment.currency !== "INR" || Number(payment.amount) !== Number(session.amount) ||
+    if (payment.order_id !== orderId || payment.currency !== "INR" || Number(payment.amount) !== sessionPaise(session.amount, session.data) ||
         !["authorized", "captured"].includes(payment.status)) {
       return res.status(400).json({ message: "Payment amount or status could not be verified" })
     }

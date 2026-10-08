@@ -84,9 +84,18 @@ export function logout() {
   location.assign("/admin/login")
 }
 
-export function formatINR(paise: number | undefined | null): string {
-  if (paise == null) return "—"
-  return `₹${(paise / 100).toLocaleString("en-IN")}`
+export function formatINR(rupees: number | undefined | null): string {
+  if (rupees == null) return "—"
+  return `₹${Number(rupees).toLocaleString("en-IN")}`
+}
+export function orderAmount(order: {total?:number;metadata?:any}):number|null {
+  const unit=order.metadata?.commerce_approval?.money_unit||order.metadata?.money_unit
+  if(order.total==null||!Number.isFinite(Number(order.total)))return null
+  return unit==='inr-major-v2'?Number(order.total):unit==='inr-paise-v1'?Number(order.total)/100:null
+}
+export function formatOrderINR(order:{total?:number;metadata?:any}):string {
+  const amount=orderAmount(order)
+  return amount==null?'Amount review required':formatINR(amount)
 }
 
 export function fmtDate(iso: string | null | undefined): string {

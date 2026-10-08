@@ -13,6 +13,7 @@ import '../styles/ShopFooter.css'
 
 const FILTERS = [
   { id: 'all', label: 'All pieces' },
+  { id: 'festive-rituals', label: 'Festive rituals' },
   { id: 'confidence-power', label: 'Courage & presence' },
   { id: 'vitality-balance', label: 'Growth & renewal' },
   { id: 'love-connection', label: 'Love & devotion' },

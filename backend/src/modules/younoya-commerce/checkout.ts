@@ -1,6 +1,6 @@
 import crypto from "crypto"
 import { Modules } from "@medusajs/framework/utils"
-import { CommerceError, minor } from "./db"
+import { CommerceError, toPaise } from "./db"
 import { readCart } from "./orders"
 import { pack } from "./packing"
 import { requireLive } from "./settings"
@@ -9,7 +9,7 @@ const canonical = (value: any): any => Array.isArray(value) ? value.map(canonica
   ? Object.fromEntries(Object.keys(value).sort().map(key => [key,canonical(value[key])])) : value
 export function cartFingerprint(cart: any) {
   return crypto.createHash("sha256").update(JSON.stringify(canonical({ id: cart.id, items: (cart.items || []).map((i: any) => [i.variant_id,i.quantity,i.total]).sort(),
-    total: minor(cart.total), address: cart.shipping_address, email: cart.email, currency: cart.currency_code }))).digest("hex")
+    total: toPaise(cart.total), address: cart.shipping_address, email: cart.email, currency: cart.currency_code }))).digest("hex")
 }
 export function approvalSignature(approval: any) {
   if (!process.env.JWT_SECRET) throw new CommerceError("Checkout signing is not configured",503)
@@ -23,6 +23,8 @@ export function validApproval(approval: any) {
 export async function serviceability(scope: any, cartId: string, customer: string, revision: string) {
   const s = await requireLive()
   const cart = await readCart(scope,cartId,customer)
+  if (cart.metadata?.commerce_requote_required || cart.metadata?.money_unit !== 'inr-major-v2')
+    throw new CommerceError('Reopen checkout to calculate current prices. Your bag and address are preserved.',409)
   if (cart.completed_at || cart.currency_code !== "inr" || cart.shipping_address?.country_code !== "in") throw new CommerceError("Only uncompleted India INR carts are supported")
   if (revision !== s.revision) throw new CommerceError("Please review and accept the current policies", 409)
   if (!/^[1-9]\d{5}$/.test(cart.shipping_address?.postal_code || "")) throw new CommerceError("Enter a valid India PIN code")
@@ -34,7 +36,7 @@ export async function serviceability(scope: any, cartId: string, customer: strin
   const parcel = pack(cart.items,s.draft)
   const couriers = await shiprocket.serviceability(s.draft.pickupPincode,cart.shipping_address.postal_code,parcel.weightKg,parcel)
   if (!couriers.length) throw new CommerceError("Delivery is unavailable for this PIN code. Your selection is still saved.", 409)
-  const approval = { revision: s.revision, customer_id: customer, accepted_at: new Date().toISOString(),
+  const approval = { money_unit: "inr-major-v2", revision: s.revision, customer_id: customer, accepted_at: new Date().toISOString(),
     fingerprint: cartFingerprint(cart), parcel, shipping: { pickupName: s.draft.pickupName, pickupPincode: s.draft.pickupPincode,
       stockLocationId: s.draft.stockLocationId, hsn: s.draft.hsn,
       variantHsns:Object.fromEntries(cart.items.map((item: any) => [item.variant_id,s.draft.variants.find((v: any) => v.id===item.variant_id)?.hsn || s.draft.hsn])) }, valid_until: new Date(Date.now()+15*60000).toISOString() }
@@ -46,7 +48,7 @@ export async function validatePreparedCart(scope: any, cartId: string, customer?
   const s = await requireLive()
   const cart = await readCart(scope,cartId,customer)
   const approval = cart.metadata?.commerce_approval
-  if (!validApproval(approval) || approval.customer_id !== cart.customer_id || approval.revision !== s.revision ||
+  if (!validApproval(approval) || approval.customer_id !== (cart.customer_id || `guest:${cart.id}`) || approval.revision !== s.revision ||
     new Date(approval.valid_until).getTime() < Date.now() || approval.fingerprint !== cartFingerprint(cart))
     throw new CommerceError("Please review delivery and the current policies again", 409)
   if (cart.shipping_methods?.length !== 1 || cart.shipping_methods[0].shipping_option_id !== s.draft.shippingOptionId ||

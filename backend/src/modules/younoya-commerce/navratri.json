@@ -1,0 +1,181 @@
+{
+  "product": {
+    "id": "navratri-shringaar-box",
+    "handle": "navratri-shringaar-box",
+    "sku": "YN-NAVRATRI-9D-001",
+    "kind": "ritual-box",
+    "name": "9 Days Navratri Shringaar Box",
+    "shopName": "NAVRATRI SHRINGAAR BOX",
+    "chapter": "Navratri",
+    "badge": "NINE DAYS, ONE BOX",
+    "subtitle": "Nine daily kits · one complete set",
+    "tagline": "Nine days of colour, devotion and ritual",
+    "motif": "Navratri daily rituals",
+    "price": "₹ 1,499",
+    "priceNum": 1499,
+    "currency": "₹",
+    "intention": "festive-rituals",
+    "primaryImage": "/media/navratri/red-kit-1200.webp",
+    "cardImage": "/media/navratri/red-kit-600.webp",
+    "galleryImages": [
+      "/media/navratri/red-kit-1200.webp",
+      "/media/navratri/green-kit-1200.webp",
+      "/media/navratri/blue-kit-1200.webp",
+      "/media/navratri/orange-kit-1200.webp",
+      "/media/navratri/pink-kit-1200.webp",
+      "/media/navratri/yellow-kit-1200.webp"
+    ],
+    "galleryCaptions": [
+      "Red daily kit detail · mehendi is included on Day 8",
+      "Green daily kit detail",
+      "Dark blue daily kit detail",
+      "Orange daily kit detail",
+      "Dark pink daily kit detail",
+      "Yellow daily kit detail"
+    ],
+    "intentionStory": "A complete nine-day Navratri shringaar set, with a colour and devotional keepsake for each day. Nine individually packed daily kits arrive together in one outer box.",
+    "relatedHandles": [
+      "wild-poise",
+      "flamingo-grace",
+      "the-verdant-rising"
+    ]
+  },
+  "days": [
+    {
+      "day": 1,
+      "colour": "White",
+      "deity": "Maa Shailputri",
+      "hindi": "माँ शैलपुत्री",
+      "contents": [
+        "White chunari",
+        "White bindi",
+        "White bangles",
+        "Mitti diya + cotton wick (rui jyot)",
+        "Pooja dhoop",
+        "Chandrama + moti keepsake"
+      ],
+      "note": ""
+    },
+    {
+      "day": 2,
+      "colour": "Red",
+      "deity": "Maa Brahmacharini",
+      "hindi": "माँ ब्रह्मचारिणी",
+      "contents": [
+        "Red chunari",
+        "Red bindi · 1 piece",
+        "Red bangles · 1 pair",
+        "Red coloured diya + cotton wick (rui jyot)",
+        "Pooja dhoop",
+        "Copper ring"
+      ],
+      "note": "Mehendi is included in Day 8 only."
+    },
+    {
+      "day": 3,
+      "colour": "Light pink",
+      "deity": "Maa Chandra Ghanta",
+      "hindi": "माँ चंद्रघंटा",
+      "contents": [
+        "Light pink chunari",
+        "Light pink bindi · 1 piece",
+        "Light pink bangles · 1 pair",
+        "Pink mitti diya + cotton wick (rui jyot)",
+        "Pooja dhoop",
+        "Itr"
+      ],
+      "note": ""
+    },
+    {
+      "day": 4,
+      "colour": "Orange",
+      "deity": "Maa Kushmanda",
+      "hindi": "माँ कूष्मांडा",
+      "contents": [
+        "Orange chunari",
+        "Orange bindi · 1 piece",
+        "Orange bangles · 1 pair",
+        "Orange mitti diya + cotton wick (rui jyot)",
+        "Pooja dhoop",
+        "Copper Surya"
+      ],
+      "note": ""
+    },
+    {
+      "day": 5,
+      "colour": "Green",
+      "deity": "Maa Skandmata",
+      "hindi": "माँ स्कंदमाता",
+      "contents": [
+        "Green chunari",
+        "Green bindi · 1 piece",
+        "Green bangles · 1 pair",
+        "Green coloured diya + cotton wick (rui jyot)",
+        "Pooja dhoop",
+        "Green stone"
+      ],
+      "note": ""
+    },
+    {
+      "day": 6,
+      "colour": "Yellow",
+      "deity": "Maa Katyayni",
+      "hindi": "माँ कात्यायनी",
+      "contents": [
+        "Yellow chunari",
+        "Yellow bindi · 1 piece",
+        "Yellow bangles · 1 pair",
+        "Yellow coloured diya + cotton wick (rui jyot)",
+        "Pooja dhoop",
+        "Brass key"
+      ],
+      "note": ""
+    },
+    {
+      "day": 7,
+      "colour": "Dark blue",
+      "deity": "Maa Kaalratri",
+      "hindi": "माँ कालरात्रि",
+      "contents": [
+        "Dark blue chunari",
+        "Dark blue bindi · 1 piece",
+        "Dark blue bangles · 1 pair",
+        "Blue coloured diya + cotton wick (rui jyot)",
+        "Pooja dhoop",
+        "Iron ring"
+      ],
+      "note": ""
+    },
+    {
+      "day": 8,
+      "colour": "Red",
+      "deity": "Maa Mahagauri",
+      "hindi": "माँ महागौरी",
+      "contents": [
+        "Red chunari",
+        "Red bindi · 1 piece",
+        "Red bangles · 1 pair",
+        "Red coloured diya + cotton wick (rui jyot)",
+        "Pooja dhoop",
+        "Silver-coloured Om Namah Shivay Bel Patra devotional item",
+        "Mehendi cone"
+      ],
+      "note": ""
+    },
+    {
+      "day": 9,
+      "colour": "Dark pink",
+      "deity": "Maa Siddhidatri",
+      "hindi": "माँ सिद्धिदात्री",
+      "contents": [
+        "Dark pink chunari",
+        "Dark pink bindi · 1 piece",
+        "Dark pink bangles · 1 pair",
+        "Pink coloured diya + cotton wick (rui jyot)",
+        "Pooja dhoop",
+        "Five-mukhi rudraksh"
+      ],
+      "note": ""
+    }
+  ]
+}

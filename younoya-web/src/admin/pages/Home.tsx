@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { api, formatINR, fmtDate } from "../api"
+import { api, formatINR, formatOrderINR, orderAmount, fmtDate } from "../api"
 
-type OrderRow = { id: string; display_id?: number; created_at: string; total?: number; email?: string; payment_status: string; fulfillment_status: string }
+type OrderRow = { id: string; display_id?: number; created_at: string; total?: number; metadata?:any; email?: string; payment_status: string; fulfillment_status: string }
 type CustomerRow = { id: string; email: string; first_name?: string; created_at: string }
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
 
   useEffect(() => {
     Promise.all([
-      api("/admin/orders?limit=100"),
+      api("/admin/orders?limit=100&fields=%2Bmetadata"),
       api("/admin/customers?limit=5"),
       api("/admin/blog/posts?limit=1"),
     ])
@@ -23,7 +23,7 @@ export default function Home() {
         const recent30 = all.filter((o) => new Date(o.created_at).getTime() > cutoff)
         setStats({
           orders30: orders.count ?? all.length,
-          revenue30: recent30.reduce((sum, o) => sum + (o.total ?? 0), 0),
+          revenue30: recent30.some(o=>orderAmount(o)==null)?NaN:recent30.reduce((sum, o) => sum + (orderAmount(o) ?? 0), 0),
           customers: customers.count ?? 0,
           posts: blog.count ?? 0,
         })
@@ -47,7 +47,7 @@ export default function Home() {
         </div>
         <div className="ad-stat">
           <small>Revenue · last 30 days</small>
-          <strong>{stats ? formatINR(stats.revenue30) : "…"}</strong>
+          <strong>{stats ? Number.isFinite(stats.revenue30)?formatINR(stats.revenue30):'Amount review required' : "…"}</strong>
         </div>
         <div className="ad-stat">
           <small>Customers</small>
@@ -74,7 +74,7 @@ export default function Home() {
                 <td><Link to={`/admin/orders/${o.id}`} className="ad-link">#{o.display_id ?? o.id.slice(0, 8)}</Link></td>
                 <td>{fmtDate(o.created_at)}</td>
                 <td><span className={`ad-chip ad-chip--${o.payment_status === "captured" ? "ok" : "wait"}`}>{o.payment_status}</span></td>
-                <td className="ad-right">{formatINR(o.total)}</td>
+                <td className="ad-right">{formatOrderINR(o)}</td>
               </tr>
             ))}
             {recent.length === 0 && (

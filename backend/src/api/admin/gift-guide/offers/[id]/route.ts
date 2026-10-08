@@ -64,11 +64,11 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     }
   }
   await updateProductsWorkflow(req.scope).run({ input: { products: [{ id: product.id,
-    title, description, thumbnail, images: [{ url: thumbnail }], metadata: { ...product.metadata,
+    title, description, thumbnail, images: [{ url: thumbnail }], metadata: { ...product.metadata, money_unit: "inr-major-v2",
       gift_guide_approved: body.approved === true, gift_guide_intentions: intentions,
       gift_guide_matrix_keys: keys,
       ...(isKit ? { gift_guide_components: contents, gift_guide_component_variants: components } : {}) } }] } })
   await updateProductVariantsWorkflow(req.scope).run({ input: { product_variants: [{ id: variant.id,
-    manage_inventory: true, allow_backorder: false, prices: [{ amount: price * 100, currency_code: "inr" }] }] } })
+    manage_inventory: true, allow_backorder: false, prices: [{ amount: price, currency_code: "inr" }] }] } })
   return res.json({ id: product.id, message: isKit ? "Offer updated. Recommendation availability follows the component stock." : "Offer updated." })
 }

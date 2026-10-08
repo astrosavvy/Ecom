@@ -25,3 +25,10 @@
 - younoya-toolkits: curated boxes/rules.
 - younoya-recipients: recipient profiles/addresses.
 - younoya-astro: Vedic calculation and recommendations.
+
+## Navratri catalogue and guest checkout (2026-10-08)
+- Medusa 2 uses rupees, not paise. Catalogue/cart/order/admin amount unit is `inr-major-v2`; Razorpay converts once to paise, Shiprocket receives rupees. Reviewed historical records use `inr-paise-v1`; unknown records block financial processing. Superseded paise statements in historical milestones are not current implementation guidance.
+- `/store/navratri` exposes verified sale availability only when launch readiness, product approval/publication, real inventory and price match pass. Static preview is available while the backend product stays draft.
+- Ordering is guest-capable without OTP. `/store/commerce/guest-cart` returns a cart-bound secret stored in sessionStorage; PostgreSQL stores only its hash/expiry. Prepare/payment sessions/completion/recovery enforce this secret or customer ownership. Account order history/save/reopen retain OTP auth.
+- `/store/commerce/pincode` resolves India city/district and state through validated, cached backend Postal PIN Code API requests; manual entry handles failure/ambiguity.
+- Runbook: backend/NAVRATRI_RELEASE.md. Idempotent draft upsert and money migration never run the destructive seed or invent stock.

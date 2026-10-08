@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import { getProductByHandle, getRelatedProducts } from '../data/products'
 import { useCart } from '../context/CartContext'
 import NotFound from './NotFound'
+import NavratriDetail from './NavratriDetail'
 import ProductGallery from '../components/product/ProductGallery'
 import ProductBuyBox from '../components/product/ProductBuyBox'
 import ProductHighlights from '../components/product/ProductHighlights'
@@ -39,6 +40,7 @@ export default function ProductDetail() {
   }, [handle])
 
   if (!product) return <NotFound />
+  if (product.kind === 'ritual-box') return <NavratriDetail product={product} />
 
   const images = product.galleryImages && product.galleryImages.length > 0 
     ? product.galleryImages 

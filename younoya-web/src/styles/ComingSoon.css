@@ -17,6 +17,9 @@
   cursor: default;
 }
 
+.coming-soon__collection { display: inline-flex; gap: 20px; align-items: center; min-height: 48px; margin-top: 24px; padding: 10px 24px; border: 1px solid rgba(214,176,106,.55); border-radius: 28px; color: #ecd6ae; font-size: 13px; }
+.coming-soon__collection:focus-visible { outline: 2px solid #ecd6ae; outline-offset: 4px; }
+
 /* Background Facade Image with Object-Cover */
 .coming-soon__media {
   position: absolute;

@@ -1,27 +1,23 @@
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { CommerceError } from "../../modules/younoya-commerce/db"
-import { getCustomerId } from "./auth"
 import { validatePreparedCart } from "../../modules/younoya-commerce/checkout"
 import { completeApprovedCart } from "../../modules/younoya-commerce/completion"
+import { checkoutOwner } from '../../modules/younoya-commerce/guest'
 export async function checkoutGuard(req: any, res: any, next: any) {
   try {
-    const customer = getCustomerId(req)
-    if (!customer) return res.status(401).json({ message: "Sign in before ordering" })
     const id = (req.originalUrl || req.url).match(/payment-collections\/([^/]+)\/payment-sessions/)?.[1]
     if (!id) throw new CommerceError("Payment collection not found",404)
     const { data } = await req.scope.resolve(ContainerRegistrationKeys.QUERY).graph({ entity: "cart_payment_collection",
       fields: ["cart_id"], filters: { payment_collection_id: id } })
     if (!data[0]?.cart_id) throw new CommerceError("Cart not found",404)
-    await validatePreparedCart(req.scope,data[0].cart_id,customer)
+    await validatePreparedCart(req.scope,data[0].cart_id,await checkoutOwner(req,data[0].cart_id))
     next()
   } catch (error) { return res.status(error instanceof CommerceError ? error.status : 503).json({ message: error instanceof CommerceError ? error.message : "Checkout validation is unavailable" }) }
 }
 export async function completionGuard(req: any, res: any, _next: any) {
   try {
-    const customer = getCustomerId(req)
-    if (!customer) throw new CommerceError("Sign in before completing an order",401)
     const id = (req.originalUrl || req.url).match(/carts\/([^/]+)\/complete/)?.[1]
-    const order = await completeApprovedCart(req.scope,id,customer)
+    const order = await completeApprovedCart(req.scope,id,await checkoutOwner(req,id))
     return res.status(200).json({ type: "order", order })
   } catch (error) { if (!res.headersSent) return res.status(error instanceof CommerceError ? error.status : 503).json({ message: error instanceof CommerceError ? error.message : "Order completion is being reconciled; your payment is preserved" }) }
 }

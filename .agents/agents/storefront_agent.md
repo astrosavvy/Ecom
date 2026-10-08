@@ -21,3 +21,9 @@
 - `components/shop/ShopFooter.jsx` groups order history, shipping, cancellations/refunds and contact under Here to help. Terms and Privacy use a separate legal row aligned with the brand/navigation content; avoid full-width uncontained policy rows or duplicate support links.
 - `styles/ShopFooter.css` owns footer spacing and focus styles. Below 670px, Shop and Explore form two columns, followed by a full-width, two-column help section. Footer links keep 44px minimum touch targets.
 - Shared `components/PolicyLinks.jsx` accepts optional `paths`, `includeOrders` and `className`; defaults retain all five policy destinations and order history for checkout, account pages and policy navigation.
+
+## Navratri and checkout surfaces
+- NavratriDetail is a dedicated light view with exact nine-day contents, six authentic individual-kit photos and mobile three-column day navigation. Never inherit brooch materials, consecration, reviews or personalisation claims. The preview enters the bag; backend approval/inventory/readiness gates actual payment.
+- `/` defaults to ComingSoon; Shop remains `/shop`. Match SEO generator and public backend setting. Keep archived hero film unchanged.
+- Checkout uses an ivory two-column desktop form/summary and mobile stack: saved address/edit, free shipping, official Razorpay SVG, promotion, totals, consent and action. Guest ordering has no OTP. PIN lookup goes through Younoya's backend with manual fallback.
+- Shared GuideLogin remains a native account modal, now ivory/champagne. Preserve email OTP, exact state/action return handlers, focus restoration and keyboard-aware height. Do not add passwords or enable mobile delivery providers.

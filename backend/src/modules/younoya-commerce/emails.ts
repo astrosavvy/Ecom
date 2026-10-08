@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer"
-import { enqueue, CommerceError } from "./db"
+import { enqueue, CommerceError, orderPaise, rupees } from "./db"
 import { readOrder } from "./orders"
 import { settings, defaults } from "./settings"
 export async function queueEmail(orderId: string, key: string, subject: string, text: string) {
@@ -14,7 +14,7 @@ export async function sendOrderEmail(scope: any, operation: any) {
   const transporter = nodemailer.createTransport({ host: process.env.SMTP_HOST, port: Number(process.env.SMTP_PORT || 587),
     secure: process.env.SMTP_SECURE === "true", connectionTimeout: 10000, socketTimeout: 12000,
     ...(process.env.SMTP_USER ? { auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD } } : {}) })
-  const body = `${operation.payload.text}\n\nOrder #${order.display_id || order.id}\n${order.items.map((i: any) => `${i.title} × ${i.quantity}`).join("\n")}\nTotal: INR ${(Number(order.total)/100).toFixed(2)}\n\nView your order: https://younoya.com/account/orders/${order.id}\n${business.supportEmail}\n${business.legalName}`
+  const body = `${operation.payload.text}\n\nOrder #${order.display_id || order.id}\n${order.items.map((i: any) => `${i.title} × ${i.quantity}`).join("\n")}\nTotal: INR ${rupees(orderPaise(order.total,order)).toFixed(2)}\n\nView your order: https://younoya.com/account/orders/${order.id}\n${business.supportEmail}\n${business.legalName}`
   try { await transporter.sendMail({ from: process.env.SMTP_FROM_EMAIL, replyTo: business.supportEmail, to: order.email,
     messageId: `<${operation.id}@younoya.com>`, subject: `${operation.payload.subject} · YOUNOYA #${order.display_id || order.id}`, text: body }) }
   finally { transporter.close() }

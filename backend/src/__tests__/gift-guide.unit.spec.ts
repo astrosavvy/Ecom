@@ -8,10 +8,14 @@ import { signRecommendation, verifyRecommendation } from "../modules/younoya-ast
 import RazorpayPaymentProvider, { validRazorpaySignature } from "../modules/younoya-razorpay/service"
 import { hideRecommendationOffers } from "../api/middlewares"
 import { liveProduct } from "../modules/younoya-astro/offers"
+jest.mock('../modules/younoya-commerce/razorpay', () => ({
+  ...jest.requireActual('../modules/younoya-commerce/razorpay'),
+  persistedOrder: jest.fn(async (_id, _amount, create) => create()),
+}))
 
 const product = { id: "prod_one", handle: "wild-poise", title: "Wild Poise", thumbnail: "/wild.webp",
   metadata: {}, variants: [{ id: "variant_one", manage_inventory: false, allow_backorder: false,
-    prices: [{ amount: 249900, currency_code: "inr" }] }] }
+    prices: [{ amount: 2499, currency_code: "inr" }] }] }
 const scope = { resolve: () => ({ graph: async () => ({ data: [product] }) }) }
 const answers = { forWhom: "self", name: "Asha", moment: "A new beginning", intention: "confidence-power" }
 
@@ -23,10 +27,11 @@ describe("gift guide rules", () => {
     const intention = await buildGuideResult(scope, answers)
     expect(intention.method).toBe("intention")
     expect(intention.offers[0].variantId).toBe("variant_one")
-    expect(intention.offers[0].price).toBe(249900)
+    expect(intention.offers[0].price).toBe(2499)
     const dateOnly = await buildGuideResult(scope, { ...answers, dob: "1994-09-30" })
     expect(dateOnly.method).toBe("numerology")
-    expect(dateOnly.guide).toMatchObject({ kind: "Destiny number" })
+    expect(dateOnly.guide).toBeNull()
+    expect(dateOnly.offers[0].price).toBe(2499)
   })
 
   test("age 31 uses Moolank and age 32 uses Destiny number", () => {
@@ -82,18 +87,20 @@ describe("gift guide rules", () => {
       }
     }) as any
     process.env.GEONAMES_USERNAME = "unit-test"
+    const openCage = process.env.OPENCAGE_API_KEY
+    delete process.env.OPENCAGE_API_KEY
     try {
       const result = await buildGuideResult(scope, { ...answers, dob: "1994-09-30", tob: "09:30", placeId: 5128581 })
       expect(result.method).toBe("astrology")
       expect(result.guide).toHaveProperty("moonSign", "Gemini")
       expect(result.guide).toHaveProperty("antardasha", "Mercury")
-    } finally { global.fetch = originalFetch; delete process.env.GEONAMES_USERNAME }
+    } finally { global.fetch = originalFetch; delete process.env.GEONAMES_USERNAME; if (openCage) process.env.OPENCAGE_API_KEY = openCage }
     expect(birthInstant("1970-01-01", "09:00", "America/New_York").toISOString()).toBe("1970-01-01T14:00:00.000Z")
   })
 
-  test("OpenCage strictly suppresses queries under 4 characters", async () => {
+  test("OpenCage suppresses queries under 3 characters", async () => {
     process.env.OPENCAGE_API_KEY = "test-key"
-    const results = await searchPlaces("Del")
+    const results = await searchPlaces("De")
     expect(results).toEqual([])
     delete process.env.OPENCAGE_API_KEY
   })
@@ -148,9 +155,9 @@ describe("gift guide rules", () => {
       expect(places.map((place) => place.region)).toEqual(["Illinois", "Massachusetts"])
       expect(places[0].id).toBeGreaterThan(0)
       const result = await buildGuideResult(scope, answers)
-      expect(result.explanation).toContain("Your intention")
-      global.fetch = jest.fn(async () => ({ ok: true, json: async () => ({ choices: [{ message: { content: "not valid JSON" } }] }) })) as any
-      expect((await buildGuideResult(scope, answers)).explanation).toContain("Your intention")
+      expect(result.explanation).toContain("Career & Confidence")
+      global.fetch = jest.fn(async () => ({ ok: true, json: async () => ({ choices: [] }) })) as any
+      expect((await buildGuideResult(scope, answers)).explanation).toContain("Career & Confidence")
     } finally { global.fetch = originalFetch; delete process.env.OPENCAGE_API_KEY; delete process.env.OPENROUTER_API_KEY; delete process.env.OPENROUTER_MODEL }
   })
 })
@@ -172,14 +179,17 @@ describe("saved result and payment verification", () => {
     expect(validRazorpaySignature("order_1", "pay_1", signature, secret)).toBe(true)
     expect(validRazorpaySignature("order_1", "pay_2", signature, secret)).toBe(false)
     const provider = new RazorpayPaymentProvider({}, { key_id: "rzp_test", key_secret: secret })
-    ;(provider as any).razorpay = { orders: { create: jest.fn(async (input: any) => ({ id: "order_1", ...input })) },
+    ;(provider as any).razorpay = { orders: { create: jest.fn(async (input: any) => ({ id: "order_1", ...input })),
+      fetch: jest.fn(async () => ({ id:'order_1',amount:249900,notes:{medusa_session_id:'ps_1'} })) },
       payments: { fetch: jest.fn(async () => ({ order_id: "order_1", amount: 249900, currency: "INR", status: "captured" })) } }
-    const started = await provider.initiatePayment({ amount: 249900, currency_code: "inr", data: { session_id: "ps_1" } })
+    const started = await provider.initiatePayment({ amount: 2499, currency_code: "inr", data: { session_id: "ps_1" } })
     expect(started.data.amount).toBe(249900)
     const valid = await provider.authorizePayment({ data: { ...started.data, razorpay_payment_id: "pay_1", razorpay_signature: signature } })
     expect(valid.status).toBe("captured")
     const invalid = await provider.authorizePayment({ data: { ...started.data, razorpay_payment_id: "pay_1", razorpay_signature: "bad" } })
     expect(invalid.status).toBe("error")
+    await expect(provider.updatePayment({amount:2499,currency_code:'inr',data:started.data})).resolves.toEqual({data:started.data})
+    await expect(provider.updatePayment({amount:2498,currency_code:'inr',data:started.data})).rejects.toThrow('fresh')
   })
 })
 

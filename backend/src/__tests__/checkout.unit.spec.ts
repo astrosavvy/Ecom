@@ -20,13 +20,13 @@ describe("payment confirmation", () => {
 
   test("the same verified callback is safe to repeat, but a different payment is rejected", async () => {
     const session: any = { id: "ps_1", provider_id: "pp_razorpay_razorpay", payment_collection_id: "paycol_1",
-      amount: 249900, currency_code: "inr", data: { id: "order_1" } }
+      amount: 2499, currency_code: "inr", data: { id: "order_1",money_unit:"inr-major-v2" } }
     const update = jest.fn(async ({ data }: any) => { session.data = data })
     const req: any = { auth_context: { actor_id: "cus_1" }, body: { cartId: "cart_1", sessionId: "ps_1",
       razorpay_order_id: "order_1", razorpay_payment_id: "pay_1",
       razorpay_signature: crypto.createHmac("sha256", secret).update("order_1|pay_1").digest("hex") },
       scope: { resolve: (key: string) => key === ContainerRegistrationKeys.QUERY
-        ? { graph: async () => ({ data: [{ id: "cart_1", customer_id: "cus_1", total: 249900,
+        ? { graph: async () => ({ data: [{ id: "cart_1", customer_id: "cus_1", total: 2499,
           currency_code: "inr", shipping_address: { country_code: "in" }, payment_collection: { id: "paycol_1" } }] }) }
         : { retrievePaymentSession: async () => session, updatePaymentSession: update } } }
     fetchPayment.mockResolvedValue({ order_id: "order_1", amount: 249900, currency: "INR", status: "captured" })
@@ -44,10 +44,10 @@ describe("payment confirmation", () => {
       razorpay_order_id: "order_1", razorpay_payment_id: "pay_1",
       razorpay_signature: crypto.createHmac("sha256", secret).update("order_1|pay_1").digest("hex") },
       scope: { resolve: (key: string) => key === ContainerRegistrationKeys.QUERY
-        ? { graph: async () => ({ data: [{ customer_id: "cus_1", total: 10000, currency_code: "inr",
+        ? { graph: async () => ({ data: [{ customer_id: "cus_1", total: 100, currency_code: "inr",
           shipping_address: { country_code: "in" }, payment_collection: { id: "paycol_1" } }] }) }
         : { retrievePaymentSession: async () => ({ id: "ps_1", provider_id: "pp_razorpay_razorpay",
-          payment_collection_id: "paycol_1", amount: 10000, data: { id: "order_1" } }) } } }
+          payment_collection_id: "paycol_1", amount: 100, data: { id: "order_1",money_unit:"inr-major-v2" } }) } } }
     fetchPayment.mockResolvedValue({ order_id: "order_1", amount: 10000, currency: "INR", status: "failed" })
     const rejected = await POST(req, response()) as any
     expect(rejected.code).toBe(400)
@@ -59,17 +59,17 @@ describe("payment confirmation", () => {
       razorpay_signature: crypto.createHmac("sha256", secret).update("order_1|pay_1").digest("hex") },
       scope: { resolve: () => ({ graph: async ({ entity }: any) => ({
         data: entity === "cart" ? [{ id: "cart_1", customer_id: "cus_1", completed_at: "2026-09-30T12:00:00Z" }]
-          : entity === "order_cart" ? [{ order_id: "ord_123" }] : [{ id: "ord_123", display_id: 1, total: 249900 }]
+          : entity === "order_cart" ? [{ order_id: "ord_123" }] : [{ id: "ord_123", display_id: 1, total: 2499,metadata:{money_unit:"inr-major-v2"} }]
       }) }) } }
     const postRes = await POST(reqPost, response()) as any
-    expect(postRes.body).toEqual({ verified: true, completed: true, order: { id: "ord_123", display_id: 1, total: 249900 } })
+    expect(postRes.body).toEqual({ verified: true, completed: true, order: { id: "ord_123", display_id: 1, total: 2499,metadata:{money_unit:"inr-major-v2"},money_unit:"inr-major-v2" } })
 
     const reqGet: any = { auth_context: { actor_id: "cus_1" }, query: { cartId: "cart_1" },
       scope: { resolve: () => ({ graph: async ({ entity }: any) => ({
         data: entity === "cart" ? [{ id: "cart_1", customer_id: "cus_1", completed_at: "2026-09-30T12:00:00Z" }]
-          : entity === "order_cart" ? [{ order_id: "ord_123" }] : [{ id: "ord_123", display_id: 1, total: 249900 }]
+          : entity === "order_cart" ? [{ order_id: "ord_123" }] : [{ id: "ord_123", display_id: 1, total: 2499,metadata:{money_unit:"inr-major-v2"} }]
       }) }) } }
     const getRes = await GET(reqGet, response()) as any
-    expect(getRes.body).toEqual({ owned: true, completed: true, order: { id: "ord_123", display_id: 1, total: 249900 } })
+    expect(getRes.body).toEqual({ owned: true, completed: true, order: { id: "ord_123", display_id: 1, total: 2499,metadata:{money_unit:"inr-major-v2"},money_unit:"inr-major-v2" } })
   })
 })

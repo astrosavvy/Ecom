@@ -11,6 +11,7 @@ export default function ProductCard({ product, index, reducedMotion, onWishlist,
   function handleQuickAdd(e) {
     e.preventDefault()
     e.stopPropagation()
+    if (product.kind === 'ritual-box') return
     addToCart({
       id: `${product.id}::standard`,
       handle: product.handle,
@@ -19,7 +20,7 @@ export default function ProductCard({ product, index, reducedMotion, onWishlist,
       price: product.price,
       priceNum: product.priceNum,
       image: product.cardImage || product.primaryImage,
-      chapter: 'Younoya brooch',
+      chapter: product.kind === 'ritual-box' ? 'Navratri ritual box' : 'Younoya brooch',
     }, 1)
     setAdded(true)
     setIsOpen(true)
@@ -39,7 +40,7 @@ export default function ProductCard({ product, index, reducedMotion, onWishlist,
         <Link to={`/product/${product.handle}`} className="livora-card__link" aria-label={`Explore ${product.name}`}>
           <img src={product.shopCardImage || product.cardImage || product.primaryImage} alt={product.name} loading={index < 5 ? 'eager' : 'lazy'} />
         </Link>
-        <button
+        {product.kind !== 'ritual-box' && <button
           type="button"
           className={`livora-card__quick-bag ${added ? 'is-added' : ''}`}
           onClick={handleQuickAdd}
@@ -47,7 +48,7 @@ export default function ProductCard({ product, index, reducedMotion, onWishlist,
           title="Add to bag"
         >
           {added ? <Check size={14} /> : <ShoppingBag size={14} />}
-        </button>
+        </button>}
       </div>
 
       <div className="livora-card__body">

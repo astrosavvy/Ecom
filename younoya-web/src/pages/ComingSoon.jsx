@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Sparkles, Check } from 'lucide-react'
 import '../styles/ComingSoon.css'
@@ -77,6 +78,7 @@ export default function ComingSoon() {
               </div>
             )}
           </div>
+          <Link className="coming-soon__collection" to="/shop">Explore the collection <span aria-hidden="true">↗</span></Link>
           <div style={{ marginTop: 24 }}><PolicyLinks /></div>
         </motion.div>
       </div>

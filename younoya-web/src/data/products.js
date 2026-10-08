@@ -1,4 +1,5 @@
 import productEditorial from './productEditorial.js'
+import { NAVRATRI_PRODUCT } from './navratri.js'
 
 // Product facts and editorial copy come from the updated YOUNOYA brooch collection document.
 // Names retain established storefront URLs where possible; imagery maps to P55–P64.
@@ -15,11 +16,12 @@ const catalog = [
   { handle: 'the-inner-kingdom', name: 'THE INNER KINGDOM', motif: 'Sculptural animals', intention: 'wealth-prosperity', element: 'earth', photos: 3, related: ['wild-poise', 'golden-instinct', 'cats-eye'] },
 ]
 
-export const PRODUCTS = catalog.map((item, index) => {
+export const BROOCH_PRODUCTS = catalog.map((item, index) => {
   const editorial = productEditorial[item.handle]
   const photoRoot = `/media/products/${item.handle}`
   return {
     id: item.handle,
+    kind: 'brooch',
     handle: item.handle,
     chapter: String(index + 1).padStart(2, '0'),
     badge: `PIECE ${String(index + 1).padStart(2, '0')}`,
@@ -47,6 +49,8 @@ export const PRODUCTS = catalog.map((item, index) => {
     relatedHandles: item.related,
   }
 })
+
+export const PRODUCTS = [NAVRATRI_PRODUCT, ...BROOCH_PRODUCTS]
 
 export function getProductByHandle(handle) {
   return PRODUCTS.find(product => product.handle === handle)

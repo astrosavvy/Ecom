@@ -5,7 +5,7 @@ import GuideLogin from '../components/gift-guide/GuideLogin'
 import AfterSaleForm from '../components/orders/AfterSaleForm'
 import PolicyLinks from '../components/PolicyLinks'
 import '../styles/CustomerOrders.css'
-const money = value => `₹${(Number(value || 0)/100).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`
+const money = value => `₹${(Number(value || 0)).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`
 export default function CustomerOrders() {
   const { id } = useParams()
   const [signedIn, setSignedIn] = useState(!!getCustomerToken())

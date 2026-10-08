@@ -18,12 +18,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       thumbnail: `${origin}${piece.thumbnail}`,
       images: piece.images.map((url) => ({ url: `${origin}${url}` })),
       metadata: { gift_guide_intentions: [piece.intention], gift_guide_approved: true,
-        catalog_source: "younoya-brooch-2026", element: piece.element },
+        catalog_source: "younoya-brooch-2026", money_unit: "inr-major-v2", element: piece.element },
       sales_channels: [{ id: salesChannelId }],
       options: [{ title: "Edition", values: ["Standard"] }],
       variants: [{ title: "Standard", sku: `YN-${piece.handle.toUpperCase().replace(/[^A-Z0-9]+/g, "-")}`,
         manage_inventory: true, allow_backorder: false, options: { Edition: "Standard" },
-        prices: [{ amount: piece.price * 100, currency_code: "inr" }] }],
+        prices: [{ amount: piece.price, currency_code: "inr" }] }],
     }] } })
     created.push(result[0].id)
   }

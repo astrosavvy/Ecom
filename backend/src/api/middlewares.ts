@@ -11,6 +11,7 @@ import {
 } from "./utils/roles"
 
 const customerAuth = authenticate("customer", ["bearer", "session"])
+const optionalCustomerAuth = authenticate("customer", ["bearer", "session"], { allowUnauthenticated: true })
 const adminAuth = authenticate("user", ["bearer", "session"])
 const adminOnly = requireRole("admin")
 const staffRead = requireRole("admin", "support")
@@ -68,9 +69,9 @@ export default defineMiddlewares([
   { matcher: "/hooks/younoya-razorpay", method: ["POST"], bodyParser: { preserveRawBody: true } },
   { matcher: /^\/hooks\/payment\/(?:pp_)?razorpay(?:_razorpay)?$/, method: ["POST"], bodyParser: { preserveRawBody: true }, middlewares: [async (req, res) => { await durableRazorpayWebhook(req,res) }] },
   { matcher: /^\/store\/account(?:\/|$)/, middlewares: [customerAuth] },
-  { matcher: "/store/commerce/prepare", method: ["POST"], middlewares: [customerAuth] },
-  { matcher: /^\/store\/payment-collections\/[^/]+\/payment-sessions$/, method: ["POST"], middlewares: [customerAuth, checkoutGuard] },
-  { matcher: /^\/store\/carts\/[^/]+\/complete$/, method: ["POST"], middlewares: [customerAuth, completionGuard] },
+  { matcher: "/store/commerce/prepare", method: ["POST"], middlewares: [optionalCustomerAuth] },
+  { matcher: /^\/store\/payment-collections\/[^/]+\/payment-sessions$/, method: ["POST"], middlewares: [optionalCustomerAuth, checkoutGuard] },
+  { matcher: /^\/store\/carts\/[^/]+\/complete$/, method: ["POST"], middlewares: [optionalCustomerAuth, completionGuard] },
   { matcher: /^\/admin\/commerce(?:\/|$)/, middlewares: [adminAuth, readStaffWriteAdmin] },
   { matcher: /^\/admin\/commerce\/(settings|provision)(?:\/|$)/, middlewares: [adminOnly] },
   { matcher: /^\/admin\/(payments\/[^/]+\/refund|orders\/[^/]+\/cancel|orders\/[^/]+\/fulfillments(?:\/.*)?)$/, method: ["POST"], middlewares: [adminAuth, adminOnly, operationGuard] },
@@ -117,7 +118,7 @@ export default defineMiddlewares([
   {
     matcher: "/store/gift-guide/payment-confirm",
     method: ["GET", "POST"],
-    middlewares: [customerAuth],
+    middlewares: [optionalCustomerAuth],
   },
   {
     matcher: "/store/recipients",

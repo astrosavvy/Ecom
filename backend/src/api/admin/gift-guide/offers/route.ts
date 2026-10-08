@@ -65,12 +65,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const { result } = await createProductsWorkflow(req.scope).run({ input: { products: [{
     title, handle, description, thumbnail, images: [{ url: thumbnail }], status: ProductStatus.PUBLISHED,
     sales_channels: [{ id: salesChannelId }],
-    metadata: { recommendation_only: true, gift_guide_approved: body.approved === true,
+    metadata: { money_unit: "inr-major-v2", recommendation_only: true, gift_guide_approved: body.approved === true,
       gift_guide_intentions: intentions, gift_guide_matrix_keys: keys, gift_guide_components: contents,
       gift_guide_component_variants: components },
     options: [{ title: "Edition", values: ["Standard"] }],
     variants: [{ title: "Standard", sku, manage_inventory: true, allow_backorder: false,
-      options: { Edition: "Standard" }, prices: [{ amount: price * 100, currency_code: "inr" }],
+      options: { Edition: "Standard" }, prices: [{ amount: price, currency_code: "inr" }],
       ...(kit.size ? { inventory_items: [...kit].map(([inventory_item_id, required_quantity]) => ({ inventory_item_id, required_quantity })) } : {}) }],
   }] } })
   return res.status(201).json({ id: result[0].id, message: "Offer created. It appears in results only when approved and in stock." })

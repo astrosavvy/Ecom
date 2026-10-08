@@ -1,0 +1,41 @@
+[
+  {
+    "asset": "red-kit",
+    "source": "IMG_5993.JPG.jpeg",
+    "sha256": "41f5cf205993830fd89566bc801e4e616450e7635778f7f77916e0f0937afc25",
+    "selection": "Background edit accepted after visual inspection"
+  },
+  {
+    "asset": "green-kit",
+    "source": "IMG_6001.JPG.jpeg",
+    "sha256": "8b02bec4eabece0324b50b3175f21c148de7bb2e3632bf750903b81811810aee",
+    "selection": "Original retained: generated pattern/printed mark drift rejected"
+  },
+  {
+    "asset": "blue-kit",
+    "source": "IMG_6038.JPG.jpeg",
+    "sha256": "4bde9be6110b955f148ca76cebcfaf32f6ca07f878b838be658011a5b2117793",
+    "selection": "Original retained: generated pattern/printed mark drift rejected"
+  },
+  {
+    "asset": "orange-kit",
+    "source": "IMG_6009.JPG.jpeg",
+    "sha256": "166de5bd0f04271fa4bedb8791c235c119193daad61a44e7ce52941904568e36",
+    "selection": "Background edit accepted after visual inspection",
+    "generated": "exec-270d00c1-68d8-4257-ab92-6b802d465e69.png"
+  },
+  {
+    "asset": "pink-kit",
+    "source": "IMG_6017.JPG.jpeg",
+    "sha256": "c576a55576497ecaee551db8bb7c1b7249276f808d2f59707c5bef6cbf42e632",
+    "selection": "Background edit accepted after visual inspection",
+    "generated": "exec-09dcc828-ae2e-4d77-8d06-f831a3bb7998.png"
+  },
+  {
+    "asset": "yellow-kit",
+    "source": "IMG_6027.JPG.jpeg",
+    "sha256": "9b7ba83881f24f354548375d52c3cc4e4aa45901ce6ba8b6407e703dcdc715fd",
+    "selection": "Background edit accepted after visual inspection",
+    "generated": "exec-7573f5eb-a6a2-41f7-9381-0d8743807951.png"
+  }
+]

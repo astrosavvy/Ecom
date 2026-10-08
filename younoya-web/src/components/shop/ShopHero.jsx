@@ -5,18 +5,18 @@ export default function ShopHero() {
   return (
     <section className="livora-hero-bar" aria-label="The Younoya collection">
       <div className="livora-hero-bar__left">
-        <span className="livora-kicker">THE YOUNOYA EDIT ✦</span>
-        <h1 className="livora-hero-bar__title">Wear your meaning.<br /><em>Every day.</em></h1>
-        <p className="livora-hero-bar__desc">A collection of symbolic brooches for the people, moments and intentions that stay with you.</p>
+        <span className="livora-kicker">THE YOUNOYA NAVRATRI EDIT</span>
+        <h1 className="livora-hero-bar__title">Nine days of devotion.<br /><em>Kept together.</em></h1>
+        <p className="livora-hero-bar__desc">Shringaar, colour and small devotional keepsakes. Nine individually packed daily kits, brought together in one complete box.</p>
         <div className="livora-hero-bar__buttons">
-          <a href="#pieces" className="livora-btn livora-btn--gold">Explore the collection</a>
+          <Link to="/product/navratri-shringaar-box" className="livora-btn livora-btn--gold">Discover the Navratri box</Link>
           <Link to="/find-a-gift" className="livora-btn-watch">
             <span className="livora-play-icon"><Sparkles size={16} strokeWidth={1.5} /></span>
             <span>Find your piece</span>
           </Link>
         </div>
         <div className="livora-hero-bar__proof">
-          <span className="livora-hero-bar__proof-text">Ten pieces. A meaning for every wearer.</span>
+          <span className="livora-hero-bar__proof-text">The complete nine-day set · ₹1,499 including 18% GST</span>
         </div>
       </div>
       <div className="livora-hero-bar__right">
@@ -24,14 +24,14 @@ export default function ShopHero() {
         <span className="livora-hero-bar__orbit livora-hero-bar__orbit--two" aria-hidden="true" />
         <span className="livora-hero-bar__spark livora-hero-bar__spark--one" aria-hidden="true">✦</span>
         <span className="livora-hero-bar__spark livora-hero-bar__spark--two" aria-hidden="true">✦</span>
-        <Link className="livora-hero-bar__arch-frame" to="/product/wild-poise" aria-label="Discover Wild Poise">
-          <img src="/media/shop-wild-poise-editorial.webp" alt="Wild Poise jaguar brooch on a warm stone plinth" fetchPriority="high" />
+        <Link className="livora-hero-bar__arch-frame" to="/product/navratri-shringaar-box" aria-label="Discover the Navratri Shringaar Box">
+          <img src="/media/navratri/red-kit-1200.webp" srcSet="/media/navratri/red-kit-600.webp 600w, /media/navratri/red-kit-1200.webp 1200w" sizes="(min-width: 960px) 40vw, 85vw" alt="Red Navratri daily kit detail, including Day 8 mehendi" fetchPriority="high" />
         </Link>
-        <Link className="livora-hero-bar__floating-card" to="/product/wild-poise">
-          <span className="livora-hero-bar__card-label">THE FEATURED PIECE</span>
-          <span className="livora-hero-bar__card-title">Wild Poise <ArrowUpRight size={17} strokeWidth={1.5} /></span>
-          <strong>₹ 2,499</strong>
-          <span className="livora-hero-bar__card-detail">Jaguar brooch · black metal</span>
+        <Link className="livora-hero-bar__floating-card" to="/product/navratri-shringaar-box">
+          <span className="livora-hero-bar__card-label">THE NINE-DAY SET</span>
+          <span className="livora-hero-bar__card-title">Navratri Shringaar <ArrowUpRight size={17} strokeWidth={1.5} /></span>
+          <strong>₹ 1,499</strong>
+          <span className="livora-hero-bar__card-detail">Nine daily kits · GST included</span>
         </Link>
       </div>
     </section>

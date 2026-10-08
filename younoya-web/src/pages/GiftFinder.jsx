@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { PRODUCTS } from '../data/products'
+import { BROOCH_PRODUCTS as PRODUCTS } from '../data/products'
 import { getCustomerToken, storeRequest } from '../lib/giftGuideApi'
 import AsterStage from '../components/gift-guide/AsterStage'
 import GuideConversation from '../components/gift-guide/GuideConversation'
@@ -16,7 +16,7 @@ const readSession = key => { try { return JSON.parse(sessionStorage.getItem(key)
 const preview = answers => ({ method: 'intention', previewOnly: true,
   explanation: 'These pieces reflect your chosen intention. The personal guide is temporarily unavailable, so this is a collection preview.',
   offers: PRODUCTS.filter(item => item.intention === answers.intention).slice(0, 3).map(item => ({
-    id: item.id, handle: item.handle, title: item.shopName, image: item.primaryImage, price: item.priceNum * 100,
+    id: item.id, handle: item.handle, title: item.shopName, image: item.primaryImage, price: item.priceNum,
   })),
 })
 
@@ -76,7 +76,6 @@ export default function GiftFinder() {
   function order(offer) {
     if (!offer.variantId) { setNotice('Ordering will be available when this piece is confirmed in the live catalog.'); return }
     sessionStorage.setItem('yn_selected_offer', JSON.stringify(offer))
-    if (!getCustomerToken()) { setPendingOffer(offer); setLoginFor('order this selection'); return }
     navigate('/checkout')
   }
   async function showSaved() {

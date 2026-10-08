@@ -1,0 +1,74 @@
+.navratri-page { background: #faf6ee; color: #352a22; padding: 110px 0 0; font-family: var(--font-sans); }
+.navratri-shell { max-width: 1320px; margin: auto; padding: 0 40px; }
+.navratri-breadcrumb { display: flex; align-items: center; gap: 24px; font-size: 12px; color: #7a6b5c; margin-bottom: 28px; }
+.navratri-breadcrumb a { display: inline-flex; gap: 8px; align-items: center; min-height: 44px; }
+.navratri-intro { display: grid; grid-template-columns: 1.08fr 1fr; gap: clamp(32px,5vw,80px); align-items: center; }
+.navratri-gallery { min-width: 0; }
+.navratri-gallery figure { margin: 0; }
+.navratri-gallery figure > img { display: block; width: 100%; height: auto; max-height: 650px; object-fit: contain; background: #f2ece2; border-radius: 22px; }
+.navratri-gallery figcaption { font-size: 11px; line-height: 1.6; margin-top: 12px; color: #776857; }
+.navratri-thumbnails { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+.navratri-thumbnails button { border: 1px solid transparent; padding: 4px; border-radius: 12px; background: transparent; cursor: pointer; }
+.navratri-thumbnails button[aria-pressed=true] { border-color: #a6814b; }
+.navratri-thumbnails img { display: block; width: 64px; height: 76px; object-fit: cover; border-radius: 8px; }
+.navratri-eyebrow { font-size: 10px; letter-spacing: .16em; line-height: 1.8; color: #926f3d; }
+.navratri-page h1,.navratri-page h2,.navratri-page h3 { font-family: var(--font-serif); font-weight: 400; }
+.navratri-buybox h1 { font-size: clamp(36px,3.8vw,58px); line-height: 1.08; letter-spacing: -.025em; margin: 20px 0 24px; }
+.navratri-page em { font-weight: 400; color: #997443; }
+.navratri-buybox h2 { font-family: var(--font-sans); font-size: 15px; line-height: 1.6; margin: 0 0 12px; font-weight: 500; }
+.navratri-lead { font-size: 14px; line-height: 1.85; color: #756657; max-width: 45ch; }
+.navratri-price { margin: 28px 0; display: flex; flex-direction: column; gap: 8px; }
+.navratri-price strong { font-size: 28px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.navratri-price span { font-size: 11px; color: #776857; }
+.navratri-facts { font-size: 12px; border-block: 1px solid #e6daca; margin: 24px 0; padding: 12px 0; }
+.navratri-facts > div { display: grid; grid-template-columns: 120px 1fr; gap: 8px; padding: 8px 0; }
+.navratri-facts dt { color: #776857; }
+.navratri-facts dd { margin: 0; }
+.navratri-actions { display: flex; justify-content: space-between; gap: 14px; margin: 0 0 18px; }
+.navratri-quantity { display: flex; align-items: center; border: 1px solid #dfcfb8; border-radius: 30px; }
+.navratri-quantity button { display: grid; place-items: center; width: 44px; height: 44px; background: transparent; border: 0; color: inherit; cursor: pointer; }
+.navratri-quantity output { min-width: 26px; text-align: center; font-size: 13px; }
+.navratri-save { background: transparent; border: 0; color: #795d36; display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 12px; cursor: pointer; }
+.navratri-button { display: flex; align-items: center; justify-content: center; gap: 16px; width: 100%; min-height: 52px; border: 1px solid #bea274; background: #d4bd94; color: #352a22; border-radius: 28px; font-family: inherit; font-weight: 500; font-size: 13px; cursor: pointer; }
+.navratri-button:disabled { cursor: default; background: #ede4d5; border-color: #d9cbb8; color: #75604b; }
+.navratri-quantity button:disabled { opacity: .35; cursor: default; }
+.navratri-availability { font-size: 11px; line-height: 1.7; color: #776857; margin: 10px 0; text-align: center; }
+.navratri-details-link { display: inline-flex; min-height: 44px; align-items: center; gap: 12px; margin-top: 14px; font-size: 12px; color: #795d36; }
+.navratri-days { padding: 100px 0 72px; scroll-margin-top: 100px; }
+.navratri-days header { max-width: 670px; }
+.navratri-days h2,.navratri-notes h2 { font-size: clamp(32px,3.4vw,46px); line-height: 1.16; margin: 14px 0; }
+.navratri-days header p,.navratri-notes p { font-size: 13px; line-height: 1.9; color: #756657; }
+.navratri-day-selector { display: grid; grid-template-columns: repeat(9,minmax(0,1fr)); border-block: 1px solid #dfcfb8; margin: 32px 0; }
+.navratri-day-selector button { display: flex; flex-direction: column; justify-content: center; gap: 8px; min-height: 84px; border: 0; background: transparent; color: #756657; font: inherit; font-size: 12px; cursor: pointer; padding: 12px 4px; }
+.navratri-day-selector span { font-size: 9px; letter-spacing: .1em; }
+.navratri-day-selector button[aria-pressed=true] { background: #eee4d4; color: #352a22; box-shadow: inset 0 -2px #a6814b; }
+.navratri-day-content { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; padding: 18px 0; }
+.navratri-day-content h3 { font-size: clamp(30px,3vw,42px); margin: 14px 0; }
+.navratri-hindi { font-size: 21px; color: #997443; margin: 0; }
+.navratri-day-note { font-size: 12px; color: #756657; line-height: 1.8; }
+.navratri-day-content ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+.navratri-day-content li { font-size: 13px; line-height: 1.8; padding: 12px 0; border-bottom: 1px solid #e6daca; }
+.navratri-notes { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; padding: 64px 0 90px; border-top: 1px solid #dfcfb8; }
+.navratri-notes h3 { font-size: 25px; margin: 0 0 16px; }
+.navratri-notes a { font-size: 12px; color: #795d36; display: flex; align-items: center; gap: 8px; min-height: 44px; }
+.navratri-mobile-bar { display: none; }
+.navratri-page :is(button,a):focus-visible { outline: 2px solid #926f3d; outline-offset: 4px; }
+.coming-soon__collection { display: inline-flex; gap: 20px; align-items: center; min-height: 48px; margin-top: 24px; padding: 10px 24px; border: 1px solid rgba(214,176,106,.55); border-radius: 28px; color: #ecd6ae; font-family: var(--font-sans); font-size: 13px; }
+@media (max-width:959px) {
+  .navratri-page { padding-top: 84px; padding-bottom: 94px; }
+  .navratri-shell { padding: 0 20px; }
+  .navratri-breadcrumb { margin-bottom: 12px; }
+  .navratri-intro { grid-template-columns: 1fr; gap: 32px; }
+  .navratri-gallery figure > img { max-height: 510px; }
+  .navratri-buybox h1 { font-size: clamp(35px,8.5vw,55px); }
+  .navratri-days { padding: 64px 0 40px; }
+  .navratri-day-selector { grid-template-columns: repeat(3,1fr); }
+  .navratri-day-selector button { min-height: 68px; border-bottom: 1px solid #e6daca; }
+  .navratri-day-content { grid-template-columns: 1fr; gap: 24px; }
+  .navratri-day-content ul { grid-template-columns: 1fr; }
+  .navratri-notes { grid-template-columns: 1fr; gap: 32px; padding: 44px 0 56px; }
+  .navratri-mobile-bar { display: flex; align-items: center; gap: 16px; padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); position: fixed; bottom: 0; inset-inline: 0; z-index: 45; background: #faf6ee; border-top: 1px solid #dfcfb8; }
+  .navratri-mobile-bar > span { flex-shrink: 0; font-size: 9px; color: #756657; }
+  .navratri-mobile-bar strong { display: block; font-size: 18px; color: #352a22; margin-top: 5px; font-weight: 500; }
+  .navratri-mobile-bar .navratri-button { font-size: 11px; min-height: 48px; }
+}

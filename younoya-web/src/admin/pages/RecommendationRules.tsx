@@ -284,7 +284,7 @@ export default function RecommendationRules() {
         handle: match?.handle || handleOrId,
         thumbnail: match?.thumbnail || match?.images?.[0]?.url || "/media/shop-wild-poise-card.webp",
         priceINR: match?.variants?.[0]?.prices?.[0]?.amount
-          ? Math.round(match.variants[0].prices[0].amount / 100)
+          ? match.variants[0].prices[0].amount
           : 2499,
       }
     }
@@ -724,7 +724,7 @@ export default function RecommendationRules() {
                       {rule.lead.title}
                     </strong>
                     <span style={{ fontSize: "12px", color: "var(--ad-ink-soft)" }}>
-                      {formatINR((rule.lead.priceINR || 2499) * 100)}
+                      {formatINR(rule.lead.priceINR || 2499)}
                     </span>
                   </div>
                 </div>
@@ -772,7 +772,7 @@ export default function RecommendationRules() {
                       {rule.secondary1.title}
                     </strong>
                     <span style={{ fontSize: "12px", color: "var(--ad-ink-soft)" }}>
-                      {formatINR((rule.secondary1.priceINR || 2499) * 100)}
+                      {formatINR(rule.secondary1.priceINR || 2499)}
                     </span>
                   </div>
                 </div>
@@ -820,7 +820,7 @@ export default function RecommendationRules() {
                       {rule.secondary2.title}
                     </strong>
                     <span style={{ fontSize: "12px", color: "var(--ad-ink-soft)" }}>
-                      {formatINR((rule.secondary2.priceINR || 2499) * 100)}
+                      {formatINR(rule.secondary2.priceINR || 2499)}
                     </span>
                   </div>
                 </div>

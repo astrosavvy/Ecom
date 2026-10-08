@@ -686,7 +686,7 @@ export default async function seedCatalog({ container }: { container: MedusaCont
                 options: { Size: "Standard" },
                 prices: [
                   {
-                    amount: p.price * 100,
+                    amount: p.price,
                     currency_code: "inr",
                     ...(indiaRegion ? { region_id: indiaRegion.id } : {}),
                   },
