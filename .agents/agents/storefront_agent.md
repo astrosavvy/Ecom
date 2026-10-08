@@ -29,3 +29,4 @@
 - Shared GuideLogin remains a native account modal, now ivory/champagne. Preserve email OTP, exact state/action return handlers, focus restoration and keyboard-aware height. Do not add passwords or enable mobile delivery providers.
 
 - Checkout City and State are always visible required inputs, silently filled by PIN lookup and bound to the checkout shipping address. Retain editing fallback and stale-request abort; do not restore Guest checkout copy, manual edit toggles or search/success messages. Explain unpublished policy/payment readiness beside disabled controls without bypassing backend launch checks.
+- Homepage must resolve initial SiteConfig before displaying Coming Soon or Shop; keep root navigation hidden during loading. Keep current mode if a later refresh fails. Coming Soon remains live at /, collection at /shop through an explicit link. Do not add GST-inclusive price copy to storefront or search metadata; retain backend tax accounting.

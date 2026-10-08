@@ -26,3 +26,4 @@ textarea:focus, textarea:focus-visible { outline: none !important; }
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {
   body, button, a, input { cursor: auto; }
 }
+.home-loading{min-height:100dvh;display:grid;place-items:center;background:#080b14;color:#ecd6ae}.home-loading span{font-family:var(--font-display,Georgia,serif);font-size:20px;letter-spacing:.22em}

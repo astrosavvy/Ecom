@@ -16,7 +16,7 @@ export default function ShopHero() {
           </Link>
         </div>
         <div className="livora-hero-bar__proof">
-          <span className="livora-hero-bar__proof-text">The complete nine-day set · ₹1,499 including 18% GST</span>
+          <span className="livora-hero-bar__proof-text">The complete nine-day set · ₹1,499</span>
         </div>
       </div>
       <div className="livora-hero-bar__right">
@@ -31,7 +31,7 @@ export default function ShopHero() {
           <span className="livora-hero-bar__card-label">THE NINE-DAY SET</span>
           <span className="livora-hero-bar__card-title">Navratri Shringaar <ArrowUpRight size={17} strokeWidth={1.5} /></span>
           <strong>₹ 1,499</strong>
-          <span className="livora-hero-bar__card-detail">Nine daily kits · GST included</span>
+          <span className="livora-hero-bar__card-detail">Nine daily kits</span>
         </Link>
       </div>
     </section>

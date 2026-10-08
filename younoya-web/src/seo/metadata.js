@@ -136,7 +136,7 @@ export function getSeo(pathname, storefrontMode = 'coming-soon') {
   if (product) return {
     path,
     title: `${product.name} | Younoya`,
-    description: product.kind === 'ritual-box' ? 'Nine individually packed Navratri daily kits in one outer box. Discover the complete nine-day Shringaar set for ₹1,499, including 18% GST.' : `${product.name} — ${product.tagline}. Explore its symbolism, measured details and price at Younoya.`,
+    description: product.kind === 'ritual-box' ? 'Nine individually packed Navratri daily kits in one outer box. Discover the complete nine-day Shringaar set for ₹1,499.' : `${product.name} — ${product.tagline}. Explore its symbolism, measured details and price at Younoya.`,
     image: product.primaryImage,
     product,
     schema: [
