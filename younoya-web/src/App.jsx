@@ -44,8 +44,8 @@ function JournalRedirect() {
 
 function StoreNavigation() {
   const { pathname } = useLocation()
-  const { storefrontMode } = useSiteConfig()
-  const comingSoon = pathname === '/' && storefrontMode === 'coming-soon'
+  const { storefrontMode, loading } = useSiteConfig()
+  const comingSoon = pathname === '/' && (loading || storefrontMode === 'coming-soon')
   const lightStorefront = !comingSoon && !pathname.startsWith('/admin')
   useEffect(() => {
     document.documentElement.classList.toggle('store-light', lightStorefront)

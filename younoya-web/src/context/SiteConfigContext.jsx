@@ -9,8 +9,8 @@ export function SiteConfigProvider({ children }) {
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     let active = true
-    const refresh = () => storeRequest('/store/site-config').then(data => { if (active) setConfig(data) })
-      .catch(() => { if (active) setConfig(initialSiteConfig) }).finally(() => { if (active) setLoading(false) })
+    const refresh = () => storeRequest('/store/site-config', { signal: AbortSignal.timeout(5000) }).then(data => { if (active) setConfig(data) })
+      .catch(() => { /* Keep the current mode; first-load failures use the confirmed defaults. */ }).finally(() => { if (active) setLoading(false) })
     refresh(); window.addEventListener('younoya-settings', refresh)
     return () => { active = false; window.removeEventListener('younoya-settings', refresh) }
   }, [])

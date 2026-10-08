@@ -56,7 +56,7 @@ export default function NavratriDetail({ product }) {
           <h1 id="navratri-title">Nine days of devotion.<br /><em>One considered box.</em></h1>
           <h2>{product.name}</h2>
           <p className="navratri-lead">A colour for every day. Shringaar and small devotional keepsakes, brought together for your nine-day ritual.</p>
-          <div className="navratri-price"><strong>₹1,499</strong><span>Complete nine-day set · includes 18% GST</span></div>
+          <div className="navratri-price"><strong>₹1,499</strong><span>Complete nine-day set</span></div>
           <dl className="navratri-facts"><div><dt>Inside the box</dt><dd>Nine individually packed daily kits</dd></div><div><dt>Your selection</dt><dd>One complete set · Standard edition</dd></div><div><dt>Delivery</dt><dd>Free shipping within India</dd></div></dl>
           <div className="navratri-actions"><div className="navratri-quantity" aria-label="Number of complete sets"><button type="button" disabled={quantity === 1} onClick={() => setQuantity(q => q - 1)} aria-label="Remove one set"><Minus size={16} /></button><output aria-live="polite">{quantity}</output><button type="button" disabled={!availability?.purchasable || quantity >= Math.min(10, availability.availableQuantity)} onClick={() => setQuantity(q => q + 1)} aria-label="Add one set"><Plus size={16} /></button></div><button className="navratri-save" type="button" onClick={toggleSaved} aria-pressed={saved}><Heart size={17} fill={saved ? 'currentColor' : 'none'} />{saved ? 'Saved' : 'Save this box'}</button></div>
           {purchase}

@@ -53,12 +53,12 @@ module.exports = defineConfig({
     },    {
       resolve: "@medusajs/medusa/payment",
       options: {
-        providers: process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET ? [{
+        providers: ((process.env.RAZORPAY_KEY_ID || process.env.key_id) && (process.env.RAZORPAY_KEY_SECRET || process.env.key_secret)) ? [{
             resolve: "./src/modules/younoya-razorpay",
             id: "razorpay",
             options: {
-              key_id: process.env.RAZORPAY_KEY_ID,
-              key_secret: process.env.RAZORPAY_KEY_SECRET,
+              key_id: process.env.RAZORPAY_KEY_ID || process.env.key_id,
+              key_secret: process.env.RAZORPAY_KEY_SECRET || process.env.key_secret,
             },
           }] : [],
       },

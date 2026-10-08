@@ -21,7 +21,7 @@ export async function checkoutOwner(req:any,cartId:string) {
   const customer=req.auth_context?.actor_id
   if(customer && cart.customer_id===customer) return customer
   const token=req.headers?.['x-younoya-checkout-token']
-  if(cart.customer_id || typeof token!=='string' || !/^[a-f0-9]{64}$/.test(token)) throw new CommerceError('Checkout session not found',403)
+  if(typeof token!=='string' || !/^[a-f0-9]{64}$/.test(token)) throw new CommerceError('Checkout session not found',403)
   const data=(await database().query('select data from commerce_setting where id=$1',[`guest:${cartId}`])).rows[0]?.data
   if(!data || data.expires<Date.now() || !/^[a-f0-9]{64}$/.test(data.hash) || !crypto.timingSafeEqual(Buffer.from(data.hash,'hex'),Buffer.from(digest(token),'hex')))
     throw new CommerceError('Checkout session expired. Please reopen your bag.',403)

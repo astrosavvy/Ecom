@@ -4,10 +4,12 @@ import { CommerceError, database, enqueue, finish, operationId, minor, transacti
 import { ProviderError } from "./shiprocket"
 export const refundContext = new AsyncLocalStorage<string>()
 export async function razorpayRequest(path: string, method = "GET", body?: any, idempotency?: string) {
-  if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) throw new CommerceError("Payments are not configured.", 503)
+  const keyId = process.env.RAZORPAY_KEY_ID || process.env.key_id
+  const keySecret = process.env.RAZORPAY_KEY_SECRET || process.env.key_secret
+  if (!keyId || !keySecret) throw new CommerceError("Payments are not configured.", 503)
   try {
     const response = await fetch(`https://api.razorpay.com/v1${path}`, { method, signal: AbortSignal.timeout(12000),
-      headers: { "Content-Type": "application/json", Authorization: `Basic ${Buffer.from(`${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_KEY_SECRET}`).toString("base64")}`,
+      headers: { "Content-Type": "application/json", Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString("base64")}`,
         ...(idempotency ? { "X-Refund-Idempotency": idempotency } : {}) }, ...(body ? { body: JSON.stringify(body) } : {}) })
     if (!response.ok) throw new ProviderError(response.status >= 500 || [408,409,429].includes(response.status))
     const data = await response.json()

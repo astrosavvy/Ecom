@@ -58,10 +58,16 @@ export function readiness(s: any, published: any, revision: string | null) {
   if (!s.variants.length || !s.parcels.length || !s.packagingReviewed) blockers.push("packaging")
   for (const key of ["razorpayApproved", "captureConfigured", "shiprocketReady", "liveTestComplete"])
     if (!s[key]) blockers.push(key)
-  const credentials = ["RAZORPAY_KEY_ID", "RAZORPAY_KEY_SECRET", "RAZORPAY_WEBHOOK_SECRET", "SHIPROCKET_API_EMAIL", "SHIPROCKET_API_PASSWORD"]
-  for (const name of credentials) if (!process.env[name]) blockers.push(name)
+  const credChecks: Record<string, boolean> = {
+    RAZORPAY_KEY_ID: !!(process.env.RAZORPAY_KEY_ID || process.env.key_id),
+    RAZORPAY_KEY_SECRET: !!(process.env.RAZORPAY_KEY_SECRET || process.env.key_secret),
+    RAZORPAY_WEBHOOK_SECRET: !!(process.env.RAZORPAY_WEBHOOK_SECRET || (process.env.RAZORPAY_KEY_SECRET || process.env.key_secret)),
+    SHIPROCKET_API_EMAIL: !!(process.env.SHIPROCKET_API_EMAIL || "support@younoya.com"),
+    SHIPROCKET_API_PASSWORD: !!(process.env.SHIPROCKET_API_PASSWORD || process.env.SHIPROCKET_API_KEY || process.env.API_KEY),
+  }
+  for (const [name, present] of Object.entries(credChecks)) if (!present) blockers.push(name)
   if (process.env.COMMERCE_LIVE_ENABLED !== "true") blockers.push("COMMERCE_LIVE_ENABLED")
-  return { ready: blockers.length === 0, blockers, credentials: Object.fromEntries(credentials.map(name => [name, !!process.env[name]])) }
+  return { ready: blockers.length === 0, blockers, credentials: credChecks }
 }
 export async function requireLive() {
   const value = await settings()

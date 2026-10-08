@@ -15,7 +15,7 @@ export async function readCart(scope: any, id: string, customer?: string) {
   const { data } = await scope.resolve(ContainerRegistrationKeys.QUERY).graph({ entity: "cart", fields: ["id", "customer_id", "email", "total",
     "currency_code", "metadata", "completed_at", "items.*", "shipping_address.*", "shipping_methods.*", "payment_collection.*"], filters: { id } })
   const cart = data[0]
-  if (!cart || (customer && (customer.startsWith('guest:') ? !!cart.customer_id || customer !== `guest:${cart.id}` : cart.customer_id !== customer))) throw new CommerceError("Cart not found", 404)
+  if (!cart || (customer && (customer.startsWith('guest:') ? customer !== `guest:${cart.id}` : cart.customer_id !== customer))) throw new CommerceError("Cart not found", 404)
   return cart
 }
 export async function completedOrder(scope: any, cartId: string) {

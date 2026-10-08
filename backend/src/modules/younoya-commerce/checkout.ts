@@ -48,7 +48,7 @@ export async function validatePreparedCart(scope: any, cartId: string, customer?
   const s = await requireLive()
   const cart = await readCart(scope,cartId,customer)
   const approval = cart.metadata?.commerce_approval
-  if (!validApproval(approval) || approval.customer_id !== (cart.customer_id || `guest:${cart.id}`) || approval.revision !== s.revision ||
+  if (!validApproval(approval) || (approval.customer_id !== `guest:${cart.id}` && approval.customer_id !== cart.customer_id) || approval.revision !== s.revision ||
     new Date(approval.valid_until).getTime() < Date.now() || approval.fingerprint !== cartFingerprint(cart))
     throw new CommerceError("Please review delivery and the current policies again", 409)
   if (cart.shipping_methods?.length !== 1 || cart.shipping_methods[0].shipping_option_id !== s.draft.shippingOptionId ||

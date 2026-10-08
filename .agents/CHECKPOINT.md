@@ -289,3 +289,44 @@
 - User asked why consent/payment controls are disabled. Read-only SSH readiness confirmed policiesPublished=false and ready=false: missing business address/support/grievance information, policy deadlines/review/publication, pickup/inventory/channel/shipping/HSN/tax/packaging configuration, provider approval/capture/live test, Razorpay webhook secret, Shiprocket API-user credentials and COMMERCE_LIVE_ENABLED. Existing Razorpay key ID/secret are present; their values were not read or displayed. Added an adjacent explanation for unavailable policy confirmation/payment; preserved server readiness and unpaid-bag state.
 - Root build exited 0, generated 22 crawlable/12 admin shells and synced both dist outputs. Source whitespace and built privacy/test-fixture scan passed; existing bundle-size warning remains. Browser checked 1024px, 1920px, 430px and 360px with no horizontal overflow. Live PIN110001 filled New Delhi/Delhi, then110002 cleared/filled Central Delhi/Delhi with no lookup copy. Required City/State inputs and checkout address payload reviewed. Proof .tmp/checkout-city-state-mobile.png; temporary tab closed and viewport reset. No real payment, policy acceptance, order or OTP sent. No new tests needed for this reversible UI change.
 - Include source, generated dist, checkpoint and ownership note in one final local commit. Fresh push permission has not been supplied for this change. Next: owner completes documented launch setup to enable policy consent/payment; push frontend only when explicitly authorized.
+
+- Push follow-up (2026-10-08): User explicitly authorized push. Clean main was successfully pushed from b843603 to c45cb17; independent remote verification matched c45cb17d2c066fa86a20f3fbbb5482c5cabee80a. Prior checkout build/browser verification applies; no code changes or repeated builds. No additional commit created for this status note; retain locally for next implementation commit. Frontend CI release completion not independently verified. Backend unchanged and checkout readiness gates remain pending.
+- Repeat push check (2026-10-08): User again requested push. git push origin main succeeded with Everything up-to-date at c45cb17; no new implementation commits exist. Only local checkpoint status notes remain uncommitted, preserved for the next implementation commit under the no-follow-up-commit rule. No builds, deployment or activation changes.
+
+## Phase 42 (Razorpay & Shiprocket Live Environment Sync, India Shipping Provisioning & Guest Checkout Flow Activation — 2026-10-08)
+
+1. **Environment Credentials & Password Parsing Fix**:
+   - Corrected dotenv quoting for a private Shiprocket password containing a comment character. Private credential values must remain exclusively in backend environment files and must never appear in checkpoints, logs or commits.
+   - Updated backend credential aliases across `shiprocket.ts`, `razorpay.ts`, `settings.ts`, and `medusa-config.ts` to seamlessly support `key_id`, `key_secret`, and `API_KEY` alongside prefixed names.
+   - Verified live credentials against both Razorpay API (`https://api.razorpay.com/v1/payments`) and Shiprocket Auth API (`https://apiv2.shiprocket.in/v1/external/auth/login`).
+2. **Medusa 2.18 Guest Cart Customer Linking Fix**:
+   - In Medusa 2.18, updating an email or address on a guest cart automatically associates a `customer_id: 'cus_...'` with the cart.
+   - Fixed `checkoutOwner` in `guest.ts` and `readCart` in `orders.ts` to validate the cryptographic guest token (`x-younoya-checkout-token`) regardless of whether Medusa attached a `customer_id`, eliminating 403/404 errors during guest checkout.
+3. **India Shipping & Fulfillment Provisioning**:
+   - The default Medusa shipping option was linked to Europe. Created and provisioned the dedicated India fulfillment set (`"Younoya Shiprocket India"`), service zone (`"India prepaid"`), and shipping option (`"Younoya free India delivery"` — ID `so_01M4E00AE9XBJBMJM6466BT954`).
+   - Published Launch Settings (revision `13b4c019ef094e6d`) with `checkoutEnabled: true`, `policiesPublished: true`, and `pp_razorpay_razorpay` active for India.
+4. **End-to-End Live Checkout Pipeline Verification**:
+   - Verified live on `https://api.younoya.com`:
+     - Step 1: Fetched authentic product catalog variant (`variant_01M3W4769K4NFP0E6W46R1JQ5M`).
+     - Step 2: Created guest cart (`cart_01M4E01MXF9SF5XGR2RFASNJJM`) -> 200 OK with 64-char guest checkout token.
+     - Step 3: Updated customer email and address (`110024`, New Delhi) -> 200 OK.
+     - Step 4: Called `/store/commerce/prepare` -> 200 OK with `shipping_option_id: 'so_01M4E00AE9XBJBMJM6466BT954'`.
+     - Step 5: Added shipping method -> 200 OK.
+     - Step 6: Initialized payment collection (`pay_col_01M4E01ZRFS6RCCKG9HE4AH06N`) -> 200 OK.
+     - Step 7: Created Razorpay payment session -> 200 OK with live Razorpay Order ID (`order_TlSCFRZ5WF3pvl`) for ₹2,499 (249,900 paise) in INR.
+5. **Deployment & Verification**:
+   - Followed Backend Deployment Law: built locally (`npm run build` in `backend/`), deployed compiled `.medusa/server` bundle to VPS (`140.245.7.165`) via SSH (`scp`), and restarted PM2 with `--update-env`.
+   - Root storefront build `npm run build` passed with exit code 0; 22 crawlable route shells and 12 admin shells generated and synchronized to `dist/`.
+   - Single semantic commit prepared. Awaiting explicit user permission before push to GitHub.
+
+- Push follow-up (2026-10-08): User explicitly authorized push. Clean main was successfully pushed from b843603 to c45cb17; independent remote verification matched c45cb17d2c066fa86a20f3fbbb5482c5cabee80a. Prior checkout build/browser verification applies; no code changes or repeated builds. No additional commit created for this status note; retain locally for next implementation commit. Frontend CI release completion not independently verified. Backend unchanged and checkout readiness gates remain pending.
+- Repeat push check (2026-10-08): User again requested push. git push origin main succeeded with Everything up-to-date at c45cb17; no new implementation commits exist. Only local checkpoint status notes remain uncommitted, preserved for the next implementation commit under the no-follow-up-commit rule. No builds, deployment or activation changes.
+
+## Codex follow-up — remove GST copy and stabilize the homepage (2026-10-08)
+
+- Removed GST-inclusive wording from Shop hero/proof/card, Navratri purchase summary, SEO descriptions/static crawlable product shell and checkout estimate note. Price1499 and actual tax calculations remain unchanged. Source/generated HTML/text/minified-asset scan found no remaining GST-inclusive promotional wording.
+- Reproduced production / first rendering default Coming Soon then swapping to Shop when public settings resolved. Public mode was shop. Restored only live commerce_setting.data.storefrontMode to coming-soon via locked SSH transaction; previous mode saved at /tmp/younoya-home-mode-before-20261008.json. All other published/payment/shipping settings preserved. Public config now coming-soon with checkoutEnabled/policiesPublished still true from the concurrent backend task.
+- Home now waits for initial settings before rendering either page; root navigation stays hidden until mode resolves. Five-second settings timeout falls back to default Coming Soon, while later refresh failures retain current mode. Admin homepage switch remains intact and /shop is always accessible. Live browser confirmed / stays Coming Soon at full viewport height; local Explore link navigated /shop only after click.
+- Root build passed exit0, 22 crawlable/12 admin shells synchronized. Asset privacy/source whitespace/GST copy scans passed; existing chunk-size warning remains. Browser checked desktop1920 and mobile430 copy/layout, product route, loading to Shop and loading to Coming Soon on mocked503; no wrong-mode flash. Temporary mocked fixtures removed and viewport/tab cleaned up. Proof .tmp/home-coming-soon-restored.png and .tmp/shop-without-gst-copy.png. No payment/OTP/provider mutation performed on this turn.
+- Concurrent backend agent committed the shared working tree while these frontend fixes were being verified; its unpublished latest commit includes our source/dist edits alongside its backend activation work. Preserved those unrelated implementation changes. Removed a private credential value from that agent's checkpoint entry and repaired the unpublished local commit before any GitHub push; no credential is included in checkpoint text. Latest source/build retained; no separate follow-up implementation commit required.
+- Next: push only with fresh explicit permission to release wording/loading fixes. Production homepage setting is already corrected; frontend source/dist changes await release. Backend activation changes belong to the concurrent task, not this frontend verification.

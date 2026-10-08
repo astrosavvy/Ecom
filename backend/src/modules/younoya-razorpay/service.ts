@@ -16,8 +16,8 @@ class RazorpayPaymentProvider extends AbstractPaymentProvider {
 
   constructor(container: any, options: any) {
     super(container, options)
-    const keyId = options?.key_id || process.env.RAZORPAY_KEY_ID
-    this.secret = options?.key_secret || process.env.RAZORPAY_KEY_SECRET || ""
+    const keyId = options?.key_id || process.env.RAZORPAY_KEY_ID || process.env.key_id
+    this.secret = options?.key_secret || process.env.RAZORPAY_KEY_SECRET || process.env.key_secret || ""
     if (keyId && this.secret) this.razorpay = new Razorpay({ key_id: keyId, key_secret: this.secret, timeout: 12000 } as any)
   }
 
