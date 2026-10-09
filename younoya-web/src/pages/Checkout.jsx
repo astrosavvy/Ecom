@@ -40,7 +40,51 @@ export default function Checkout() {
   useEffect(() => { sessionStorage.setItem('yn_checkout_address', JSON.stringify(address)) }, [address])
 
   function complete(value) {
-    setOrder(value)
+    const checkoutBagItems = offer
+      ? [{ id: offer.id, title: offer.title, quantity: 1, thumbnail: offer.thumbnail || offer.image || '/media/shop-apple.webp', total: offer.price, subtitle: offer.subtitle }]
+      : (bag || []).map(item => ({
+          id: item.id,
+          title: item.name || item.title,
+          quantity: item.quantity || 1,
+          thumbnail: item.image || item.thumbnail || '/media/shop-apple.webp',
+          total: Number(item.priceNum || item.price || 0) * (item.quantity || 1),
+          subtitle: item.subtitle
+        }))
+
+    const resolvedItems = (Array.isArray(value?.items) && value.items.length > 0 && value.items[0]?.title)
+      ? value.items.map(it => ({
+          ...it,
+          thumbnail: it.thumbnail || checkoutBagItems.find(b => b.id === it.id || b.title === it.title)?.thumbnail || '/media/shop-apple.webp'
+        }))
+      : checkoutBagItems
+
+    const resolvedAddress = {
+      firstName: value?.shipping_address?.first_name || address.firstName || '',
+      lastName: value?.shipping_address?.last_name || address.lastName || '',
+      street: value?.shipping_address?.address_1 || address.street || '',
+      street2: value?.shipping_address?.address_2 || address.street2 || '',
+      city: value?.shipping_address?.city || address.city || '',
+      state: value?.shipping_address?.province || address.state || '',
+      pincode: value?.shipping_address?.postal_code || address.pincode || '',
+      phone: value?.shipping_address?.phone || address.phone || ''
+    }
+
+    const enriched = {
+      ...value,
+      items: resolvedItems,
+      shipping_address: {
+        first_name: resolvedAddress.firstName,
+        last_name: resolvedAddress.lastName,
+        address_1: resolvedAddress.street,
+        address_2: resolvedAddress.street2,
+        city: resolvedAddress.city,
+        province: resolvedAddress.state,
+        postal_code: resolvedAddress.pincode,
+        phone: resolvedAddress.phone
+      }
+    }
+
+    setOrder(enriched)
     clearCart()
     sessionStorage.removeItem('yn_selected_offer')
     sessionStorage.removeItem('yn_pending_payment')
@@ -143,7 +187,6 @@ export default function Checkout() {
     return (
       <section className="checkout-page checkout-success">
         <OrderSuccessCelebration order={order} />
-        <PolicyLinks />
       </section>
     )
   }

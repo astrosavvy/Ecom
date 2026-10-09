@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Check, ShieldCheck, Mail, Sparkles, Printer, ArrowRight } from 'lucide-react'
+import { Check, ShieldCheck, Mail, Sparkles, ArrowRight } from 'lucide-react'
 import { money } from './CheckoutSummary'
 import ConfettiCelebration from './ConfettiCelebration'
 
@@ -35,15 +35,64 @@ function calculateEstimatedDelivery(dateString) {
   return `${fmt(start)} – ${fmt(end)}, ${year}`
 }
 
+const MILESTONE_STEPS = [
+  { id: 'placed', label: 'Order Placed', status: 'completed' },
+  { id: 'processing', label: 'Processing', status: 'current' },
+  { id: 'shipped', label: 'Shipped', status: 'upcoming' },
+  { id: 'delivered', label: 'Delivered', status: 'upcoming' },
+]
+
 export default function OrderSuccessCelebration({ order }) {
   const orderNumber = formatOrderNumber(order)
   const orderDate = formatOrderDate(order?.created_at)
   const deliveryEstimate = calculateEstimatedDelivery(order?.created_at)
 
   const addr = order?.shipping_address || {}
-  const recipientName = `${addr.first_name || ''} ${addr.last_name || ''}`.trim() || 'Valued Patron'
-  const items = order?.items || []
-  const totalAmount = order?.total || 0
+  const savedAddress = (() => {
+    try {
+      return JSON.parse(sessionStorage.getItem('yn_checkout_address') || '{}')
+    } catch {
+      return {}
+    }
+  })()
+
+  const firstName = addr.first_name || savedAddress.firstName || ''
+  const lastName = addr.last_name || savedAddress.lastName || ''
+  const recipientName = `${firstName} ${lastName}`.trim()
+  const street1 = addr.address_1 || savedAddress.street || ''
+  const street2 = addr.address_2 || savedAddress.street2 || ''
+  const city = addr.city || savedAddress.city || ''
+  const state = addr.province || savedAddress.state || ''
+  const pincode = addr.postal_code || savedAddress.pincode || ''
+  const phone = addr.phone || savedAddress.phone || ''
+
+  const savedOffer = (() => {
+    try {
+      return JSON.parse(sessionStorage.getItem('yn_selected_offer') || 'null')
+    } catch {
+      return null
+    }
+  })()
+
+  const items = (Array.isArray(order?.items) && order.items.length > 0)
+    ? order.items
+    : savedOffer
+      ? [{
+          id: savedOffer.id,
+          title: savedOffer.title || 'Curated Atelier Selection',
+          quantity: 1,
+          thumbnail: savedOffer.thumbnail || savedOffer.image || '/media/shop-apple.webp',
+          total: savedOffer.price || order?.total || 0
+        }]
+      : [{
+          id: 'curated-piece',
+          title: 'Atelier Curated Selection',
+          quantity: 1,
+          thumbnail: '/media/shop-apple.webp',
+          total: order?.total || 0
+        }]
+
+  const totalAmount = order?.total || (items.reduce((sum, item) => sum + Number(item.total || 0), 0))
 
   return (
     <section className="celebration-container" aria-label="Order confirmation details">
@@ -55,16 +104,16 @@ export default function OrderSuccessCelebration({ order }) {
         <div className="celebration-emblem" aria-hidden="true">
           <div className="celebration-emblem-glow" />
           <div className="celebration-emblem-circle">
-            <Check size={28} strokeWidth={3} className="celebration-check-icon" />
+            <Check size={28} strokeWidth={3.2} className="celebration-check-icon" />
           </div>
         </div>
         <h1 className="celebration-title">Order Confirmed</h1>
         <p className="celebration-subtitle">
-          Thank you for the purchase. We've received your order.
+          Thank you for your purchase. We are carefully processing your order to dispatch it with utmost care at the earliest.
         </p>
       </div>
 
-      {/* 3. Main Receipt Card (Image 2 Style) */}
+      {/* 3. Main Receipt Card */}
       <div className="celebration-receipt-card">
         {/* Top Highlight Banner */}
         <div className="receipt-banner">
@@ -82,40 +131,27 @@ export default function OrderSuccessCelebration({ order }) {
         <div className="receipt-section receipt-items-section">
           <h2 className="receipt-section-title">Items</h2>
           <div className="receipt-items-list">
-            {items.length > 0 ? (
-              items.map((item, idx) => (
-                <div key={item.id || idx} className="receipt-item-row">
-                  <div className="receipt-item-media">
-                    {item.thumbnail ? (
-                      <img
-                        src={item.thumbnail}
-                        alt={item.title}
-                        className="receipt-item-thumb"
-                        width="64"
-                        height="64"
-                      />
-                    ) : (
-                      <div className="receipt-item-thumb-placeholder">✦</div>
-                    )}
-                  </div>
-                  <div className="receipt-item-info">
-                    <span className="receipt-item-title">{item.title || 'Curated Atelier Piece'}</span>
-                    <span className="receipt-item-qty">Qty: {item.quantity || 1}</span>
-                  </div>
-                  <strong className="receipt-item-price">
-                    {money(item.total || (item.unit_price * (item.quantity || 1)) || totalAmount)}
-                  </strong>
+            {items.map((item, idx) => (
+              <div key={item.id || idx} className="receipt-item-row">
+                <div className="receipt-item-media">
+                  <img
+                    src={item.thumbnail || item.image || '/media/shop-apple.webp'}
+                    alt={item.title || 'Curated Atelier Piece'}
+                    className="receipt-item-thumb"
+                    width="64"
+                    height="64"
+                    onError={e => { e.currentTarget.src = '/media/shop-apple.webp' }}
+                  />
                 </div>
-              ))
-            ) : (
-              <div className="receipt-item-row">
                 <div className="receipt-item-info">
-                  <span className="receipt-item-title">Atelier Curated Selection</span>
-                  <span className="receipt-item-qty">Qty: 1</span>
+                  <span className="receipt-item-title">{item.title || 'Curated Atelier Piece'}</span>
+                  <span className="receipt-item-qty">Qty: {item.quantity || 1}</span>
                 </div>
-                <strong className="receipt-item-price">{money(totalAmount)}</strong>
+                <strong className="receipt-item-price">
+                  {money(item.total || (item.unit_price * (item.quantity || 1)) || totalAmount)}
+                </strong>
               </div>
-            )}
+            ))}
           </div>
         </div>
 
@@ -125,22 +161,27 @@ export default function OrderSuccessCelebration({ order }) {
           <div className="receipt-col receipt-address-col">
             <h2 className="receipt-section-title">Shipping Address</h2>
             <div className="receipt-address-details">
-              <strong className="receipt-recipient">{recipientName}</strong>
-              <p className="receipt-address-lines">
-                {addr.address_1 || 'Studio Address'}
-                {addr.address_2 ? `, ${addr.address_2}` : ''}
-              </p>
-              <p className="receipt-address-city">
-                {[addr.city, addr.province].filter(Boolean).join(', ')}{' '}
-                {addr.postal_code || ''}
-              </p>
+              {recipientName ? (
+                <strong className="receipt-recipient">{recipientName}</strong>
+              ) : null}
+              {street1 ? (
+                <p className="receipt-address-lines">
+                  {street1}
+                  {street2 ? `, ${street2}` : ''}
+                </p>
+              ) : null}
+              {(city || state || pincode) ? (
+                <p className="receipt-address-city">
+                  {[city, state].filter(Boolean).join(', ')}{pincode ? ` ${pincode}` : ''}
+                </p>
+              ) : null}
               <p className="receipt-address-country">
-                India{addr.phone ? ` · +91 ${addr.phone}` : ''}
+                India{phone ? ` · +91 ${phone}` : ''}
               </p>
             </div>
           </div>
 
-          {/* Delivery Information Column with 4-Stage Progress Bar */}
+          {/* Delivery Information Column with 4-Stage Milestone Stepper */}
           <div className="receipt-col receipt-delivery-col">
             <h2 className="receipt-section-title">Delivery Information</h2>
             <div className="delivery-estimate-box">
@@ -148,16 +189,25 @@ export default function OrderSuccessCelebration({ order }) {
               <strong className="delivery-estimate-date">{deliveryEstimate}</strong>
             </div>
 
-            {/* 4-Stage Progress Bar */}
-            <div className="delivery-progress-widget" aria-label="Order fulfillment progress">
-              <div className="delivery-progress-track">
-                <div className="delivery-progress-bar-fill" style={{ width: '25%' }} />
-              </div>
-              <div className="delivery-progress-labels">
-                <span className="progress-step is-active">Order Placed</span>
-                <span className="progress-step">Processing</span>
-                <span className="progress-step">Shipped</span>
-                <span className="progress-step">Delivered</span>
+            {/* 4-Stage Milestone Stepper with Dots */}
+            <div className="milestone-stepper" aria-label="Order fulfillment progress">
+              <div className="milestone-track">
+                <div className="milestone-track-line" />
+                <div className="milestone-track-fill" style={{ width: '33%' }} />
+                <div className="milestone-nodes">
+                  {MILESTONE_STEPS.map((step) => (
+                    <div key={step.id} className={`milestone-node is-${step.status}`}>
+                      <div className="milestone-dot">
+                        {step.status === 'completed' ? (
+                          <Check size={11} strokeWidth={3.5} />
+                        ) : (
+                          <span className="milestone-dot-inner" />
+                        )}
+                      </div>
+                      <span className="milestone-label">{step.label}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -183,25 +233,17 @@ export default function OrderSuccessCelebration({ order }) {
             <div className="trust-icon-pill"><Sparkles size={16} /></div>
             <div>
               <strong>Atelier Concierge</strong>
-              <span>order@younoya.com</span>
+              <span>support@younoya.com</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 4. Action Buttons (Image 2 Style) */}
+      {/* 4. Action Buttons */}
       <div className="celebration-actions">
-        <button
-          type="button"
-          onClick={() => window.print()}
-          className="celebration-btn-primary"
-        >
-          <Printer size={16} />
-          <span>Track Order</span>
-        </button>
-        <Link to="/shop" className="celebration-btn-secondary">
+        <Link to="/shop" className="celebration-btn-primary">
           <span>Continue Shopping</span>
-          <ArrowRight size={15} />
+          <ArrowRight size={16} />
         </Link>
       </div>
     </section>

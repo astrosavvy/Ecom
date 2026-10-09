@@ -484,12 +484,26 @@
      - Outbound requests to Shiprocket (`https://apiv2.shiprocket.in`) originate directly from the VPS public network interface (`140.245.7.165`) over standard HTTPS. CF Tunnel is not involved in outbound traffic.
      - Tested from local machine as well; identical 403 returned, proving the lock is an account-level security cooldown on Shiprocket's servers (not IP or network tunnel related).
    - Actionable resolution: In Shiprocket dashboard (`app.shiprocket.in`), navigate to `Settings → API → Configure → Manage API Users`, create a new API user (e.g. `orders@younoya.com` or `dev@younoya.com`) to instantly bypass the lockout without waiting for the cooldown timer.
-4. **Build Verification**:
-   - Root `npm run build` exited with code 0; 22 crawlable route shells and 12 admin shells synchronized to `dist/`.
-   - Local commit `d76f183` ready for user push authorization.
+## Phase 49 (Order Confirmation Receipt Luxury Refinement — 2026-10-09)
 
-
-
-
-
-
+1. **Header Clearance & Emblem Visibility (`Checkout.css`)**:
+   - Resolved checkmark emblem overlap: `.checkout-success` top padding increased to `130px` (desktop) and `112px` (mobile), clearing the `96px` fixed navbar and making the celebration checkmark emblem and radial glow fully visible.
+2. **Elevated Reassurance Copy (`OrderSuccessCelebration.jsx`)**:
+   - Replaced basic subtitle with luxury atelier copy: *"Thank you for your purchase. We are carefully processing your order to dispatch it with utmost care at the earliest."*
+3. **Product Imagery on Receipt (`Checkout.jsx` & `OrderSuccessCelebration.jsx`)**:
+   - Enriched order completion handler to capture checkout items with thumbnails from cart/bag/offer.
+   - Guaranteed authentic product photo displayed in the itemized receipt list with graceful fallback to `/media/shop-apple.webp`.
+4. **4-Stage Milestone Stepper with Dots (`OrderSuccessCelebration.jsx` & `Checkout.css`)**:
+   - Replaced plain bar with a luxury milestone stepper featuring connected milestone dots:
+     - `Order Placed`: Completed milestone dot with checkmark.
+     - `Processing`: Active milestone dot with pulsing glow.
+     - `Shipped` & `Delivered`: Clean upcoming milestone dots.
+5. **Customer Details & "Valued Patron" Elimination**:
+   - Excised all `"Valued Patron"` and `"Studio Address"` placeholder strings.
+   - Reliably extracts customer's real name, street address, city, state, pincode, and phone from order details and checkout state.
+6. **Support Email & Action Button Polish**:
+   - Updated Atelier Concierge contact to `support@younoya.com`.
+   - Removed `Track Order` button; streamlined `Continue Shopping` as the primary rounded CTA.
+   - Excised redundant `<PolicyLinks />` footer links from the confirmation screen.
+7. **Build Verification**:
+   - Root `npm run build` exited with code 0 (22 crawlable route shells, 12 admin shells, synced `dist/`).
