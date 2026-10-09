@@ -507,3 +507,25 @@
    - Excised redundant `<PolicyLinks />` footer links from the confirmation screen.
 7. **Build Verification**:
    - Root `npm run build` exited with code 0 (22 crawlable route shells, 12 admin shells, synced `dist/`).
+   - Pushed verified commit `22fec90` to GitHub `origin main`.
+
+## Phase 50 (Shiprocket Production Integration Verified & Order Creation Live — 2026-10-09)
+
+1. **Shiprocket API User & Authentication Verified**:
+   - Deployed active API credentials for `order@younoya.com` to VPS `/home/ubuntu/younoya/backend/.env` and `.medusa/server/.env`.
+   - Verified authentication directly from VPS: `POST /v1/external/auth/login` returns **HTTP 200** with valid 240-hour JWT token.
+2. **Pickup Location Synchronization**:
+   - Verified pickup address configuration via `GET /v1/external/settings/company/pickup`.
+   - Confirmed primary pickup nickname: `"warehouse"` (Company: `YOUNOYA HOUSE OF ASTRO PRIVATE LIMITED`, PIN: `110024`, Status: 2 verified).
+3. **Live Order Creation in Shiprocket**:
+   - Successfully created order for `#YOU-2026-0004` (`order_01M4G3KMA02RKHMQ3B33NK688K`) via `POST /v1/external/orders/create/adhoc`:
+     - **Shiprocket Order ID**: `1641627893`
+     - **Channel Order ID**: `YN-order_01M4G3KMA02RKHMQ3B33NK688K`
+     - **Shipment ID**: `1637597195`
+     - **Status**: `NEW` (Ready to select courier and dispatch)
+     - **Item**: *9 Days Navratri Shringaar Box* (Qty 1, ₹1,499.00, SKU `YN-NAVRATRI-9D-001`, HSN `711790`)
+     - **Customer**: Rakesh (South Delhi, 110049)
+4. **Database State Updated**:
+   - Recorded `commerce_shipment` as `booked` with `shiprocketOrderId: 1641627893` and `shipmentId: 1637597195`.
+   - Updated `commerce_operation` (`cop_e8f2ab6b906fc9fe162b8cfd08f8c1a8064e46a6`) to `complete`.
+
