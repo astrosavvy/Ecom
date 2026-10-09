@@ -289,6 +289,7 @@
 - User asked why consent/payment controls are disabled. Read-only SSH readiness confirmed policiesPublished=false and ready=false: missing business address/support/grievance information, policy deadlines/review/publication, pickup/inventory/channel/shipping/HSN/tax/packaging configuration, provider approval/capture/live test, Razorpay webhook secret, Shiprocket API-user credentials and COMMERCE_LIVE_ENABLED. Existing Razorpay key ID/secret are present; their values were not read or displayed. Added an adjacent explanation for unavailable policy confirmation/payment; preserved server readiness and unpaid-bag state.
 - Root build exited 0, generated 22 crawlable/12 admin shells and synced both dist outputs. Source whitespace and built privacy/test-fixture scan passed; existing bundle-size warning remains. Browser checked 1024px, 1920px, 430px and 360px with no horizontal overflow. Live PIN110001 filled New Delhi/Delhi, then110002 cleared/filled Central Delhi/Delhi with no lookup copy. Required City/State inputs and checkout address payload reviewed. Proof .tmp/checkout-city-state-mobile.png; temporary tab closed and viewport reset. No real payment, policy acceptance, order or OTP sent. No new tests needed for this reversible UI change.
 - Include source, generated dist, checkpoint and ownership note in one final local commit. Fresh push permission has not been supplied for this change. Next: owner completes documented launch setup to enable policy consent/payment; push frontend only when explicitly authorized.
+<<<<<<< HEAD
 
 - Push follow-up (2026-10-08): User explicitly authorized push. Clean main was successfully pushed from b843603 to c45cb17; independent remote verification matched c45cb17d2c066fa86a20f3fbbb5482c5cabee80a. Prior checkout build/browser verification applies; no code changes or repeated builds. No additional commit created for this status note; retain locally for next implementation commit. Frontend CI release completion not independently verified. Backend unchanged and checkout readiness gates remain pending.
 - Repeat push check (2026-10-08): User again requested push. git push origin main succeeded with Everything up-to-date at c45cb17; no new implementation commits exist. Only local checkpoint status notes remain uncommitted, preserved for the next implementation commit under the no-follow-up-commit rule. No builds, deployment or activation changes.
@@ -354,5 +355,27 @@
    - `GET /store/products?handle=navratri-shringaar-box` -> 200 OK, returns published product and variant `variant_01M4DMPRCYJ0M4YFAE1ST9398W`.
    - `GET /store/navratri` -> 200 OK, returns `{ purchasable: true, availableQuantity: 100, price: 1499, currency: 'INR' }`.
    - Full checkout pipeline for Navratri box (`cart_01M4FKV3P23N0JVJJD55Q7K1F8`) -> 200 OK across address, delivery preparation, shipping method (`so_01M4E00AE9XBJBMJM6466BT954`), payment collection (`pay_col_01M4FKVBRNPZBE8J4SJ6B5KCBJ`), and Razorpay session creation (`order_TlhcIbcICWixDZ` for ₹1,499 / 149,900 paise).
-   - Monorepo root build `npm run build` passed with exit code 0.
+   ## Codex follow-up — storefront-only release prepared after push rejection (2026-10-08)
 
+- Automatic approval review rejected the requested push of the shared backend/storefront commit because it included unreviewed Razorpay/Shiprocket activation before required launch checks. Nothing was pushed. The complete backend task remains preserved in the original checkout; it is excluded from this release's ancestry and diff.
+- This branch starts directly at GitHub main c45cb17 and contains only frontend GST wording removal, Home initial-settings loading, root navigation loading behavior, five-second config timeout and preservation of the current mode on later refresh failures. Existing checkoutEnabled=false/policiesPublished=false defaults and all backend launch checks are unchanged here. Price/tax accounting remains unchanged. Live homepage mode was already restored to coming-soon through a one-field settings update; /shop requires an explicit collection click.
+- Applied the verified frontend source patch and rebuilt from confirmed draft site information, avoiding unrelated backend settings and activation changes in generated policy shells. Root npm run build exited0, generated22 crawlable/12 admin shells and synchronized both dist outputs. Frontend-only inventory, source whitespace, conservative config defaults and built provider-secret/direct-provider/GST-copy scans passed. Generated HTML has existing line-ending whitespace noise; source check excludes generated output. Existing chunk-size warning remains.
+- Previous browser verification applies to the identical frontend bundle: live / stays Coming Soon at full viewport height; local Shop/product no GST copy; desktop1920/mobile430 no horizontal overflow; mocked delayed config loading to Shop and failed config loading to Coming Soon showed no wrong-page flash. Temporary fixtures removed. Proofs in original workspace .tmp/home-coming-soon-restored.png and .tmp/shop-without-gst-copy.png.
+- One final local frontend-only commit prepared in codex/storefront-homepage-fix. No real charge/refund/pickup/OTP or backend deployment was performed. Await explicit user approval of this reduced release scope before pushing to main. Do not push or merge the preserved backend activation commit as a workaround for rejection.
+
+## Phase 43 (Navratri Shringaar Box Checkout Availability & Stock 100 Allocation — 2026-10-09)
+
+1. **Root Cause Resolved**:
+   - On `/checkout`, `createCheckoutCart` queries `GET /store/products?handle=navratri-shringaar-box&region_id=...` which filters by `status = 'published'`.
+   - `prod_01M4DMPPTT963YR4BDHFE0ZJAC` was previously in `draft` status, `navratri_release_approved` was `false`, and inventory level was unassigned at the warehouse, triggering the blocking checkout error *"9 Days Navratri Shringaar Box is not available for checkout yet"*.
+2. **Product Publication & Release Approval**:
+   - Authenticated as atelier owner and updated `prod_01M4DMPPTT963YR4BDHFE0ZJAC`:
+     - `status: "published"`
+     - `metadata.navratri_release_approved: true`
+3. **100 Units Inventory Stock Allocated**:
+   - Provisioned inventory level linking `iitem_01M4DMPRJW442WFX7C2SSZ82K1` to warehouse location `sloc_01M1BRNJ25CACX2636BXMGT0GV` with `stocked_quantity: 100`.
+4. **Live Verification Across All Endpoints**:
+   - `GET /store/products?handle=navratri-shringaar-box` -> 200 OK, returns published product and variant `variant_01M4DMPRCYJ0M4YFAE1ST9398W`.
+   - `GET /store/navratri` -> 200 OK, returns `{ purchasable: true, availableQuantity: 100, price: 1499, currency: 'INR' }`.
+   - Full checkout pipeline for Navratri box (`cart_01M4FKV3P23N0JVJJD55Q7K1F8`) -> 200 OK across address, delivery preparation, shipping method (`so_01M4E00AE9XBJBMJM6466BT954`), payment collection (`pay_col_01M4FKVBRNPZBE8J4SJ6B5KCBJ`), and Razorpay session creation (`order_TlhcIbcICWixDZ` for ₹1,499 / 149,900 paise).
+   - Monorepo root build `npm run build` passed with exit code 0.
