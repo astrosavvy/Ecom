@@ -3,7 +3,7 @@
 > **SSOT**: Mandatory turn start (Step 1) & turn finish (Step 4) reference for all agents (Codex, Antigravity, Claude Code).
 
 ## 1. 📍 Status & Topology
-- **Phase**: Phase 46 Checkout Order Summary Empty Products & Zero Total Fix. Fixed falsy evaluation and unpriced cart state in CheckoutSummary, and populated cart line items via readCart in guest-cart backend API.
+- **Phase**: Phase 47 Single-Click Payment, Modern Minimal Rounded Checkout & Order Confirmation Experience. Eliminated double-click payment flow, added confetti party bomb engine, genuine YOU-YYYY-XXXX order numbering series, Image 2 confirmation receipt with 4-stage progress bar, Image 3 squircle checkout inputs, and full mobile responsiveness (< 768px, < 430px).
 - **Last Update**: 2026-10-09 | **Agent**: Antigravity
 - **URLs**: Dev `http://localhost:5173` | Preview `http://127.0.0.1:5175` | Prod `https://younoya.com` | API `https://api.younoya.com`
 - **Stack**: Frontend Vite 6 + React 19 + Framer Motion + Lenis (Cloudflare Worker `ecom` Static Assets). Backend Medusa 2.18 + PG 15 + Redis (VPS 140.245.7.165 headless REST API via CF Tunnel). Zero VPS admin builds (956MB RAM OOM ceiling).
@@ -427,6 +427,43 @@
    - Built backend locally (`npm run build` in `backend/` passed with exit code 0 in 11.16s), deployed compiled route to `/home/ubuntu/younoya/backend/.medusa/server/src/api/store/commerce/guest-cart/route.js` on VPS (`140.245.7.165`) via SCP per Backend Deployment Law, and restarted PM2 (`younoya-backend` verified HTTP 200 OK on `https://api.younoya.com/health`).
 4. **Build & Route Shells Verification**:
    - Root `npm run build` passed with exit code 0; 22 crawlable route shells and 12 admin shells synchronized to `dist/`.
+
+## Phase 47 (Single-Click Payment Flow, Modern Minimal Rounded Checkout & Image 2 Confirmation — 2026-10-09)
+
+1. **Single-Click Unified Payment Flow (`Checkout.jsx`)**:
+   - Diagnosed root cause of the previous 2-step button dance ("Continue to payment" -> 4–5s wait -> "Pay ₹1,499.00 securely" -> 2nd click to open Razorpay): `pay()` in `Checkout.jsx` previously had a premature `return` after preparing the session.
+   - Refactored `pay()` to directly chain `launchPayment(activeCart, activeSession, address)` in the exact same click execution:
+     - Page initially displays actual payable amount: `Pay ${money(payableAmount)} securely →`.
+     - Clicking once indicates `✦ Opening secure payment…`, prepares order with Medusa and Razorpay, and immediately opens the Razorpay popup modal in the same execution.
+     - Zero intermediate screens, zero second clicks.
+2. **Confetti Party Bomb Animation Engine (`ConfettiCelebration.jsx`)**:
+   - Engineered lightweight HTML5 canvas particle generator:
+     - Bursts 85 celebratory particles (radiating outward from the central checkmark emblem) upon order completion.
+     - Palette of gold, champagne, rose gold, and deep forest emerald (`#D4AF37`, `#F3E5AB`, `#C5A880`, `#E5C38C`, `#2B6E3F`).
+     - Includes realistic drag, gravity, rotation, wobble, and smooth fade-out.
+     - Automatically terminates animation frame loop after 3.8s with cleanup. Respects `prefers-reduced-motion`.
+3. **Genuine Order Numbering Series (`YOU-YYYY-XXXX`)**:
+   - Implemented `formatOrderNumber(order)` returning `YOU-${year}-${String(displayId).padStart(4, '0')}` (e.g. `YOU-2026-0002`).
+   - Guarantees `YOU-` prefix and at least two hyphens as required.
+4. **Order Confirmation Redesign (Reference Image 2 Comp)**:
+   - Rebuilt `OrderSuccessCelebration.jsx` matching Reference Image 2:
+     - Centered glowing checkmark emblem with radial aura and `<ConfettiCelebration />` particle burst.
+     - Headline: "Order Confirmed" / "Thank you for the purchase. We've received your order."
+     - Receipt card with top purple/champagne tint banner: Order #YOU-2026-0002 & date on left, Total price on right.
+     - Itemized products section with rounded squircle thumbnails, title, `Qty: 1`, and price.
+     - Side-by-side grid (stacks on mobile): Shipping Address vs. Delivery Information (with 4-stage visual progress timeline: Order Placed -> Processing -> Shipped -> Delivered).
+     - 3 trust assurance cards: Purchase Protection, Order Updates, Atelier Concierge.
+     - Dual action buttons: `Track Order` (receipt print) and `Continue Shopping` (links to `/shop`).
+5. **Modern Minimal Rounded Checkout Redesign (Reference Image 3 Comp & Mobile Optimization)**:
+   - Modern squircle inputs (`border-radius: 14px`, 52px height) in `CheckoutFields.jsx` with clean labels and asterisks (`Full Name *`, `Email Address *`, `Phone Number *`, `Address *`, `City *`, `State *`, `PIN Code *`).
+   - Direct form flow without clunky accordion collapse states, maintaining automatic 6-digit Indian PIN code city/state lookup.
+   - Modern order summary card in `CheckoutSummary.jsx`: rounded item rows with thumbnails and quantity, inline coupon code input with pill "Apply Code" button, and clean financial breakdown.
+   - Rounded card blocks (`border-radius: 22px` on desktop, `18px` on mobile), warm ivory canvas (`#FAF7F2`), crisp white cards (`#FFFFFF`).
+   - Full-width pill CTA button (`border-radius: 999px`, height 54–56px, rich deep forest obsidian `#1B3D2F`).
+   - Mobile-first responsiveness (`< 768px` and `< 430px`): single-column flow, 16px input font size preventing iOS Safari auto-zoom, comfortable $\ge 50$px touch targets, zero horizontal overflow.
+6. **Build Verification**:
+   - Monorepo `npm run build` exited with code 0; 22 crawlable route shells and 12 admin shells synchronized to `dist/`.
+
 
 
 
