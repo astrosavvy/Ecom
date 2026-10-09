@@ -4,6 +4,7 @@ import { createGuestAccess, guestRate } from '../../../../modules/younoya-commer
 import { CommerceError } from '../../../../modules/younoya-commerce/db'
 import { createCartWorkflow } from '@medusajs/medusa/core-flows'
 import { Modules } from '@medusajs/framework/utils'
+import { readCart } from '../../../../modules/younoya-commerce/orders'
 export const POST=commerceRoute(async req=>{
  await requireLive();await guestRate(req.ip||'unknown')
  const input=req.body as any
@@ -18,5 +19,6 @@ export const POST=commerceRoute(async req=>{
    (product.metadata?.product_kind==='ritual-box'&&product.metadata?.navratri_release_approved!==true)
  })) throw new CommerceError('One of these pieces is not available to order yet',409)
  const {result:cart}=await createCartWorkflow(req.scope).run({input:{region_id:region.id,items:input.items,metadata:{money_unit:'inr-major-v2'}}})
- return {cart,checkout_token:await createGuestAccess(cart.id)}
+ const populated = await readCart(req.scope,cart.id).catch(() => cart)
+ return {cart:populated,checkout_token:await createGuestAccess(cart.id)}
 })

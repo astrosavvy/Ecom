@@ -3,7 +3,7 @@
 > **SSOT**: Mandatory turn start (Step 1) & turn finish (Step 4) reference for all agents (Codex, Antigravity, Claude Code).
 
 ## 1. 📍 Status & Topology
-- **Phase**: Phase 45 Order Confirmation Celebration UI, Luxury Nodemailer HTML Template, Hostinger SMTP Integration & Warehouse Courier Dispatch Controls.
+- **Phase**: Phase 46 Checkout Order Summary Empty Products & Zero Total Fix. Fixed falsy evaluation and unpriced cart state in CheckoutSummary, and populated cart line items via readCart in guest-cart backend API.
 - **Last Update**: 2026-10-09 | **Agent**: Antigravity
 - **URLs**: Dev `http://localhost:5173` | Preview `http://127.0.0.1:5175` | Prod `https://younoya.com` | API `https://api.younoya.com`
 - **Stack**: Frontend Vite 6 + React 19 + Framer Motion + Lenis (Cloudflare Worker `ecom` Static Assets). Backend Medusa 2.18 + PG 15 + Redis (VPS 140.245.7.165 headless REST API via CF Tunnel). Zero VPS admin builds (956MB RAM OOM ceiling).
@@ -406,5 +406,27 @@
    - Restarted PM2 process `younoya-backend` (`pm2 restart younoya-backend --update-env`). Verified live API health (`HTTP 200 OK` on `https://api.younoya.com/health`).
 6. **Frontend Monorepo Build Verification**:
    - Root `npm run build` passed with exit code 0; 22 crawlable route shells and 12 admin shells generated and synchronized to `dist/`.
+
+## Phase 46 (Checkout Order Summary Empty Products & Zero Total Resolution — 2026-10-09)
+
+1. **Root Cause Analysis of Empty Products & ₹0.00 Total**:
+   - In `CheckoutSummary.jsx`, line 5 previously evaluated `const items = cart?.items || (offer ? ... : bag.map(...))`.
+   - When the checkout page asynchronously initializes via `createCheckoutCart(offer, bag, customer)`:
+     - `createCartWorkflow` on Medusa 2.18 creates the raw database cart entity but does not expand/populate line item attributes by default, leaving `cart.items` as `[]`.
+     - In JavaScript, an empty array `[]` is **truthy**. Therefore, `[] || fallback` evaluated directly to `[]` instead of falling back to `bag`!
+     - `items` became an empty array, rendering zero product cards.
+     - Furthermore, `cart?.original_item_total ?? estimate` and `cart?.total ?? estimate` evaluated `0 ?? estimate`. In JavaScript, `0` is not nullish (`0 !== null && 0 !== undefined`), so nullish coalescing returned `0` instead of `estimate` (`₹1,499.00`).
+2. **Frontend Robustness Hardening (`CheckoutSummary.jsx`)**:
+   - Rebuilt `CheckoutSummary.jsx` with strict validity checks:
+     - `cartHasValidItems`: guarantees `Array.isArray(cart?.items) && cart.items.length > 0 && cart.items.some(...)`.
+     - `items`: falls back unconditionally to `bagItems` (or `offer`) whenever `cartItems` is empty or lacks titles/totals.
+     - `subtotal` & `total`: checks `Number(cart?.original_item_total) > 0 ? cart.original_item_total : estimate` and `Number(cart?.total) > 0 ? cart.total : estimate`.
+     - Guarantees the customer always sees their authentic piece title, studio image thumbnail, quantity, and real estimated price (`₹1,499.00`), never an empty card or `₹0.00`.
+3. **Backend API Cart Population Safeguard (`guest-cart/route.ts`)**:
+   - Updated `backend/src/api/store/commerce/guest-cart/route.ts` to populate the newly created cart entity with `await readCart(req.scope, cart.id).catch(() => cart)` before returning to the frontend.
+   - Built backend locally (`npm run build` in `backend/` passed with exit code 0 in 11.16s), deployed compiled route to `/home/ubuntu/younoya/backend/.medusa/server/src/api/store/commerce/guest-cart/route.js` on VPS (`140.245.7.165`) via SCP per Backend Deployment Law, and restarted PM2 (`younoya-backend` verified HTTP 200 OK on `https://api.younoya.com/health`).
+4. **Build & Route Shells Verification**:
+   - Root `npm run build` passed with exit code 0; 22 crawlable route shells and 12 admin shells synchronized to `dist/`.
+
 
 
