@@ -4,12 +4,11 @@ import { ArrowLeft, ArrowRight, LockKeyhole, CircleCheck, ShieldCheck } from 'lu
 import { useCart } from '../context/CartContext'
 import { useSiteConfig } from '../context/SiteConfigContext'
 import { getCustomerToken, clearCustomerToken, storeRequest } from '../lib/giftGuideApi'
-import { createCheckoutCart, getPendingPayment, launchPayment, preparePayment, checkoutAccess } from '../lib/checkout'
+import { createCheckoutCart, getPendingPayment, launchPayment, preparePayment, checkoutAccess, preloadCheckout } from '../lib/checkout'
 import CheckoutFields from '../components/checkout/CheckoutFields'
 import CheckoutSummary, { money } from '../components/checkout/CheckoutSummary'
 import PolicyConsent from '../components/checkout/PolicyConsent'
 import OrderSuccessCelebration from '../components/checkout/OrderSuccessCelebration'
-import PolicyLinks from '../components/PolicyLinks'
 import '../styles/Policies.css'
 import '../styles/Checkout.css'
 
@@ -38,6 +37,7 @@ export default function Checkout() {
   const payableAmount = Number(cart?.total || 0) > 0 ? cart.total : bagEstimate
 
   useEffect(() => { sessionStorage.setItem('yn_checkout_address', JSON.stringify(address)) }, [address])
+  useEffect(() => { preloadCheckout() }, [])
 
   function complete(value) {
     const checkoutBagItems = offer

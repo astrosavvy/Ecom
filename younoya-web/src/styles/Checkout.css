@@ -353,6 +353,10 @@
   box-shadow: none;
 }
 
+.checkout-place-order-btn:disabled:not([disabled=""]):has(span) {
+  opacity: 0.85;
+}
+
 .checkout-error {
   color: #B03A2E;
   font-size: 13px;

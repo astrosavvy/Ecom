@@ -3,8 +3,44 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Sparkles, Check } from 'lucide-react'
 import '../styles/ComingSoon.css'
-import PolicyLinks from '../components/PolicyLinks'
-import '../styles/Policies.css'
+function BubblyRepelButton({ to, children }) {
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    const distPercentX = (e.clientX - centerX) / (rect.width / 2)
+    const distPercentY = (e.clientY - centerY) / (rect.height / 2)
+
+    // Repel cursor in opposite direction
+    const maxRepel = 16
+    setOffset({
+      x: -distPercentX * maxRepel,
+      y: -distPercentY * maxRepel
+    })
+  }
+
+  const handleMouseLeave = () => {
+    setOffset({ x: 0, y: 0 })
+  }
+
+  return (
+    <motion.div
+      className="coming-soon__bubbly-wrap"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      animate={{ x: offset.x, y: offset.y }}
+      transition={{ type: 'spring', stiffness: 350, damping: 16, mass: 0.5 }}
+      whileHover={{ scale: 1.06 }}
+      whileTap={{ scale: 0.94 }}
+    >
+      <Link className="coming-soon__collection coming-soon__collection--bubbly" to={to}>
+        {children}
+      </Link>
+    </motion.div>
+  )
+}
 
 export default function ComingSoon() {
   const [email, setEmail] = useState('')
@@ -78,8 +114,10 @@ export default function ComingSoon() {
               </div>
             )}
           </div>
-          <Link className="coming-soon__collection" to="/shop">Explore the collection <span aria-hidden="true">↗</span></Link>
-          <div style={{ marginTop: 24 }}><PolicyLinks /></div>
+          <BubblyRepelButton to="/shop">
+            <span>Explore the collection</span>
+            <span className="coming-soon__collection-arrow" aria-hidden="true">↗</span>
+          </BubblyRepelButton>
         </motion.div>
       </div>
     </main>

@@ -3,7 +3,7 @@
 > **SSOT**: Mandatory turn start (Step 1) & turn finish (Step 4) reference for all agents (Codex, Antigravity, Claude Code).
 
 ## 1. 📍 Status & Topology
-- **Phase**: Phase 48 Checkbox UI Glitch Fix, PolicyLinks Footer Removal & Shiprocket API User Diagnostic. Scoped inputs to exclude checkboxes, added 18px squircle pointer styling, removed redundant footer links beneath checkout CTA, and verified Shiprocket API User configuration with official documentation.
+- **Phase**: Phase 51 Navratri Box Dimensions & Weight Conversion, PostgreSQL Parcel Persistence, Etsy-Style Email Template Redesign, Bubbly Repel Explore Button & Checkout Payment Speed Optimization.
 - **Last Update**: 2026-10-09 | **Agent**: Antigravity
 - **URLs**: Dev `http://localhost:5173` | Preview `http://127.0.0.1:5175` | Prod `https://younoya.com` | API `https://api.younoya.com`
 - **Stack**: Frontend Vite 6 + React 19 + Framer Motion + Lenis (Cloudflare Worker `ecom` Static Assets). Backend Medusa 2.18 + PG 15 + Redis (VPS 140.245.7.165 headless REST API via CF Tunnel). Zero VPS admin builds (956MB RAM OOM ceiling).
@@ -528,4 +528,38 @@
 4. **Database State Updated**:
    - Recorded `commerce_shipment` as `booked` with `shiprocketOrderId: 1641627893` and `shipmentId: 1637597195`.
    - Updated `commerce_operation` (`cop_e8f2ab6b906fc9fe162b8cfd08f8c1a8064e46a6`) to `complete`.
+
+## Phase 51 (Navratri Box Packaging Persistence, Etsy Email Template, Bubbly Repel Explore Button & Checkout Speed Optimization — 2026-10-09)
+
+1. **Navratri Box Dimension & Weight Metric Conversion (Inches & Grams $\rightarrow$ CM & KG)**:
+   - User inputs: Length 13", Width 9", Height 3.5", Weight 700g.
+   - Converted values: Length $33.02\text{ cm}$, Breadth $22.86\text{ cm}$, Height $8.89\text{ cm}$, Dead Weight $0.70\text{ kg}$.
+   - Volumetric Weight: $(33.02 \times 22.86 \times 8.89) / 5000 = 1.342\text{ kg}$.
+2. **PostgreSQL Database Persistence (`younoya_db` on VPS)**:
+   - Updated `product_variant` for `variant_01M4DMPRCYJ0M4YFAE1ST9398W`: `weight = 0.70`, `length = 33.02`, `width = 22.86`, `height = 8.89`.
+   - Updated `product.metadata` for `prod_01M4DMPPTT963YR4BDHFE0ZJAC` with structured `package_dimensions`.
+   - Updated `commerce_setting` (`id = 'launch'`):
+     - `variants`: `variant_01M4DMPRCYJ0M4YFAE1ST9398W` `packedUnitKg: 0.70`.
+     - `parcels`: Created dedicated `"Navratri Shringaar Box Outer Carton"` ($33.02 \times 22.86 \times 8.89\text{ cm}$, tare $0.0\text{ kg}$, max 1 unit, max $1.0\text{ kg}$). Removed Navratri variant from `"Standard Keepsake Gift Box"`.
+3. **Etsy-Style Order Confirmation Email Template Redesign (`emails.ts`)**:
+   - Mirrored the exact layout order from the user's Etsy reference image:
+     - Top brand header: `YOUNOYA` serif wordmark with category department subline.
+     - Celebration headline: Gold sparkle stars (`✨ ✦ ✨`) + *"Woohoo! Your order is confirmed."* + atelier reassurance copy.
+     - 3-stage milestone progress stepper: `Ordered on [Date]` $\rightarrow$ `Ready to ship` $\rightarrow$ `Expected delivery [Date range]`.
+     - **Strictly zero "View your order" button** (no login or order checking portal needed).
+     - Delivery disclaimer notice with link to atelier concierge.
+     - "Order details" header with confirmation number `YOU-2026-XXXX`.
+     - White order details card: Product thumbnail image (80×80px) on left, title, SKU, quantity, price; side-by-side shipping address and financial breakdown (Subtotal, GST included, Free shipping, Shiprocket Express courier); total price row; carbon offset ribbon.
+     - Shop Information box: YOUNOYA Atelier seal, New Delhi location, 5 stars, and *"Help with order"* mailto pill button.
+   - Deployed updated `.medusa/server` to VPS via SCP and restarted PM2 `younoya-backend` per the Backend Update Law.
+4. **Home Page Facade Polish & Bubbly Cursor-Repelling Explore Button (`ComingSoon.jsx` & `ComingSoon.css`)**:
+   - Excised the red-circled footer policy links (`<PolicyLinks />`) from the Coming Soon home page facade.
+   - Upgraded "Explore the collection ↗" into `BubblyRepelButton` using Framer Motion: tracks cursor proximity and gently repels away in the opposite direction ($\sim 16\text{px}$ max), returning with a smooth bouncy spring upon mouse leave. Styled with champagne glassmorphism, inner reflection, and ambient floating breathing physics.
+5. **Checkout Payment Latency Optimization (4–6s $\rightarrow$ ~1s)**:
+   - Root cause diagnosed: 7–9 sequential roundtrips plus on-click CDN download of Razorpay `checkout.js`.
+   - Added `preloadCheckout()` on `/checkout` page mount to download `checkout.js` and prefetch `razorpayKeyId` in the background.
+   - Cached static payment providers per region and parallelized independent requests (`Promise.all`) during payment preparation.
+   - Enhanced submit button with active pulsating gradient and immediate tactile loading feedback.
+6. **Build Verification**:
+   - Root `npm run build` exited with code 0 (22 crawlable route shells, 12 admin shells, synced `dist/`).
 

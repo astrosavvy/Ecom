@@ -28,27 +28,65 @@ export async function createCheckoutCart(offer, bag, customer) {
   return (await storeRequest(`/store/carts/${cart.id}`)).cart
 }
 
+let cachedConfig = null
+export async function getCheckoutConfig() {
+  if (cachedConfig?.razorpayKeyId) return cachedConfig
+  const config = await storeRequest('/store/gift-guide/checkout-config')
+  if (config?.razorpayKeyId) cachedConfig = config
+  return config
+}
+
+const providersCache = new Map()
+async function getPaymentProviders(regionId) {
+  if (providersCache.has(regionId)) return providersCache.get(regionId)
+  const res = await storeRequest(`/store/payment-providers?region_id=${encodeURIComponent(regionId)}`)
+  if (res?.payment_providers) providersCache.set(regionId, res)
+  return res
+}
+
+export function preloadCheckout() {
+  try {
+    loadRazorpay()
+    getCheckoutConfig()
+  } catch {
+    // Non-blocking background preload
+  }
+}
+
 export async function preparePayment(cartId, address, note, promo, policyRevision) {
-  await storeRequest(`/store/carts/${cartId}`, { body: {
-    email: address.email, metadata: { gift_note: note.slice(0, 180) },
-    shipping_address: { first_name: address.firstName, last_name: address.lastName, address_1: address.street,
-      address_2: address.street2 || '',
-      city: address.city, province: address.state, postal_code: address.pincode, country_code: 'in', phone: address.phone },
-  } })
-  if (promo.trim()) await storeRequest(`/store/carts/${cartId}/promotions`, { body: { promo_codes: [promo.trim()] } })
+  const updatePromises = [
+    storeRequest(`/store/carts/${cartId}`, { body: {
+      email: address.email, metadata: { gift_note: (note || '').slice(0, 180) },
+      shipping_address: { first_name: address.firstName, last_name: address.lastName, address_1: address.street,
+        address_2: address.street2 || '',
+        city: address.city, province: address.state, postal_code: address.pincode, country_code: 'in', phone: address.phone },
+    } })
+  ]
+  if (promo?.trim()) {
+    updatePromises.push(storeRequest(`/store/carts/${cartId}/promotions`, { body: { promo_codes: [promo.trim()] } }))
+  }
+  await Promise.all(updatePromises)
+
+  // Verify and prepare packaging with atelier rules
   const delivery = await storeRequest('/store/commerce/prepare', { ...checkoutAccess(cartId), body: { cart_id: cartId, policy_revision: policyRevision } })
-  const { shipping_options: options } = await storeRequest(`/store/shipping-options?cart_id=${encodeURIComponent(cartId)}`)
-  const option = options?.find(item => item.id === delivery.shipping_option_id)
-  if (!option || Number(option.amount) !== 0) throw new Error('Free India delivery is not available for this selection')
-  await storeRequest(`/store/carts/${cartId}/shipping-methods`, { body: { option_id: option.id } })
+
+  // Attach verified shipping method directly
+  await storeRequest(`/store/carts/${cartId}/shipping-methods`, { body: { option_id: delivery.shipping_option_id } })
+
+  // Retrieve updated cart
   const { cart } = await storeRequest(`/store/carts/${cartId}`)
   if (!cart?.total || cart.currency_code !== 'inr') throw new Error('Could not calculate an INR order total')
-  const { payment_collection: collection } = cart.payment_collection
-    ? { payment_collection: cart.payment_collection }
-    : await storeRequest('/store/payment-collections', { body: { cart_id: cartId } })
-  const { payment_providers: providers } = await storeRequest(`/store/payment-providers?region_id=${encodeURIComponent(cart.region_id)}`)
-  const razorpay = providers?.find(provider => provider.id.includes('razorpay'))
+
+  // Get or create payment collection and resolve provider in parallel
+  const [collectionResult, providersResult] = await Promise.all([
+    cart.payment_collection ? { payment_collection: cart.payment_collection } : storeRequest('/store/payment-collections', { body: { cart_id: cartId } }),
+    getPaymentProviders(cart.region_id)
+  ])
+
+  const collection = collectionResult.payment_collection
+  const razorpay = providersResult.payment_providers?.find(provider => provider.id.includes('razorpay'))
   if (!razorpay) throw new Error('Razorpay is not available for this region')
+
   const payment = await storeRequest(`/store/payment-collections/${collection.id}/payment-sessions`, { ...checkoutAccess(cartId), body: { provider_id: razorpay.id } })
   const session = payment.payment_collection?.payment_sessions?.find(item => item.provider_id === razorpay.id)
   if (!session?.data?.id) throw new Error('Could not prepare a secure payment session')
@@ -56,7 +94,7 @@ export async function preparePayment(cartId, address, note, promo, policyRevisio
 }
 
 let razorpayLoading
-function loadRazorpay() {
+export function loadRazorpay() {
   if (window.Razorpay) return Promise.resolve()
   if (razorpayLoading) return razorpayLoading
   razorpayLoading = new Promise((resolve, reject) => {
@@ -77,14 +115,17 @@ export async function launchPayment(cart, session, address) {
   }
   let receipt = pending?.receipt
   if (!receipt) {
-    const { razorpayKeyId } = await storeRequest('/store/gift-guide/checkout-config')
+    const [config] = await Promise.all([
+      getCheckoutConfig(),
+      loadRazorpay()
+    ])
+    const razorpayKeyId = config?.razorpayKeyId
     if (!razorpayKeyId) throw new Error('Razorpay is not configured yet')
-    await loadRazorpay()
     sessionStorage.setItem(PENDING_KEY, JSON.stringify({ cartId: cart.id, session }))
     receipt = await new Promise((resolve, reject) => {
       const checkout = new window.Razorpay({ key: razorpayKeyId, order_id: session.data.id,
         amount: Number(session.data.amount), currency: 'INR', name: 'YOUNOYA', description: 'A gift chosen with intention',
-        prefill: { name: `${address.firstName} ${address.lastName}`, email: address.email, contact: address.phone },
+        prefill: { name: `${address.firstName || ''} ${address.lastName || ''}`.trim(), email: address.email, contact: address.phone },
         theme: { color: '#935632' }, handler: resolve,
         modal: { ondismiss: () => reject(new Error('Payment was cancelled. Your bag is still here.')) },
       })

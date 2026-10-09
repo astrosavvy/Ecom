@@ -16,7 +16,15 @@ export function trackingStatus(raw: unknown) {
   if (["new","awbassigned","pickupqueued"].includes(status)) return "booked"
   return "unknown"
 }
-export const externalOrderId = (id: string) => `YN-${id}`
+export function externalOrderId(id: string, order?: any) {
+  if (order?.custom_display_id) return order.custom_display_id
+  const year = new Date(order?.created_at || Date.now()).getFullYear() || 2026
+  if (order?.display_id != null) {
+    return `YOU-${year}-${String(order.display_id).padStart(4, '0')}`
+  }
+  const raw = String(id || '').replace(/[^a-zA-Z0-9]/g, '').slice(-4).toUpperCase()
+  return `YOU-${year}-${raw.padStart(4, '0')}`
+}
 export async function shipOrder(scope: any, id: string) {
   const order = await readOrder(scope,id)
   if ((await database().query("select id from commerce_request where order_id=$1 and kind='cancellation' and status in ('processing','refund_pending','refunded')",[id])).rowCount)
@@ -29,10 +37,11 @@ export async function shipOrder(scope: any, id: string) {
     throw new CommerceError("Payment needs review before dispatch",409)
   return order
 }
-async function findExternal(id: string) {
-  const response = await shiprocket.get(`/orders?search=${encodeURIComponent(externalOrderId(id))}`)
+async function findExternal(id: string, order?: any) {
+  const extId = externalOrderId(id, order)
+  const response = await shiprocket.get(`/orders?search=${encodeURIComponent(extId)}`)
   if (!Array.isArray(response.data)) throw new ProviderError(true)
-  const found = response.data.filter((o: any) => String(o.channel_order_id || o.order_id) === externalOrderId(id))
+  const found = response.data.filter((o: any) => String(o.channel_order_id || o.order_id) === extId || String(o.channel_order_id || o.order_id) === `YN-${id}`)
   if (found.length > 1) throw new CommerceError("Multiple shipping records require manual review",409)
   return found[0] || null
 }
@@ -54,7 +63,7 @@ export function orderPayload(order: any, s: any) {
   }
   const sum = items.reduce((n,i) => n+Math.round(i.selling_price*100)*i.units,0)
   if (sum !== orderPaise(order.total,order)) throw new CommerceError("Shipping invoice total does not match the paid order")
-  return { order_id: externalOrderId(order.id), order_date: new Date(new Date(order.created_at).getTime()+19800000).toISOString().slice(0,16).replace("T"," "),
+  return { order_id: externalOrderId(order.id, order), order_date: new Date(new Date(order.created_at).getTime()+19800000).toISOString().slice(0,16).replace("T"," "),
     pickup_location: s.pickupName, billing_customer_name: a.first_name, billing_last_name: a.last_name || "",
     billing_address: a.address_1, billing_address_2: a.address_2 || "", billing_city: a.city, billing_pincode: a.postal_code,
     billing_state: a.province, billing_country: "India", billing_email: order.email, billing_phone: a.phone,
@@ -64,17 +73,17 @@ export function orderPayload(order: any, s: any) {
 export async function createShipping(scope: any, op: any) {
   const existing = await shipment(op.order_id)
   if (existing?.data?.shiprocketOrderId) return existing.data
-  const found = await findExternal(op.order_id)
+  const order = await shipOrder(scope,op.order_id)
+  const found = await findExternal(op.order_id, order)
   let result = found
   if (!found) {
     if (op.status === "reconcile") throw new CommerceError("Shipping creation is uncertain; verify the merchant order ID in Shiprocket before resolving.",409)
-    const order = await shipOrder(scope,op.order_id)
     const s = await settings()
     result = await shiprocket.post("/orders/create/adhoc",orderPayload(order,{ ...s.draft,...order.metadata.commerce_approval.shipping }))
   }
   const shiprocketOrderId = Number(result.order_id || result.id), shipmentId = Number(result.shipment_id || result.shipments?.id || result.shipments?.[0]?.id)
   if (!Number.isSafeInteger(shiprocketOrderId) || shiprocketOrderId <= 0 || !Number.isSafeInteger(shipmentId) || shipmentId <= 0) throw new ProviderError(true)
-  const data = { shiprocketOrderId, shipmentId, merchantOrderId: externalOrderId(op.order_id) }
+  const data = { shiprocketOrderId, shipmentId, merchantOrderId: externalOrderId(op.order_id, order) }
   await setShipment(op.order_id,"booked",data); return data
 }
 export async function providerOrder(id: string) {
