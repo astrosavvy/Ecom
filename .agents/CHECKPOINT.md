@@ -330,3 +330,29 @@
 - Root build passed exit0, 22 crawlable/12 admin shells synchronized. Asset privacy/source whitespace/GST copy scans passed; existing chunk-size warning remains. Browser checked desktop1920 and mobile430 copy/layout, product route, loading to Shop and loading to Coming Soon on mocked503; no wrong-mode flash. Temporary mocked fixtures removed and viewport/tab cleaned up. Proof .tmp/home-coming-soon-restored.png and .tmp/shop-without-gst-copy.png. No payment/OTP/provider mutation performed on this turn.
 - Concurrent backend agent committed the shared working tree while these frontend fixes were being verified; its unpublished latest commit includes our source/dist edits alongside its backend activation work. Preserved those unrelated implementation changes. Removed a private credential value from that agent's checkpoint entry and repaired the unpublished local commit before any GitHub push; no credential is included in checkpoint text. Latest source/build retained; no separate follow-up implementation commit required.
 - Next: push only with fresh explicit permission to release wording/loading fixes. Production homepage setting is already corrected; frontend source/dist changes await release. Backend activation changes belong to the concurrent task, not this frontend verification.
+
+## Codex follow-up — push blocked; preparing a storefront-only release (2026-10-08)
+- User authorized push of the latest shared commit af4e971. Automatic approval review rejected git push origin main because it includes concurrent unreviewed live Razorpay/Shiprocket activation, contrary to required launch checks. No push executed. Preserve the complete backend task locally; do not bypass the rejection or deploy its changes indirectly.
+- Preparing a separate managed worktree from origin/main c45cb17 with only our storefront GST-copy/loading fixes and documentation. Its history will exclude af4e971 and all backend changes. Build and commit that concrete frontend-only result, then ask the user to approve the reduced release scope before another push. Root checkpoint status remains local; no new root commit or backend mutation.
+
+- Reduced release ready: managed worktree C:/Users/Palak/.codex/worktrees/storefront-homepage-fix/Savvy_Ecom, branch codex/storefront-homepage-fix, commit59f7f054dfcf4ac90524803ae64e57980f2c098a. Build passed; verified parent c45cb17, backend diff empty and rejected af4e971 excluded from ancestry. Await user approval to push only this frontend commit to main; no push yet. Original root backend commit preserved; root checkpoint note remains local.
+- Approved frontend-only push (2026-10-08): User explicitly approved the reduced release scope. Successfully pushed commit59f7f054dfcf4ac90524803ae64e57980f2c098a to origin/main from c45cb17; independent ls-remote verified the same hash. The rejected backend activation commit af4e971 is not in remote main ancestry and remains local in the original checkout. Prior frontend build/browser checks apply; CI deployment completion is not independently verified. No force push, backend deployment or provider action. Keep the managed frontend worktree for subsequent storefront work until the separate backend review is resolved; local root main differs from GitHub main and must not be pushed or merged automatically. Push-status notes remain local for the next implementation commit, with no extra commit.
+- Live product / commit verification (2026-10-08): User requested removal of GST note and asked whether e87a58e was pushed. New browser load of https://younoya.com/product/navratri-shringaar-box confirmed price caption Complete nine-day set, no GST text anywhere in body, and deployed bundle index-BM6m8mF8.js. Screenshot .tmp/navratri-gst-removed-live.png; viewport reset and temporary tab closed. No additional code edits/build/commit needed. Independent git ls-remote confirmed GitHub main at59f7f054dfcf4ac90524803ae64e57980f2c098a. e87a58e was superseded locally by redacted af4e971; neither backend activation commit was pushed. Original backend work remains local. Next: refresh any previously open tab to load the verified frontend release; keep separate backend activation review pending.
+
+## Phase 43 (Navratri Shringaar Box Checkout Availability & Stock 100 Allocation — 2026-10-09)
+
+1. **Root Cause Resolved**:
+   - On `/checkout`, `createCheckoutCart` queries `GET /store/products?handle=navratri-shringaar-box&region_id=...` which filters by `status = 'published'`.
+   - `prod_01M4DMPPTT963YR4BDHFE0ZJAC` was previously in `draft` status, `navratri_release_approved` was `false`, and inventory level was unassigned at the warehouse, triggering the blocking checkout error *"9 Days Navratri Shringaar Box is not available for checkout yet"*.
+2. **Product Publication & Release Approval**:
+   - Authenticated as atelier owner and updated `prod_01M4DMPPTT963YR4BDHFE0ZJAC`:
+     - `status: "published"`
+     - `metadata.navratri_release_approved: true`
+3. **100 Units Inventory Stock Allocated**:
+   - Provisioned inventory level linking `iitem_01M4DMPRJW442WFX7C2SSZ82K1` to warehouse location `sloc_01M1BRNJ25CACX2636BXMGT0GV` with `stocked_quantity: 100`.
+4. **Live Verification Across All Endpoints**:
+   - `GET /store/products?handle=navratri-shringaar-box` -> 200 OK, returns published product and variant `variant_01M4DMPRCYJ0M4YFAE1ST9398W`.
+   - `GET /store/navratri` -> 200 OK, returns `{ purchasable: true, availableQuantity: 100, price: 1499, currency: 'INR' }`.
+   - Full checkout pipeline for Navratri box (`cart_01M4FKV3P23N0JVJJD55Q7K1F8`) -> 200 OK across address, delivery preparation, shipping method (`so_01M4E00AE9XBJBMJM6466BT954`), payment collection (`pay_col_01M4FKVBRNPZBE8J4SJ6B5KCBJ`), and Razorpay session creation (`order_TlhcIbcICWixDZ` for ₹1,499 / 149,900 paise).
+   - Monorepo root build `npm run build` passed with exit code 0.
+
