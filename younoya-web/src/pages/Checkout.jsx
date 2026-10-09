@@ -238,8 +238,6 @@ export default function Checkout() {
           onPromoChange={val => { setPromo(val); setSession(null) }}
         />
       </div>
-
-      <PolicyLinks />
     </section>
   )
 }

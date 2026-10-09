@@ -145,7 +145,7 @@
   margin-left: 2px;
 }
 
-.checkout-form input {
+.checkout-form input:not([type="checkbox"]) {
   width: 100%;
   box-sizing: border-box;
   min-height: 52px;
@@ -159,15 +159,62 @@
   transition: all 0.2s ease;
 }
 
-.checkout-form input:focus {
+.checkout-form input:not([type="checkbox"]):focus {
   border-color: #B29263;
   background: #FFFFFF;
   box-shadow: 0 0 0 3px rgba(178, 146, 99, 0.12);
 }
 
-.checkout-form input::placeholder {
+.checkout-form input:not([type="checkbox"])::placeholder {
   color: #A3998D;
   font-weight: 400;
+}
+
+.checkout-policies {
+  margin: 10px 0 4px;
+}
+
+.checkout-policies label {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  color: #5E5347 !important;
+}
+
+.checkout-policies input[type="checkbox"],
+.checkout-form input[type="checkbox"] {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  padding: 0 !important;
+  margin: 2px 0 0 0 !important;
+  border: 1.5px solid #C5A880 !important;
+  border-radius: 4px !important;
+  background: #FFFFFF !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  accent-color: #1B3D2F !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.checkout-policies a {
+  color: #1E1C1A;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.checkout-policies a:hover {
+  color: #8D683D;
 }
 
 .checkout-country-pill {

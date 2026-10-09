@@ -3,7 +3,7 @@
 > **SSOT**: Mandatory turn start (Step 1) & turn finish (Step 4) reference for all agents (Codex, Antigravity, Claude Code).
 
 ## 1. 📍 Status & Topology
-- **Phase**: Phase 47 Single-Click Payment, Modern Minimal Rounded Checkout & Order Confirmation Experience. Eliminated double-click payment flow, added confetti party bomb engine, genuine YOU-YYYY-XXXX order numbering series, Image 2 confirmation receipt with 4-stage progress bar, Image 3 squircle checkout inputs, and full mobile responsiveness (< 768px, < 430px).
+- **Phase**: Phase 48 Checkbox UI Glitch Fix, PolicyLinks Footer Removal & Shiprocket API User Diagnostic. Scoped inputs to exclude checkboxes, added 18px squircle pointer styling, removed redundant footer links beneath checkout CTA, and verified Shiprocket API User configuration with official documentation.
 - **Last Update**: 2026-10-09 | **Agent**: Antigravity
 - **URLs**: Dev `http://localhost:5173` | Preview `http://127.0.0.1:5175` | Prod `https://younoya.com` | API `https://api.younoya.com`
 - **Stack**: Frontend Vite 6 + React 19 + Framer Motion + Lenis (Cloudflare Worker `ecom` Static Assets). Backend Medusa 2.18 + PG 15 + Redis (VPS 140.245.7.165 headless REST API via CF Tunnel). Zero VPS admin builds (956MB RAM OOM ceiling).
@@ -463,6 +463,32 @@
    - Mobile-first responsiveness (`< 768px` and `< 430px`): single-column flow, 16px input font size preventing iOS Safari auto-zoom, comfortable $\ge 50$px touch targets, zero horizontal overflow.
 6. **Build Verification**:
    - Monorepo `npm run build` exited with code 0; 22 crawlable route shells and 12 admin shells synchronized to `dist/`.
+
+## Phase 48 (Checkbox UI Glitch Fix, PolicyLinks Footer Removal & Shiprocket API User Diagnostic — 2026-10-09)
+
+1. **Ugly Checkbox Box & Cursor Fix (`Checkout.css`)**:
+   - Root cause: `.checkout-form input` had previously styled all inputs (including `<input type="checkbox">`) with `min-height: 52px`, `padding: 13px 18px`, `border: 1px solid #E2DCD3`, and text cursor.
+   - Scoped general text inputs using `.checkout-form input:not([type="checkbox"])`.
+   - Added dedicated styling for `.checkout-policies input[type="checkbox"]`: 18px square squircle, 4px border radius, gold/emerald accent, no 52px beige container, and `cursor: pointer`.
+   - Styled `.checkout-policies label` with `cursor: pointer`, 12px gap, and flexbox alignment.
+2. **Redundant Policy Links Removal (`Checkout.jsx`)**:
+   - Removed `<PolicyLinks />` from the bottom of the checkout page (below the primary payment button).
+   - Terms, Privacy, Shipping, and Cancellation policies remain fully accessible within the policy consent checkbox text above the button.
+3. **Shiprocket API User & Documentation Diagnostic**:
+   - Inspected official Shiprocket API documentation (`https://apidocs.shiprocket.in/`).
+   - Confirmed: Custom headless architecture uses Shiprocket External REST API (`/v1/external/orders/create/adhoc`).
+   - Confirmed: Shiprocket requires an API User (`Settings → API → Add New API User`), which provides an API password / key.
+   - Tested live endpoint from server: Shiprocket returns `403 {"message":"User blocked due to too many failed login attempts."}` for both `support@younoya.com` and `api@younoya.com`.
+   - Verified Outbound Architecture vs Cloudflare Tunnel:
+     - Cloudflare Tunnel (`cloudflared`) is exclusively an INBOUND reverse proxy (`younoya.com` / `api.younoya.com` -> VPS port 80/9000).
+     - Outbound requests to Shiprocket (`https://apiv2.shiprocket.in`) originate directly from the VPS public network interface (`140.245.7.165`) over standard HTTPS. CF Tunnel is not involved in outbound traffic.
+     - Tested from local machine as well; identical 403 returned, proving the lock is an account-level security cooldown on Shiprocket's servers (not IP or network tunnel related).
+   - Actionable resolution: In Shiprocket dashboard (`app.shiprocket.in`), navigate to `Settings → API → Configure → Manage API Users`, create a new API user (e.g. `orders@younoya.com` or `dev@younoya.com`) to instantly bypass the lockout without waiting for the cooldown timer.
+4. **Build Verification**:
+   - Root `npm run build` exited with code 0; 22 crawlable route shells and 12 admin shells synchronized to `dist/`.
+   - Local commit `d76f183` ready for user push authorization.
+
+
 
 
 
