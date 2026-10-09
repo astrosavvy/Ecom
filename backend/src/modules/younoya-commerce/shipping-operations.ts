@@ -113,9 +113,11 @@ export async function bookPickup(scope: any, op: any) {
     return recovered
   }
   if (op.status === "reconcile") throw new CommerceError("Pickup outcome is uncertain; reconcile it in Shiprocket before resolving",409)
-  const result = await shiprocket.post("/courier/generate/pickup",{ shipment_id: [delivery.data.shipmentId] })
+  const pickupPayload: any = { shipment_id: [delivery.data.shipmentId] }
+  if (op.payload?.pickupDate) pickupPayload.pickup_date = [op.payload.pickupDate]
+  const result = await shiprocket.post("/courier/generate/pickup", pickupPayload)
   if (Number(result.pickup_status) !== 1) throw new ProviderError(true)
-  await setShipment(op.order_id,"booked",{ pickupScheduled: true, pickupDate: result.response?.pickup_scheduled_date || null })
+  await setShipment(op.order_id,"booked",{ pickupScheduled: true, pickupDate: result.response?.pickup_scheduled_date || op.payload?.pickupDate || null })
   return { pickupScheduled: true }
 }
 export async function cancelShipping(id: string, reconcile = false) {

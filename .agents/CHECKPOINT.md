@@ -3,7 +3,7 @@
 > **SSOT**: Mandatory turn start (Step 1) & turn finish (Step 4) reference for all agents (Codex, Antigravity, Claude Code).
 
 ## 1. 📍 Status & Topology
-- **Phase**: Phase 44 Order Confirmation Shipping Profile Resolution & Phone Regex Fix. Catalog products linked to Default Shipping Profile in Medusa, completion workflow hardened with auto-linking safeguard, deployed to VPS, and phone regex syntax error resolved.
+- **Phase**: Phase 45 Order Confirmation Celebration UI, Luxury Nodemailer HTML Template, Hostinger SMTP Integration & Warehouse Courier Dispatch Controls.
 - **Last Update**: 2026-10-09 | **Agent**: Antigravity
 - **URLs**: Dev `http://localhost:5173` | Preview `http://127.0.0.1:5175` | Prod `https://younoya.com` | API `https://api.younoya.com`
 - **Stack**: Frontend Vite 6 + React 19 + Framer Motion + Lenis (Cloudflare Worker `ecom` Static Assets). Backend Medusa 2.18 + PG 15 + Redis (VPS 140.245.7.165 headless REST API via CF Tunnel). Zero VPS admin builds (956MB RAM OOM ceiling).
@@ -373,4 +373,38 @@
    - Fixed regex from `[0-9+ ()-]{10,18}` to `[0-9+\\s\\(\\)\\-]{10,18}` to resolve the Chrome / Chromium Unicode sets `/v` flag `SyntaxError: Invalid regular expression: /[0-9+ ()-]{10,18}/v: Invalid character in character class`.
 5. **Build & Route Shells Verification**:
    - Monorepo `npm run build` passed with exit code 0; 22 route shells and 12 admin shells synchronized to `dist/`.
+
+## Phase 45 (Celebratory Order Confirmation, Luxury Nodemailer HTML Template & Warehouse Courier Dispatch Controls — 2026-10-09)
+
+1. **Hostinger SMTP Credentials Configured & Live Verified**:
+   - Tested and verified Hostinger SSL port 465 with credentials (`order@younoya.com` / `YqZ!gq0vh/2`).
+   - Configured `.env` and `backend/.env` locally, and `/home/ubuntu/younoya/backend/.env` & `.medusa/server/.env` on the VPS with `SMTP_HOST=smtp.hostinger.com`, `SMTP_PORT=465`, `SMTP_SECURE=true`, `SMTP_USER=order@younoya.com`, `SMTP_FROM_EMAIL=order@younoya.com`, `SMTP_FROM_NAME="YOUNOYA"`.
+2. **Luxury Nodemailer Order Confirmation HTML Template (`emails.ts`)**:
+   - Engineered responsive, Cartier-grade HTML email template in `backend/src/modules/younoya-commerce/emails.ts` featuring:
+     - Deep burgundy/espresso header with gold brand mark (`YOUNOYA · For Every Chapter`).
+     - "Order Confirmed" laurel badge and warm patron greeting.
+     - Highlighted Order Reference ID and "✓ Payment Verified" badge.
+     - Curated selection breakdown with item titles, quantities, and prices.
+     - Delivery destination card with recipient name, address, and contact number.
+     - Atelier fulfillment notice explaining sacred packaging and Shiprocket tracking updates.
+     - "View Order Details ↗" CTA button and atelier concierge contact (`order@younoya.com`).
+3. **Celebratory Order Confirmation UI (`<OrderSuccessCelebration />` & `Checkout.jsx`)**:
+   - Built `younoya-web/src/components/checkout/OrderSuccessCelebration.jsx` and integrated it into `Checkout.jsx`.
+   - Features:
+     - Radiant golden emblem with glowing pulse animation and gold checkmark.
+     - "Hurray! Congratulations" headline with patron greeting.
+     - Clear copy affirming payment is verified and received, and pieces are being prepared for dispatch.
+     - 3-stage visual fulfillment journey (*Payment Verified & Captured $\to$ Atelier Curation & Packaging $\to$ Courier Dispatch & Delivery*).
+     - Curated items table, delivery address card, "Continue Exploring" action, and "Print Receipt" trigger.
+   - Enhanced `Checkout.jsx` with real-time status feedback during the post-Razorpay completion window (`"✦ Payment received. Finalizing your order with the atelier… Please do not refresh."`) ensuring zero double-clicks.
+4. **Warehouse Operator Courier & Dispatch Date Selection Controls**:
+   - Hardened `backend/src/api/admin/commerce/orders/[id]/actions/route.ts` and `backend/src/modules/younoya-commerce/shipping-operations.ts` to support optional custom `pickup_date` for Shiprocket's `/courier/generate/pickup`.
+   - Upgraded `younoya-web/src/admin/pages/commerce/OrderOperations.tsx` with warehouse dispatch date picker (`<input type="date" />`) and clear 4-step workflow: (1) Prepare shipping parcel $\to$ (2) Fetch live courier quotes $\to$ (3) Assign warehouse-chosen courier (Delhivery, BlueDart, etc.) $\to$ (4) Approve pickup on chosen date. Couriers and dates are never auto-assigned at checkout.
+5. **Backend Deployment to VPS**:
+   - Built backend locally (`npm run build` in `backend/` passed in 11.46s, exit code 0).
+   - Deployed compiled `emails.js`, `shipping-operations.js`, `completion.js`, and `actions/route.js` to `/home/ubuntu/younoya/backend/.medusa/server/` on VPS (`140.245.7.165`) via SCP per Backend Update Law.
+   - Restarted PM2 process `younoya-backend` (`pm2 restart younoya-backend --update-env`). Verified live API health (`HTTP 200 OK` on `https://api.younoya.com/health`).
+6. **Frontend Monorepo Build Verification**:
+   - Root `npm run build` passed with exit code 0; 22 crawlable route shells and 12 admin shells generated and synchronized to `dist/`.
+
 

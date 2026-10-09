@@ -8,6 +8,7 @@ import { createCheckoutCart, getPendingPayment, launchPayment, preparePayment, c
 import CheckoutFields from '../components/checkout/CheckoutFields'
 import CheckoutSummary, { money } from '../components/checkout/CheckoutSummary'
 import PolicyConsent from '../components/checkout/PolicyConsent'
+import OrderSuccessCelebration from '../components/checkout/OrderSuccessCelebration'
 import PolicyLinks from '../components/PolicyLinks'
 import '../styles/Policies.css'
 import '../styles/Checkout.css'
@@ -84,7 +85,12 @@ export default function Checkout() {
     setAddress(current => ({ ...current, [field]: value })); setSession(null)
   }
   const pending = !!getPendingPayment()
-  if (order) return <section className="checkout-page checkout-success"><span>YOUNOYA · ORDER CONFIRMED</span><h1>Thank you for your order.</h1><p>Order {order.display_id || order.id} is confirmed. Dispatch follows payment confirmation and courier preparation.</p>{customer?.id && cart?.customer_id===customer.id ? <Link className="policy-action" to={`/account/orders/${order.id}`}>View your order ↗</Link> : <p>Your confirmation and delivery updates will be sent to your email. Keep your order reference for support.</p>}<PolicyLinks /></section>
+  if (order) return (
+    <section className="checkout-page checkout-success">
+      <OrderSuccessCelebration order={order} />
+      <PolicyLinks />
+    </section>
+  )
   return <section className="checkout-page"><div className="checkout-top"><button type="button" onClick={()=>setIsOpen(true)}><ArrowLeft size={16}/>Back to bag</button><span><LockKeyhole size={14}/>Secure checkout</span></div>
     {!site.checkoutEnabled && !pending && <p className="checkout-paused" role="status">Online ordering is being prepared. Your selections remain saved. Contact <a href="mailto:support@younoya.com">support@younoya.com</a> for assistance.</p>}
     <div className="checkout-page__grid">
@@ -95,7 +101,8 @@ export default function Checkout() {
         <div className="checkout-action"><PolicyConsent accepted={accepted} onChange={setAccepted} disabled={!site.policiesPublished || pending} />
         {!pending&&(!site.policiesPublished||!site.checkoutEnabled)&&<p className="checkout-availability" role="status">{!site.policiesPublished?'Policy confirmation and payment will be available once the store policies and ordering setup are complete.':'Online payments will be available once the ordering setup is complete.'}</p>}
         {error && <p className="checkout-error" role="alert">{error}</p>}
-        <button className="checkout-continue" type="submit" disabled={!cart || busy || (!pending && (!site.checkoutEnabled || !accepted))}>{busy ? 'One moment…' : pending ? 'Confirm your order' : session ? `Pay ${money(cart.total)} securely` : 'Continue to payment'}<ArrowRight size={18}/></button></div>
+        {busy && pending && <p className="checkout-finalizing-note" style={{ color: '#8d683d', fontSize: '13px', textAlign: 'center', margin: '4px 0' }}>✦ Payment received. Finalizing your order with the atelier… Please do not refresh.</p>}
+        <button className="checkout-continue" type="submit" disabled={!cart || busy || (!pending && (!site.checkoutEnabled || !accepted))}>{busy ? (pending ? 'Finalizing your order…' : 'One moment…') : pending ? 'Finalizing order…' : session ? `Pay ${money(cart.total)} securely` : 'Continue to payment'}<ArrowRight size={18}/></button></div>
       </form><CheckoutSummary cart={cart} bag={bag} session={session} offer={offer} />
     </div><PolicyLinks />
   </section>

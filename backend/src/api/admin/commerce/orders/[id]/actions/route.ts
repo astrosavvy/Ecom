@@ -21,6 +21,6 @@ export const POST = commerceRoute(async req => {
   if (!kinds[body.action] || (body.action === "awb" && (!Number.isSafeInteger(body.courier_id) || body.courier_id <= 0)) ||
     (body.action === "document" && !["label","invoice","manifest"].includes(body.document))) throw new CommerceError("Invalid shipping action")
   const [kind,key] = kinds[body.action]
-  const operation = await enqueue(kind,key,{ courierId: body.courier_id, document: body.document },id)
+  const operation = await enqueue(kind,key,{ courierId: body.courier_id, document: body.document, pickupDate: body.pickup_date },id)
   return { operation_id: operation, status: "queued" }
 })
