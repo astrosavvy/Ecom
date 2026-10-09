@@ -3,7 +3,7 @@
 > **SSOT**: Mandatory turn start (Step 1) & turn finish (Step 4) reference for all agents (Codex, Antigravity, Claude Code).
 
 ## 1. 📍 Status & Topology
-- **Phase**: Phase 43 Navratri Shringaar Box checkout availability activated, 100 units warehouse stock allocated, guest checkout verified through Razorpay session, and route shells synchronized.
+- **Phase**: Phase 44 Order Confirmation Shipping Profile Resolution & Phone Regex Fix. Catalog products linked to Default Shipping Profile in Medusa, completion workflow hardened with auto-linking safeguard, deployed to VPS, and phone regex syntax error resolved.
 - **Last Update**: 2026-10-09 | **Agent**: Antigravity
 - **URLs**: Dev `http://localhost:5173` | Preview `http://127.0.0.1:5175` | Prod `https://younoya.com` | API `https://api.younoya.com`
 - **Stack**: Frontend Vite 6 + React 19 + Framer Motion + Lenis (Cloudflare Worker `ecom` Static Assets). Backend Medusa 2.18 + PG 15 + Redis (VPS 140.245.7.165 headless REST API via CF Tunnel). Zero VPS admin builds (956MB RAM OOM ceiling).
@@ -356,4 +356,21 @@
    - `GET /store/navratri` -> 200 OK, returns `{ purchasable: true, availableQuantity: 100, price: 1499, currency: 'INR' }`.
    - Full checkout pipeline for Navratri box (`cart_01M4FKV3P23N0JVJJD55Q7K1F8`) -> 200 OK across address, delivery preparation, shipping method (`so_01M4E00AE9XBJBMJM6466BT954`), payment collection (`pay_col_01M4FKVBRNPZBE8J4SJ6B5KCBJ`), and Razorpay session creation (`order_TlhcIbcICWixDZ` for ₹1,499 / 149,900 paise).
    - Monorepo root build `npm run build` passed with exit code 0; 22 route shells and 12 admin shells synchronized to `dist/`.
+
+## Phase 44 (Order Confirmation Shipping Profile Resolution & Phone Regex Fix — 2026-10-09)
+
+1. **Root Cause of "Order confirmation is pending" (409 on `/store/carts/:id/complete`)**:
+   - In Medusa 2.18, `completeCartWorkflow` runs `validate-shipping` (`@medusajs/core-flows`), which validates that all cart line item products have a remote link to a shipping profile matching the cart's selected shipping option (`sp_01M1BRNHB7FKTN11GN93N0PXV0`).
+   - Because newly created products were never linked in `product_shipping_profile`, `item.variant.product?.shipping_profile?.id` was undefined, which failed `!availableShippingProfiles.includes(profile)` and threw:
+     `"The cart items require shipping profiles that are not satisfied by the current shipping methods"`.
+   - Workflow reverted, `completionGuard` caught it with 409 `"Order confirmation is being reconciled"`, and the frontend displayed *"Payment was verified, but order confirmation is pending"*.
+2. **Resolution & Database Linking**:
+   - Linked all 11 catalog products (the 10 heirlooms + `prod_01M4DMPPTT963YR4BDHFE0ZJAC`) to `sp_01M1BRNHB7FKTN11GN93N0PXV0` in PostgreSQL table `product_shipping_profile` with `deleted_at = NULL`.
+3. **Backend Completion Workflow Hardening (`completion.ts`)**:
+   - Added an automatic linking safeguard in `completeApprovedCart` before invoking `completeCartWorkflowId`: queries cart line items and guarantees that all products in the cart are linked to the selected shipping option's shipping profile in `product_shipping_profile`.
+   - Built backend locally (`npm run build` in `backend/` passed with exit code 0) and deployed compiled `.medusa/server` bundle and source to VPS via SCP per Backend Update Law. PM2 restarted.
+4. **Phone Input Regex Fix (`CheckoutFields.jsx`)**:
+   - Fixed regex from `[0-9+ ()-]{10,18}` to `[0-9+\\s\\(\\)\\-]{10,18}` to resolve the Chrome / Chromium Unicode sets `/v` flag `SyntaxError: Invalid regular expression: /[0-9+ ()-]{10,18}/v: Invalid character in character class`.
+5. **Build & Route Shells Verification**:
+   - Monorepo `npm run build` passed with exit code 0; 22 route shells and 12 admin shells synchronized to `dist/`.
 

@@ -31,7 +31,7 @@ export default function CheckoutFields({address,onChange,locked}) {
   required={key!=='street2'} value={address[key]} autoComplete={autoComplete} readOnly={locked}
   type={key==='email'?'email':key==='phone'?'tel':'text'}
   {...(key==='pincode'?{inputMode:'numeric',pattern:'[1-9][0-9]{5}',maxLength:6}:{})}
-  {...(key==='phone'?{pattern:'[0-9+ ()-]{10,18}'}:{})}
+  {...(key==='phone'?{pattern:'[0-9+\\s\\(\\)\\-]{10,18}'}:{})}
   onChange={event=>{if(key==='pincode'){change.current('city','');change.current('state','')};onChange(key,key==='pincode'?event.target.value.replace(/\D/g,''):event.target.value)}}/></label>
  return <section ref={container} className={`checkout-address ${editing?'is-editing':''}`} aria-label="Delivery address">
  <div className="checkout-address__heading"><h2><MapPin size={18}/>Delivery address</h2>{!editing&&<button type="button" disabled={locked} onClick={()=>setEditing(true)}><Pencil size={14}/>Edit</button>}</div>
