@@ -65,13 +65,13 @@ export function renderOrderEmailHtml(order: any, business: any) {
       <td align="center">
         <table role="presentation" width="100%" style="max-width: 580px; background-color: #FFFFFF; border: 1px solid rgba(44, 34, 28, 0.08); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(44, 34, 28, 0.04);" cellspacing="0" cellpadding="0" border="0">
           
-          <!-- BRAND HEADER -->
+          <!-- BRAND HEADER WITH LOGO -->
           <tr>
-            <td style="background-color: #FFFFFF; padding: 28px 24px 16px; text-align: center; border-bottom: 1px solid #F0EAE1;">
-              <div style="font-family: Georgia, 'Cormorant Garamond', serif; font-size: 28px; letter-spacing: 0.16em; color: #1A0A17; font-weight: 600; text-transform: uppercase;">
-                YOUNOYA
-              </div>
-              <div style="font-size: 11px; letter-spacing: 0.12em; color: #8A7B70; margin-top: 10px; text-transform: uppercase;">
+            <td style="background-color: #FFFFFF; padding: 32px 24px 20px; text-align: center; border-bottom: 1px solid #F0EAE1;">
+              <a href="https://younoya.com" target="_blank" style="text-decoration: none; display: inline-block;">
+                <img src="https://younoya.com/brand.png" alt="YOUNOYA · For every chapter" width="150" height="87" style="display: block; width: 150px; max-width: 100%; height: auto; margin: 0 auto; border: 0;" />
+              </a>
+              <div style="font-size: 11px; letter-spacing: 0.14em; color: #8A7B70; margin-top: 14px; text-transform: uppercase; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;">
                 Rituals &nbsp;·&nbsp; Keepsakes &nbsp;·&nbsp; Sacred Altar &nbsp;·&nbsp; Gift Sets
               </div>
             </td>
@@ -92,38 +92,71 @@ export function renderOrderEmailHtml(order: any, business: any) {
 
           <!-- MILESTONE PROGRESS STEPPER -->
           <tr>
-            <td style="padding: 10px 32px 28px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <td style="padding: 12px 32px 28px;">
+              <!-- 3-STAGE PROGRESS BAR (EQUAL SPACING & EXACT ALIGNMENT) -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed; width: 100%; border-collapse: collapse;">
+                <!-- ROW 1: NODES AND CONNECTING LINES -->
                 <tr>
-                  <td align="center" style="width: 33%;">
-                    <div style="width: 26px; height: 26px; border-radius: 50%; background-color: #1E1C1A; color: #FFFFFF; line-height: 26px; text-align: center; font-size: 13px; font-weight: bold; margin: 0 auto;">✓</div>
+                  <!-- STAGE 1: ORDERED (COMPLETED) -->
+                  <td width="33.33%" align="center" style="width: 33.33%; padding: 0; vertical-align: middle;">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
+                      <tr>
+                        <td width="50%" style="width: 50%; height: 26px;">&nbsp;</td>
+                        <td width="26" align="center" style="width: 26px; height: 26px; vertical-align: middle;">
+                          <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #1E1C1A; border: 2px solid #1E1C1A; color: #FFFFFF; line-height: 24px; text-align: center; font-size: 13px; font-weight: bold; margin: 0 auto; mso-line-height-rule: exactly; box-sizing: border-box;">✓</div>
+                        </td>
+                        <td width="50%" style="width: 50%; height: 26px; vertical-align: middle; line-height: 1px; font-size: 1px;">
+                          <div style="height: 2px; background-color: #1E1C1A; line-height: 1px; font-size: 1px; width: 100%;">&nbsp;</div>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
-                  <td style="width: 33%; vertical-align: middle;">
-                    <div style="height: 2px; background-color: #1E1C1A; width: 100%;"></div>
+
+                  <!-- STAGE 2: READY TO SHIP (IN PROGRESS) -->
+                  <td width="33.34%" align="center" style="width: 33.34%; padding: 0; vertical-align: middle;">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
+                      <tr>
+                        <td width="50%" style="width: 50%; height: 26px; vertical-align: middle; line-height: 1px; font-size: 1px;">
+                          <div style="height: 2px; background-color: #1E1C1A; line-height: 1px; font-size: 1px; width: 100%;">&nbsp;</div>
+                        </td>
+                        <td width="26" align="center" style="width: 26px; height: 26px; vertical-align: middle;">
+                          <div style="width: 22px; height: 22px; border-radius: 50%; border: 2px solid #8A7B70; background-color: #FFFFFF; margin: 0 auto; box-sizing: border-box;"></div>
+                        </td>
+                        <td width="50%" style="width: 50%; height: 26px; vertical-align: middle; line-height: 1px; font-size: 1px;">
+                          <div style="height: 2px; background-color: #DCD4CA; line-height: 1px; font-size: 1px; width: 100%;">&nbsp;</div>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
-                  <td align="center" style="width: 33%;">
-                    <div style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid #8A7B70; background-color: #FFFFFF; margin: 0 auto;"></div>
-                  </td>
-                  <td style="width: 33%; vertical-align: middle;">
-                    <div style="height: 2px; background-color: #DCD4CA; width: 100%;"></div>
-                  </td>
-                  <td align="center" style="width: 33%;">
-                    <div style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid #DCD4CA; background-color: #FFFFFF; margin: 0 auto;"></div>
+
+                  <!-- STAGE 3: EXPECTED DELIVERY (UPCOMING) -->
+                  <td width="33.33%" align="center" style="width: 33.33%; padding: 0; vertical-align: middle;">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
+                      <tr>
+                        <td width="50%" style="width: 50%; height: 26px; vertical-align: middle; line-height: 1px; font-size: 1px;">
+                          <div style="height: 2px; background-color: #DCD4CA; line-height: 1px; font-size: 1px; width: 100%;">&nbsp;</div>
+                        </td>
+                        <td width="26" align="center" style="width: 26px; height: 26px; vertical-align: middle;">
+                          <div style="width: 22px; height: 22px; border-radius: 50%; border: 2px solid #DCD4CA; background-color: #FFFFFF; margin: 0 auto; box-sizing: border-box;"></div>
+                        </td>
+                        <td width="50%" style="width: 50%; height: 26px;">&nbsp;</td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
+
+                <!-- ROW 2: LABELS -->
                 <tr>
-                  <td align="center" style="padding-top: 8px; vertical-align: top;">
-                    <div style="font-size: 12px; font-weight: 600; color: #1E1C1A;">Ordered</div>
-                    <div style="font-size: 11px; color: #8A7B70;">on ${orderDate}</div>
+                  <td width="33.33%" align="center" style="width: 33.33%; padding-top: 10px; vertical-align: top; text-align: center;">
+                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1E1C1A; line-height: 1.3;">Ordered</div>
+                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 11px; color: #8A7B70; line-height: 1.3; margin-top: 2px;">on ${orderDate}</div>
                   </td>
-                  <td></td>
-                  <td align="center" style="padding-top: 8px; vertical-align: top;">
-                    <div style="font-size: 12px; font-weight: 600; color: #1E1C1A;">Ready to ship</div>
+                  <td width="33.34%" align="center" style="width: 33.34%; padding-top: 10px; vertical-align: top; text-align: center;">
+                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1E1C1A; line-height: 1.3;">Ready to ship</div>
                   </td>
-                  <td></td>
-                  <td align="center" style="padding-top: 8px; vertical-align: top;">
-                    <div style="font-size: 12px; font-weight: 600; color: #1E1C1A;">Expected delivery</div>
-                    <div style="font-size: 11px; color: #8A7B70;">${deliveryStart} – ${deliveryEnd}</div>
+                  <td width="33.33%" align="center" style="width: 33.33%; padding-top: 10px; vertical-align: top; text-align: center;">
+                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1E1C1A; line-height: 1.3;">Expected delivery</div>
+                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 11px; color: #8A7B70; line-height: 1.3; margin-top: 2px;">${deliveryStart} – ${deliveryEnd}</div>
                   </td>
                 </tr>
               </table>

@@ -91,15 +91,27 @@ function routeHtml(template, route) {
     .replace('<div id="root"></div>', `<div id="root"></div><noscript>${fallbackContent(route, seo)}</noscript>`)
 }
 
+async function safeWriteFile(target, content) {
+  for (let i = 0; i < 5; i++) {
+    try {
+      await writeFile(target, content, 'utf8')
+      return
+    } catch (err) {
+      if (i === 4) throw err
+      await new Promise((r) => setTimeout(r, 150 * (i + 1)))
+    }
+  }
+}
+
 async function writeRoutePages() {
   const template = await readFile(path.join(distRoot, 'index.html'), 'utf8')
   for (const route of [...routes, ...ADMIN_SHELL_ROUTES]) {
     const target = route === '/' ? path.join(distRoot, 'index.html') : path.join(distRoot, route.slice(1), 'index.html')
     await mkdir(path.dirname(target), { recursive: true })
-    await writeFile(target, routeHtml(template, route), 'utf8')
+    await safeWriteFile(target, routeHtml(template, route))
   }
   const notFound = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,follow"><title>Page not found | Younoya</title></head><body><main><h1>This path has wandered.</h1><p><a href="/shop">Explore the Younoya collection</a>.</p></main></body></html>`
-  await writeFile(path.join(distRoot, '404.html'), notFound, 'utf8')
+  await safeWriteFile(path.join(distRoot, '404.html'), notFound)
   console.log(`Generated ${routes.length} crawlable route shells, ${ADMIN_SHELL_ROUTES.length} admin shells, and 404.html.`)
 }
 
