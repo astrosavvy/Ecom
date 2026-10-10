@@ -5,8 +5,8 @@
 ---
 
 ## 1. 📍 Executive Status & System Topology
-- **Active Phase**: Phase 57 — Shop hero guide shortcut temporarily hidden locally; awaiting push permission.
-- **Last Updated**: 2026-10-10 | **Agent**: Codex | **Git Branch**: `main`
+- **Active Phase**: Phase 58 — Live Razorpay Credentials Update & Production VPS Deployment.
+- **Last Updated**: 2026-10-10 | **Agent**: Antigravity | **Git Branch**: `main`
 - **Storefront**: `https://younoya.com` (Vite 6 + React 19 + Framer Motion + Lenis, deployed to Cloudflare Worker `ecom` via Git).
 - **Backend API**: `https://api.younoya.com` (Medusa 2.18 + Node 20 + PostgreSQL 15 `younoya_db` + Redis on VPS `ubuntu@140.245.7.165` via CF Tunnel).
 - **Admin Console**: Hosted exclusively on frontend edge (`https://younoya.com/admin/*`). ZERO VPS admin builds (956MB RAM OOM ceiling).
@@ -123,3 +123,15 @@
 - Root build exited 0; 22 crawlable route shells and 12 admin shells generated and root distribution synchronized. Existing Vite chunk-size advisory remains. Source whitespace check passed; no new tests needed for this reversible display-only change.
 - Single final local commit includes implementation, generated output, prior push checkpoint note and this update. No backend/API changes. Original `9inone/` photographs remain untouched and untracked.
 - Next: obtain fresh explicit push permission before GitHub/production release; toggle SHOW_GIFT_GUIDE_CTA back to true when the hero shortcut should return.
+## 13. Shop hero shortcut push completion — 2026-10-10 / Codex
+- User explicitly authorized push. `git push origin main` exited 0; GitHub main advanced from `b912ab7` to `8c51bae`, temporarily hiding Find your piece from the Shop hero.
+- Prior successful build and mobile/desktop verification remain applicable. No additional source changes, build, deployment or checkpoint-only commit on this push turn. This push note remains in the working tree for the next implementation commit.
+- Original `9inone/` photographs remain untracked. Next: confirm the Cloudflare frontend release; restore SHOW_GIFT_GUIDE_CTA=true when requested. No backend update required.
+## 14. Live Razorpay Keys Deployment — 2026-10-10 / Antigravity
+- User provided live credentials in private source `D:\C Downloads\rzp-key.csv`.
+- Verified authentication directly against Razorpay API `https://api.razorpay.com/v1/payments` (returned HTTP 200).
+- Configured exclusively in private server environment files (`backend/.env`, `backend/.env.production`, strictly gitignored; zero env files or secret literals on GitHub).
+- Deployed via SCP to VPS (`ubuntu@140.245.7.165`) across `/home/ubuntu/younoya/backend/.env`, `/home/ubuntu/younoya/backend/.medusa/server/.env`, and production env files.
+- Restarted PM2 `younoya-backend` with `--update-env` (process `online`, pid `3181841`). Zero GitHub involvement per the Backend Update Law.
+- Verified live endpoint `https://api.younoya.com/store/gift-guide/checkout-config` successfully returns live checkout readiness (`checkoutEnabled: true`).
+
