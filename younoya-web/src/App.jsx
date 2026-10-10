@@ -21,6 +21,7 @@ import AdminApp from './admin/AdminApp'
 import SeoHead from './seo/SeoHead'
 import NavratriPixel from './components/NavratriPixel'
 import './styles/global.css'
+import './styles/MobileLayout.css'
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()

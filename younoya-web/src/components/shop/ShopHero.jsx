@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { ArrowUpRight, Sparkles } from 'lucide-react'
+import { NAVRATRI_PRODUCT } from '../../data/navratri'
 
 export default function ShopHero() {
+  const [imageFailed, setImageFailed] = useState(false)
+  const photo = NAVRATRI_PRODUCT.gallery[0]
+  const image = imageFailed ? photo.fallback : photo
   return (
     <section className="livora-hero-bar" aria-label="The Younoya collection">
       <div className="livora-hero-bar__left">
@@ -25,7 +30,7 @@ export default function ShopHero() {
         <span className="livora-hero-bar__spark livora-hero-bar__spark--one" aria-hidden="true">✦</span>
         <span className="livora-hero-bar__spark livora-hero-bar__spark--two" aria-hidden="true">✦</span>
         <Link className="livora-hero-bar__arch-frame" to="/product/navratri-shringaar-box" aria-label="Discover the Navratri Shringaar Box">
-          <img src="/media/navratri/red-kit-1200.webp" srcSet="/media/navratri/red-kit-600.webp 600w, /media/navratri/red-kit-1200.webp 1200w" sizes="(min-width: 960px) 40vw, 85vw" alt="Red Navratri daily kit detail, including Day 8 mehendi" fetchPriority="high" />
+          <img src={image.src} srcSet={`${image.thumbnail} 600w, ${image.src} ${image.width}w`} sizes="(min-width: 1512px) 650px, (min-width: 960px) 45vw, calc(100vw - 40px)" width={image.width} height={image.height} alt="Complete Younoya nine-day Navratri box; background flowers and idols are styling props" fetchPriority="high" onError={() => setImageFailed(true)} />
         </Link>
         <Link className="livora-hero-bar__floating-card" to="/product/navratri-shringaar-box">
           <span className="livora-hero-bar__card-label">THE NINE-DAY SET</span>

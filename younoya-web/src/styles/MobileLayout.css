@@ -1,0 +1,150 @@
+/* Shared mobile rhythm; imported after page styles to reconcile legacy overrides. */
+@media (max-width: 768px) {
+  :root { --mobile-gutter: max(20px, env(safe-area-inset-left), env(safe-area-inset-right)); }
+  body { min-width: 0; }
+
+  .navbar { height: 72px; min-height: 72px; padding: 4px var(--mobile-gutter); }
+  .navbar .navbar__brand img { width: 98px; height: 56px; }
+  .navbar__right { gap: 8px; }
+  .navbar__icon-link, .navbar__cart { width: 44px; height: 44px; flex-shrink: 0; }
+
+  .livora-shop__shell, .livora-detail__shell, .navratri-shell,
+  .journal-container, .article-container { padding-inline: var(--mobile-gutter); }
+  .checkout-page, .policy-page, .customer-orders, .private-offer,
+  .guide-page, .navbar--guide { padding-inline: var(--mobile-gutter); }
+  .not-found { padding-inline: var(--mobile-gutter) !important; }
+  .policy-page, .customer-orders, .private-offer, .journal-page, .article-page { padding-top: 96px; }
+  .navratri-page { padding-top: 84px; padding-bottom: calc(94px + env(safe-area-inset-bottom)); }
+
+  .livora-hero-bar { margin-top: 72px; }
+  .livora-hero-bar__left { padding-top: 24px; }
+  .livora-hero-bar__buttons { align-items: flex-start; gap: 12px; }
+  .livora-hero-bar__buttons .livora-btn, .livora-btn-watch { min-height: 44px; }
+  .livora-hero-bar__right { height: auto; min-height: 0; margin-top: 20px; display: grid; gap: 12px; }
+  .livora-hero-bar__arch-frame { width: 100%; height: auto; aspect-ratio: 1; }
+  .livora-hero-bar__floating-card { position: static; width: 100%; min-width: 0; }
+  .livora-trending-title-row h2 { white-space: normal; text-align: center; text-wrap: balance; }
+  .livora-card__wish, .livora-card__quick-bag { width: 44px; height: 44px; }
+  .livora-card__body { padding: 12px; }
+  .livora-card__title h3 { font-size: .85rem; line-height: 1.5; overflow-wrap: anywhere; }
+  .livora-card__price-row { gap: 4px; }
+  .livora-card__price { white-space: nowrap; }
+  .livora-catalog__more { min-height: 44px; }
+  .livora-filters { flex-wrap: wrap; justify-content: flex-start; overflow: visible; padding-bottom: 20px; }
+  .livora-filters__pill { min-height: 44px; max-width: 100%; }
+
+  .livora-detail { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+  .livora-stage { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 24px 0 40px; }
+  .livora-stage > *, .livora-gallery__main, .livora-buybox { min-width: 0; }
+  .livora-crumb { flex-wrap: wrap; gap: 8px; padding-top: 88px; line-height: 1.7; }
+  .livora-crumb a { display: inline-flex; align-items: center; min-height: 44px; }
+  .livora-gallery__thumbs { flex-wrap: wrap; gap: 10px; }
+  .livora-gallery__controls button, .livora-buybox__wish { width: 44px; height: 44px; flex-shrink: 0; }
+  .livora-buybox { padding: 20px; }
+  .livora-buybox__kicker { gap: 12px; }
+  .livora-buybox__title { overflow-wrap: anywhere; text-wrap: balance; }
+  .livora-buybox__actions { grid-template-columns: minmax(0, 1fr); }
+  .livora-buybox__qty { width: 132px; padding-inline: 4px; min-height: 48px; }
+  .livora-buybox__qty button { width: 44px; height: 44px; }
+  .livora-personalize__box { padding: 20px 16px; }
+  .livora-personalize__head { gap: 12px; align-items: flex-start; }
+  .livora-personalize__head button { min-width: 44px; min-height: 44px; flex-shrink: 0; }
+  .livora-personalize input, .livora-personalize textarea { width: 100%; min-width: 0; min-height: 48px; font-size: 16px; }
+  .livora-tabs__nav { display: grid; grid-template-columns: minmax(0, 1fr); overflow: visible; }
+  .livora-tabs__nav button { min-width: 0; min-height: 48px; padding: 12px 16px; white-space: normal; text-align: left; }
+  .livora-tabs__content { padding: 24px 20px; }
+  .livora-related__head { flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+  .livora-related__head a { min-height: 44px; display: inline-flex; align-items: center; }
+  .livora-philosophy-banner__box .livora-btn { max-width: 100%; padding-inline: 16px; white-space: normal; text-align: center; }
+  .livora-sticky-bar, .navratri-mobile-bar { padding-inline: var(--mobile-gutter); gap: 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .livora-sticky-bar__info { flex: 1; min-width: 0; }
+  .livora-sticky-bar__info strong { font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+  .livora-sticky-bar .livora-btn { flex-shrink: 0; padding-inline: 16px; min-height: 48px; font-size: 12px; }
+  .navratri-mobile-bar .navratri-button { font-size: 13px; }
+  .navratri-days { padding-top: 44px; }
+  .navratri-facts > div, .navratri-product-details dl > div { grid-template-columns: minmax(0, 95px) minmax(0, 1fr); }
+
+  .checkout-top { gap: 12px; margin-bottom: 24px; }
+  .checkout-top button { min-height: 44px; }
+  .checkout-form, .checkout-summary-card { width: 100%; }
+  .checkout-card { padding: 20px 16px; }
+  .checkout-fields-grid { gap: 16px; }
+  .checkout-coupon-input-group { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .checkout-coupon-input { min-width: 0; width: 100%; }
+  .checkout-field { min-width: 0; }
+  .checkout-form input:not([type="checkbox"]), .checkout-form select { font-size: 16px; }
+  .policy-page aside .policy-links { gap: 4px 16px; padding-bottom: 20px; }
+  .policy-links a { display: inline-flex; align-items: center; min-height: 44px; max-width: 100%; overflow-wrap: anywhere; }
+  .policy-page h1, .customer-orders h1 { font-size: clamp(34px, 9vw, 42px); text-wrap: balance; line-height: 1.15; }
+  .policy-back { margin-bottom: 24px; }
+  .policy-page__body { gap: 24px; }
+  .customer-orders__list > a { flex-wrap: wrap; gap: 12px; }
+  .customer-order__item { display: grid; grid-template-columns: 64px minmax(0, 1fr); }
+  .customer-order__item img { width: 64px; height: 76px; }
+  .customer-order__item strong { grid-column: 2; margin-left: 0; }
+  .customer-order__item:not(:has(img)) { grid-template-columns: minmax(0, 1fr); }
+  .customer-order__item:not(:has(img)) strong { grid-column: 1; }
+  .customer-order__grid > *, .private-offer__grid > * { min-width: 0; }
+  .order-request textarea, .order-request select { font-size: 16px; }
+  .private-offer__inner > a { display: inline-flex; align-items: center; min-height: 44px; }
+  .private-offer h1 { font-size: clamp(36px, 10vw, 56px); overflow-wrap: anywhere; }
+  .private-offer__empty { padding-block: 40px; }
+
+  .journal-filter-btn { min-height: 44px; }
+  .article-prose, .article-prose-inner { overflow-wrap: anywhere; }
+  .article-prose :is(table, pre), .article-prose-inner :is(table, pre) { display: block; max-width: 100%; overflow-x: auto; }
+  .article-prose img, .article-prose-inner img { height: auto; }
+
+  .atelier-footer__lead, .atelier-footer__main, .atelier-footer__fineprint { padding-inline: var(--mobile-gutter); }
+  .atelier-community { padding-inline: 0; }
+  .atelier-community__action form { flex-direction: column; align-items: stretch; gap: 8px; border-radius: 16px; padding: 8px; }
+  .atelier-community__action input, .atelier-community__action button { min-height: 48px; font-size: 16px; }
+  .atelier-community__action button { width: 100%; font-size: 12px; }
+  .atelier-footer__links { gap: 24px 16px; }
+
+  .cart-drawer__header, .cart-drawer__body, .cart-drawer__footer { padding-inline: var(--mobile-gutter); }
+  .cart-close-btn { width: 44px; height: 44px; flex-basis: 44px; }
+  .cart-item { gap: 12px; padding: 12px; }
+  .cart-item__img-box { flex-basis: 72px; width: 72px; }
+  .cart-item__remove { width: 44px; height: 44px; flex-basis: 44px; }
+  .cart-item__qty button { width: 44px; height: 44px; }
+  .cart-item__bottom { flex-wrap: wrap; gap: 10px; }
+  .cart-voucher__form input, .cart-gift-card textarea { font-size: 16px; }
+  .cart-empty { min-height: 0; flex: 1; padding-block: 40px; }
+
+  .login-form { padding: 28px 20px 24px; }
+  .login-form h1 { font-size: clamp(30px, 8.5vw, 36px); text-wrap: balance; }
+  .login-footnote svg { flex-shrink: 0; }
+  .login-footnote { text-align: center; }
+  .guide-conversation .guide-birth__more { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .guide-conversation .guide-birth { padding: 16px; }
+  .guide-dialog { width: min(480px, calc(100vw - 24px)); max-width: calc(100vw - 24px); }
+  .guide-dialog__panel { padding: 12px; }
+  .guide-dialog .guide-calendar__popover header { display: grid; grid-template-columns: 44px minmax(0, 1fr) minmax(64px, .65fr) 44px; gap: 4px; }
+  .guide-dialog .guide-calendar__popover header button { width: 44px; }
+  .guide-dialog .guide-calendar__days { gap: 0; }
+  .guide-conversation .guide-birth input { font-size: 16px; }
+
+  .coming-soon__content { padding-inline: var(--mobile-gutter); padding-bottom: calc(48px + env(safe-area-inset-bottom)); }
+  .coming-soon__input { min-width: 0; width: 100%; min-height: 48px; font-size: 16px; }
+  .coming-soon__btn, .journal-footer-links a, .article-back-link { min-height: 44px; }
+}
+
+@media (max-width: 360px) {
+  /* Keep complete month/year labels readable without shrinking arrow targets. */
+  .guide-dialog .guide-calendar__popover header { grid-template-columns: 44px minmax(0, 1fr) 44px; }
+  .guide-dialog .guide-calendar__popover header select { grid-column: 2; width: 100%; }
+  .guide-dialog .guide-calendar__popover header button:first-child { grid-column: 1; grid-row: 1 / 3; }
+  .guide-dialog .guide-calendar__popover header button:last-child { grid-column: 3; grid-row: 1 / 3; }
+}
+
+@media (max-width: 768px) and (max-height: 550px) {
+  /* The keyboard leaves room for the active form rather than a clipped portrait caption. */
+  .guide-stage { display: none; }
+  .login-form { padding: 16px 20px; }
+  .login-mobile-logo { width: 70px; margin-bottom: 12px; }
+  .login-form h1 { font-size: 28px; margin-block: 8px; }
+  .login-intro { font-size: 12px; line-height: 1.5; margin-bottom: 16px; }
+  .login-field-note { margin-bottom: 16px; }
+  .login-footnote { margin-top: 12px; padding-top: 12px; }
+}
