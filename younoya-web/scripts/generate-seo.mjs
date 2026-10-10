@@ -5,6 +5,7 @@ import { PRODUCTS } from '../src/data/products.js'
 import { NAVRATRI_DAYS } from '../src/data/navratri.js'
 import { getSeo, indexableRoutes, SITE_URL } from '../src/seo/metadata.js'
 import { POLICY_ROUTES, policySections } from '../src/data/policies.js'
+import { NAVRATRI_PIXEL_PATH, NAVRATRI_PIXEL_FALLBACK } from '../src/lib/navratriPixel.js'
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const publicRoot = path.join(appRoot, 'public')
@@ -88,7 +89,7 @@ function routeHtml(template, route) {
     .replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(seo.title)}</title>`)
     .replace(/<meta name="description"[^>]*>/, `<meta name="description" content="${escapeHtml(seo.description)}">`)
     .replace('</head>', `    ${tags}\n  </head>`)
-    .replace('<div id="root"></div>', `<div id="root"></div><noscript>${fallbackContent(route, seo)}</noscript>`)
+    .replace('<div id="root"></div>', `<div id="root"></div><noscript>${fallbackContent(route, seo)}${route === NAVRATRI_PIXEL_PATH ? NAVRATRI_PIXEL_FALLBACK : ''}</noscript>`)
 }
 
 async function safeWriteFile(target, content) {

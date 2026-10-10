@@ -19,6 +19,7 @@ import BlogPost from './pages/BlogPost'
 import NotFound from './pages/NotFound'
 import AdminApp from './admin/AdminApp'
 import SeoHead from './seo/SeoHead'
+import NavratriPixel from './components/NavratriPixel'
 import './styles/global.css'
 
 function ScrollToTop() {
@@ -62,6 +63,7 @@ export default function App() {
         <SmoothScroll>
           <ScrollToTop />
           <SeoHead />
+          <NavratriPixel />
           <StoreNavigation />
           <main>
             <Routes>

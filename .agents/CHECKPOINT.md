@@ -5,7 +5,7 @@
 ---
 
 ## 1. 📍 Executive Status & System Topology
-- **Active Phase**: Phase 54 — Festive Navratri Photography & Rich Product Description.
+- **Active Phase**: Phase 55 — Navratri Product Meta Pixel.
 - **Last Updated**: 2026-10-10 | **Agent**: Codex | **Git Branch**: `main`
 - **Storefront**: `https://younoya.com` (Vite 6 + React 19 + Framer Motion + Lenis, deployed to Cloudflare Worker `ecom` via Git).
 - **Backend API**: `https://api.younoya.com` (Medusa 2.18 + Node 20 + PostgreSQL 15 `younoya_db` + Redis on VPS `ubuntu@140.245.7.165` via CF Tunnel).
@@ -84,3 +84,11 @@
 - Failure test: temporarily hidden edited hero files triggered successful original-photo fallback; files restored and no test residue remains. Shop tile loaded with object-fit contain. Metadata/schema includes the new title, description and all ten photographs.
 - Evidence: `.tmp/navratri-festive-{desktop,mobile,description}.png`; documentation/prompts/source provenance and verification in `creative/younoya-navratri/`.
 - One final local commit prepared. Next: obtain fresh explicit push permission before GitHub/production frontend release. No backend/API changes or SSH deployment needed.
+
+## 7. Latest completed turn — 2026-10-10 / Codex
+- Added user-supplied Meta Pixel ID `1812138199833737` for `/product/navratri-shringaar-box` only. Loads the official asynchronous fbevents script on first Navratri visit and initializes once per document.
+- Router observer sends one PageView per pathname visit, suppresses React StrictMode effect replay and tracks return visits after leaving the page. No purchase, checkout or customer-field events were added.
+- Generated the supplied hidden image fallback inside only the Navratri route shell's noscript content. Other page shells and the global HTML template remain free of this fallback.
+- Verification: root frontend build exit 0, 22 crawlable route shells / 12 admin shells, clean distribution synchronized. Existing chunk-size warning remains. Three Node tests pass: delayed provider queue / StrictMode replay / return visit, existing-loader reuse, and route-specific fallback across every built HTML shell.
+- Browser: Shop initially has zero pixel scripts; SPA navigation to Navratri loads one; leaving and returning retains one script. No console errors/warnings observed. No bag, checkout or backend changes. Screenshot: `.tmp/navratri-pixel-page.png`.
+- One final local commit prepared with implementation, tests, generated output and checkpoint. Next: obtain fresh explicit permission before GitHub push / frontend release; Meta Events Manager receipt should be checked after release. No backend deployment required. Original `9inone/` photographs remain untouched and untracked.
