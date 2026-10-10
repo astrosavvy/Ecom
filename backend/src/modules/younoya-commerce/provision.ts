@@ -33,8 +33,18 @@ export async function provision(scope: any) {
       prices: [{ region_id: india.id, amount: 0 }], rules: [{ attribute: "enabled_in_store", value: "true", operator: "eq" },{ attribute: "is_return", value: "false", operator: "eq" }] }] })
     option = result[0]
   }
-  if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET)
-    await updateRegionsWorkflow(scope).run({ input: { selector: { id: india.id }, update: { payment_providers: ["pp_razorpay_razorpay"] } } })
-  await saveSettings({ ...s, shippingOptionId: option.id })
-  return { shippingOptionId: option.id }
+  const codOptions = await fulfillment.listShippingOptions({ name: 'Younoya COD handling' })
+  let cod = codOptions[0]
+  if (!cod) {
+    const { result } = await createShippingOptionsWorkflow(scope).run({ input: [{ name: 'Younoya COD handling', price_type: 'calculated',
+      provider_id: 'younoya-shiprocket_shiprocket', service_zone_id: set.service_zones[0].id, shipping_profile_id: profile.id,
+      data: { id: 'india-cod' }, type: { label: 'Cash on Delivery', description: 'Free delivery; ₹49 COD handling per order', code: 'india-cod' },
+      rules: [{ attribute: 'enabled_in_store', value: 'true', operator: 'eq' }, { attribute: 'is_return', value: 'false', operator: 'eq' }] }] })
+    cod = result[0]
+  }
+  const providerIds = (await scope.resolve(Modules.PAYMENT).listPaymentProviders({ is_enabled: true })).map((p: any) => p.id)
+  const methods = providerIds.filter((id: string) => id === 'pp_system' || id.includes('razorpay'))
+  await updateRegionsWorkflow(scope).run({ input: { selector: { id: india.id }, update: { payment_providers: methods } } })
+  await saveSettings({ ...s, shippingOptionId: option.id, codShippingOptionId: cod.id })
+  return { shippingOptionId: option.id, codShippingOptionId: cod.id }
 }

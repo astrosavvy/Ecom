@@ -4,19 +4,20 @@ import { shipment } from "../younoya-commerce/orders"
 import { requireLive } from "../younoya-commerce/settings"
 import { pack } from "../younoya-commerce/packing"
 import { shiprocket } from "../younoya-commerce/shiprocket"
+import { COD_FEE } from '../younoya-commerce/delivery'
 export default class ShiprocketFulfillment extends AbstractFulfillmentProviderService {
   static identifier = "younoya-shiprocket"
-  async getFulfillmentOptions() { return [{ id: "india-prepaid", name: "Free India delivery" }] }
-  async validateOption(data: any) { return data.id === "india-prepaid" }
+  async getFulfillmentOptions() { return [{ id: "india-prepaid", name: "Free India delivery" }, { id: 'india-cod', name: 'Cash on Delivery' }] }
+  async validateOption(data: any) { return ['india-prepaid','india-cod'].includes(data.id) }
   async canCalculate() { return true }
-  async calculatePrice() { return { calculated_amount: 0, is_calculated_price_tax_inclusive: true } }
-  async validateFulfillmentData(_options: any, _data: any, context: any) {
+  async calculatePrice(options: any) { return { calculated_amount: options.id === 'india-cod' ? COD_FEE : 0, is_calculated_price_tax_inclusive: true } }
+  async validateFulfillmentData(options: any, _data: any, context: any) {
     const s = await requireLive()
     const parcel = pack(context.items,s.draft)
     const pin = context.shipping_address?.postal_code
     if (context.shipping_address?.country_code !== "in" || !/^[1-9]\d{5}$/.test(pin || "")) throw new CommerceError("Enter an India delivery address")
-    if (!(await shiprocket.serviceability(s.draft.pickupPincode,pin,parcel.weightKg,parcel)).length) throw new CommerceError("Delivery is unavailable for this PIN code")
-    return { id: "india-prepaid", parcel }
+    // The signed checkout preparation performs one authoritative serviceability check.
+    return { id: options.id, parcel }
   }
   async createFulfillment(_data: any, _items: any, order: any) {
     const delivery = await shipment(order?.id)

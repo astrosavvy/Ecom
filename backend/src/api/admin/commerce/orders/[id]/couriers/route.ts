@@ -9,6 +9,6 @@ export const GET = commerceRoute(async req => {
   const approved = order.metadata?.commerce_approval
   const parcel = approved?.parcel || pack(order.items,s.draft)
   const couriers = await shiprocket.serviceability(approved?.shipping?.pickupPincode || s.draft.pickupPincode,
-    order.shipping_address?.postal_code,parcel.weightKg,parcel)
+    order.shipping_address?.postal_code,parcel.weightKg,parcel,approved?.payment_method === 'cod')
   return { couriers: couriers.map((c: any) => ({ id: Number(c.courier_company_id), name: c.courier_name, rate: Number(c.rate), etd: c.etd })) }
 })

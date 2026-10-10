@@ -13,7 +13,7 @@ export async function readOrder(scope: any, id: string, customer?: string) {
 export async function readCart(scope: any, id: string, customer?: string) {
   if (!/^cart_[a-zA-Z0-9]+$/.test(id)) throw new CommerceError("Cart not found", 404)
   const { data } = await scope.resolve(ContainerRegistrationKeys.QUERY).graph({ entity: "cart", fields: ["id", "customer_id", "email", "total",
-    "currency_code", "metadata", "completed_at", "items.*", "shipping_address.*", "shipping_methods.*", "payment_collection.*"], filters: { id } })
+    "currency_code", "metadata", "completed_at", "items.*", "shipping_address.*", "shipping_methods.*", "shipping_methods.adjustments.*", "payment_collection.*"], filters: { id } })
   const cart = data[0]
   if (!cart || (customer && (customer.startsWith('guest:') ? customer !== `guest:${cart.id}` : cart.customer_id !== customer))) throw new CommerceError("Cart not found", 404)
   return cart
@@ -40,9 +40,11 @@ export async function details(scope: any, id: string, customer?: string) {
   const captured = payments.filter((p: any) => p.captured_at)
   const paid = captured.reduce((n: number,p: any) => n+Number(p.amount),0)
   const refunded = captured.reduce((n: number,p: any) => n+(p.refunds || []).reduce((sum: number,r: any) => sum+Number(r.amount),0),0)
-  const paymentStatus = refunded ? refunded >= paid ? "refunded" : "partially_refunded" : captured.length ? "captured" : "pending"
+  const cod = order.metadata?.commerce_approval?.payment_method === 'cod'
+  const paymentStatus = cod ? 'due_on_delivery' : refunded ? refunded >= paid ? "refunded" : "partially_refunded" : captured.length ? "captured" : "pending"
   const safeOrder = { id: order.id, display_id: order.display_id, created_at: order.created_at, status: order.status,
-    total: rupees(orderPaise(order.total,order)), money_unit: 'inr-major-v2', currency_code: order.currency_code, items: order.items.map((i: any) => ({ id: i.id,title: i.title,quantity: i.quantity,total: rupees(orderPaise(i.total,order)),thumbnail: i.thumbnail })), shipping_address: order.shipping_address, payment_status: paymentStatus }
+    total: rupees(orderPaise(order.total,order)), money_unit: 'inr-major-v2', payment_method: cod ? 'cod' : 'razorpay', cod_fee: cod ? 49 : 0,
+    delivery: order.metadata?.commerce_approval?.delivery, currency_code: order.currency_code, items: order.items.map((i: any) => ({ id: i.id,title: i.title,quantity: i.quantity,total: rupees(orderPaise(i.total,order)),thumbnail: i.thumbnail })), shipping_address: order.shipping_address, payment_status: order.status === 'canceled' ? 'cancelled' : paymentStatus }
   const delivery = await shipment(id)
   const publicRequests = requests.map(r => ({ ...r, data: { reply: r.data?.reply, outsideWindow: r.data?.outsideWindow,
     refundId: r.data?.refundId, refundAmount: r.data?.refundAmount == null ? null : rupees(orderPaise(r.data.refundAmount,order)), refundStatus: r.data?.refundStatus } }))

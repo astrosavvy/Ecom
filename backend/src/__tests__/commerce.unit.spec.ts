@@ -96,6 +96,7 @@ describe('Shiprocket provider', () => {
   })
   test('missing configuration and malformed authentication block delivery',async () => {
     delete process.env.SHIPROCKET_API_PASSWORD
+    delete process.env.SHIPROCKET_API_KEY
     const fetcher=jest.fn();await expect(new Shiprocket(fetcher as any).get('/orders')).rejects.toThrow('not configured');expect(fetcher).not.toHaveBeenCalled()
     process.env.SHIPROCKET_API_PASSWORD='test-private-password'
     fetcher.mockResolvedValue(ok({ token:'bad' }));await expect(new Shiprocket(fetcher as any).get('/orders')).rejects.toBeInstanceOf(ProviderError)

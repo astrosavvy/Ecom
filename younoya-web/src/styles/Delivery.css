@@ -1,0 +1,14 @@
+.delivery-notice { margin: 12px 0; color: #695844; font-size: 13px; line-height: 1.65; }
+.delivery-notice p { margin: 0; }
+.delivery-notice small { display: block; margin-top: 4px; font-size: 12px; color: #807365; }
+.checkout-form label.checkout-payment-option { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; cursor: pointer; }
+.checkout-payment-option + .checkout-payment-option { margin-top: 12px; }
+.checkout-form .checkout-payment-option > input[type=radio] { appearance: auto; width: 18px; height: 18px; min-height: 18px; flex: 0 0 18px; margin: 0; padding: 0; accent-color: #987443; }
+.checkout-payment-option:has(input:focus-visible) { outline: 2px solid #987443; outline-offset: 3px; }
+.checkout-payment-option:has(input:disabled) { cursor: default; opacity: .7; }
+
+@media (max-width: 640px) { .checkout-payment-option { flex-direction: row; align-items: center; flex-wrap: wrap; } .checkout-payment-option__info { flex: 1; min-width: 0; } .checkout-payment-badges { padding-left: 28px; } }
+
+.product-delivery-note { margin-top: 8px; color: #695844; font-size: 13px; line-height: 1.65; }
+.product-delivery-note p { margin: 0; }
+.product-delivery-note small { display: block; margin-top: 5px; font-size: 12px; color: #807365; }

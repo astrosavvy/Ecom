@@ -19,7 +19,8 @@ export default function OrderOperations({ id, role }: { id: string; role: Role }
   async function quotes() { setBusy(true); setError(''); try { const result = await api(`/admin/commerce/orders/${id}/couriers`); setCouriers(result.couriers) } catch (e: any) { setError(e.message) } finally { setBusy(false) } }
   const owner = role === 'admin', delivery = data?.shipment
   return <section className="ad-card order-operations"><h2>Shipping & Warehouse Dispatch (Shiprocket)</h2>{error && <p className="ad-error" role="alert">{error}</p>}
-    <p>Delivery: {delivery?.status?.replace(/_/g,' ') || 'Awaiting paid order preparation'}</p>{delivery?.data?.awb && <p>AWB {delivery.data.awb} · {delivery.data.courier}{delivery?.data?.pickupDate ? ` · Scheduled: ${delivery.data.pickupDate}` : ''}</p>}
+    <p>Payment: {data?.order?.payment_method === 'cod' ? `Cash on Delivery · ₹49 handling · Amount due on delivery ₹${data.order.total}` : data?.order?.payment_status?.replace(/_/g,' ') || 'Pending'}</p>
+    <p>Delivery: {delivery?.status?.replace(/_/g,' ') || 'Awaiting order preparation'}</p>{delivery?.data?.awb && <p>AWB {delivery.data.awb} · {delivery.data.courier}{delivery?.data?.pickupDate ? ` · Scheduled: ${delivery.data.pickupDate}` : ''}</p>}
     {owner && <><div className="launch-actions"><button className="ad-btn" disabled={busy} onClick={() => act({ action:'create' })}>1. Prepare shipping parcel</button><button className="ad-btn" disabled={busy} onClick={quotes}>2. Fetch live courier quotes</button></div>
       {!!couriers.length && <label>Warehouse Selected Courier<select value={courier} onChange={e => setCourier(e.target.value)}><option value="">Choose warehouse courier</option>{couriers.map(c => <option key={c.id} value={c.id}>{c.name} · INR {c.rate} · {c.etd || 'Estimate unavailable'}</option>)}</select></label>}
       <div className="launch-actions" style={{ alignItems: 'center', gap: '12px' }}>

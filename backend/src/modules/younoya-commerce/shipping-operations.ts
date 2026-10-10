@@ -5,6 +5,7 @@ import { razorpayRequest } from "./razorpay"
 import { shiprocket, ProviderError } from "./shiprocket"
 import { settings } from "./settings"
 import { validApproval } from "./checkout"
+import { COD_FEE } from './delivery'
 export function trackingStatus(raw: unknown) {
   const status = String(raw || "").toLowerCase().replace(/[^a-z]/g,"")
   if (status.includes("rtodelivered") || status.includes("returned")) return "returned"
@@ -30,6 +31,12 @@ export async function shipOrder(scope: any, id: string) {
   if ((await database().query("select id from commerce_request where order_id=$1 and kind='cancellation' and status in ('processing','refund_pending','refunded')",[id])).rowCount)
     throw new CommerceError("Cancellation is being processed; dispatch is blocked",409)
   if (order.status === "canceled" || !validApproval(order.metadata?.commerce_approval)) throw new CommerceError("Order is not approved for shipping")
+  if (order.metadata.commerce_approval.payment_method === 'cod') {
+    const payment = order.payment_collections?.flatMap((p: any) => p.payments || []).find((p: any) => p.provider_id === 'pp_system')
+    if (!payment || orderPaise(payment.amount,order) !== orderPaise(order.total,order) || order.metadata.commerce_approval.cod_fee !== COD_FEE)
+      throw new CommerceError('Cash on Delivery authorization needs review',409)
+    return order
+  }
   const payment = order.payment_collections?.flatMap((p: any) => p.payments || []).find((p: any) => p.captured_at)
   if (!payment?.data?.razorpay_payment_id) throw new CommerceError("Captured payment is required",409)
   const verified = await razorpayRequest(`/payments/${payment.data.razorpay_payment_id}`)
@@ -62,13 +69,16 @@ export function orderPayload(order: any, s: any) {
     })
   }
   const sum = items.reduce((n,i) => n+Math.round(i.selling_price*100)*i.units,0)
-  if (sum !== orderPaise(order.total,order)) throw new CommerceError("Shipping invoice total does not match the paid order")
+  const cod = order.metadata?.commerce_approval?.payment_method === 'cod'
+  const fee = cod ? COD_FEE * 100 : 0
+  if (cod && order.metadata.commerce_approval.cod_fee !== COD_FEE) throw new CommerceError('Invalid COD fee')
+  if (sum + fee !== orderPaise(order.total,order)) throw new CommerceError("Shipping invoice total does not match the order")
   return { order_id: externalOrderId(order.id, order), order_date: new Date(new Date(order.created_at).getTime()+19800000).toISOString().slice(0,16).replace("T"," "),
     pickup_location: s.pickupName, billing_customer_name: a.first_name, billing_last_name: a.last_name || "",
     billing_address: a.address_1, billing_address_2: a.address_2 || "", billing_city: a.city, billing_pincode: a.postal_code,
     billing_state: a.province, billing_country: "India", billing_email: order.email, billing_phone: a.phone,
-    shipping_is_billing: true, order_items: items, payment_method: "Prepaid", shipping_charges: 0,
-    sub_total: rupees(orderPaise(order.total,order)), length: parcel.lengthCm, breadth: parcel.widthCm, height: parcel.heightCm, weight: parcel.weightKg }
+    shipping_is_billing: true, order_items: items, payment_method: cod ? 'COD' : 'Prepaid', shipping_charges: rupees(fee),
+    sub_total: rupees(sum), length: parcel.lengthCm, breadth: parcel.widthCm, height: parcel.heightCm, weight: parcel.weightKg }
 }
 export async function createShipping(scope: any, op: any) {
   const existing = await shipment(op.order_id)
@@ -101,7 +111,7 @@ export async function assignAwb(scope: any, op: any) {
   if (!raw.awb && !raw.awb_code && !delivery.data.awb) {
     if (op.status === "reconcile") throw new CommerceError("AWB assignment needs provider reconciliation",409)
     const approval = order.metadata.commerce_approval
-    const quotes = await shiprocket.serviceability(approval.shipping.pickupPincode,order.shipping_address.postal_code,approval.parcel.weightKg,approval.parcel)
+    const quotes = await shiprocket.serviceability(approval.shipping.pickupPincode,order.shipping_address.postal_code,approval.parcel.weightKg,approval.parcel,approval.payment_method === 'cod')
     if (!quotes.some((q: any) => Number(q.courier_company_id) === op.payload.courierId)) throw new CommerceError("Select a currently available courier")
     const result = await shiprocket.post("/courier/assign/awb", { shipment_id: delivery.data.shipmentId, courier_id: op.payload.courierId })
     if (Number(result.awb_assign_status) !== 1) throw new ProviderError(true)

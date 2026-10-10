@@ -4,7 +4,9 @@ import { ArrowLeft, ArrowRight, LockKeyhole, CircleCheck, ShieldCheck } from 'lu
 import { useCart } from '../context/CartContext'
 import { useSiteConfig } from '../context/SiteConfigContext'
 import { getCustomerToken, clearCustomerToken, storeRequest } from '../lib/giftGuideApi'
-import { createCheckoutCart, getPendingPayment, launchPayment, preparePayment, checkoutAccess, preloadCheckout } from '../lib/checkout'
+import { createCheckoutCart, getPendingPayment, launchPayment, preparePayment, checkoutAccess, preloadCheckout, confirmCod } from '../lib/checkout'
+import { checkoutTotal } from '../lib/delivery'
+import DeliveryNotice from '../components/DeliveryNotice'
 import CheckoutFields from '../components/checkout/CheckoutFields'
 import CheckoutSummary, { money } from '../components/checkout/CheckoutSummary'
 import PolicyConsent from '../components/checkout/PolicyConsent'
@@ -23,7 +25,10 @@ export default function Checkout() {
   const [customerReady, setCustomerReady] = useState(() => !getCustomerToken())
   const [cart, setCart] = useState(null)
   const [session, setSession] = useState(null)
-  const [address, setAddress] = useState(() => { try { return { ...initialAddress, ...JSON.parse(sessionStorage.getItem('yn_checkout_address') || '{}') } } catch { return initialAddress } })
+  const [address, setAddress] = useState(() => { try { const saved = JSON.parse(sessionStorage.getItem('yn_checkout_address') || '{}'); return { ...initialAddress, ...saved } } catch { return initialAddress } })
+  const [method,setMethod] = useState('razorpay')
+  const [delivery,setDelivery] = useState(null)
+  const [pendingCod,setPendingCod] = useState(() => sessionStorage.getItem('yn_pending_cod') || '')
   const [promo, setPromo] = useState('')
   const [accepted, setAccepted] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -34,7 +39,7 @@ export default function Checkout() {
 
   // Calculate live payable amount for initial button rendering
   const bagEstimate = offer ? Number(offer.price || 0) : bag.reduce((sum, item) => sum + Number(item.priceNum || item.price || 0) * (item.quantity || 1), 0)
-  const payableAmount = Number(cart?.total || 0) > 0 ? cart.total : bagEstimate
+  const payableAmount = checkoutTotal(cart,bagEstimate,method)
 
   useEffect(() => { sessionStorage.setItem('yn_checkout_address', JSON.stringify(address)) }, [address])
   useEffect(() => { preloadCheckout() }, [])
@@ -88,6 +93,7 @@ export default function Checkout() {
     clearCart()
     sessionStorage.removeItem('yn_selected_offer')
     sessionStorage.removeItem('yn_pending_payment')
+    sessionStorage.removeItem('yn_pending_cod'); setPendingCod('')
   }
 
   useEffect(() => { try { setOffer(JSON.parse(sessionStorage.getItem('yn_selected_offer'))) } catch { setOffer(null) } }, [location.key])
@@ -115,6 +121,12 @@ export default function Checkout() {
     setAddress(current => ({ ...current, email: current.email || customer?.email || '', firstName: current.firstName || customer?.first_name || '', lastName: current.lastName || customer?.last_name || '' }))
 
     let cancelled = false
+    const codId = sessionStorage.getItem('yn_pending_cod')
+    if (codId) {
+      setMethod('cod'); setAccepted(true)
+      confirmCod(codId).then(value => { if (!cancelled) complete(value) }).catch(issue => { if (!cancelled) setError(issue.message) })
+      return () => { cancelled = true }
+    }
     const pending = getPendingPayment()
     if (pending?.cartId && pending?.session?.id) {
       storeRequest(`/store/gift-guide/payment-confirm?cartId=${encodeURIComponent(pending.cartId)}`, checkoutAccess(pending.cartId))
@@ -145,6 +157,7 @@ export default function Checkout() {
     setBusy(true)
     setError('')
     try {
+      if (pendingCod) { complete(await confirmCod(pendingCod)); return }
       if (!site.checkoutEnabled || !accepted) {
         throw new Error('Please review and accept the store policies before placing your order.')
       }
@@ -153,16 +166,22 @@ export default function Checkout() {
       let activeSession = session
 
       // If payment session not yet prepared, prepare it now
-      if (!activeSession) {
+      if (!activeSession || method === 'cod') {
         const current = activeCart?.metadata?.commerce_requote_required || activeCart?.metadata?.money_unit !== 'inr-major-v2'
           ? await createCheckoutCart(offer, bag, customer)
           : activeCart
         setCart(current)
-        const prepared = await preparePayment(current.id, address, giftNote, promo, site.policyRevision)
+        const prepared = await preparePayment(current.id, address, giftNote, promo, site.policyRevision,method)
         activeCart = prepared.cart
         activeSession = prepared.session
         setCart(activeCart)
         setSession(activeSession)
+        if (prepared.delivery) setDelivery(prepared.delivery)
+      }
+
+      if (method === 'cod') {
+        setPendingCod(activeCart.id)
+        complete(await confirmCod(activeCart.id)); return
       }
 
       // Directly open Razorpay in the same flow — zero second clicks!
@@ -176,12 +195,14 @@ export default function Checkout() {
   }
 
   function editAddress(field, value) {
-    if (getPendingPayment()) return
+    if (getPendingPayment() || pendingCod || busy) return
     setAddress(current => ({ ...current, [field]: value }))
+    if (field === 'pincode') setDelivery(null)
     setSession(null)
   }
 
-  const pending = !!getPendingPayment()
+  const pending = !!getPendingPayment() || !!pendingCod
+  function changeMethod(value) { if (pending || busy) return; setMethod(value); setSession(null); setError('') }
 
   if (order) {
     return (
@@ -213,15 +234,13 @@ export default function Checkout() {
       <div className="checkout-page__grid">
         <form className="checkout-form" onSubmit={pay}>
           {/* 1. Modern Shipping Address Block */}
-          <CheckoutFields address={address} onChange={editAddress} locked={pending} />
+          <CheckoutFields address={address} onChange={editAddress} locked={pending || busy} onDelivery={setDelivery} />
 
           {/* 2. Modern Payment Method Block (Image 3 Style) */}
           <section className="checkout-card checkout-payment-card" aria-label="Payment method">
             <h2 className="checkout-card__title">Payment Method</h2>
-            <div className="checkout-payment-option is-selected">
-              <div className="checkout-payment-option__radio">
-                <CircleCheck size={18} className="payment-check-icon" />
-              </div>
+            <label className={`checkout-payment-option ${method === 'razorpay' ? 'is-selected' : ''}`}>
+              <input type="radio" name="payment_method" value="razorpay" checked={method === 'razorpay'} onChange={() => changeMethod('razorpay')} disabled={pending || busy} />
               <div className="checkout-payment-option__info">
                 <span className="payment-provider-title">Razorpay Secure Checkout</span>
                 <span className="payment-provider-subtitle">UPI, Credit/Debit Cards, Net Banking &amp; Wallets</span>
@@ -231,7 +250,12 @@ export default function Checkout() {
                 <span className="payment-method-badge">Cards</span>
                 <span className="payment-method-badge">Net Banking</span>
               </div>
-            </div>
+            </label>
+            <label className={`checkout-payment-option ${method === 'cod' ? 'is-selected' : ''}`}>
+              <input type="radio" name="payment_method" value="cod" checked={method === 'cod'} onChange={() => changeMethod('cod')} disabled={pending || busy || !site.codEnabled} />
+              <div className="checkout-payment-option__info"><span className="payment-provider-title">Cash on Delivery · ₹49 extra</span><span className="payment-provider-subtitle">Payment due on delivery · Standard delivery</span></div>
+            </label>
+            <DeliveryNotice delivery={delivery} method={method} />
           </section>
 
           {/* 3. Policy Consent & Unified Single-Click CTA Button */}
@@ -250,7 +274,7 @@ export default function Checkout() {
 
             {busy && pending && (
               <p className="checkout-finalizing-note">
-                ✦ Payment received. Finalizing your order with the atelier… Please do not refresh.
+                {method === 'cod' ? 'Confirming your Cash on Delivery order… Please do not refresh.' : 'Payment received. Finalizing your order with the atelier… Please do not refresh.'}
               </p>
             )}
 
@@ -261,10 +285,10 @@ export default function Checkout() {
             >
               <span>
                 {busy
-                  ? (pending ? 'Finalizing your order…' : '✦ Opening secure payment…')
+                  ? (pending || method === 'cod' ? 'Finalizing your order…' : 'Opening secure payment…')
                   : pending
                     ? 'Finalizing order…'
-                    : `Pay ${money(payableAmount)} securely`}
+                    : method === 'cod' ? `Place order · ${money(payableAmount)}` : `Pay ${money(payableAmount)} securely`}
               </span>
               <ArrowRight size={17} />
             </button>
@@ -278,6 +302,7 @@ export default function Checkout() {
           session={session}
           offer={offer}
           promo={promo}
+          method={method}
           onPromoChange={val => { setPromo(val); setSession(null) }}
         />
       </div>

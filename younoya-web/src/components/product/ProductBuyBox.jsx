@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, ArrowUpRight, Check, Compass, Heart, Minus, Plus, Scroll, Sparkles, Star } from 'lucide-react'
 import ProductPersonalization from './ProductPersonalization'
+import ProductDeliveryNote from '../ProductDeliveryNote'
 
 export default function ProductBuyBox({
   product, quantity, onQuantityChange, added, onAddPiece,
@@ -42,8 +43,9 @@ export default function ProductBuyBox({
           <span className="livora-buybox__badge">Consecrated Brooch</span>
         </div>
         <small className="livora-buybox__delivery-note">
-          Complimentary insured express delivery across India (2–4 days)
+          Free shipping within India
         </small>
+        <ProductDeliveryNote />
       </div>
 
       <div className="livora-buybox__intention">

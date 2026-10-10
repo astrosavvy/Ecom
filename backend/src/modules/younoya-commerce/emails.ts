@@ -7,9 +7,9 @@ export function renderOrderEmailHtml(order: any, business: any) {
   const displayId = order.custom_display_id || (order.display_id ? `YOU-2026-${String(order.display_id).padStart(4, '0')}` : `#${order.id.slice(-8).toUpperCase()}`)
   const orderDate = new Date(order.created_at || Date.now()).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })
   
-  // Calculate delivery window (dispatch within 24h + 3-5 delivery days)
-  const deliveryStart = new Date(Date.now() + 3 * 86400000).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })
-  const deliveryEnd = new Date(Date.now() + 6 * 86400000).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })
+  const cod = order.metadata?.commerce_approval?.payment_method === 'cod'
+  const deliveryEstimate = order.metadata?.commerce_approval?.delivery?.message || `Estimated delivery ${business.deliveryMinDays || 3}–${business.deliveryMaxDays || 5} working days after dispatch.`
+  const paymentNote = cod ? 'Cash on Delivery · ₹49 handling charge included in the total. Amount due on delivery.' : 'Prepaid order'
 
   const totalAmount = `₹${rupees(orderPaise(order.total, order)).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   const addr = order.shipping_address || {}
@@ -156,7 +156,7 @@ export function renderOrderEmailHtml(order: any, business: any) {
                   </td>
                   <td width="33.33%" align="center" style="width: 33.33%; padding-top: 10px; vertical-align: top; text-align: center;">
                     <div style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1E1C1A; line-height: 1.3;">Expected delivery</div>
-                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 11px; color: #8A7B70; line-height: 1.3; margin-top: 2px;">${deliveryStart} – ${deliveryEnd}</div>
+                    <div style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 11px; color: #8A7B70; line-height: 1.3; margin-top: 2px;">${deliveryEstimate}</div>
                   </td>
                 </tr>
               </table>
@@ -241,7 +241,7 @@ export function renderOrderEmailHtml(order: any, business: any) {
                 <tr>
                   <td style="padding: 14px 20px; border-top: 1px solid #ECE3D6; text-align: right;">
                     <span style="font-size: 14px; color: #1E1C1A; margin-right: 14px;">Total (${totalItemsCount} item${totalItemsCount > 1 ? 's' : ''})</span>
-                    <span style="font-size: 20px; font-weight: 700; color: #1E1C1A;">${totalAmount}</span>
+                    <span style="font-size: 20px; font-weight: 700; color: #1E1C1A;">${totalAmount}</span><p style="font-size:13px;color:#695844;line-height:1.6;">${paymentNote}</p>
                   </td>
                 </tr>
 
@@ -315,7 +315,7 @@ export async function sendOrderEmail(scope: any, operation: any) {
   const transporter = nodemailer.createTransport({ host: process.env.SMTP_HOST, port: Number(process.env.SMTP_PORT || 465),
     secure: process.env.SMTP_SECURE === "true" || process.env.SMTP_PORT === "465", connectionTimeout: 10000, socketTimeout: 12000,
     ...(process.env.SMTP_USER ? { auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD } } : {}) })
-  const plainText = `${operation.payload.text}\n\nOrder Confirmation: ${displayId}\n${order.items.map((i: any) => `${i.title} × ${i.quantity}`).join("\n")}\nTotal: INR ${rupees(orderPaise(order.total,order)).toFixed(2)}\n\nDelivery Destination:\n${order.shipping_address?.first_name || ''} ${order.shipping_address?.last_name || ''}\n${order.shipping_address?.address_1 || ''}\n${order.shipping_address?.city || ''}, ${order.shipping_address?.province || ''} ${order.shipping_address?.postal_code || ''}\nIndia\n\nQuestions? Contact the atelier: ${business.supportEmail || 'support@younoya.com'}\n${business.legalName || 'YOUNOYA'}`
+  const plainText = `${operation.payload.text}\n\nOrder Confirmation: ${displayId}\n${order.items.map((i: any) => `${i.title} × ${i.quantity}`).join("\n")}\nPayment: ${order.metadata?.commerce_approval?.payment_method === 'cod' ? 'Cash on Delivery; ₹49 COD handling; payment due on delivery' : 'Prepaid'}\nDelivery: ${order.metadata?.commerce_approval?.delivery?.message || 'Estimated 3–5 working days after dispatch'}\nTotal: INR ${rupees(orderPaise(order.total,order)).toFixed(2)}\n\nDelivery Destination:\n${order.shipping_address?.first_name || ''} ${order.shipping_address?.last_name || ''}\n${order.shipping_address?.address_1 || ''}\n${order.shipping_address?.city || ''}, ${order.shipping_address?.province || ''} ${order.shipping_address?.postal_code || ''}\nIndia\n\nQuestions? Contact the atelier: ${business.supportEmail || 'support@younoya.com'}\n${business.legalName || 'YOUNOYA'}`
   const htmlContent = renderOrderEmailHtml(order, business)
   try {
     await transporter.sendMail({

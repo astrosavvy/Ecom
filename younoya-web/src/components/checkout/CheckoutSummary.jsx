@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { ShieldCheck, Truck, Sparkles } from 'lucide-react'
+import { checkoutTotal } from '../../lib/delivery'
 
 export const money = value => `₹${Number(value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 
-export default function CheckoutSummary({ cart, bag, session, offer, promo = '', onPromoChange }) {
+export default function CheckoutSummary({ cart, bag, session, offer, promo = '', onPromoChange, method = 'razorpay' }) {
   const [promoInput, setPromoInput] = useState(promo)
   const [promoApplied, setPromoApplied] = useState(false)
 
@@ -36,7 +37,7 @@ export default function CheckoutSummary({ cart, bag, session, offer, promo = '',
   const cartTotal = Number(cart?.total || 0)
 
   const subtotal = cartSubtotal > 0 ? cartSubtotal : estimate
-  const total = cartTotal > 0 ? cartTotal : estimate
+  const total = checkoutTotal(cart,estimate,method)
 
   function handleApplyPromo(e) {
     e?.preventDefault?.()
@@ -117,6 +118,7 @@ export default function CheckoutSummary({ cart, bag, session, offer, promo = '',
             <dd>−{money(cart.discount_total)}</dd>
           </div>
         )}
+        {method === 'cod' && <div className="checkout-summary__row"><dt>COD handling charge:</dt><dd>{money(49)}</dd></div>}
         <div className="checkout-summary__row checkout-summary__total-row">
           <dt>Total:</dt>
           <dd>{money(total)}</dd>
@@ -126,7 +128,7 @@ export default function CheckoutSummary({ cart, bag, session, offer, promo = '',
       {/* Trust Micro-Badges */}
       <div className="checkout-trust-bar">
         <span><ShieldCheck size={14} /> 100% Secure Checkout</span>
-        <span><Truck size={14} /> Free Express Delivery</span>
+        <span><Truck size={14} /> Free Delivery</span>
         <span><Sparkles size={14} /> Sacred Packaging</span>
       </div>
     </aside>

@@ -145,7 +145,7 @@
   margin-left: 2px;
 }
 
-.checkout-form input:not([type="checkbox"]) {
+.checkout-form input:not([type="checkbox"]):not([type="radio"]) {
   width: 100%;
   box-sizing: border-box;
   min-height: 52px;
@@ -159,13 +159,13 @@
   transition: all 0.2s ease;
 }
 
-.checkout-form input:not([type="checkbox"]):focus {
+.checkout-form input:not([type="checkbox"]):not([type="radio"]):focus {
   border-color: #B29263;
   background: #FFFFFF;
   box-shadow: 0 0 0 3px rgba(178, 146, 99, 0.12);
 }
 
-.checkout-form input:not([type="checkbox"])::placeholder {
+.checkout-form input:not([type="checkbox"]):not([type="radio"])::placeholder {
   color: #A3998D;
   font-weight: 400;
 }

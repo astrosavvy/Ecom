@@ -8,6 +8,7 @@ import { storeRequest } from '../lib/giftGuideApi'
 import ShopFooter from '../components/shop/ShopFooter'
 import NavratriGallery from '../components/NavratriGallery'
 import NavratriDescription from '../components/NavratriDescription'
+import ProductDeliveryNote from '../components/ProductDeliveryNote'
 import '../styles/Navratri.css'
 import '../styles/ShopFooter.css'
 
@@ -52,7 +53,7 @@ export default function NavratriDetail({ product }) {
           <h2>{product.displaySubtitle}</h2>
           <p className="navratri-lead">Thoughtfully curated for devotional offerings to Maa Durga. Nine daily kits of shringaar, puja essentials and devotional offerings, together in one complete box.</p>
           <div className="navratri-price"><strong>₹1,499</strong><span>Complete nine-day set</span></div>
-          <dl className="navratri-facts"><div><dt>Inside the box</dt><dd>Nine individually packed daily kits</dd></div><div><dt>Your selection</dt><dd>One complete set · Standard edition</dd></div><div><dt>Delivery</dt><dd>Free shipping within India</dd></div></dl>
+          <dl className="navratri-facts"><div><dt>Inside the box</dt><dd>Nine individually packed daily kits</dd></div><div><dt>Your selection</dt><dd>One complete set · Standard edition</dd></div><div><dt>Delivery</dt><dd>Free shipping within India<ProductDeliveryNote /></dd></div></dl>
           <div className="navratri-actions"><div className="navratri-quantity" aria-label="Number of complete sets"><button type="button" disabled={quantity === 1} onClick={() => setQuantity(q => q - 1)} aria-label="Remove one set"><Minus size={16} /></button><output aria-live="polite">{quantity}</output><button type="button" disabled={!availability?.purchasable || quantity >= Math.min(10, availability.availableQuantity)} onClick={() => setQuantity(q => q + 1)} aria-label="Add one set"><Plus size={16} /></button></div><button className="navratri-save" type="button" onClick={toggleSaved} aria-pressed={saved}><Heart size={17} fill={saved ? 'currentColor' : 'none'} />{saved ? 'Saved' : 'Save this box'}</button></div>
           {purchase}
           {!available && <p className="navratri-availability" role="status">Add the set to your bag. Payment opens after stock and delivery checks are complete.</p>}
@@ -71,7 +72,7 @@ export default function NavratriDetail({ product }) {
         <p>A thoughtful spiritual gift for family, friends and loved ones celebrating Navratri or Durga Puja. Bring home the blessings of devotion and celebrate Navratri with YOUNOYA. Make every prayer more special with a Shringaar kit created for your festive worship.</p>
         <p className="navratri-gifting__signature">YOUNOYA – Celebrate Tradition, Share Blessings.</p>
       </section>
-      <section className="navratri-notes" aria-label="Packaging and care"><div><span className="navratri-eyebrow">THE COMPLETE SET</span><h2>A ritual, <em>ready to unfold.</em></h2><p>All nine daily kits arrive together, individually packed inside one outer box. Gallery photographs show the box and individual daily kit details.</p><p>Keep fabrics and keepsakes dry. Use diya and dhoop on a heat-resistant surface, away from fabrics, children and pets. Never leave a flame unattended.</p></div><div><h3>Delivery & order care</h3><p>Dispatch within {business.dispatchHours || 24} hours of payment confirmation. Estimated delivery {business.deliveryMinDays || 3}–{business.deliveryMaxDays || 5} working days after dispatch; remote areas may take longer.</p><Link to="/shipping-policy">Shipping information <ArrowRight size={14} /></Link><Link to="/cancellation-and-refunds">Cancellation & refunds <ArrowRight size={14} /></Link><a href="mailto:support@younoya.com">Ask the atelier <ArrowRight size={14} /></a></div></section>
+      <section className="navratri-notes" aria-label="Packaging and care"><div><span className="navratri-eyebrow">THE COMPLETE SET</span><h2>A ritual, <em>ready to unfold.</em></h2><p>All nine daily kits arrive together, individually packed inside one outer box. Gallery photographs show the box and individual daily kit details.</p><p>Keep fabrics and keepsakes dry. Use diya and dhoop on a heat-resistant surface, away from fabrics, children and pets. Never leave a flame unattended.</p></div><div><h3>Delivery & order care</h3><p>Dispatch within {business.dispatchHours || 24} hours of prepaid payment or COD order confirmation. Estimated delivery {business.deliveryMinDays || 3}–{business.deliveryMaxDays || 5} working days after dispatch; remote areas may take longer.</p><Link to="/shipping-policy">Shipping information <ArrowRight size={14} /></Link><Link to="/cancellation-and-refunds">Cancellation & refunds <ArrowRight size={14} /></Link><a href="mailto:support@younoya.com">Ask the atelier <ArrowRight size={14} /></a></div></section>
     </div>
     <ShopFooter />
     <div className="navratri-mobile-bar"><span>Complete set<strong>₹1,499</strong></span>{purchase}</div>

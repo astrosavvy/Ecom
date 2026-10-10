@@ -70,6 +70,7 @@ export default defineMiddlewares([
   { matcher: /^\/hooks\/payment\/(?:pp_)?razorpay(?:_razorpay)?$/, method: ["POST"], bodyParser: { preserveRawBody: true }, middlewares: [async (req, res) => { await durableRazorpayWebhook(req,res) }] },
   { matcher: /^\/store\/account(?:\/|$)/, middlewares: [customerAuth] },
   { matcher: "/store/commerce/prepare", method: ["POST"], middlewares: [optionalCustomerAuth] },
+  { matcher: '/store/commerce/cod', method: ['POST'], middlewares: [optionalCustomerAuth] },
   { matcher: /^\/store\/payment-collections\/[^/]+\/payment-sessions$/, method: ["POST"], middlewares: [optionalCustomerAuth, checkoutGuard] },
   { matcher: /^\/store\/carts\/[^/]+\/complete$/, method: ["POST"], middlewares: [optionalCustomerAuth, completionGuard] },
   { matcher: /^\/admin\/commerce(?:\/|$)/, middlewares: [adminAuth, readStaffWriteAdmin] },

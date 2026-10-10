@@ -20,6 +20,7 @@ export async function checkoutOwner(req:any,cartId:string) {
   const cart=await readCart(req.scope,cartId)
   const customer=req.auth_context?.actor_id
   if(customer && cart.customer_id===customer) return customer
+  if(cart.customer_id) throw new CommerceError('Checkout session not found',403)
   const token=req.headers?.['x-younoya-checkout-token']
   if(typeof token!=='string' || !/^[a-f0-9]{64}$/.test(token)) throw new CommerceError('Checkout session not found',403)
   const data=(await database().query('select data from commerce_setting where id=$1',[`guest:${cartId}`])).rows[0]?.data

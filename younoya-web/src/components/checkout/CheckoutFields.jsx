@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { storeRequest } from '../../lib/giftGuideApi'
 
-export default function CheckoutFields({ address, onChange, locked }) {
+export default function CheckoutFields({ address, onChange, locked, onDelivery }) {
   const [status, setStatus] = useState('')
   const [loading, setLoading] = useState(false)
   const change = useRef(onChange)
   change.current = onChange
+  const delivery = useRef(onDelivery)
+  delivery.current = onDelivery
+  const filledPin = useRef('')
 
   // Auto-fetch City and State when 6-digit Indian PIN code is typed
   useEffect(() => {
@@ -17,21 +20,24 @@ export default function CheckoutFields({ address, onChange, locked }) {
     const controller = new AbortController()
     setLoading(true)
     setStatus('')
-    storeRequest(`/store/commerce/pincode?pincode=${address.pincode}`, { signal: controller.signal })
+    delivery.current?.(null)
+    const lookup = () => storeRequest(`/store/commerce/pincode?pincode=${address.pincode}`, { signal: controller.signal })
       .then(result => {
         if (controller.signal.aborted) return
-        change.current('city', result.city)
-        change.current('state', result.state)
+        if (filledPin.current !== address.pincode) { change.current('city', result.city); change.current('state', result.state); filledPin.current = address.pincode }
+        delivery.current?.(result.delivery)
       })
       .catch(error => {
         if (!controller.signal.aborted) {
+          delivery.current?.(null)
           setStatus(error.message === 'Failed to fetch' ? 'Enter city and state below.' : (error.message || ''))
         }
       })
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false)
       })
-    return () => controller.abort()
+    lookup(); const timer = setInterval(lookup,60000)
+    return () => { controller.abort(); clearInterval(timer) }
   }, [address.pincode, locked])
 
   return (
@@ -125,6 +131,7 @@ export default function CheckoutFields({ address, onChange, locked }) {
             onChange={e => {
               const val = e.target.value.replace(/\D/g, '')
               if (val !== address.pincode) {
+                filledPin.current = ''
                 change.current('city', '')
                 change.current('state', '')
               }
@@ -143,7 +150,7 @@ export default function CheckoutFields({ address, onChange, locked }) {
             autoComplete="address-level2"
             readOnly={locked}
             aria-busy={loading}
-            placeholder={loading ? 'Locating…' : 'e.g. New Delhi'}
+            placeholder="City"
             onChange={e => onChange('city', e.target.value)}
           />
         </label>
@@ -158,7 +165,7 @@ export default function CheckoutFields({ address, onChange, locked }) {
             autoComplete="address-level1"
             readOnly={locked}
             aria-busy={loading}
-            placeholder={loading ? 'Locating…' : 'e.g. Delhi'}
+            placeholder="State"
             onChange={e => onChange('state', e.target.value)}
           />
         </label>

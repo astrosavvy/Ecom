@@ -14,7 +14,7 @@ export const settingsSchema = z.object({
   deliveryMaxDays: z.number().int().positive().max(60), damageReportHours: z.number().int().nonnegative().max(8760),
   refundInitiationDays: z.number().int().nonnegative().max(60), pickupName: text, pickupPincode: text,
   pickupAddress: text, taxStatus: z.enum(["unconfirmed", "registered", "not_registered"]), gstin: text,
-  hsn: text, stockLocationId: text, salesChannelId: text, shippingOptionId: text,
+  hsn: text, stockLocationId: text, salesChannelId: text, shippingOptionId: text, codShippingOptionId: text.default(''),
   variants: z.array(z.object({ id: z.string().min(1).max(100), packedUnitKg: z.number().positive().max(100), hsn:text.default("") })).max(1000),
   parcels: z.array(parcel).max(100), storefrontMode: z.enum(["shop", "coming-soon"]),
   razorpayApproved: z.boolean(), captureConfigured: z.boolean(), shiprocketReady: z.boolean(),
@@ -25,7 +25,7 @@ export const defaults = {
   legalName: "YOUNOYA HOUSE OF ASTRO PRIVATE LIMITED", supportEmail: "support@younoya.com", address: "", supportPhone: "",
   grievanceName: "", grievanceEmail: "", grievancePhone: "", dispatchHours: 24, deliveryMinDays: 3, deliveryMaxDays: 5,
   damageReportHours: 0, refundInitiationDays: 0, pickupName: "", pickupPincode: "", pickupAddress: "", taxStatus: "unconfirmed",
-  gstin: "", hsn: "", stockLocationId: "", salesChannelId: "", shippingOptionId: "", variants: [], parcels: [],
+  gstin: "", hsn: "", stockLocationId: "", salesChannelId: "", shippingOptionId: "", codShippingOptionId: "", variants: [], parcels: [],
   storefrontMode: "coming-soon", razorpayApproved: false, captureConfigured: false, shiprocketReady: false,
   packagingReviewed: false, consumerReviewComplete: false, liveTestComplete: false, taxInvoiceReviewed:false,
   catalogMoneyVersion: '',
@@ -63,7 +63,7 @@ export function readiness(s: any, published: any, revision: string | null) {
     RAZORPAY_KEY_SECRET: !!(process.env.RAZORPAY_KEY_SECRET || process.env.key_secret),
     RAZORPAY_WEBHOOK_SECRET: !!(process.env.RAZORPAY_WEBHOOK_SECRET || (process.env.RAZORPAY_KEY_SECRET || process.env.key_secret)),
     SHIPROCKET_API_EMAIL: !!(process.env.SHIPROCKET_API_EMAIL || "support@younoya.com"),
-    SHIPROCKET_API_PASSWORD: !!(process.env.SHIPROCKET_API_PASSWORD || process.env.SHIPROCKET_API_KEY || process.env.API_KEY),
+    SHIPROCKET_API_PASSWORD: !!(process.env.SHIPROCKET_API_PASSWORD || process.env.SHIPROCKET_API_KEY),
   }
   for (const [name, present] of Object.entries(credChecks)) if (!present) blockers.push(name)
   if (process.env.COMMERCE_LIVE_ENABLED !== "true") blockers.push("COMMERCE_LIVE_ENABLED")
@@ -85,9 +85,9 @@ export async function saveSettings(input: unknown, publish = false) {
     // Only the audited server migration may set this marker; owner UI cannot bypass it.
     data.catalogMoneyVersion = current?.data?.catalogMoneyVersion || ''
     const published = publish ? publicFields(data) : current?.published || null
-    const revision = publish ? crypto.createHash("sha256").update(JSON.stringify({ documentVersion:"2026-10-07",business:published })).digest("hex").slice(0, 16) : current?.revision || null
+    const revision = publish ? crypto.createHash("sha256").update(JSON.stringify({ documentVersion:"2026-10-10-cod",business:published })).digest("hex").slice(0, 16) : current?.revision || null
     if (publish) await client.query("insert into commerce_setting(id,data,published,revision) values ($1,$2,$2,$3) on conflict(id) do nothing",
-      [`policy:${revision}`,JSON.stringify({ ...published,documentVersion:"2026-10-07" }),revision])
+      [`policy:${revision}`,JSON.stringify({ ...published,documentVersion:"2026-10-10-cod" }),revision])
     await client.query(`insert into commerce_setting(id,data,published,revision) values ('launch',$1,$2,$3)
       on conflict(id) do update set data=$1,published=$2,revision=$3,updated_at=now()`, [JSON.stringify(data),JSON.stringify(published),revision])
     return { draft: data, published, revision }
@@ -101,5 +101,7 @@ export async function publicSettings() {
   const value = await settings()
   return { business: value.published || publicFields(defaults), policiesPublished: !!value.published,
     policyRevision: value.revision, storefrontMode: value.draft.storefrontMode,
-    checkoutEnabled: readiness(value.draft, value.published, value.revision).ready, shippingFee: 0, currency: "INR", country: "IN" }
+    checkoutEnabled: readiness(value.draft, value.published, value.revision).ready,
+    codEnabled: !!value.draft.codShippingOptionId && readiness(value.draft,value.published,value.revision).ready,
+    codFee: 49, shippingFee: 0, currency: "INR", country: "IN" }
 }

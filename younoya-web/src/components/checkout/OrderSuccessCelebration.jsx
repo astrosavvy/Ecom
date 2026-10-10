@@ -24,17 +24,6 @@ function formatOrderDate(dateString) {
   })
 }
 
-function calculateEstimatedDelivery(dateString) {
-  const start = dateString ? new Date(dateString) : new Date()
-  const end = new Date(start)
-  start.setDate(start.getDate() + 4)
-  end.setDate(end.getDate() + 7)
-
-  const fmt = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-  const year = end.getFullYear()
-  return `${fmt(start)} – ${fmt(end)}, ${year}`
-}
-
 const MILESTONE_STEPS = [
   { id: 'placed', label: 'Order Placed', status: 'completed' },
   { id: 'processing', label: 'Processing', status: 'current' },
@@ -45,7 +34,8 @@ const MILESTONE_STEPS = [
 export default function OrderSuccessCelebration({ order }) {
   const orderNumber = formatOrderNumber(order)
   const orderDate = formatOrderDate(order?.created_at)
-  const deliveryEstimate = calculateEstimatedDelivery(order?.created_at)
+  const cod = order?.metadata?.commerce_approval?.payment_method === 'cod'
+  const deliveryEstimate = order?.metadata?.commerce_approval?.delivery?.message || 'Estimated delivery 3–5 working days after dispatch.'
 
   const addr = order?.shipping_address || {}
   const savedAddress = (() => {
@@ -184,9 +174,10 @@ export default function OrderSuccessCelebration({ order }) {
           {/* Delivery Information Column with 4-Stage Milestone Stepper */}
           <div className="receipt-col receipt-delivery-col">
             <h2 className="receipt-section-title">Delivery Information</h2>
+            {cod && <p>Cash on Delivery · ₹49 handling charge<br /><strong>Amount due on delivery: {money(totalAmount)}</strong></p>}
             <div className="delivery-estimate-box">
               <span className="delivery-estimate-label">Estimate delivery date:</span>
-              <strong className="delivery-estimate-date">{deliveryEstimate}</strong>
+              <strong className="delivery-estimate-date">{deliveryEstimate}</strong><small>Festival, weather and unforeseen delays may affect delivery.</small>
             </div>
 
             {/* 4-Stage Milestone Stepper with Dots */}
@@ -219,14 +210,14 @@ export default function OrderSuccessCelebration({ order }) {
             <div className="trust-icon-pill"><ShieldCheck size={16} /></div>
             <div>
               <strong>Purchase Protection</strong>
-              <span>Guaranteed safe delivery</span>
+              <span>Support for delivery issues</span>
             </div>
           </div>
           <div className="receipt-trust-card">
             <div className="trust-icon-pill"><Mail size={16} /></div>
             <div>
               <strong>Order Updates</strong>
-              <span>Track via email &amp; SMS</span>
+              <span>Updates via email</span>
             </div>
           </div>
           <div className="receipt-trust-card">

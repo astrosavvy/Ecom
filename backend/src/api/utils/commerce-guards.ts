@@ -10,7 +10,9 @@ export async function checkoutGuard(req: any, res: any, next: any) {
     const { data } = await req.scope.resolve(ContainerRegistrationKeys.QUERY).graph({ entity: "cart_payment_collection",
       fields: ["cart_id"], filters: { payment_collection_id: id } })
     if (!data[0]?.cart_id) throw new CommerceError("Cart not found",404)
-    await validatePreparedCart(req.scope,data[0].cart_id,await checkoutOwner(req,data[0].cart_id))
+    const cart = await validatePreparedCart(req.scope,data[0].cart_id,await checkoutOwner(req,data[0].cart_id))
+    if (cart.metadata.commerce_approval.payment_method === 'cod' || !/^pp_razorpay_razorpay$/.test(req.body?.provider_id || ''))
+      throw new CommerceError('Use the approved checkout payment method',409)
     next()
   } catch (error) { return res.status(error instanceof CommerceError ? error.status : 503).json({ message: error instanceof CommerceError ? error.message : "Checkout validation is unavailable" }) }
 }

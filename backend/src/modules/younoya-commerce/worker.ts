@@ -75,6 +75,13 @@ async function afterSale(scope: any, op: any) {
       await cancelOrderFulfillmentWorkflow(scope).run({ input: { order_id: order.id, fulfillment_id: f.id } })
   }
   const payment = order.payment_collections?.flatMap((c: any) => c.payments || []).find((p: any) => p.captured_at)
+  if (order.metadata?.commerce_approval?.payment_method === 'cod') {
+    if (op.kind !== 'cancel_refund' || payment) throw new CommerceError('Contact the atelier for COD refund resolution; no online refund was submitted',409)
+    if (order.status !== 'canceled') await cancelOrderWorkflow(scope).run({ input: { order_id: order.id } })
+    await database().query("update commerce_request set status='closed',data=data || $2::jsonb,updated_at=now() where id=$1",[request.id,JSON.stringify({ reply: 'COD order cancelled. No payment was collected and no refund is due.' })])
+    await queueEmail(order.id,`cancel:${request.id}`,'Order cancelled','Your Cash on Delivery order was cancelled before dispatch. No online refund is due.')
+    return { cancelled: true, refundRequired: false }
+  }
   if (!payment) throw new CommerceError("Captured payment is required")
   const amount = op.kind === "cancel_refund" ? sessionPaise(payment.amount,payment.data)-(payment.refunds || []).reduce((n: number,r: any) => n+sessionPaise(r.amount,payment.data),0) : sessionPaise(op.payload.amount,op.payload)
   const recorded = payment.refunds?.find((r: any) => r.note === op.id)
@@ -128,9 +135,11 @@ export async function runCommerceWorker(scope: any) {
       and metadata->'commerce_approval' is not null and not exists(select 1 from commerce_operation p where p.order_id=o.id and p.kind='create_shipping') order by created_at limit 20`)).rows
     for (const row of candidates) {
       const order = await readOrder(scope,row.id)
-      if (!order.payment_collections?.some((c: any) => c.payments?.some((p: any) => p.captured_at))) continue
+      if (!validApproval(order.metadata?.commerce_approval)) continue
+      const cod = order.metadata.commerce_approval.payment_method === 'cod'
+      if (!cod && !order.payment_collections?.some((c: any) => c.payments?.some((p: any) => p.captured_at))) continue
       await enqueue("create_shipping",`ship:${order.id}`,{},order.id)
-      await queueEmail(order.id,"confirmation","Order confirmed","Your payment is confirmed. We will prepare your selection for dispatch; pickup has not yet occurred.")
+      await queueEmail(order.id,"confirmation","Order confirmed",cod ? 'Your Cash on Delivery order is confirmed. Payment is due on delivery; pickup has not yet occurred.' : "Your payment is confirmed. We will prepare your selection for dispatch; pickup has not yet occurred.")
     }
     const deliveries = (await database().query("select order_id from commerce_shipment where status not in ('delivered','cancelled','returned') and data->>'awb' is not null order by updated_at limit 10")).rows
     for (const d of deliveries) await enqueue("track",`track:${d.order_id}:${Math.floor(Date.now()/900000)}`,{},d.order_id)

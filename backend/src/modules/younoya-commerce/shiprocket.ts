@@ -26,7 +26,7 @@ export class Shiprocket {
   private async authenticate() {
     if (this.token && Date.now() < this.expires) return
     const email = process.env.SHIPROCKET_API_EMAIL || "support@younoya.com"
-    const password = process.env.SHIPROCKET_API_PASSWORD || process.env.SHIPROCKET_API_KEY || process.env.API_KEY
+    const password = process.env.SHIPROCKET_API_PASSWORD || process.env.SHIPROCKET_API_KEY
     if (!email || !password) throw new CommerceError("Shiprocket is not configured.", 503)
     if (!this.login) this.login = (async () => {
       const data = await this.request("/auth/login", "POST", { email, password }, false)
@@ -37,19 +37,12 @@ export class Shiprocket {
   }
   get(path: string) { return this.request(path, "GET") }
   post(path: string, body: any) { return this.request(path, "POST", body) }
-  async serviceability(pickup: string, destination: string, weight: number, parcel?: any) {
-    try {
+  async serviceability(pickup: string, destination: string, weight: number, parcel?: any, cod = false) {
       const result = await this.get(`/courier/serviceability/?${new URLSearchParams({ pickup_postcode: pickup,
-        delivery_postcode: destination, cod: "0", weight: String(weight), ...(parcel ? { length:String(parcel.lengthCm),breadth:String(parcel.widthCm),height:String(parcel.heightCm) } : {}) })}`)
+        delivery_postcode: destination, cod: cod ? '1' : '0', weight: String(weight), ...(parcel ? { length:String(parcel.lengthCm),breadth:String(parcel.widthCm),height:String(parcel.heightCm) } : {}) })}`)
       const couriers = result.data?.available_courier_companies
       if (!Array.isArray(couriers)) throw new ProviderError(true)
       return couriers.filter((row: any) => Number.isSafeInteger(Number(row.courier_company_id)) && Number(row.courier_company_id)>0 && Number.isFinite(Number(row.rate)) && Number(row.rate) >= 0)
-    } catch (error) {
-      if (/^[1-9]\d{5}$/.test(destination)) {
-        return [{ courier_company_id: 1, courier_name: "Shiprocket Express (India Delivery)", rate: 0 }]
-      }
-      throw error
-    }
   }
 }
 export const shiprocket = new Shiprocket()
