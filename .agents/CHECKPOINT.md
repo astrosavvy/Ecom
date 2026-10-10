@@ -531,15 +531,16 @@
 
 ## Phase 51 (Navratri Box Packaging Persistence, Etsy Email Template, Bubbly Repel Explore Button & Checkout Speed Optimization — 2026-10-09)
 
-1. **Navratri Box Dimension & Weight Metric Conversion (Inches & Grams $\rightarrow$ CM & KG)**:
-   - User inputs: Length 13", Width 9", Height 3.5", Weight 700g.
+1. **Navratri Box Dimension & Weight Metric Conversion (Inches & Grams $\rightarrow$ CM & KG) & HSN Update**:
+   - User inputs: Length 13", Width 9", Height 3.5", Weight 700g, HSN code `62149090`.
    - Converted values: Length $33.02\text{ cm}$, Breadth $22.86\text{ cm}$, Height $8.89\text{ cm}$, Dead Weight $0.70\text{ kg}$.
    - Volumetric Weight: $(33.02 \times 22.86 \times 8.89) / 5000 = 1.342\text{ kg}$.
+   - HSN Classification: `62149090` (Traditional sacred textiles / ritual chunaris & devotional attire).
 2. **PostgreSQL Database Persistence (`younoya_db` on VPS)**:
-   - Updated `product_variant` for `variant_01M4DMPRCYJ0M4YFAE1ST9398W`: `weight = 0.70`, `length = 33.02`, `width = 22.86`, `height = 8.89`.
-   - Updated `product.metadata` for `prod_01M4DMPPTT963YR4BDHFE0ZJAC` with structured `package_dimensions`.
+   - Updated `product_variant` for `variant_01M4DMPRCYJ0M4YFAE1ST9398W`: `weight = 0.70`, `length = 33.02`, `width = 22.86`, `height = 8.89`, `hs_code = '62149090'`.
+   - Updated `product.metadata` for `prod_01M4DMPPTT963YR4BDHFE0ZJAC` with structured `package_dimensions` and `hsn: '62149090'`.
    - Updated `commerce_setting` (`id = 'launch'`):
-     - `variants`: `variant_01M4DMPRCYJ0M4YFAE1ST9398W` `packedUnitKg: 0.70`.
+     - `variants`: `variant_01M4DMPRCYJ0M4YFAE1ST9398W` `packedUnitKg: 0.70`, `hsn: '62149090'`.
      - `parcels`: Created dedicated `"Navratri Shringaar Box Outer Carton"` ($33.02 \times 22.86 \times 8.89\text{ cm}$, tare $0.0\text{ kg}$, max 1 unit, max $1.0\text{ kg}$). Removed Navratri variant from `"Standard Keepsake Gift Box"`.
 3. **Etsy-Style Order Confirmation Email Template Redesign (`emails.ts`)**:
    - Mirrored the exact layout order from the user's Etsy reference image:
@@ -562,4 +563,10 @@
    - Enhanced submit button with active pulsating gradient and immediate tactile loading feedback.
 6. **Build Verification**:
    - Root `npm run build` exited with code 0 (22 crawlable route shells, 12 admin shells, synced `dist/`).
+
+
+## Codex follow-up — authorized push of commit96689d9 (2026-10-09)
+- User explicitly requested push of exact local commit96689d9bbbb321bd5c80a10e4420b3822a0db76c. Verified clean main, fetched current GitHub main22fec90 and confirmed fast-forward ancestry. Pending history comprised documentation148d8de and requested implementation96689d9. Pending diff contained no detected private credential literals and no new launch activation configuration changes. Source whitespace scan reported existing trailing spaces/EOF blank line in the committed code; no code edits or history rewrite were made for this exact-commit push.
+- Successfully pushed the requested commit to origin/main from22fec90. Independent ls-remote verified96689d9bbbb321bd5c80a10e4420b3822a0db76c. Prior Phase51 root build exit0 applies; builds/tests were not repeated on this push-only turn. No backend deployment, provider calls, real charge/refund/pickup or OTP performed. GitHub push is not the backend SSH deployment process; frontend release completion not independently verified.
+- This push-status note remains local for the next implementation commit; no additional commit created. Next: verify the frontend release through the established deployment checks and maintain backend SSH deployment separation.
 
