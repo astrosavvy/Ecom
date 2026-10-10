@@ -3,6 +3,9 @@ import { useState } from 'react'
 import { ArrowUpRight, Sparkles } from 'lucide-react'
 import { NAVRATRI_PRODUCT } from '../../data/navratri'
 
+// Temporarily hide the Shop hero's guide shortcut; toggle back on to restore it.
+const SHOW_GIFT_GUIDE_CTA = false
+
 export default function ShopHero() {
   const [imageFailed, setImageFailed] = useState(false)
   const photo = NAVRATRI_PRODUCT.gallery[0]
@@ -15,10 +18,10 @@ export default function ShopHero() {
         <p className="livora-hero-bar__desc">Shringaar, colour and small devotional keepsakes. Nine individually packed daily kits, brought together in one complete box.</p>
         <div className="livora-hero-bar__buttons">
           <Link to="/product/navratri-shringaar-box" className="livora-btn livora-btn--gold">Discover the Navratri box</Link>
-          <Link to="/find-a-gift" className="livora-btn-watch">
+          {SHOW_GIFT_GUIDE_CTA && <Link to="/find-a-gift" className="livora-btn-watch">
             <span className="livora-play-icon"><Sparkles size={16} strokeWidth={1.5} /></span>
             <span>Find your piece</span>
-          </Link>
+          </Link>}
         </div>
         <div className="livora-hero-bar__proof">
           <span className="livora-hero-bar__proof-text">The complete nine-day set · ₹1,499</span>

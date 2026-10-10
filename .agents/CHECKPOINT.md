@@ -5,7 +5,7 @@
 ---
 
 ## 1. 📍 Executive Status & System Topology
-- **Active Phase**: Phase 56 — Mobile UX Audit completed locally; awaiting explicit push permission.
+- **Active Phase**: Phase 57 — Shop hero guide shortcut temporarily hidden locally; awaiting push permission.
 - **Last Updated**: 2026-10-10 | **Agent**: Codex | **Git Branch**: `main`
 - **Storefront**: `https://younoya.com` (Vite 6 + React 19 + Framer Motion + Lenis, deployed to Cloudflare Worker `ecom` via Git).
 - **Backend API**: `https://api.younoya.com` (Medusa 2.18 + Node 20 + PostgreSQL 15 `younoya_db` + Redis on VPS `ubuntu@140.245.7.165` via CF Tunnel).
@@ -113,3 +113,13 @@
 - Final root build exited 0: 22 crawlable route shells, 12 admin shells, root distribution synchronized. Existing Vite chunk-size advisory remains. All three Meta Pixel tests pass; source whitespace check passed; no temporary hidden image files remain.
 - Authenticated order data, protected offers and generated guide results reviewed in source only; physical-device keyboard/autofill/safe-area validation remains manual. No OTP, recommendation submission, payment or order created. Bag remains one Navratri set / ₹1,499; `9inone/` originals untouched and untracked. No backend/API changes or deployment.
 - Single final local commit includes source, documentation, distribution and checkpoint. Next immediate action: obtain fresh explicit permission before GitHub push/frontend release. No backend SSH update required.
+## 11. Mobile UX push completion — 2026-10-10 / Codex
+- User explicitly authorized push. `git push origin main` exited 0; GitHub main advanced from `15195d8` to `b912ab7` (mobile layout fixes, corrected Navratri hero, plan/results, distribution and implementation checkpoint).
+- No source changes, additional build or checkpoint-only commit on this push turn. Prior final build and three passing Meta Pixel tests remain applicable. This push note stays in the working tree for the next implementation commit, respecting the single-commit rule.
+- Original photographs in `9inone/` remain untracked. Next: confirm Cloudflare frontend release and real-device keyboard/autofill checks. No backend deployment is required.
+## 12. Temporary Shop hero shortcut removal — 2026-10-10 / Codex
+- Temporarily hid the screenshot-selected Find your piece icon/link from the Shop hero using an explicit local SHOW_GIFT_GUIDE_CTA=false toggle. The existing markup remains easy to restore. Other gift-guide navigation stays available.
+- Verified /shop at 430x932 and 1024x768: only Discover the Navratri box remains in the hero action row; no horizontal overflow. Evidence: `.tmp/shop-hero-shortcut-hidden.png`.
+- Root build exited 0; 22 crawlable route shells and 12 admin shells generated and root distribution synchronized. Existing Vite chunk-size advisory remains. Source whitespace check passed; no new tests needed for this reversible display-only change.
+- Single final local commit includes implementation, generated output, prior push checkpoint note and this update. No backend/API changes. Original `9inone/` photographs remain untouched and untracked.
+- Next: obtain fresh explicit push permission before GitHub/production release; toggle SHOW_GIFT_GUIDE_CTA back to true when the hero shortcut should return.
