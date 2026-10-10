@@ -27,6 +27,8 @@ export default function NavratriDetail({ product }) {
   }, [])
   const available = checkoutEnabled && availability?.purchasable && availability?.price === product.priceNum && availability?.availableQuantity >= quantity
   const selected = NAVRATRI_DAYS[day]
+  const photoDimensions = product.galleryDimensions[photo]
+  const thumbnail = image => image.replace(/-\d+(?=\.webp$)/, '-600')
   function toggleSaved() {
     let previous
     try { previous = JSON.parse(localStorage.getItem('younoya-saved-pieces') || '[]') } catch { previous = [] }
@@ -46,10 +48,10 @@ export default function NavratriDetail({ product }) {
       <section className="navratri-intro" aria-labelledby="navratri-title">
         <div className="navratri-gallery">
           <figure>
-            <img src={product.galleryImages[photo]} srcSet={[600,1200].map(width => `${product.galleryImages[photo].replace('1200', width)} ${width}w`).join(', ')} sizes="(min-width: 960px) 48vw, 100vw" alt={product.galleryCaptions[photo]} width="1200" height="1600" fetchPriority="high" />
+            <img src={product.galleryImages[photo]} srcSet={`${thumbnail(product.galleryImages[photo])} 600w, ${product.galleryImages[photo]} ${photoDimensions.width}w`} sizes="(min-width: 1400px) 602px, (min-width: 960px) 48vw, calc(100vw - 40px)" alt={product.galleryCaptions[photo]} width={photoDimensions.width} height={photoDimensions.height} fetchPriority="high" />
             <figcaption>{product.galleryCaptions[photo]}</figcaption>
           </figure>
-          <div className="navratri-thumbnails" aria-label="Product photographs">{product.galleryImages.map((image, index) => <button key={image} type="button" aria-label={product.galleryCaptions[index]} aria-pressed={photo === index} onClick={() => setPhoto(index)}><img src={image.replace('1200','600')} alt="" width="90" height="120" loading="lazy" /></button>)}</div>
+          <div className="navratri-thumbnails" aria-label="Product photographs">{product.galleryImages.map((image, index) => <button key={image} type="button" aria-label={product.galleryCaptions[index]} aria-pressed={photo === index} onClick={() => setPhoto(index)}><img src={thumbnail(image)} alt="" width="90" height="120" loading="lazy" /></button>)}</div>
         </div>
         <div className="navratri-buybox">
           <span className="navratri-eyebrow">YOUNOYA · THE NAVRATRI EDIT</span>
@@ -69,7 +71,7 @@ export default function NavratriDetail({ product }) {
         <div className="navratri-day-selector" aria-label="Choose a daily kit">{NAVRATRI_DAYS.map((item, index) => <button key={item.day} type="button" aria-pressed={day === index} aria-controls="navratri-day-content" onClick={() => setDay(index)}><span>DAY {String(item.day).padStart(2,'0')}</span>{item.colour}</button>)}</div>
         <div id="navratri-day-content" className="navratri-day-content" aria-live="polite" aria-atomic="true"><div><span className="navratri-eyebrow">DAY {String(selected.day).padStart(2,'0')} · {selected.colour}</span><h3>{selected.deity}</h3><p lang="hi" className="navratri-hindi">{selected.hindi}</p>{selected.note && <p className="navratri-day-note">{selected.note}</p>}</div><ul>{selected.contents.map(item => <li key={item}>{item}</li>)}</ul></div>
       </section>
-      <section className="navratri-notes" aria-label="Packaging and care"><div><span className="navratri-eyebrow">THE COMPLETE SET</span><h2>A ritual, <em>ready to unfold.</em></h2><p>All nine daily kits arrive together, individually packed inside one outer box. Gallery photographs show individual kit details.</p><p>Keep fabrics and keepsakes dry. Use diya and dhoop on a heat-resistant surface, away from fabrics, children and pets. Never leave a flame unattended.</p></div><div><h3>Delivery & order care</h3><p>Dispatch within {business.dispatchHours || 24} hours of payment confirmation. Estimated delivery {business.deliveryMinDays || 3}–{business.deliveryMaxDays || 5} working days after dispatch; remote areas may take longer.</p><Link to="/shipping-policy">Shipping information <ArrowRight size={14} /></Link><Link to="/cancellation-and-refunds">Cancellation & refunds <ArrowRight size={14} /></Link><a href="mailto:support@younoya.com">Ask the atelier <ArrowRight size={14} /></a></div></section>
+      <section className="navratri-notes" aria-label="Packaging and care"><div><span className="navratri-eyebrow">THE COMPLETE SET</span><h2>A ritual, <em>ready to unfold.</em></h2><p>All nine daily kits arrive together, individually packed inside one outer box. Gallery photographs show the box and individual daily kit details.</p><p>Keep fabrics and keepsakes dry. Use diya and dhoop on a heat-resistant surface, away from fabrics, children and pets. Never leave a flame unattended.</p></div><div><h3>Delivery & order care</h3><p>Dispatch within {business.dispatchHours || 24} hours of payment confirmation. Estimated delivery {business.deliveryMinDays || 3}–{business.deliveryMaxDays || 5} working days after dispatch; remote areas may take longer.</p><Link to="/shipping-policy">Shipping information <ArrowRight size={14} /></Link><Link to="/cancellation-and-refunds">Cancellation & refunds <ArrowRight size={14} /></Link><a href="mailto:support@younoya.com">Ask the atelier <ArrowRight size={14} /></a></div></section>
     </div>
     <ShopFooter />
     <div className="navratri-mobile-bar"><span>Complete set<strong>₹1,499</strong></span>{purchase}</div>

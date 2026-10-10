@@ -2,7 +2,9 @@
 
 Sources: `D:/C Downloads/drive-download-20261008T094631Z-1-001`. Originals are untouched and excluded from Git. `sources.json` records file hashes, chosen originals and acceptance decisions.
 
-Six actual daily kits are published at 600px and 1200px widths as WebP in `younoya-web/public/media/navratri/`: red, green, dark blue, orange, dark pink and yellow. The red detail is the hero. These are individual kits, not a photograph of the complete outer box.
+The user-supplied square box image (2026-10-10) is the Shop product tile and first gallery image. It is exported as `navratri-box-600.webp` and `navratri-box-1024.webp` at WebP quality 94, preserving the supplied composition without content edits or upscaling. `sources.json` records the original attachment path and hash.
+
+The six existing daily kit images remain in the gallery at 600px and 1200px widths: red, green, dark blue, orange, dark pink and yellow. The red detail remains the Shop hero. The product gallery now contains seven images: the supplied box image followed by these individual kit details.
 
 ## Background-edit prompt
 
