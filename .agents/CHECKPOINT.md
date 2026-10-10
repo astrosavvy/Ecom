@@ -5,7 +5,7 @@
 ---
 
 ## 1. 📍 Executive Status & System Topology
-- **Active Phase**: Phase 53 — User-supplied Navratri Box Photography.
+- **Active Phase**: Phase 54 — Festive Navratri Photography & Rich Product Description.
 - **Last Updated**: 2026-10-10 | **Agent**: Codex | **Git Branch**: `main`
 - **Storefront**: `https://younoya.com` (Vite 6 + React 19 + Framer Motion + Lenis, deployed to Cloudflare Worker `ecom` via Git).
 - **Backend API**: `https://api.younoya.com` (Medusa 2.18 + Node 20 + PostgreSQL 15 `younoya_db` + Redis on VPS `ubuntu@140.245.7.165` via CF Tunnel).
@@ -75,9 +75,12 @@
 - **Commit History**: Single semantic commits following the Inviolable Git Protocol.
 
 ## 6. Latest completed turn — 2026-10-10 / Codex
-- Used the supplied `codex-clipboard-a0e98e67-d542-48cb-b10f-096dd5ce607c.png` as the Navratri Shop tile and first product gallery image. Preserved all six existing daily-kit images (seven total).
-- Exported native 1024px and responsive 600px WebP assets at quality 94 without upscaling/content edits. Updated responsive gallery dimensions, captions, social/schema image and asset provenance.
-- Verification: root frontend build exit 0 (22 route shells / 12 admin shells); source whitespace check passed. Browser checks at 360px, 430px, 1024px and 1920px confirmed image loading, seven thumbnails, existing gallery selection and no horizontal overflow. Screenshots saved under `.tmp/navratri-new-box-*.png`.
-- Retained existing published policy snapshots after the SEO build's backend config fetch intermittently fell back to draft data. No policy/source changes were made.
-- One final local commit prepared; GitHub push awaits fresh explicit user permission. No backend deployment needed for this storefront asset change.
-- Unrelated untracked `9inone/` directory preserved and excluded from this commit.
+- Edited all four actual box photos from `F:/Savvy_Ecom/9inone` with built-in imagegen: warm ivory surfaces, marigolds and softly blurred brass-toned Durga idols. Main photo retried for a quieter background; product contents and printed branding visually compared with originals.
+- Gallery now has ten images: IMG_6055, IMG_6067, IMG_6066, IMG_6060, then the six existing kit details. New main image also used on the Shop tile, with contain sizing to retain the box edges.
+- Added original-photo fallbacks, actual intrinsic dimensions, responsive WebP exports (600px / up to 1200px without upscaling), source hashes and recorded prompts. Styling props are explicitly excluded in captions. Originals remain untouched/untracked in `9inone/`.
+- Added the requested product heading/subtitle, devotional introduction, five key features, complete contents, product details and gifting copy. Preserved exact daily kit contents, price ₹1,499, SKU, saved identity and checkout. Uses approved wording 'nine devotional offerings'; no unverified material claims or GST-inclusive storefront text.
+- Verification: root frontend build exit 0, 22 route shells / 12 admin shells. Fixed Node SEO generator's JSON import attribute. Source whitespace checks passed; existing Vite chunk-size warning remains. Published policy snapshots retained.
+- Browser: 360px / 430px / 1024px / 1920px without horizontal overflow; all ten selections, mobile three-column day selector, keyboard Enter on Day 8, saved toggle and add-to-bag verified. Bag restored to original one set / ₹1,499 after testing; no checkout/payment started.
+- Failure test: temporarily hidden edited hero files triggered successful original-photo fallback; files restored and no test residue remains. Shop tile loaded with object-fit contain. Metadata/schema includes the new title, description and all ten photographs.
+- Evidence: `.tmp/navratri-festive-{desktop,mobile,description}.png`; documentation/prompts/source provenance and verification in `creative/younoya-navratri/`.
+- One final local commit prepared. Next: obtain fresh explicit push permission before GitHub/production frontend release. No backend/API changes or SSH deployment needed.

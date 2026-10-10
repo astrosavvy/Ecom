@@ -1,3 +1,5 @@
+import boxPhotos from './navratriPhotos.json' with { type: 'json' }
+
 // Owner-supplied contents. Unconfirmed materials and measurements are deliberately omitted.
 export const NAVRATRI_DAYS = [
   ['White', 'Maa Shailputri', 'माँ शैलपुत्री', 'Mitti diya', ['Chandrama + moti keepsake']],
@@ -18,12 +20,20 @@ export const NAVRATRI_DAYS = [
 export const NAVRATRI_PRODUCT = {
   id: 'navratri-shringaar-box', handle: 'navratri-shringaar-box', sku: 'YN-NAVRATRI-9D-001', kind: 'ritual-box',
   name: '9 Days Navratri Shringaar Box', shopName: 'NAVRATRI SHRINGAAR BOX', chapter: 'Navratri', badge: 'NINE DAYS, ONE BOX',
+  displayName: 'YOUNOYA 9 Kit Shringaar Kit', displaySubtitle: 'Special Navratri Pooja Shringaar Set',
+  seoTitle: '9 Kit Shringaar Kit for Navratri | Younoya',
+  seoDescription: 'Celebrate Navratri with nine daily shringaar kits for Maa Durga: chunaris, bindi and bangles, clay diyas, pooja dhoop and devotional offerings. ₹1,499.',
   subtitle: 'Nine daily kits · one complete set', tagline: 'Nine days of colour, devotion and ritual', motif: 'Navratri daily rituals',
   price: '₹ 1,499', priceNum: 1499, currency: '₹', intention: 'festive-rituals',
-  primaryImage: '/media/navratri/navratri-box-1024.webp', cardImage: '/media/navratri/navratri-box-600.webp',
-  galleryImages: ['/media/navratri/navratri-box-1024.webp', ...['red-kit','green-kit','blue-kit','orange-kit','pink-kit','yellow-kit'].map(name => `/media/navratri/${name}-1200.webp`)],
-  galleryDimensions: [{ width: 1024, height: 1024 }, ...Array.from({ length: 6 }, () => ({ width: 1200, height: 1600 }))],
-  galleryCaptions: ['Navratri 9-in-1 box', 'Red daily kit detail · mehendi is included on Day 8', 'Green daily kit detail', 'Dark blue daily kit detail', 'Orange daily kit detail', 'Dark pink daily kit detail', 'Yellow daily kit detail'],
-  intentionStory: 'A complete nine-day Navratri shringaar set, with a colour and devotional keepsake for each day. Nine individually packed daily kits arrive together in one outer box.',
+  primaryImage: boxPhotos[0].src, cardImage: boxPhotos[0].thumbnail, cardImageFallback: boxPhotos[0].fallback.thumbnail,
+  gallery: [...boxPhotos, ...[
+    ['red-kit', 'Red daily kit detail · mehendi is included on Day 8'],
+    ['green-kit', 'Green daily kit detail'],
+    ['blue-kit', 'Dark blue daily kit detail'],
+    ['orange-kit', 'Orange daily kit detail'],
+    ['pink-kit', 'Dark pink daily kit detail'],
+    ['yellow-kit', 'Yellow daily kit detail'],
+  ].map(([id, caption]) => ({ id, caption, src: `/media/navratri/${id}-1200.webp`, thumbnail: `/media/navratri/${id}-600.webp`, width: 1200, height: 1600 }))],
+  intentionStory: 'Thoughtfully curated for devotional offerings to Maa Durga, this Navratri shringaar set brings together nine coloured chunaris, bindi and bangles, clay diyas with cotton wicks, fragrant pooja dhoop cones and nine devotional offerings in one box.',
   relatedHandles: ['wild-poise', 'flamingo-grace', 'the-verdant-rising'],
 }

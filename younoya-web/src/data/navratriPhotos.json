@@ -1,0 +1,62 @@
+[
+  {
+    "id": "open-box",
+    "src": "/media/navratri/festive-open-box-1200.webp",
+    "thumbnail": "/media/navratri/festive-open-box-600.webp",
+    "width": 1200,
+    "height": 1200,
+    "caption": "Complete nine-day Navratri box, open",
+    "styled": true,
+    "fallback": {
+      "src": "/media/navratri/original-open-box-1200.webp",
+      "thumbnail": "/media/navratri/original-open-box-600.webp",
+      "width": 1200,
+      "height": 1841
+    }
+  },
+  {
+    "id": "wide-box",
+    "src": "/media/navratri/festive-wide-box-1200.webp",
+    "thumbnail": "/media/navratri/festive-wide-box-600.webp",
+    "width": 1200,
+    "height": 616,
+    "caption": "Open box and daily shringaar kits",
+    "styled": true,
+    "fallback": {
+      "src": "/media/navratri/original-wide-box-1200.webp",
+      "thumbnail": "/media/navratri/original-wide-box-600.webp",
+      "width": 1200,
+      "height": 617
+    }
+  },
+  {
+    "id": "box-detail",
+    "src": "/media/navratri/festive-box-detail-1200.webp",
+    "thumbnail": "/media/navratri/festive-box-detail-600.webp",
+    "width": 1200,
+    "height": 734,
+    "caption": "Navratri box contents and devotional lid detail",
+    "styled": true,
+    "fallback": {
+      "src": "/media/navratri/original-box-detail-1200.webp",
+      "thumbnail": "/media/navratri/original-box-detail-600.webp",
+      "width": 1200,
+      "height": 734
+    }
+  },
+  {
+    "id": "closed-box",
+    "src": "/media/navratri/festive-closed-box-1086.webp",
+    "thumbnail": "/media/navratri/festive-closed-box-600.webp",
+    "width": 1086,
+    "height": 1448,
+    "caption": "Closed Navratri box with YOUNOYA devotional artwork",
+    "styled": true,
+    "fallback": {
+      "src": "/media/navratri/original-closed-box-1200.webp",
+      "thumbnail": "/media/navratri/original-closed-box-600.webp",
+      "width": 1200,
+      "height": 1600
+    }
+  }
+]

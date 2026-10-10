@@ -2,15 +2,19 @@
 .navratri-shell { max-width: 1320px; margin: auto; padding: 0 40px; }
 .navratri-breadcrumb { display: flex; align-items: center; gap: 24px; font-size: 12px; color: #7a6b5c; margin-bottom: 28px; }
 .navratri-breadcrumb a { display: inline-flex; gap: 8px; align-items: center; min-height: 44px; }
-.navratri-intro { display: grid; grid-template-columns: 1.08fr 1fr; gap: clamp(32px,5vw,80px); align-items: center; }
+.navratri-intro { display: grid; grid-template-columns: 1.08fr 1fr; gap: clamp(32px,5vw,80px); align-items: start; }
 .navratri-gallery { min-width: 0; }
 .navratri-gallery figure { margin: 0; }
-.navratri-gallery figure > img { display: block; width: 100%; height: auto; max-height: 650px; object-fit: contain; background: #f2ece2; border-radius: 22px; }
+.navratri-gallery__stage { display: grid; place-items: center; aspect-ratio: 1; overflow: hidden; background: #f2ece2; border-radius: 22px; }
+.navratri-gallery__stage > img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.navratri-gallery__original-closed { transform: rotate(-90deg); }
+.navratri-gallery__unavailable { max-width: 26ch; padding: 24px; font-size: 14px; line-height: 1.8; text-align: center; color: #756657; }
 .navratri-gallery figcaption { font-size: 11px; line-height: 1.6; margin-top: 12px; color: #776857; }
-.navratri-thumbnails { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
-.navratri-thumbnails button { border: 1px solid transparent; padding: 4px; border-radius: 12px; background: transparent; cursor: pointer; }
+.navratri-gallery figcaption span { display: block; margin-top: 3px; }
+.navratri-thumbnails { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 10px; max-width: 400px; margin-top: 18px; }
+.navratri-thumbnails button { display: grid; place-items: center; min-height: 44px; aspect-ratio: 1; border: 1px solid transparent; padding: 4px; border-radius: 12px; background: transparent; cursor: pointer; color: #795d36; }
 .navratri-thumbnails button[aria-pressed=true] { border-color: #a6814b; }
-.navratri-thumbnails img { display: block; width: 64px; height: 76px; object-fit: cover; border-radius: 8px; }
+.navratri-thumbnails img { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; border-radius: 8px; }
 .navratri-eyebrow { font-size: 10px; letter-spacing: .16em; line-height: 1.8; color: #926f3d; }
 .navratri-page h1,.navratri-page h2,.navratri-page h3 { font-family: var(--font-serif); font-weight: 400; }
 .navratri-buybox h1 { font-size: clamp(36px,3.8vw,58px); line-height: 1.08; letter-spacing: -.025em; margin: 20px 0 24px; }
@@ -34,7 +38,32 @@
 .navratri-quantity button:disabled { opacity: .35; cursor: default; }
 .navratri-availability { font-size: 11px; line-height: 1.7; color: #776857; margin: 10px 0; text-align: center; }
 .navratri-details-link { display: inline-flex; min-height: 44px; align-items: center; gap: 12px; margin-top: 14px; font-size: 12px; color: #795d36; }
-.navratri-days { padding: 100px 0 72px; scroll-margin-top: 100px; }
+.navratri-description,.navratri-inclusions { display: grid; grid-template-columns: 1.08fr 1fr; gap: clamp(32px,5vw,80px); padding: 72px 0; border-top: 1px solid #dfcfb8; }
+.navratri-description { margin-top: 64px; }
+.navratri-description h2,.navratri-inclusions h2,.navratri-gifting h2 { max-width: 18ch; font-size: clamp(32px,3.4vw,46px); line-height: 1.15; margin: 14px 0 24px; text-wrap: balance; }
+.navratri-description p,.navratri-inclusions p,.navratri-gifting p { max-width: 62ch; color: #756657; font-size: 14px; line-height: 1.9; text-wrap: pretty; }
+.navratri-description strong { color: #352a22; font-weight: 500; }
+.navratri-features > h3,.navratri-product-details > h3 { font-size: 28px; margin: 0 0 20px; }
+.navratri-features ul,.navratri-inclusions__list { list-style: none; padding: 0; margin: 0; }
+.navratri-features li { padding: 16px 0; border-bottom: 1px solid #e6daca; }
+.navratri-features li:first-child { padding-top: 0; }
+.navratri-features h4 { font-size: 14px; font-weight: 500; margin: 0 0 5px; }
+.navratri-features p { margin: 0; font-size: 13px; }
+.navratri-inclusions__list li { display: flex; align-items: baseline; gap: 20px; padding: 18px 0; border-bottom: 1px solid #e6daca; }
+.navratri-inclusions__list li > span { flex-shrink: 0; font-size: 13px; font-variant-numeric: tabular-nums; color: #997443; }
+.navratri-inclusions__list h3 { font-family: var(--font-sans); font-size: 14px; font-weight: 500; margin: 0 0 4px; }
+.navratri-inclusions__list p { margin: 0; font-size: 12px; }
+.navratri-product-details { padding-top: 6px; }
+.navratri-product-details dl { margin: 0 0 24px; }
+.navratri-product-details dl > div { display: grid; grid-template-columns: 110px 1fr; gap: 16px; border-bottom: 1px solid #e6daca; padding: 16px 0; font-size: 13px; line-height: 1.8; }
+.navratri-product-details dt { color: #776857; }
+.navratri-product-details dd { margin: 0; }
+.navratri-product-details a { display: inline-flex; align-items: center; gap: 16px; min-height: 44px; font-size: 13px; color: #795d36; }
+.navratri-gifting { padding: 64px 0; border-top: 1px solid #dfcfb8; }
+.navratri-gifting h2 { max-width: none; }
+.navratri-gifting p { max-width: 74ch; }
+.navratri-gifting .navratri-gifting__signature { color: #795d36; font-size: 13px; margin-top: 24px; }
+.navratri-days { padding: 64px 0 72px; border-top: 1px solid #dfcfb8; scroll-margin-top: 100px; }
 .navratri-days header { max-width: 670px; }
 .navratri-days h2,.navratri-notes h2 { font-size: clamp(32px,3.4vw,46px); line-height: 1.16; margin: 14px 0; }
 .navratri-days header p,.navratri-notes p { font-size: 13px; line-height: 1.9; color: #756657; }
@@ -59,8 +88,11 @@
   .navratri-shell { padding: 0 20px; }
   .navratri-breadcrumb { margin-bottom: 12px; }
   .navratri-intro { grid-template-columns: 1fr; gap: 32px; }
-  .navratri-gallery figure > img { max-height: 510px; }
   .navratri-buybox h1 { font-size: clamp(35px,8.5vw,55px); }
+  .navratri-description,.navratri-inclusions { grid-template-columns: 1fr; gap: 32px; padding: 44px 0; }
+  .navratri-description { margin-top: 36px; }
+  .navratri-gifting { padding: 44px 0; }
+  .navratri-product-details dl > div { grid-template-columns: 95px 1fr; gap: 12px; }
   .navratri-days { padding: 64px 0 40px; }
   .navratri-day-selector { grid-template-columns: repeat(3,1fr); }
   .navratri-day-selector button { min-height: 68px; border-bottom: 1px solid #e6daca; }

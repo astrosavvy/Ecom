@@ -135,16 +135,16 @@ export function getSeo(pathname, storefrontMode = 'coming-soon') {
   const product = PRODUCTS.find(item => item.handle === handle)
   if (product) return {
     path,
-    title: `${product.name} | Younoya`,
-    description: product.kind === 'ritual-box' ? 'Nine individually packed Navratri daily kits in one outer box. Discover the complete nine-day Shringaar set for ₹1,499.' : `${product.name} — ${product.tagline}. Explore its symbolism, measured details and price at Younoya.`,
+    title: product.seoTitle || `${product.name} | Younoya`,
+    description: product.seoDescription || `${product.name} — ${product.tagline}. Explore its symbolism, measured details and price at Younoya.`,
     image: product.primaryImage,
     product,
     schema: [
       {
         '@context': 'https://schema.org',
         '@type': 'Product',
-        name: product.name,
-        image: absolute(product.primaryImage),
+        name: product.displayName || product.name,
+        image: product.gallery ? product.gallery.map(photo => absolute(photo.src)) : absolute(product.primaryImage),
         description: product.intentionStory,
         brand: { '@type': 'Brand', name: 'Younoya' },
         ...(product.kind === 'ritual-box' ? { sku: product.sku } : { offers: { '@type': 'Offer', url: absolute(path), priceCurrency: 'INR', price: product.priceNum } }),
