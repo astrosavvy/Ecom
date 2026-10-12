@@ -5,8 +5,8 @@
 ---
 
 ## 1. 📍 Executive Status & System Topology
-- **Active Phase**: Phase 58 — Live Razorpay Credentials Update & Production VPS Deployment.
-- **Last Updated**: 2026-10-10 | **Agent**: Antigravity | **Git Branch**: `main`
+- **Active Phase**: Public SEO indexing repair — verified locally; awaiting explicit push permission and frontend release.
+- **Last Updated**: 2026-10-12 | **Agent**: Codex | **Git Branch**: `main`
 - **Storefront**: `https://younoya.com` (Vite 6 + React 19 + Framer Motion + Lenis, deployed to Cloudflare Worker `ecom` via Git).
 - **Backend API**: `https://api.younoya.com` (Medusa 2.18 + Node 20 + PostgreSQL 15 `younoya_db` + Redis on VPS `ubuntu@140.245.7.165` via CF Tunnel).
 - **Admin Console**: Hosted exclusively on frontend edge (`https://younoya.com/admin/*`). ZERO VPS admin builds (956MB RAM OOM ceiling).
@@ -18,7 +18,7 @@
 1. **Explicit Git Push Permission Law**: NEVER execute `git push` automatically. Always stop and ask the user: *"Would you like me to push these changes to GitHub now?"* Only push when explicitly approved.
 2. **Single Final Semantic Commit**: NEVER make intermediate or micro-commits. Update `CHECKPOINT.md`, verify `npm run build` exits 0, and batch all changes into ONE final semantic commit.
 3. **Backend Update Law (Zero GitHub Involvement)**: Backend changes are built locally (`npm --prefix backend run build`), packaged (`server-src.tar.gz`), copied via SCP (`ubuntu@140.245.7.165`), extracted into `/home/ubuntu/younoya/backend/.medusa/server/`, and restarted with PM2 `younoya-backend`. GitHub is never involved in backend deployments.
-4. **Paise Money Convention**: All Medusa pricing and Razorpay amounts are stored and computed in paise (₹1,499 = 149900 paise).
+4. **Money Units**: Medusa 2 pricing and Shiprocket totals use major INR rupees (₹1,499 = 1499); convert to paise only at the Razorpay boundary (149900). Preserve explicit legacy-unit compatibility for historical financial records.
 5. **Security & Auth**: OTP auth via PBKDF2-SHA512 with 10-minute JWT session tokens and strict CORS.
 
 ---
@@ -70,7 +70,7 @@
 
 ## 5. 🎯 Verification & Build Status
 - **Backend Build**: `npm --prefix backend run build` exited 0; deployed via SCP and restarted PM2 `younoya-backend` (status `online`).
-- **Frontend Build**: `npm run build` exited 0 (22 crawlable route shells, 12 admin shells, synced `dist/`).
+- **Frontend Build**: `npm run build` exited 0 on 2026-10-12 (22 indexable route shells, 4 excluded shells, 12 admin shells, synced `dist/`). Existing Vite bundle-size advisory remains. Public SEO regression suite: 13/13 passing; final Worker dry-run exits 0.
 - **Visual Verification**: Tested email HTML in Chromium via Puppeteer; confirmed balanced stepper and crisp logo.
 - **Commit History**: Single semantic commits following the Inviolable Git Protocol.
 
@@ -146,3 +146,20 @@
 - Backend DEPLOYED via SCP/SSH to /home/ubuntu/younoya/backend/.medusa/server: migrations succeeded, COD calculated shipping option and manual provider provisioned, published policies refreshed (document version 2026-10-10-cod), PM2 younoya-backend restarted and health passed. No VPS build or GitHub used. Public config verified checkoutEnabled/codEnabled true, codFee 49, shippingFee 0, policyRevision 0b7fd2bea0a02a8e. Exactly one calculated india-cod option exists; production 110001 postal lookup and cutoff checks before/at 6 PM and COD passed.
 - Private rollback backup at /tmp/younoya-cod-rollback-20261010 (compiled-src.tar.gz + settings.json). Running PM2 production environment was preserved; shell .env database credentials differed and must not overwrite the running environment. No new model migration introduced.
 - Implementation/API/verification/deployment documentation: docs/prepaid-cod-delivery.md. One final local commit includes implementation, generated output, tests and checkpoint. Original 9inone/ photos remain untouched/untracked. Next: fresh explicit permission for GitHub push/frontend release; no push performed this turn.
+
+## 16. Prepaid/COD push completion — 2026-10-10 / Codex
+- User authorized push. git push origin main exited 0; remote main advanced from 1a88e6e to 76bd3e3. Prior verified builds and 52 passing tests remain applicable; backend was already deployed. No new source changes, order, payment or deployment on this push turn.
+- This note stays in the working tree for the next implementation commit; no checkpoint-only commit. Original 9inone/ photos remain untouched/untracked. Next: confirm Cloudflare frontend release and controlled provider verification.
+
+
+
+## 17. Public SEO indexing repair — 2026-10-12 / Codex
+- Diagnosed the Search Console noindex report: metadata.js recognised only two legacy blog slugs, so React marked the newly published Navratri articles as 404/noindex. Public HTTP inspection also showed the new article receiving the Coming Soon title and a canonical pointing to the home URL. Backend published feed contains four articles, including both Navratri stories.
+- Public Shop, all eleven current products, Journal/list/articles and five policy/contact pages remain index,follow with their own canonical. Home / and Q&A /find-a-gift are now noindex,follow and omitted from discovery. Private checkout/accounts/admin/offers and missing pages retain noindex. robots.txt allows crawling so exclusions can be read.
+- Added a small Cloudflare Worker with selective routing for Journal/blog and sitemap only, ASSETS binding and matching root/frontend Wrangler configuration. It reads existing published-only public APIs, serves actual article metadata/schema and escaped full text before JavaScript, discovers all published articles across pagination and updates the live sitemap without another frontend rebuild. No private credentials or backend change required.
+- New/unpublished/missing article handling: validated published data only; 404/noindex for unavailable slugs; network/timeouts/malformed responses get uncached 503/Retry-After. Existing backend DB-error-to-404/empty-list behaviour is documented as a current limitation. Alias/trailing-slash redirects preserved.
+- Shared build/edge metadata replacement prevents duplicate robots/canonicals/schema. Browser reuses fresh public bootstrap and shares in-flight article requests. Fixed the bootstrap-expiry navigation error caught during browser QA; added regression coverage. Preserved Journal categories/read-times, product identity, ordering, imagery and the route-specific Meta Pixel fallback.
+- Verification: 13 SEO tests pass, final root build exit 0, Worker deploy --dry-run exit 0 (48.24 KiB bundle). All 22 generated public HTML shells checked for index/canonical and matching distributions; excluded HTML checked. Both browser and Worker bundles checked against 13 private environment values: zero matches. Source whitespace check passes. One intermediate root sync hit Windows EBUSY while Wrangler watched dist; stopping the preview resolved it. Final build succeeded with no file lock.
+- Local Cloudflare HTTP: Navratri article 200/index with its own canonical and full text; nonexistent article 404/noindex; home/Q&A noindex; Shop/product/contact index; sitemap includes both new Navratri articles and excludes home/Q&A/private routes; robots allows crawling. Browser: direct Navratri article, rendered BlogPosting/canonical, SPA article-to-Journal and Journal-to-article, final four article links/category filters, and public/excluded route metadata verified. No errors/warnings from the final browser bundle. Tests made public read-only requests only; no order, OTP, payment, backend write or deployment.
+- Documentation: docs/public-page-indexing.md. Local Wrangler tested with CLOUDFLARE_LOAD_DEV_VARS_FROM_DOT_ENV=false; unrelated private env bindings excluded. Temporary preview stopped and test tab closed. Original 9inone/ photos remain untouched/untracked.
+- One final local commit contains implementation, tests, configs, generated distributions, documentation and checkpoint including the prior push note. No push/release this turn. Next: obtain fresh explicit permission to push main; release the complete Worker plus assets; verify live metadata and sitemap, then request Search Console recrawl/indexing. No backend SSH deployment is needed. Search-engine indexing remains a separate post-release process.

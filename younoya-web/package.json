@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "node scripts/generate-seo.mjs public && vite build && node scripts/generate-seo.mjs dist",
     "preview": "vite preview",
+    "test:seo": "node --test tests/seo.test.mjs",
     "deploy": "npx wrangler deploy"
   },
   "dependencies": {

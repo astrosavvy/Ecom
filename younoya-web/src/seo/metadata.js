@@ -1,7 +1,9 @@
 import { PRODUCTS } from '../data/products.js'
 import { POLICY_ROUTES } from '../data/policies.js'
+import { getBlogSeo } from './blog.js'
+import { SITE_URL } from './site.js'
 
-export const SITE_URL = 'https://younoya.com'
+export { SITE_URL }
 
 export const KNOWN_POSTS = [
   {
@@ -23,11 +25,12 @@ export const KNOWN_POSTS = [
 const absolute = path => `${SITE_URL}${path}`
 const cleanPath = path => path === '/' ? '/' : path.replace(/\/+$/, '')
 
-export function getSeo(pathname, storefrontMode = 'coming-soon') {
+export function getSeo(pathname, storefrontMode = 'coming-soon', posts = KNOWN_POSTS) {
   const path = cleanPath(pathname)
 
   if (path === '/') return {
     path,
+    noindex: true,
     title: storefrontMode === 'coming-soon' ? 'YOUNOYA — Coming Soon | Astrology-Backed Gifting' : 'YOUNOYA | Meaningful Gifts & Keepsakes',
     description: storefrontMode === 'coming-soon' ? 'Younoya is preparing to open its doors. Astrology-backed gifting for every chapter.' : 'Explore the Younoya collection of meaningful keepsakes and considered gifts, with personal guidance for every chapter.',
     image: '/media/diorama-arrival-desktop.webp',
@@ -66,6 +69,7 @@ export function getSeo(pathname, storefrontMode = 'coming-soon') {
 
   if (path === '/find-a-gift') return {
     path,
+    noindex: true,
     title: 'Let Younoya Help You Choose a Gift',
     description: 'Tell us the occasion and the person you have in mind. Explore a guided Younoya gift edit with meaningful keepsakes chosen for your moment.',
     image: '/media/guide-listen.webp',
@@ -90,7 +94,7 @@ export function getSeo(pathname, storefrontMode = 'coming-soon') {
       description: 'Stories of intention, ritual, and affection by Younoya Atelier.',
       mainEntity: {
         '@type': 'ItemList',
-        itemListElement: KNOWN_POSTS.map((post, idx) => ({
+        itemListElement: posts.map((post, idx) => ({
           '@type': 'ListItem',
           position: idx + 1,
           name: post.title,
@@ -101,35 +105,10 @@ export function getSeo(pathname, storefrontMode = 'coming-soon') {
   }
 
   const blogSlug = path.match(/^\/blog\/([a-z0-9-]+)$/)?.[1]
-  const blogPost = KNOWN_POSTS.find(item => item.slug === blogSlug)
-  if (blogPost) return {
-    path,
-    title: `${blogPost.title} | Younoya Journal`,
-    description: blogPost.description,
-    image: blogPost.image,
-    schema: [
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: blogPost.title,
-        description: blogPost.description,
-        image: blogPost.image,
-        datePublished: blogPost.published_at,
-        author: { '@type': 'Organization', name: 'YOUNOYA Atelier', url: SITE_URL },
-        publisher: { '@type': 'Organization', name: 'Younoya', logo: { '@type': 'ImageObject', url: absolute('/brand.webp') } },
-        mainEntityOfPage: { '@type': 'WebPage', '@id': absolute(path) },
-      },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-          { '@type': 'ListItem', position: 2, name: 'The Journal', item: absolute('/blog') },
-          { '@type': 'ListItem', position: 3, name: blogPost.title, item: absolute(path) },
-        ],
-      },
-    ],
-  }
+  const blogPost = posts.find(item => item.slug === blogSlug)
+  if (blogPost) return getBlogSeo(blogPost)
+  // A new admin-published slug is resolved asynchronously by SeoHead, not a 404.
+  if (blogSlug) return { path, title: 'The Journal | Younoya', description: 'Stories of intention, ritual and thoughtful gifting from Younoya.', article: true }
 
   const handle = path.match(/^\/product\/([a-z0-9-]+)$/)?.[1]
   const product = PRODUCTS.find(item => item.handle === handle)
@@ -183,14 +162,17 @@ export function getSeo(pathname, storefrontMode = 'coming-soon') {
   }
 }
 
-export function indexableRoutes() {
+export function indexableRoutes(posts = KNOWN_POSTS) {
   return [
-    '/',
     '/shop',
-    '/find-a-gift',
     '/blog',
     ...Object.keys(POLICY_ROUTES),
-    ...KNOWN_POSTS.map(post => `/blog/${post.slug}`),
+    ...posts.map(post => `/blog/${post.slug}`),
     ...PRODUCTS.map(product => `/product/${product.handle}`),
   ]
+}
+
+export function getInitialSeo(pathname, storefrontMode, bootstrap) {
+  if (bootstrap?.post && cleanPath(pathname) === `/blog/${bootstrap.post.slug}`) return getBlogSeo(bootstrap.post)
+  return getSeo(pathname, storefrontMode, bootstrap?.posts)
 }

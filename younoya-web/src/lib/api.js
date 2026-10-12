@@ -2,6 +2,8 @@
  * YOUNOYA Commerce & Editorial Blog API Client
  * Single SSOT for fetching published stories and editorial content from Medusa 2.18
  */
+import { isPublishedPost } from '../seo/blog.js'
+import { readPublishedPost } from '../seo/publicBlog.js'
 
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE)
   ? import.meta.env.VITE_API_BASE
@@ -38,6 +40,7 @@ export const FALLBACK_BLOG_POSTS = [
     excerpt: 'Explore how aligning keepsakes with planetary energies and sacred intentions creates gifts of enduring resonance. Discover meaningful connections through crystals, zodiac symbolism, and intentional celebration.',
     cover_image: '/media/blog/thoughtful-gifts-inspired-by-astrology.webp',
     featured: true,
+    published: true,
     content: `
 Gifting is one of the oldest and most personal ways people express love, appreciation, and connection. A well-chosen gift can celebrate a special moment, mark an important chapter in someone’s life, or simply bring a sense of warmth and thoughtfulness to everyday life.
 
@@ -126,20 +129,17 @@ YOUNOYA is created for people who believe that everyday objects can carry person
  * Fetch all published blog posts from the Medusa 2.18 backend
  */
 export async function fetchBlogPosts({ limit = 12, offset = 0 } = {}) {
+  const bootstrap = readBlogBootstrap()
+  if (bootstrap?.posts && offset === 0) return { posts: enrichListing(bootstrap.posts.slice(0, limit)), count: bootstrap.count }
   try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 6000)
-
     const res = await fetch(`${API_BASE}/store/blog/posts?limit=${limit}&offset=${offset}`, {
       method: 'GET',
       headers: {
         'x-publishable-api-key': PUBLISHABLE_KEY,
         'Content-Type': 'application/json',
       },
-      signal: controller.signal,
+      signal: AbortSignal.timeout(6000),
     })
-
-    clearTimeout(timeoutId)
 
     if (!res.ok) {
       console.warn(`[YOUNOYA API] Failed to fetch blog posts (${res.status}), using fallback dataset.`)
@@ -147,15 +147,8 @@ export async function fetchBlogPosts({ limit = 12, offset = 0 } = {}) {
     }
 
     const data = await res.json()
-    if (data && Array.isArray(data.posts) && data.posts.length > 0) {
-      // Enrich with categories, read times and formatting
-      const enriched = data.posts.map((post, idx) => ({
-        ...post,
-        cover_image: getOptimizedImageUrl(post.cover_image, post.slug),
-        category: post.category || (idx === 0 ? 'Astrology & Rituals' : 'Intentional Gifting'),
-        readTime: post.readTime || `${Math.max(3, Math.ceil((post.content?.split(/\s+/).length || 500) / 220))} min read`,
-        featured: idx === 0,
-      }))
+    if (data && Array.isArray(data.posts)) {
+      const enriched = enrichListing(data.posts)
       return { posts: enriched, count: data.count || enriched.length }
     }
 
@@ -166,44 +159,47 @@ export async function fetchBlogPosts({ limit = 12, offset = 0 } = {}) {
   }
 }
 
+function enrichListing(posts) {
+  return posts.filter(isPublishedPost).map((post, idx) => ({
+    ...post,
+    cover_image: getOptimizedImageUrl(post.cover_image, post.slug),
+    category: post.category || (idx === 0 ? 'Astrology & Rituals' : 'Intentional Gifting'),
+    readTime: post.readTime || `${Math.max(3, Math.ceil((post.content?.split(/\s+/).length || 500) / 220))} min read`,
+    featured: idx === 0,
+  }))
+}
+
 /**
- * Fetch a single blog post by slug from Medusa 2.18
+ * Reuse fresh public article data supplied by the edge; never reuse drafts.
  */
-export async function fetchBlogPostBySlug(slug) {
-  if (!slug) return null
-
+export function readBlogBootstrap() {
+  if (typeof document === 'undefined') return null
   try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 6000)
+    const value = JSON.parse(document.getElementById('younoya-blog-data')?.textContent || 'null')
+    if (!value || !Number.isFinite(value.generatedAt) || Math.abs(Date.now() - value.generatedAt) > 60000) return null
+    if (isPublishedPost(value.post)) return value
+    if (value.post === null && typeof value.slug === 'string') return value
+    if (Array.isArray(value.posts) && value.posts.every(isPublishedPost)) return value
+  } catch { /* Ignore invalid or stale bootstrap data; use the public API. */ }
+  return null
+}
 
-    const res = await fetch(`${API_BASE}/store/blog/posts/${encodeURIComponent(slug)}`, {
-      method: 'GET',
-      headers: {
-        'x-publishable-api-key': PUBLISHABLE_KEY,
-        'Content-Type': 'application/json',
-      },
-      signal: controller.signal,
-    })
+const pendingPosts = new Map()
+const enrichPost = post => post ? { ...post, cover_image: getOptimizedImageUrl(post.cover_image, post.slug), category: post.category || 'Astrology & Rituals', readTime: `${Math.max(3, Math.ceil((post.content?.split(/\s+/).length || 500) / 220))} min read` } : null
 
-    clearTimeout(timeoutId)
+export function fetchBlogPostResult(slug) {
+  if (!slug) return Promise.resolve({ post: null, unavailable: false })
+  const bootstrap = readBlogBootstrap()
+  if (bootstrap?.post?.slug === slug || (bootstrap?.post === null && bootstrap.slug === slug)) return Promise.resolve({ post: enrichPost(bootstrap.post), unavailable: false })
+  if (pendingPosts.has(slug)) return pendingPosts.get(slug)
+  const pending = readPublishedPost(slug, { apiBase: API_BASE, key: PUBLISHABLE_KEY })
+    .then(post => ({ post: enrichPost(post), unavailable: false }))
+    .catch(() => ({ post: FALLBACK_BLOG_POSTS.find(post => post.slug === slug) || null, unavailable: true }))
+    .finally(() => pendingPosts.delete(slug))
+  pendingPosts.set(slug, pending)
+  return pending
+}
 
-    if (res.ok) {
-      const data = await res.json()
-      if (data && data.post) {
-        const post = data.post
-        return {
-          ...post,
-          cover_image: getOptimizedImageUrl(post.cover_image, post.slug),
-          category: post.category || 'Astrology & Rituals',
-          readTime: `${Math.max(3, Math.ceil((post.content?.split(/\s+/).length || 500) / 220))} min read`,
-        }
-      }
-    }
-  } catch (err) {
-    console.warn('[YOUNOYA API] Error fetching post by slug, checking fallback:', err.message)
-  }
-
-  // Check fallback dataset
-  const fallback = FALLBACK_BLOG_POSTS.find((p) => p.slug === slug)
-  return fallback || null
+export async function fetchBlogPostBySlug(slug) {
+  return (await fetchBlogPostResult(slug)).post
 }
