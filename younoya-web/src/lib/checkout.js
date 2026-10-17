@@ -71,7 +71,6 @@ export async function preparePayment(cartId, address, note, promo, policyRevisio
   const delivery = await storeRequest('/store/commerce/prepare', { ...checkoutAccess(cartId), body: { cart_id: cartId, policy_revision: policyRevision, payment_method: method } })
   const { cart } = delivery
   if (!cart?.total || cart.currency_code !== 'inr') throw new Error('Could not calculate an INR order total')
-  if (method === 'cod') return { cart, session: null, delivery: delivery.delivery }
 
   // Get or create payment collection and resolve provider in parallel
   const [collectionResult, providersResult] = await Promise.all([
@@ -89,12 +88,8 @@ export async function preparePayment(cartId, address, note, promo, policyRevisio
   return { cart, session }
 }
 
-export async function confirmCod(cartId) {
-  sessionStorage.setItem('yn_pending_cod',cartId)
-  const result = await storeRequest('/store/commerce/cod',{ ...checkoutAccess(cartId), body: { cart_id: cartId } })
-  if (!result.order?.id) throw new Error('Order confirmation is pending. Please retry this order.')
-  sessionStorage.removeItem('yn_pending_cod')
-  return result.order
+export async function recoverCheckout(cartId) {
+  return storeRequest(`/store/gift-guide/payment-confirm?cartId=${encodeURIComponent(cartId)}`,checkoutAccess(cartId))
 }
 
 let razorpayLoading

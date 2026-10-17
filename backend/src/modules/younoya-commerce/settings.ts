@@ -85,9 +85,9 @@ export async function saveSettings(input: unknown, publish = false) {
     // Only the audited server migration may set this marker; owner UI cannot bypass it.
     data.catalogMoneyVersion = current?.data?.catalogMoneyVersion || ''
     const published = publish ? publicFields(data) : current?.published || null
-    const revision = publish ? crypto.createHash("sha256").update(JSON.stringify({ documentVersion:"2026-10-10-cod",business:published })).digest("hex").slice(0, 16) : current?.revision || null
+    const revision = publish ? crypto.createHash("sha256").update(JSON.stringify({ documentVersion:"2026-10-17-prepaid",business:published })).digest("hex").slice(0, 16) : current?.revision || null
     if (publish) await client.query("insert into commerce_setting(id,data,published,revision) values ($1,$2,$2,$3) on conflict(id) do nothing",
-      [`policy:${revision}`,JSON.stringify({ ...published,documentVersion:"2026-10-10-cod" }),revision])
+      [`policy:${revision}`,JSON.stringify({ ...published,documentVersion:"2026-10-17-prepaid" }),revision])
     await client.query(`insert into commerce_setting(id,data,published,revision) values ('launch',$1,$2,$3)
       on conflict(id) do update set data=$1,published=$2,revision=$3,updated_at=now()`, [JSON.stringify(data),JSON.stringify(published),revision])
     return { draft: data, published, revision }
@@ -102,6 +102,6 @@ export async function publicSettings() {
   return { business: value.published || publicFields(defaults), policiesPublished: !!value.published,
     policyRevision: value.revision, storefrontMode: value.draft.storefrontMode,
     checkoutEnabled: readiness(value.draft, value.published, value.revision).ready,
-    codEnabled: !!value.draft.codShippingOptionId && readiness(value.draft,value.published,value.revision).ready,
-    codFee: 49, shippingFee: 0, currency: "INR", country: "IN" }
+    codEnabled: false,
+    codFee: 0, shippingFee: 0, currency: "INR", country: "IN" }
 }

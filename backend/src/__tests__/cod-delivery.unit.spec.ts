@@ -18,6 +18,7 @@ test('India-time cutoff is prepaid only, including weekends', () => {
 })
 test('payment defaults and fixed fee reject client substitutions', () => {
   expect(checkoutMethod(undefined)).toBe('razorpay'); expect(() => checkoutMethod('free')).toThrow()
+  expect(() => checkoutMethod('cod')).toThrow('no longer available')
   const method = {shipping_option_id:'so_cod',amount:49,total:49,is_tax_inclusive:true,adjustments:[]}
   expect(() => validateShippingFee({shipping_methods:[method]},'so_cod','cod')).not.toThrow()
   for (const invalid of [{...method,amount:0},{...method,total:98},{...method,adjustments:[{amount:1}]},{...method,is_tax_inclusive:false}])

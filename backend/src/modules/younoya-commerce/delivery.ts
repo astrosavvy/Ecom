@@ -3,8 +3,8 @@ export const COD_FEE = 49
 export type CheckoutMethod = 'razorpay' | 'cod'
 export function checkoutMethod(value: unknown): CheckoutMethod {
   if (value === undefined || value === 'razorpay') return 'razorpay'
-  if (value === 'cod') return 'cod'
-  throw new CommerceError('Select Razorpay or Cash on Delivery')
+  if (value === 'cod') throw new CommerceError('Cash on Delivery is no longer available. Please use online payment.',409)
+  throw new CommerceError('Select Razorpay for online payment')
 }
 const normalize = (value: unknown) => String(value || '').toLowerCase().replace(/[^a-z]/g, '')
 export function coreNcr(location: any) {

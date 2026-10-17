@@ -118,7 +118,6 @@ export default function CheckoutSummary({ cart, bag, session, offer, promo = '',
             <dd>−{money(cart.discount_total)}</dd>
           </div>
         )}
-        {method === 'cod' && <div className="checkout-summary__row"><dt>COD handling charge:</dt><dd>{money(49)}</dd></div>}
         <div className="checkout-summary__row checkout-summary__total-row">
           <dt>Total:</dt>
           <dd>{money(total)}</dd>

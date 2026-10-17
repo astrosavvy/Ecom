@@ -1,0 +1,35 @@
+.kalash-page .navratri-buybox h1 { max-width: 13ch; font-size: clamp(40px,4.3vw,64px); line-height: 1.13; }
+.kalash-page .navratri-save { margin: 0 0 12px auto; }
+.kalash-page .navratri-gallery__stage { aspect-ratio: 3/2; }
+.kalash-story { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px,6vw,90px); padding: 80px 0; margin-top: 56px; border-top: 1px solid #dfcfb8; }
+.kalash-page :is(.kalash-story,.kalash-contents,.kalash-intentions,.kalash-gifting) h2 { font-size: clamp(34px,3.5vw,48px); line-height: 1.18; letter-spacing: -.02em; margin: 0 0 24px; padding-bottom: 4px; }
+.kalash-page :is(.kalash-story,.kalash-contents,.kalash-intentions,.kalash-gifting) p { font-size: 14px; line-height: 1.95; color: #756657; max-width: 62ch; margin: 0 0 18px; }
+.kalash-contents { padding: 64px 0; border-top: 1px solid #dfcfb8; scroll-margin-top: 100px; }
+.kalash-contents header { max-width: 690px; margin-bottom: 36px; }
+.kalash-contents ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 64px; }
+.kalash-contents li { display: flex; gap: 22px; padding: 24px 0; border-bottom: 1px solid #e6daca; }
+.kalash-contents li > span { font-size: 11px; color: #795d36; padding-top: 5px; }
+.kalash-contents h3 { font-size: 27px; margin: 0 0 8px; }
+.kalash-contents li p { margin: 0; font-size: 13px; }
+.kalash-intentions { padding: 64px 0; border-top: 1px solid #dfcfb8; }
+.kalash-intentions ul { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); list-style: none; padding: 0; gap: 32px; margin: 40px 0 24px; }
+.kalash-intentions li { padding-top: 22px; border-top: 1px solid #dfcfb8; }
+.kalash-intentions li > span { font-size: 17px; color: #795d36; }
+.kalash-intentions h3 { font-size: 27px; margin: 8px 0 14px; }
+.kalash-intentions .kalash-intentions__note { font-size: 12px; }
+.kalash-gifting { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; padding: 64px 0 80px; border-top: 1px solid #dfcfb8; }
+.kalash-gifting img { display: block; width: 100%; height: auto; border-radius: 20px; }
+.kalash-gifting .kalash-gifting__caption { font-size: 11px; }
+.kalash-specs { font-size: 12px; line-height: 1.8; margin: 0 0 20px; }
+.kalash-specs > div { display: grid; grid-template-columns: 90px 1fr; gap: 20px; padding: 8px 0; }
+.kalash-specs dt { color: #756657; }
+.kalash-specs dd { margin: 0; }
+@media (max-width:959px) {
+  .kalash-story,.kalash-gifting { grid-template-columns: 1fr; gap: 28px; padding: 44px 0; }
+  .kalash-story { margin-top: 36px; }
+  .kalash-contents,.kalash-intentions { padding: 44px 0; }
+  .kalash-contents ol { grid-template-columns: 1fr; }
+  .kalash-intentions ul { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .kalash-page .navratri-mobile-bar .navratri-button { white-space: nowrap; font-size: 12px; }
+}
+@media (max-width:390px) { .kalash-intentions ul { grid-template-columns: 1fr; gap: 12px; } }

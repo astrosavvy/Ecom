@@ -7,7 +7,7 @@ jest.mock("razorpay", () => ({ __esModule: true, default: jest.fn().mockImplemen
 import { GET, POST } from "../api/store/gift-guide/payment-confirm/route"
 
 function response() {
-  const res: any = { code: 200, body: null }
+  const res: any = { code: 200, body: null, setHeader:jest.fn() }
   res.status = (code: number) => { res.code = code; return res }
   res.json = (body: any) => { res.body = body; return res }
   return res
@@ -70,6 +70,6 @@ describe("payment confirmation", () => {
           : entity === "order_cart" ? [{ order_id: "ord_123" }] : [{ id: "ord_123", display_id: 1, total: 2499,metadata:{money_unit:"inr-major-v2"} }]
       }) }) } }
     const getRes = await GET(reqGet, response()) as any
-    expect(getRes.body).toEqual({ owned: true, completed: true, order: { id: "ord_123", display_id: 1, total: 2499,metadata:{money_unit:"inr-major-v2"},money_unit:"inr-major-v2" } })
+    expect(getRes.body).toEqual({ owned: true, completed: true, restart_allowed:false, order: { id: "ord_123", display_id: 1, total: 2499,metadata:{money_unit:"inr-major-v2"},money_unit:"inr-major-v2" } })
   })
 })

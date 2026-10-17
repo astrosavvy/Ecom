@@ -5,6 +5,7 @@ import { Check, Heart, ShoppingBag } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 
 export default function ProductCard({ product, index, reducedMotion, onWishlist, isWishlisted }) {
+  const ritual = product.kind === 'ritual-box' || product.kind === 'kalash'
   const { addToCart, setIsOpen } = useCart()
   const [added, setAdded] = useState(false)
   const [imageFailed, setImageFailed] = useState(false)
@@ -12,7 +13,7 @@ export default function ProductCard({ product, index, reducedMotion, onWishlist,
   function handleQuickAdd(e) {
     e.preventDefault()
     e.stopPropagation()
-    if (product.kind === 'ritual-box') return
+    if (ritual) return
     addToCart({
       id: `${product.id}::standard`,
       handle: product.handle,
@@ -37,11 +38,11 @@ export default function ProductCard({ product, index, reducedMotion, onWishlist,
       exit={reducedMotion ? undefined : { opacity: 0, y: 10 }}
       transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.15) }}
     >
-      <div className={`livora-card__media${product.kind === 'ritual-box' ? ' livora-card__media--ritual' : ''}`}>
+      <div className={`livora-card__media${ritual ? ' livora-card__media--ritual' : ''}`}>
         <Link to={`/product/${product.handle}`} className="livora-card__link" aria-label={`Explore ${product.name}`}>
           <img src={imageFailed && product.cardImageFallback ? product.cardImageFallback : product.shopCardImage || product.cardImage || product.primaryImage} alt={product.name} loading={index < 5 ? 'eager' : 'lazy'} onError={() => { if (!imageFailed && product.cardImageFallback) setImageFailed(true) }} />
         </Link>
-        {product.kind !== 'ritual-box' && <button
+        {!ritual && <button
           type="button"
           className={`livora-card__quick-bag ${added ? 'is-added' : ''}`}
           onClick={handleQuickAdd}

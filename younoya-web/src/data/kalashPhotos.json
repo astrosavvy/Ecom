@@ -1,0 +1,87 @@
+[
+  {
+    "id": "hero",
+    "src": "/media/kalash/hero-1200.webp",
+    "thumbnail": "/media/kalash/hero-600.webp",
+    "width": 1200,
+    "height": 800,
+    "caption": "Kalash in an AI-styled Diwali setting",
+    "styled": true,
+    "stylingNote": "AI-styled photograph. Background flowers and lamps are styling props and are not included.",
+    "fallback": {
+      "src": "/media/kalash/original-front-1200.webp",
+      "thumbnail": "/media/kalash/original-front-600.webp",
+      "width": 1200,
+      "height": 1600,
+      "caption": "Original photograph of the actual Kalash"
+    }
+  },
+  {
+    "id": "detail",
+    "src": "/media/kalash/detail-1200.webp",
+    "thumbnail": "/media/kalash/detail-600.webp",
+    "width": 1200,
+    "height": 800,
+    "caption": "A closer view of the Kalash rim and textured exterior",
+    "styled": true,
+    "stylingNote": "AI-styled photograph. Background flowers and lamps are styling props and are not included.",
+    "fallback": {
+      "src": "/media/kalash/original-detail-1200.webp",
+      "thumbnail": "/media/kalash/original-detail-600.webp",
+      "width": 1200,
+      "height": 1600,
+      "caption": "Original photograph of the actual Kalash"
+    }
+  },
+  {
+    "id": "ritual",
+    "src": "/media/kalash/ritual-1200.webp",
+    "thumbnail": "/media/kalash/ritual-600.webp",
+    "width": 1200,
+    "height": 800,
+    "caption": "Illustrative arrangement of the six listed ritual item types falling into the Kalash",
+    "styled": true,
+    "stylingNote": "AI-styled composition. Flowers and lamps are styling props; arrangement and quantities are illustrative.",
+    "fallback": {
+      "src": "/media/kalash/original-front-1200.webp",
+      "thumbnail": "/media/kalash/original-front-600.webp",
+      "width": 1200,
+      "height": 1600,
+      "caption": "Original photograph of the actual Kalash"
+    }
+  },
+  {
+    "id": "single-woman",
+    "src": "/media/kalash/single-woman-1200.webp",
+    "thumbnail": "/media/kalash/single-woman-600.webp",
+    "width": 1200,
+    "height": 800,
+    "caption": "AI-styled lifestyle composition with one woman holding the Kalash",
+    "styled": true,
+    "stylingNote": "AI-styled photograph. Background flowers and lamps are styling props and are not included.",
+    "fallback": {
+      "src": "/media/kalash/original-front-1200.webp",
+      "thumbnail": "/media/kalash/original-front-600.webp",
+      "width": 1200,
+      "height": 1600,
+      "caption": "Original photograph of the actual Kalash"
+    }
+  },
+  {
+    "id": "two-women",
+    "src": "/media/kalash/two-women-1200.webp",
+    "thumbnail": "/media/kalash/two-women-600.webp",
+    "width": 1200,
+    "height": 800,
+    "caption": "AI-styled lifestyle composition with two women holding the Kalash",
+    "styled": true,
+    "stylingNote": "AI-styled photograph. Background flowers and lamps are styling props and are not included.",
+    "fallback": {
+      "src": "/media/kalash/original-front-1200.webp",
+      "thumbnail": "/media/kalash/original-front-600.webp",
+      "width": 1200,
+      "height": 1600,
+      "caption": "Original photograph of the actual Kalash"
+    }
+  }
+]

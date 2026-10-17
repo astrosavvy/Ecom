@@ -47,7 +47,7 @@ export function getSeo(pathname, storefrontMode = 'coming-soon', posts = KNOWN_P
   if (path === '/shop') return {
     path,
     title: 'Explore Meaningful Gifts & Keepsakes | Younoya',
-    description: 'Discover the nine-day Navratri Shringaar Box and the Younoya brooch collection. Considered rituals and symbolic keepsakes for every chapter.',
+    description: 'Discover the Diwali Wealth Kalash, nine-day Navratri Shringaar Box and Younoya brooch collection. Considered rituals and symbolic keepsakes for every chapter.',
     image: PRODUCTS[0].primaryImage,
     schema: {
       '@context': 'https://schema.org',
@@ -126,7 +126,7 @@ export function getSeo(pathname, storefrontMode = 'coming-soon', posts = KNOWN_P
         image: product.gallery ? product.gallery.map(photo => absolute(photo.src)) : absolute(product.primaryImage),
         description: product.intentionStory,
         brand: { '@type': 'Brand', name: 'Younoya' },
-        ...(product.kind === 'ritual-box' ? { sku: product.sku } : { offers: { '@type': 'Offer', url: absolute(path), priceCurrency: 'INR', price: product.priceNum } }),
+        ...(['ritual-box','kalash'].includes(product.kind) ? { sku: product.sku } : { offers: { '@type': 'Offer', url: absolute(path), priceCurrency: 'INR', price: product.priceNum } }),
       },
       {
         '@context': 'https://schema.org',

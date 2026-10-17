@@ -30,3 +30,9 @@
 
 - Checkout City and State are always visible required inputs, silently filled by PIN lookup and bound to the checkout shipping address. Retain editing fallback and stale-request abort; do not restore Guest checkout copy, manual edit toggles or search/success messages. Explain unpublished policy/payment readiness beside disabled controls without bypassing backend launch checks.
 - Homepage must resolve initial SiteConfig before displaying Coming Soon or Shop; keep root navigation hidden during loading. Keep current mode if a later refresh fails. Coming Soon remains live at /, collection at /shop through an explicit link. Do not add GST-inclusive price copy to storefront or search metadata; retain backend tax accounting.
+
+## Diwali Kalash and prepaid checkout (2026-10-17)
+- ShopHero re-exports ShopEditions: Kalash first and Navratri second, 8-second rotation, manual controls, drag/swipe and pause. Keep header clearance, whole-product framing and reduced-motion/focus/visibility suppression.
+- KalashDetail uses data/kalash.js and kalashPhotos.json with five AI-styled assets and original-product fallbacks. INR 5,599 / SKU YN-DIWALI-KALASH-001. Do not fabricate eleven inclusions, quantities, yantra/muhurat fulfilment, materials or financial results. Public preview stays disabled until the backend confirms readiness.
+- New checkout is Razorpay-only; no new COD selection or handling charge. Keep historical COD order displays accurate. A persisted yn_pending_cod key triggers owned read-only recovery, never automatic confirmation. Only a verified unattempted cart can return to prepaid preparation with fresh policy acceptance.
+- Temporary storefront QA fixture lives in tests/fixtures/storefront-preview.cjs. It is localhost-only and mocks all commerce/provider calls; stop it after use. See docs/diwali-kalash-prepaid.md and the checkpoint for deployment approval status.

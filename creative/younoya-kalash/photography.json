@@ -1,0 +1,157 @@
+{
+  "tool": "built-in imagegen",
+  "date": "2026-10-17",
+  "originals_untouched": true,
+  "shots": [
+    {
+      "id": "hero",
+      "source": "Dewali_Kalash\\WhatsApp Image 2026-10-16 at 5.05.24 PM.jpeg",
+      "source_sha256": "9bf05ba2dacadd0767b7bf5524547732d5b85a6842da7ec9ea41b0035702ff58",
+      "product_reference": "Dewali_Kalash/WhatsApp Image 2026-10-16 at 5.05.24 PM.jpeg",
+      "generated_source": "C:\\Users\\Palak\\.codex\\generated_images\\01a0be94-7a1b-7bb3-89c2-898a82466177\\exec-7d808047-313c-4dda-91a6-970f9eee9b69.png",
+      "generated_sha256": "427cc520446718d84511d0ba841184ff57487df35a5b6db5b774f578075c2f61",
+      "generated_dimensions": [
+        1536,
+        1024
+      ],
+      "exports": [
+        {
+          "path": "younoya-web\\public\\media\\kalash\\hero-600.webp",
+          "sha256": "ae640d443d8df86b686e537f0d790f9a9e45db51498a3d056f1aa9c357600bbe",
+          "dimensions": [
+            600,
+            400
+          ]
+        },
+        {
+          "path": "younoya-web\\public\\media\\kalash\\hero-1200.webp",
+          "sha256": "7321691b31525593f40e44b428eb623f5767dd1d9d7af611e4bf7c69bd54e5a4",
+          "dimensions": [
+            1200,
+            800
+          ]
+        }
+      ]
+    },
+    {
+      "id": "detail",
+      "source": "Dewali_Kalash\\WhatsApp Image 2026-10-16 at 5.05.23 PM (1).jpeg",
+      "source_sha256": "31cd196d445d2fcfa327cb30d7152d5ec601eaecc5a675839cc38fbc0b243fb8",
+      "product_reference": "Dewali_Kalash/WhatsApp Image 2026-10-16 at 5.05.24 PM.jpeg",
+      "generated_source": "C:\\Users\\Palak\\.codex\\generated_images\\01a0be94-7a1b-7bb3-89c2-898a82466177\\exec-9a923bd3-91db-4bb2-9ee1-512bab88e804.png",
+      "generated_sha256": "991ee412210db5ba86f881c4ec327ddb781cef3581fe6e348d865e7f025af179",
+      "generated_dimensions": [
+        1536,
+        1024
+      ],
+      "exports": [
+        {
+          "path": "younoya-web\\public\\media\\kalash\\detail-600.webp",
+          "sha256": "86cf630371be80b979e6657bf77b5257fc14c6595021d2c728cca554a29c0074",
+          "dimensions": [
+            600,
+            400
+          ]
+        },
+        {
+          "path": "younoya-web\\public\\media\\kalash\\detail-1200.webp",
+          "sha256": "e559cd35df418209f25dccd4c2cb8ba6a9b0a96f272b8c607f5c7c6c94fddce5",
+          "dimensions": [
+            1200,
+            800
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ritual",
+      "source": "Dewali_Kalash\\WhatsApp Image 2026-10-16 at 5.05.24 PM.jpeg",
+      "source_sha256": "9bf05ba2dacadd0767b7bf5524547732d5b85a6842da7ec9ea41b0035702ff58",
+      "product_reference": "Dewali_Kalash/WhatsApp Image 2026-10-16 at 5.05.24 PM.jpeg",
+      "generated_source": "C:\\Users\\Palak\\.codex\\generated_images\\01a0be94-7a1b-7bb3-89c2-898a82466177\\exec-3e602389-c765-4b61-bbbc-ce8a986e5beb.png",
+      "generated_sha256": "1ff014426de0f76d9c3e7aab8109dab0bd0b9614e3f81cac347890f85faf5242",
+      "generated_dimensions": [
+        1536,
+        1024
+      ],
+      "exports": [
+        {
+          "path": "younoya-web\\public\\media\\kalash\\ritual-600.webp",
+          "sha256": "6dfbb3d2d15092b8d3369b4ee3185f613e9a5cbaeb3b53d1a7699f967b2f974e",
+          "dimensions": [
+            600,
+            400
+          ]
+        },
+        {
+          "path": "younoya-web\\public\\media\\kalash\\ritual-1200.webp",
+          "sha256": "5093486633f180546218b344911cc7e5378933dee9aaedd15c1ee60cc0b24fd7",
+          "dimensions": [
+            1200,
+            800
+          ]
+        }
+      ]
+    },
+    {
+      "id": "single-woman",
+      "source": "Dewali_Kalash\\77ac84e5-a47e-49e0-81b2-40c5fcdacd0f.jpg",
+      "source_sha256": "99a8cf8e8a11ec3c72dd92ca0b79596b09bc0715effb6dad23b00b0e25a8b77d",
+      "product_reference": "Dewali_Kalash/WhatsApp Image 2026-10-16 at 5.05.24 PM.jpeg",
+      "generated_source": "C:\\Users\\Palak\\.codex\\generated_images\\01a0be94-7a1b-7bb3-89c2-898a82466177\\exec-f6f09364-83f5-481e-9b4b-156d30d51ae0.png",
+      "generated_sha256": "698f248241bb98b95d381345f8b24db885decb2701cc5075a81f458d07e673d5",
+      "generated_dimensions": [
+        1536,
+        1024
+      ],
+      "exports": [
+        {
+          "path": "younoya-web\\public\\media\\kalash\\single-woman-600.webp",
+          "sha256": "d296c8e339d4c56cdc91f2738a32baa9c852a205a0ae41824b4fecd31316695c",
+          "dimensions": [
+            600,
+            400
+          ]
+        },
+        {
+          "path": "younoya-web\\public\\media\\kalash\\single-woman-1200.webp",
+          "sha256": "397da4aadc7345dad9b866d4693cbda55a262965ad4e60e406b119923aaabb60",
+          "dimensions": [
+            1200,
+            800
+          ]
+        }
+      ]
+    },
+    {
+      "id": "two-women",
+      "source": "Dewali_Kalash\\e5d3aa37-e259-44e3-b7a3-60dbd0dd44ab.jpg",
+      "source_sha256": "f074b2c1787a356ae081e7bdcdec69b3e3d2e4730369395382eb4b5aa2b6a7bd",
+      "product_reference": "Dewali_Kalash/WhatsApp Image 2026-10-16 at 5.05.24 PM.jpeg",
+      "generated_source": "C:\\Users\\Palak\\.codex\\generated_images\\01a0be94-7a1b-7bb3-89c2-898a82466177\\exec-975c7ac0-0e08-489a-ba81-0d7c3bfcc4c4.png",
+      "generated_sha256": "29e848347f2399f31afaf687d9795980e17e6a9df65f4f4684f0f6781feb0c70",
+      "generated_dimensions": [
+        1536,
+        1024
+      ],
+      "exports": [
+        {
+          "path": "younoya-web\\public\\media\\kalash\\two-women-600.webp",
+          "sha256": "89c25f5204afdbf2476468dd782b63964bfbd548b7b2bc38a552b9be52f51c42",
+          "dimensions": [
+            600,
+            400
+          ]
+        },
+        {
+          "path": "younoya-web\\public\\media\\kalash\\two-women-1200.webp",
+          "sha256": "86bb143772f53495d23c84757ad270eac52cc83ce3c9b1c8af9dd3cfb8669b9d",
+          "dimensions": [
+            1200,
+            800
+          ]
+        }
+      ]
+    }
+  ]
+}

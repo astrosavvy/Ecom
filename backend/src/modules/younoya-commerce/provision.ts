@@ -34,17 +34,17 @@ export async function provision(scope: any) {
     option = result[0]
   }
   const codOptions = await fulfillment.listShippingOptions({ name: 'Younoya COD handling' })
-  let cod = codOptions[0]
-  if (!cod) {
-    const { result } = await createShippingOptionsWorkflow(scope).run({ input: [{ name: 'Younoya COD handling', price_type: 'calculated',
-      provider_id: 'younoya-shiprocket_shiprocket', service_zone_id: set.service_zones[0].id, shipping_profile_id: profile.id,
-      data: { id: 'india-cod' }, type: { label: 'Cash on Delivery', description: 'Free delivery; ₹49 COD handling per order', code: 'india-cod' },
-      rules: [{ attribute: 'enabled_in_store', value: 'true', operator: 'eq' }, { attribute: 'is_return', value: 'false', operator: 'eq' }] }] })
-    cod = result[0]
+  // Retain historical records, but never expose or recreate the COD option.
+  for (const cod of codOptions) {
+    const rules = await fulfillment.listShippingOptionRules({ shipping_option_id: cod.id })
+    const visibility = rules.filter((r: any) => r.attribute === 'enabled_in_store')
+    for (const rule of visibility)
+      await fulfillment.updateShippingOptionRules({ id: rule.id, attribute: rule.attribute, operator: rule.operator, value: 'false' })
+    if (!visibility.length) await fulfillment.createShippingOptionRules({shipping_option_id:cod.id,attribute:'enabled_in_store',operator:'eq',value:'false'})
   }
   const providerIds = (await scope.resolve(Modules.PAYMENT).listPaymentProviders({ is_enabled: true })).map((p: any) => p.id)
-  const methods = providerIds.filter((id: string) => id === 'pp_system' || id.includes('razorpay'))
+  const methods = providerIds.filter((id: string) => id.includes('razorpay'))
   await updateRegionsWorkflow(scope).run({ input: { selector: { id: india.id }, update: { payment_providers: methods } } })
-  await saveSettings({ ...s, shippingOptionId: option.id, codShippingOptionId: cod.id })
-  return { shippingOptionId: option.id, codShippingOptionId: cod.id }
+  await saveSettings({ ...s, shippingOptionId: option.id, codShippingOptionId: '' })
+  return { shippingOptionId: option.id, codShippingOptionId: '' }
 }

@@ -39,6 +39,14 @@ test('missing payment collection never queries unrelated payment sessions',async
     expect(resolve).not.toHaveBeenCalled()
   } finally { cart.payment_collection = saved }
 })
+
+test('a previously signed uncompleted COD cart cannot create an order through completion',async () => {
+  const approval={...cart.metadata.commerce_approval,payment_method:'cod'}
+  cart.metadata.commerce_approval={...approval,signature:approvalSignature(approval)}
+  const resolve=jest.fn()
+  await expect(completeApprovedCart({resolve},'cart_qa','cus_qa')).rejects.toThrow('no longer available')
+  expect(resolve).not.toHaveBeenCalled()
+})
 test('changed cart is held before any completion workflow',async () => {
   const run=jest.fn()
   cart.total=10001

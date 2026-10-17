@@ -5,18 +5,16 @@ import { validRazorpaySignature } from "../../../../modules/younoya-razorpay/ser
 import { completedOrder } from "../../../../modules/younoya-commerce/orders"
 import { exclusive, sessionPaise } from "../../../../modules/younoya-commerce/db"
 import { checkoutOwner } from '../../../../modules/younoya-commerce/guest'
+import { checkoutStatus } from '../../../../modules/younoya-commerce/checkout-recovery'
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
+  res.setHeader('Cache-Control','no-store')
   const cartId = String(req.query.cartId ?? "")
   if (!/^cart_[a-zA-Z0-9]+$/.test(cartId)) return res.status(400).json({ message: "Invalid cart" })
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as any
-  const { data } = await query.graph({ entity: "cart", fields: ["id", "customer_id", "completed_at"], filters: { id: cartId } })
-  try { await checkoutOwner(req,cartId) } catch { return res.status(403).json({ message:'Checkout session not found' }) }
-  let order: any = null
-  if (data[0].completed_at) {
-    order = await completedOrder(req.scope,cartId)
-  }
-  return res.json({ owned: true, completed: Boolean(data[0].completed_at), order })
+  let owner: string
+  try { owner = await checkoutOwner(req,cartId) } catch { return res.status(403).json({ message:'Checkout session not found' }) }
+  try { return res.json(await checkoutStatus(req.scope,cartId,owner)) }
+  catch { return res.status(503).json({ message:'Order status is temporarily unavailable. Your bag is saved; please do not place another order yet.' }) }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {

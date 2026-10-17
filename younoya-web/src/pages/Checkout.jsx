@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, LockKeyhole, CircleCheck, ShieldCheck } from 'lu
 import { useCart } from '../context/CartContext'
 import { useSiteConfig } from '../context/SiteConfigContext'
 import { getCustomerToken, clearCustomerToken, storeRequest } from '../lib/giftGuideApi'
-import { createCheckoutCart, getPendingPayment, launchPayment, preparePayment, checkoutAccess, preloadCheckout, confirmCod } from '../lib/checkout'
+import { createCheckoutCart, getPendingPayment, launchPayment, preparePayment, checkoutAccess, preloadCheckout, recoverCheckout } from '../lib/checkout'
 import { checkoutTotal } from '../lib/delivery'
 import DeliveryNotice from '../components/DeliveryNotice'
 import CheckoutFields from '../components/checkout/CheckoutFields'
@@ -26,7 +26,7 @@ export default function Checkout() {
   const [cart, setCart] = useState(null)
   const [session, setSession] = useState(null)
   const [address, setAddress] = useState(() => { try { const saved = JSON.parse(sessionStorage.getItem('yn_checkout_address') || '{}'); return { ...initialAddress, ...saved } } catch { return initialAddress } })
-  const [method,setMethod] = useState('razorpay')
+  const method = 'razorpay'
   const [delivery,setDelivery] = useState(null)
   const [pendingCod,setPendingCod] = useState(() => sessionStorage.getItem('yn_pending_cod') || '')
   const [promo, setPromo] = useState('')
@@ -115,16 +115,30 @@ export default function Checkout() {
 
   useEffect(() => { setAccepted(false) }, [site.policyRevision])
 
+  async function recoverPreviousCheckout(id, active = () => true) {
+    const status = await recoverCheckout(id)
+    if (!active()) return
+    if (status.order?.id) { complete(status.order); return }
+    if (!status.restart_allowed || !status.cart?.id)
+      throw new Error(status.message || 'Your previous order needs review. Please contact support before placing another order.')
+    const saved = status.cart
+    const a = saved.shipping_address || {}
+    setAddress(current => ({ ...current, firstName:a.first_name || current.firstName, lastName:a.last_name || current.lastName,
+      email:saved.email || current.email, phone:a.phone || current.phone, street:a.address_1 || current.street,
+      street2:a.address_2 || current.street2, city:a.city || current.city, state:a.province || current.state, pincode:a.postal_code || current.pincode }))
+    setCart(saved); setSession(null); setAccepted(false); setError('')
+    sessionStorage.removeItem('yn_pending_cod'); setPendingCod('')
+  }
+
   useEffect(() => {
     if (order || !customerReady) return
-    if (!site.checkoutEnabled && !getPendingPayment()) return
+    if (!site.checkoutEnabled && !getPendingPayment() && !pendingCod) return
     setAddress(current => ({ ...current, email: current.email || customer?.email || '', firstName: current.firstName || customer?.first_name || '', lastName: current.lastName || customer?.last_name || '' }))
 
     let cancelled = false
     const codId = sessionStorage.getItem('yn_pending_cod')
     if (codId) {
-      setMethod('cod'); setAccepted(true)
-      confirmCod(codId).then(value => { if (!cancelled) complete(value) }).catch(issue => { if (!cancelled) setError(issue.message) })
+      recoverPreviousCheckout(codId, () => !cancelled).catch(issue => { if (!cancelled) setError(issue.message) })
       return () => { cancelled = true }
     }
     const pending = getPendingPayment()
@@ -157,7 +171,7 @@ export default function Checkout() {
     setBusy(true)
     setError('')
     try {
-      if (pendingCod) { complete(await confirmCod(pendingCod)); return }
+      if (pendingCod) { await recoverPreviousCheckout(pendingCod); return }
       if (!site.checkoutEnabled || !accepted) {
         throw new Error('Please review and accept the store policies before placing your order.')
       }
@@ -166,7 +180,7 @@ export default function Checkout() {
       let activeSession = session
 
       // If payment session not yet prepared, prepare it now
-      if (!activeSession || method === 'cod') {
+      if (!activeSession) {
         const current = activeCart?.metadata?.commerce_requote_required || activeCart?.metadata?.money_unit !== 'inr-major-v2'
           ? await createCheckoutCart(offer, bag, customer)
           : activeCart
@@ -177,11 +191,6 @@ export default function Checkout() {
         setCart(activeCart)
         setSession(activeSession)
         if (prepared.delivery) setDelivery(prepared.delivery)
-      }
-
-      if (method === 'cod') {
-        setPendingCod(activeCart.id)
-        complete(await confirmCod(activeCart.id)); return
       }
 
       // Directly open Razorpay in the same flow — zero second clicks!
@@ -201,8 +210,8 @@ export default function Checkout() {
     setSession(null)
   }
 
-  const pending = !!getPendingPayment() || !!pendingCod
-  function changeMethod(value) { if (pending || busy) return; setMethod(value); setSession(null); setError('') }
+  const pendingPayment = getPendingPayment()
+  const pending = !!pendingPayment || !!pendingCod
 
   if (order) {
     return (
@@ -240,7 +249,7 @@ export default function Checkout() {
           <section className="checkout-card checkout-payment-card" aria-label="Payment method">
             <h2 className="checkout-card__title">Payment Method</h2>
             <label className={`checkout-payment-option ${method === 'razorpay' ? 'is-selected' : ''}`}>
-              <input type="radio" name="payment_method" value="razorpay" checked={method === 'razorpay'} onChange={() => changeMethod('razorpay')} disabled={pending || busy} />
+              <input type="radio" name="payment_method" value="razorpay" checked readOnly disabled={pending || busy} />
               <div className="checkout-payment-option__info">
                 <span className="payment-provider-title">Razorpay Secure Checkout</span>
                 <span className="payment-provider-subtitle">UPI, Credit/Debit Cards, Net Banking &amp; Wallets</span>
@@ -250,10 +259,6 @@ export default function Checkout() {
                 <span className="payment-method-badge">Cards</span>
                 <span className="payment-method-badge">Net Banking</span>
               </div>
-            </label>
-            <label className={`checkout-payment-option ${method === 'cod' ? 'is-selected' : ''}`}>
-              <input type="radio" name="payment_method" value="cod" checked={method === 'cod'} onChange={() => changeMethod('cod')} disabled={pending || busy || !site.codEnabled} />
-              <div className="checkout-payment-option__info"><span className="payment-provider-title">Cash on Delivery · ₹49 extra</span><span className="payment-provider-subtitle">Payment due on delivery · Standard delivery</span></div>
             </label>
             <DeliveryNotice delivery={delivery} method={method} />
           </section>
@@ -274,21 +279,22 @@ export default function Checkout() {
 
             {busy && pending && (
               <p className="checkout-finalizing-note">
-                {method === 'cod' ? 'Confirming your Cash on Delivery order… Please do not refresh.' : 'Payment received. Finalizing your order with the atelier… Please do not refresh.'}
+                {pendingCod ? 'Checking your previous order…' : 'Finalizing your order with the atelier… Please do not refresh.'}
               </p>
             )}
 
             <button
               className="checkout-place-order-btn"
               type="submit"
-              disabled={!cart && !offer && bag.length === 0 || busy || (!pending && (!site.checkoutEnabled || !accepted))}
+              formNoValidate={!!pendingCod}
+              disabled={(!pending && !cart && !offer && bag.length === 0) || busy || (!pending && (!site.checkoutEnabled || !accepted))}
             >
               <span>
                 {busy
-                  ? (pending || method === 'cod' ? 'Finalizing your order…' : 'Opening secure payment…')
+                  ? (pendingCod || pendingPayment?.receipt ? 'Checking your order…' : 'Opening secure payment…')
                   : pending
-                    ? 'Finalizing order…'
-                    : method === 'cod' ? `Place order · ${money(payableAmount)}` : `Pay ${money(payableAmount)} securely`}
+                    ? (pendingCod ? 'Check order status' : pendingPayment?.receipt ? 'Check payment status' : 'Resume secure payment')
+                    : `Pay ${money(payableAmount)} securely`}
               </span>
               <ArrowRight size={17} />
             </button>

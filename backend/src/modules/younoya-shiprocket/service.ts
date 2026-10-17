@@ -4,14 +4,17 @@ import { shipment } from "../younoya-commerce/orders"
 import { requireLive } from "../younoya-commerce/settings"
 import { pack } from "../younoya-commerce/packing"
 import { shiprocket } from "../younoya-commerce/shiprocket"
-import { COD_FEE } from '../younoya-commerce/delivery'
 export default class ShiprocketFulfillment extends AbstractFulfillmentProviderService {
   static identifier = "younoya-shiprocket"
-  async getFulfillmentOptions() { return [{ id: "india-prepaid", name: "Free India delivery" }, { id: 'india-cod', name: 'Cash on Delivery' }] }
-  async validateOption(data: any) { return ['india-prepaid','india-cod'].includes(data.id) }
+  async getFulfillmentOptions() { return [{ id: "india-prepaid", name: "Free India delivery" }] }
+  async validateOption(data: any) { return data.id === 'india-prepaid' }
   async canCalculate() { return true }
-  async calculatePrice(options: any) { return { calculated_amount: options.id === 'india-cod' ? COD_FEE : 0, is_calculated_price_tax_inclusive: true } }
+  async calculatePrice(options: any) {
+    if (options.id !== 'india-prepaid') throw new CommerceError('Use online payment with free India delivery',409)
+    return { calculated_amount: 0, is_calculated_price_tax_inclusive: true }
+  }
   async validateFulfillmentData(options: any, _data: any, context: any) {
+    if (options.id !== 'india-prepaid') throw new CommerceError('Use online payment with free India delivery',409)
     const s = await requireLive()
     const parcel = pack(context.items,s.draft)
     const pin = context.shipping_address?.postal_code

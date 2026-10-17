@@ -8,6 +8,8 @@ import { shiprocket } from "./shiprocket"
 import { addShippingMethodToCartWorkflow, refreshPaymentCollectionForCartWorkflow } from '@medusajs/medusa/core-flows'
 import { COD_FEE, checkoutMethod, deliveryInfo } from './delivery'
 import { lookupPincode } from './pincode'
+import { requireUnattemptedCart } from './checkout-recovery'
+import { requireReleasedItems } from './ritual-products'
 const canonical = (value: any): any => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
   ? Object.fromEntries(Object.keys(value).sort().map(key => [key,canonical(value[key])])) : value
 export function cartFingerprint(cart: any) {
@@ -27,12 +29,15 @@ export function validApproval(approval: any) {
 export async function serviceability(scope: any, cartId: string, customer: string, revision: string, requestedMethod?: unknown) {
   const s = await requireLive()
   const method = checkoutMethod(requestedMethod)
-  if (method === 'cod' && !s.draft.codShippingOptionId) throw new CommerceError('Cash on Delivery is being configured',409)
   let cart = await readCart(scope,cartId,customer)
+  await requireReleasedItems(scope,cart.items)
+  if (cart.metadata?.commerce_payment_method === 'cod' || cart.metadata?.commerce_approval?.payment_method === 'cod')
+    await requireUnattemptedCart(scope,cartId,customer)
   if (cart.payment_collection?.id) {
     const sessions = await scope.resolve(Modules.PAYMENT).listPaymentSessions({ payment_collection_id: cart.payment_collection.id })
     if (sessions.some((p: any) => p.provider_id.includes('razorpay')))
       throw new CommerceError('A payment is already prepared. Resolve it before changing the order or payment method.',409)
+    if (sessions.length) throw new CommerceError('Your previous payment attempt needs review before checkout can restart.',409)
   }
   if (cart.metadata?.commerce_requote_required || cart.metadata?.money_unit !== 'inr-major-v2')
     throw new CommerceError('Reopen checkout to calculate current prices. Your bag and address are preserved.',409)
