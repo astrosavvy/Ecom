@@ -152,6 +152,48 @@
           ]
         }
       ]
+    },
+    {
+      "id": "boxed-set",
+      "date": "2026-10-18",
+      "source": "Dewali_Kalash/WhatsApp Image 2026-10-16 at 5.05.24 PM.jpeg",
+      "source_sha256": "9bf05ba2dacadd0767b7bf5524547732d5b85a6842da7ec9ea41b0035702ff58",
+      "box_reference": "Dewali_Kalash/box-dimensions-reference.png",
+      "box_reference_sha256": "f68093336746609cbec5608a937e07b11dbc9b88a66bfedf7aa5030014d37493",
+      "generated_source": "C:\\Users\\Palak\\.codex\\generated_images\\01a0be94-7a1b-7bb3-89c2-898a82466177\\exec-5cf142ab-7b8c-49a2-a484-8ed24ca59b11.png",
+      "generated_sha256": "5225857cc21403b818a346e4f89d1a2409b5a090faecb138f801e3b40c8c7aed",
+      "generated_dimensions": [
+        1536,
+        1024
+      ],
+      "exports": [
+        {
+          "path": "younoya-web/public/media/kalash/boxed-set-600.webp",
+          "sha256": "03cc85161ea656ae9def2d4ed0c47bd9ef3513b1982b4abc0ea9445219985160",
+          "dimensions": [
+            600,
+            400
+          ]
+        },
+        {
+          "path": "younoya-web/public/media/kalash/boxed-set-1200.webp",
+          "sha256": "7afb526b5d0fd06da63fb8842c5eb261a2711981ac330c13d4d2a2d154bb8525",
+          "dimensions": [
+            1200,
+            800
+          ]
+        }
+      ],
+      "prompt": "Landscape 3:2 photorealistic included-set composition using the actual Kalash reference and exact galaxy-pattern YOUNOYA box. Place the unchanged Kalash in the left of the open black-lined box, red velvet potli on right with exact text \"11 sacred pooja samagri\", and black envelope facing camera with three exact lines \"pooja vidhi\", \"Pooja mahurat\", \"Pooja mantra\". Preserve YOUNOYA branding, product appearance and box edges. Warm ivory setting, subtle external marigolds and diya bokeh. No measurements, arrows, loose extra ritual objects, people, financial claims or watermark.",
+      "review": "Realism revision visually inspected: all requested label words intact, matte box print, natural daylight, subdued staging and faithful vessel appearance. Both generated originals preserved.",
+      "revisions": [
+        {
+          "generated_source": "C:\\Users\\Palak\\.codex\\generated_images\\01a0be94-7a1b-7bb3-89c2-898a82466177\\exec-dfd58716-fcbf-4b01-9f90-4ea8c698f36b.png",
+          "generated_sha256": "81ccad1971c267e6f0d2dc70b73a436f29b73a7be527dd21037ae654ebf43699",
+          "reason": "Owner requested more realistic photography; original generated draft preserved."
+        }
+      ],
+      "realism_edit_prompt": "Edit the original composition using the actual Kalash and supplied galaxy box references. Preserve all products, layout, YOUNOYA branding and exact labels. Use broad soft window daylight and neutral-warm white balance, matte printed cardboard rather than illuminated artwork, naturally irregular crystal chips and copper rim, believable red velvet folds, real textured envelope paper, physically correct contact shadows and restrained saturation. Reduce staging to distant diya and a few marigolds; no glowing CGI/bloom/HDR, extra products or changed lettering."
     }
   ]
 }

@@ -1,6 +1,6 @@
 # Diwali Wealth Kalash photography
 
-Five photographs edited with the built-in imagegen tool on 2026-10-17. The six original product photographs and two women references remain untouched in `Dewali_Kalash/`; original source photographs are not committed.
+The initial five photographs were edited with built-in imagegen on 2026-10-17. A sixth included-set composition was added and refined for photographic realism on 2026-10-18. Original product photographs, women references and the archived supplied box reference remain untouched in `Dewali_Kalash/`; original source photographs are not committed.
 
 ## Assets and provenance
 
@@ -25,3 +25,11 @@ All prompts requested landscape 3:2 photography, realistic contact shadows, warm
 All five outputs visually compared to their inputs: recognisable faces/clothing retained; potli/text removed; vessel proportions, rim and characteristic texture retained. The generated lifestyle images reconstruct some small chip placements and are explicitly captioned as AI-styled compositions. Do not treat illustrative object quantities, props or generated chip details as a packing/material specification.
 
 On an image failure, the gallery uses an unedited photograph of the actual Kalash, never the old potli promotion. Fallback captions change to identify the original product reference.
+
+## Sixth image — included boxed set, 18 October 2026
+
+- References: the actual Kalash hero source and the owner-supplied galaxy-pattern YOUNOYA box. The box reference is archived at `Dewali_Kalash/box-dimensions-reference.png`; hashes and both generated draft/revision paths are recorded in `photography.json`.
+- Composition prompt: one open galaxy-print box with the authentic vessel on the left, closed red velvet potli on the right, and a black envelope leaning behind it. Preserve vessel shape, irregular chips, copper-toned rim, galaxy artwork and YOUNOYA branding. Pouch text exactly **11 sacred pooja samagri**; envelope lines exactly **pooja vidhi**, **Pooja mahurat**, **Pooja mantra**. No dimensions/arrows, extra merchandise or invented contents.
+- Owner-requested realism edit: soft broad window daylight, neutral-warm colour, matte printed cardboard instead of glowing artwork, natural fabric nap/folds and paper texture, believable copper reflections/contact shadows, restrained saturation and only distant marigolds/diya. Preserve every requested word. Both generated PNGs remain untouched in the generated-image archive; responsive exports use the second image.
+- Final exports: `boxed-set-600.webp` (600 × 400) and `boxed-set-1200.webp` (1200 × 800), appended as image six. The existing five images and hero remain unchanged. The scoped Kalash thumbnail layout uses six columns on desktop and three on mobile.
+- Review: all requested lettering is intact; vessel appearance and packaging branding compared with the references. The image is explicitly identified as an AI-styled visual. The owner confirmed the box, labelled potli and puja-guidance envelope are included in every set; only external flowers/lamps are styling props. No additional ritual types or personalised consultation are implied.

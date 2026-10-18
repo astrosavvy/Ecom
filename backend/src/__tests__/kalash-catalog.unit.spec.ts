@@ -29,9 +29,11 @@ test('creates a 5599 INR Standard preview with stock 50 once; later stock adjust
   expect(product.metadata).toMatchObject({hsn:'7116',hsn_approved:true,gst_rate:null,gst_rate_approved:false,packaging_approved:false,ritual_release_approved:false,kalash_stock_initialized:true})
   expect(levels[0]).toMatchObject({stocked_quantity:50,location_id:'sloc_test'})
   levels[0].stocked_quantity=27
+  levels[0].reserved_quantity=2
   await prepareKalash(scope)
   expect(createProduct).toHaveBeenCalledTimes(1); expect(createLevel).toHaveBeenCalledTimes(1)
   expect(levels[0].stocked_quantity).toBe(27)
+  expect(levels[0].reserved_quantity).toBe(2)
 })
 test('does not reset missing initialized stock or overwrite a foreign product',async () => {
   await expect(initializeKalashStock(scope,{metadata:{kalash_stock_initialized:true}},'sloc_test')).rejects.toThrow('do not reset stock')

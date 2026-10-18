@@ -83,5 +83,22 @@
       "height": 1600,
       "caption": "Original photograph of the actual Kalash"
     }
+  },
+  {
+    "id": "boxed-set",
+    "src": "/media/kalash/boxed-set-1200.webp",
+    "thumbnail": "/media/kalash/boxed-set-600.webp",
+    "width": 1200,
+    "height": 800,
+    "caption": "AI-styled visual of the included Kalash gift box, samagri potli and puja-guidance envelope",
+    "styled": true,
+    "stylingNote": "The box, red potli and printed puja guidance are included. Background flowers and lamps are styling props.",
+    "fallback": {
+      "src": "/media/kalash/original-front-1200.webp",
+      "thumbnail": "/media/kalash/original-front-600.webp",
+      "width": 1200,
+      "height": 1600,
+      "caption": "Original photograph of the actual Kalash"
+    }
   }
 ]

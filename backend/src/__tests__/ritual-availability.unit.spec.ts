@@ -24,8 +24,10 @@ test('Navratri keeps its approved stock and price through the shared endpoint',a
 test('Kalash stock does not enable checkout without publication, rate, approval and a configured parcel',async () => {
   product.handle='diwali-wealth-kalash';product.variants[0].sku='YN-DIWALI-KALASH-001';product.variants[0].prices[0].amount=5599
   expect((await ritualAvailability(scope,product.handle)).purchasable).toBe(false)
-  product.metadata={ritual_release_approved:true,gst_rate_approved:true,gst_rate:3,packaging_approved:true}
+  product.metadata={ritual_release_approved:true,gst_rate_approved:true,gst_rate:0,packaging_approved:true}
   expect((await ritualAvailability(scope,product.handle)).availableQuantity).toBe(50)
+  ;(getVariantAvailability as jest.Mock).mockResolvedValueOnce({v_test:{availability:0}})
+  expect(await ritualAvailability(scope,product.handle)).toMatchObject({purchasable:false,availableQuantity:0})
   ;(settings as jest.Mock).mockResolvedValue({draft:{variants:[{id:'v_test',hsn:'7116'}],parcels:[]}})
   expect((await ritualAvailability(scope,product.handle)).purchasable).toBe(false)
   product.status='draft'

@@ -4,6 +4,8 @@ import { CommerceError, exclusive } from './db'
 import { settings } from './settings'
 
 export const KALASH = { handle:'diwali-wealth-kalash',sku:'YN-DIWALI-KALASH-001',price:5599,initialStock:50 }
+export const KALASH_GALLERY = ['hero','detail','ritual','single-woman','two-women','boxed-set']
+export const KALASH_PACKAGING = ['YOUNOYA gift box','Red potli labelled "11 sacred pooja samagri"','Envelope with pooja vidhi, Pooja mahurat and Pooja mantra']
 export async function initializeKalashStock(scope: any, product: any, locationId: string) {
   const inventory = scope.resolve(Modules.INVENTORY)
   const items = await inventory.listInventoryItems({sku:KALASH.sku})
@@ -30,11 +32,11 @@ export async function prepareKalash(scope: any) {
       hsn_approved:true,price_includes_gst:true,ritual_release_approved:product?.metadata?.ritual_release_approved === true,
       gst_rate:product?.metadata?.gst_rate ?? null,gst_rate_approved:product?.metadata?.gst_rate_approved === true,
       packaging_approved:product?.metadata?.packaging_approved === true,
-      contents:['Gomti chakra','Kamal gatta','Kaudiyan','Rose quartz crystals','Citrine crystals','Coins']}
+      contents:['Gomti chakra','Kamal gatta','Kaudiyan','Rose quartz crystals','Citrine crystals','Coins'],included_packaging:KALASH_PACKAGING}
     const content = {title:'YOUNOYA Diwali Wealth Kalash',handle:KALASH.handle,subtitle:'A considered ritual for prosperity',
-      description:'A textured Kalash with Gomti chakra, kamal gatta, kaudiyan, rose quartz crystals, citrine crystals and coins, for meaningful Diwali rituals and devotional gifting.',
+      description:'A textured Kalash with Gomti chakra, kamal gatta, kaudiyan, rose quartz crystals, citrine crystals and coins, for meaningful Diwali rituals and devotional gifting. Includes the YOUNOYA gift box, a red potli labelled "11 sacred pooja samagri", and an envelope containing pooja vidhi, Pooja mahurat and Pooja mantra.',
       thumbnail:`${origin}/media/kalash/hero-600.webp`,
-      images:['hero','detail','ritual','single-woman','two-women'].map(id => ({url:`${origin}/media/kalash/${id}-1200.webp`})),metadata}
+      images:KALASH_GALLERY.map(id => ({url:`${origin}/media/kalash/${id}-1200.webp`})),metadata}
     if (!product) {
       const {result} = await createProductsWorkflow(scope).run({input:{products:[{...content,status:ProductStatus.DRAFT,
         sales_channels:[{id:state.salesChannelId}],options:[{title:'Edition',values:['Standard']}],

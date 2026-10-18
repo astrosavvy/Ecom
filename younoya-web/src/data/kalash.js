@@ -17,6 +17,6 @@ export const KALASH_PRODUCT = {
   primaryImage:photos[0].src,cardImage:photos[0].thumbnail,cardImageFallback:photos[0].fallback.thumbnail,gallery:photos,
   seoTitle:'Diwali Wealth Kalash | Younoya',
   seoDescription:'Explore the Younoya Diwali Wealth Kalash with Gomti chakra, lotus seeds, cowrie shells, rose quartz, citrine and coins for devotional rituals. ₹5,599.',
-  intentionStory:'Bring a considered intention to your Diwali rituals. A textured Kalash brings together Gomti chakra, kamal gatta, kaudiyan, rose quartz crystals, citrine crystals and coins for a meaningful devotional arrangement.',
+  intentionStory:'Bring a considered intention to your Diwali rituals. A textured Kalash brings together Gomti chakra, kamal gatta, kaudiyan, rose quartz crystals, citrine crystals and coins for a meaningful devotional arrangement. Includes the YOUNOYA gift box, red samagri potli and an envelope with printed puja guidance.',
   relatedHandles:['navratri-shringaar-box','golden-instinct','the-inner-kingdom'],
 }
