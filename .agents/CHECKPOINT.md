@@ -5,8 +5,8 @@
 ---
 
 ## 1. 📍 Executive Status & System Topology
-- **Active Phase**: Kalash boxed-set backend release deployed and verified: public ordering enabled at INR 5,599 with stock 50, owner-confirmed zero tax and dedicated 2.5 kg parcel. Sixth image and revised copy verified locally; fresh GitHub push permission pending.
-- **Last Updated**: 2026-10-18 | **Agent**: Codex | **Git Branch**: `main`
+- **Active Phase**: Shop hero edition image tile fix implemented: changed `.shop-editions__image img` to `object-fit: cover` with subtle luxury hover scale and updated `ProductCard.jsx` to render Kalash catalog media edge-to-edge; build verification in progress.
+- **Last Updated**: 2026-10-19 | **Agent**: Antigravity | **Git Branch**: `main`
 - **Storefront**: `https://younoya.com` (Vite 6 + React 19 + Framer Motion + Lenis, deployed to Cloudflare Worker `ecom` via Git).
 - **Backend API**: `https://api.younoya.com` (Medusa 2.18 + Node 20 + PostgreSQL 15 `younoya_db` + Redis on VPS `ubuntu@140.245.7.165` via CF Tunnel).
 - **Admin Console**: Hosted exclusively on frontend edge (`https://younoya.com/admin/*`). ZERO VPS admin builds (956MB RAM OOM ceiling).
@@ -221,3 +221,19 @@
 - Browser QA: six gallery selections, keyboard selection, original-photo fallback on failed new asset, unavailable-state protection, add to bag and guest checkout at INR 5599 without OTP. Final viewport checks at 360/430/1024/1920 verified actual widths, no horizontal overflow, mobile purchase-bar clearance and 3/6 thumbnail columns. Read-only production check confirmed live ordering availability. No real payment, refund, pickup or customer order; no terms/Pay interaction in this round. Real-device keyboard/touch remain manual checks. QA tabs closed, viewport reset and mock fixture stopped.
 - Final consistency/security checks: 208 matching distribution files; six gallery records; 19 original/reference/export hashes verified. Browser/Worker outputs checked against 11 distinct private environment values: zero matches. Kalash canonical/index-follow/SKU/new image verified and Navratri-only Pixel absent. Source whitespace check passed. Temporary artifacts and raw Dewali_Kalash/ and Navratra/ remain excluded.
 - Implementation, source/assets, generated distributions, tests, documentation and checkpoint are included together in one final local commit. No GitHub push this turn. Next: obtain fresh explicit push permission, release frontend assets, then verify the sixth image/copy publicly. Backend activation is complete; current public frontend still has five images until release.
+
+
+## 25. Kalash boxed-set push verified — 2026-10-18 / Codex
+- User explicitly authorized git push. git push origin main exited 0, advancing main from aa16eb7 to 54b60f4. Independent git ls-remote verified full remote SHA 54b60f4a0c3c9619075a834e9904d998bef1ee43 equals local HEAD.
+- Prior successful builds, tests, responsive QA and security scans in section 24 remain applicable; no application changes or backend redeployment this turn. Raw Dewali_Kalash/ and Navratra/ remain untracked.
+- Push triggers the established frontend release pipeline; push success alone does not confirm deployment. Next: verify public sixth gallery image and revised copy after Cloudflare release. Backend ordering activation is already complete.
+- This post-push checkpoint note remains in the working tree for the next implementation commit. No checkpoint-only follow-up commit.
+
+## 26. Shop Hero Edition Image Tile & Catalog Card Fix — 2026-10-19 / Antigravity
+- User reported visual defect on `/shop` hero carousel where the Diwali Wealth Kalash image had letterbox padding / empty outer container space above and below the image inside `.shop-editions__image`.
+- Root Cause: `.shop-editions__image img` had `object-fit: contain` inside a fixed `aspect-ratio: 1.12` tile with `background: #f2ece2`. Because the Kalash hero photo is 3:2 landscape (1200x800), `contain` created ~22.6% empty beige letterbox bars above and below the photo. Additionally, `ProductCard.jsx` had grouped `product.kind === 'kalash'` under `.livora-card__media--ritual` (`object-fit: contain; padding: 10px;`), causing the catalog grid card to also render with letterbox bars.
+- Implementation:
+  - Updated `younoya-web/src/styles/ShopEditions.css`: Set `.shop-editions__image img` to `object-fit: cover; object-position: center;` with a smooth luxury hover scale (`transform: scale(1.025); transition: transform .6s cubic-bezier(.22,1,.36,1)`). The image now fills the 24px rounded card edge-to-edge without letterboxing on both desktop and mobile viewports.
+  - Updated `younoya-web/src/components/shop/ProductCard.jsx`: Scoped `.livora-card__media--ritual` strictly to `product.kind === 'ritual-box'` (Navratri clear acrylic box), allowing the Kalash editorial photography to fill the catalog card with `object-fit: cover` edge-to-edge, aligning perfectly with other atelier products. Preserved direct buy restriction to require visiting the product page.
+- Verification: Tested with Puppeteer on desktop (1440x900) and mobile (390x844); verified clean edge-to-edge framing for both Kalash and Navratri slides, with zero empty outer space. Build verification in progress. Single final local commit prepared. Push requires explicit user approval.
+
