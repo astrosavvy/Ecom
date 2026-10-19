@@ -26,6 +26,9 @@
 >    - NEVER commit intermediate edits or partial scratch work.
 >    - NEVER create a separate follow-up commit just to update a commit hash in `CHECKPOINT.md`.
 >    - Batch all code edits, asset additions, config tweaks, and `CHECKPOINT.md` updates into **ONE single final commit**.
+> 3. **ZERO LITERAL PROMPT LEAKAGE (STRICT EDITORIAL COMMON SENSE)**:
+>    - NEVER copy developer instructions, internal technical specs (e.g. "1:1 square post", "CAC reduction", prompt meta-language), or prompt directives directly onto customer- or admin-facing UI strings.
+>    - All customer-facing copy must be quiet, natural, consumer-first luxury editorial prose (e.g. "Download Card", "Post", "Story", "Share Keepsake").
 
 ---
 

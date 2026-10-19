@@ -1,29 +1,30 @@
-/* ── YOUNOYA Social Share Card & Modal Styling ── */
+/* ── YOUNOYA Social Share Card & Modal — Anthropic & Vercel Aesthetic ── */
 .social-share-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(8, 6, 4, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(10, 8, 7, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px;
 }
 
+/* Double-Bezel Architectural Modal Shell */
 .social-share-modal {
-  background: #14100D;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: #110F0E;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
-  max-width: 520px;
+  max-width: 500px;
   width: 100%;
-  max-height: 92vh;
+  max-height: 94vh;
   overflow-y: auto;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(212, 175, 55, 0.12);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.04);
   color: #FAF4EB;
   font-family: var(--font-sans, "Plus Jakarta Sans", sans-serif);
-  padding: 28px 24px;
+  padding: 30px 26px;
   position: relative;
 }
 
@@ -31,9 +32,9 @@
   position: absolute;
   top: 18px;
   right: 18px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  color: #D6B06A;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #A39688;
   border-radius: 50%;
   width: 32px;
   height: 32px;
@@ -41,17 +42,18 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .social-share-modal__close:hover {
-  background: rgba(212, 175, 55, 0.2);
-  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FAF7F2;
+  transform: scale(1.04);
 }
 
 .social-share-modal__head {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .social-share-modal__eyebrow {
@@ -59,152 +61,274 @@
   align-items: center;
   gap: 6px;
   font-size: 11px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #D6B06A;
+  color: #C49A50;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .social-share-modal__title {
   font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
-  font-size: 26px;
-  color: #FFF7EB;
-  margin-bottom: 6px;
+  font-size: 27px;
+  font-weight: 400;
+  color: #FFF9F0;
+  letter-spacing: -0.3px;
+  margin-bottom: 8px;
 }
 
 .social-share-modal__desc {
   font-size: 13px;
-  color: #A39688;
-  max-width: 400px;
+  color: #9E9182;
+  max-width: 410px;
   margin: 0 auto;
-  line-height: 1.5;
+  line-height: 1.55;
+  font-weight: 400;
 }
 
-/* Format Toggles */
-.social-share-modal__toggles {
+/* Dual Controls: Format & Theme */
+.social-share-modal__controls {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+/* Vercel-Style Segmented Pill Controls */
+.social-share-modal__toggles {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  padding: 3px;
+  gap: 2px;
 }
 
 .social-share-modal__toggle-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  color: #A39688;
+  background: transparent;
+  border: none;
+  color: #8C7F72;
   padding: 6px 14px;
   border-radius: 100px;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.social-share-modal__toggle-btn:hover {
+  color: #E6D8C8;
 }
 
 .social-share-modal__toggle-btn.active {
-  background: rgba(212, 175, 55, 0.15);
-  border-color: #D6B06A;
-  color: #D6B06A;
+  background: rgba(255, 255, 255, 0.1);
+  color: #FAF7F2;
   font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Live Card Canvas Preview */
+/* Theme Selector */
+.social-share-modal__themes {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.social-share-modal__theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #8C7F72;
+  padding: 6px 13px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.social-share-modal__theme-btn:hover {
+  color: #E6D8C8;
+}
+
+.social-share-modal__theme-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FAF7F2;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.theme-dot--ivory {
+  background: #FAF7F2;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.theme-dot--noir {
+  background: #0D0B0A;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Exhibition Matting Preview */
 .social-share-modal__canvas-wrap {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 24px;
-  background: #090706;
-  border-radius: 12px;
-  padding: 16px;
-  border: 1px solid rgba(212, 175, 55, 0.15);
+  background: #080706;
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 340px;
 }
 
 .social-share-modal__canvas {
-  max-width: 280px;
-  max-height: 440px;
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.15);
+  border-radius: 6px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Action Buttons */
+.social-share-modal__canvas--feed {
+  max-width: 320px;
+  max-height: 320px;
+  aspect-ratio: 1 / 1;
+}
+
+.social-share-modal__canvas--story {
+  max-width: 220px;
+  max-height: 390px;
+  aspect-ratio: 9 / 16;
+}
+
+/* Refined Luxury Action Controls */
 .social-share-modal__actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* Primary High-Contrast Action */
+.social-share-btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #FAF7F2;
+  color: #12100E;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 13px 20px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.social-share-btn-primary:hover {
+  transform: translateY(-1px);
+  background: #FFFFFF;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
+}
+
+.social-share-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.social-share-modal__actions-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Secondary Ghost Action */
+.social-share-btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FAF4EB;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 12px 14px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.social-share-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.social-share-btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* WhatsApp Refined Action — Zero Garish Neon */
 .social-share-btn-whatsapp {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  background: #25D366;
-  color: #0B2513;
-  font-weight: 700;
-  font-size: 14px;
-  padding: 14px;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FAF4EB;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 12px 14px;
   border-radius: 100px;
-  border: none;
   cursor: pointer;
-  transition: transform 0.2s ease, filter 0.2s ease;
-  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.social-share-btn-whatsapp__icon {
+  color: #34D399;
 }
 
 .social-share-btn-whatsapp:hover {
+  background: rgba(52, 211, 153, 0.08);
+  border-color: rgba(52, 211, 153, 0.3);
   transform: translateY(-1px);
-  filter: brightness(1.06);
 }
 
-.social-share-btn-story {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: linear-gradient(135deg, #D4AF37 0%, #AA822A 100%);
-  color: #120F0D;
-  font-weight: 700;
-  font-size: 14px;
-  padding: 14px;
-  border-radius: 100px;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.social-share-btn-story:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 18px rgba(212, 175, 55, 0.35);
-}
-
-.social-share-btn-download {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  color: #FAF4EB;
-  font-weight: 600;
-  font-size: 13px;
-  padding: 12px;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.social-share-btn-download:hover {
-  background: rgba(212, 175, 55, 0.12);
-  border-color: rgba(212, 175, 55, 0.45);
+.social-share-btn-whatsapp:active {
+  transform: scale(0.98);
 }
 
 .social-share-modal__toast {
   text-align: center;
   font-size: 12px;
-  color: #55E084;
-  margin-top: 10px;
+  color: #C49A50;
+  margin-top: 12px;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 480px) {
+  .social-share-modal {
+    padding: 22px 18px;
+  }
+  .social-share-modal__actions-row {
+    grid-template-columns: 1fr;
+  }
 }

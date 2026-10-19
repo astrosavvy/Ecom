@@ -1,16 +1,25 @@
 /**
  * YOUNOYA Luxury Social Share Card Generator
- * Synthesizes high-resolution 1080x1920 (9:16 Story) and 1080x1080 (1:1 Feed) social cards directly in browser canvas.
- * Cartier-grade obsidian & celestial gold aesthetic designed for viral Instagram Stories, WhatsApp status, and CAC reduction.
+ * Inspired by Anthropic Editorial Broadsheets & Vercel Geist Swiss Precision.
+ * Synthesizes museum-grade 1080x1080 (1:1 Square Post - DEFAULT) and 1080x1920 (9:16 Story)
+ * directly in browser canvas.
+ * 
+ * Free of AI-slop cliches:
+ * - Zero muddy yellow gradients or scattered clip-art stars
+ * - Double-bezel architectural hairline framing with precision registration marks
+ * - Literary Cormorant Garamond serif typography with balanced editorial line wrapping
+ * - Passive-voice cosmic alignment text
+ * - Dual themes: 'atelier' (Warm Alabaster/Ivory Paper - Default) & 'nocturne' (Architectural Obsidian)
  */
 
 export async function renderSocialCardToCanvas(canvas, data, options = {}) {
   const {
-    format = 'story', // 'story' (9:16) or 'feed' (1:1)
+    format = 'feed', // 'feed' (1:1 Square - Default) or 'story' (9:16)
+    theme = 'atelier', // 'atelier' (Warm Ivory - Default) or 'nocturne' (Deep Obsidian)
   } = options
 
   const width = 1080
-  const height = format === 'story' ? 1920 : 1080
+  const height = format === 'feed' ? 1080 : 1920
   canvas.width = width
   canvas.height = height
 
@@ -22,128 +31,153 @@ export async function renderSocialCardToCanvas(canvas, data, options = {}) {
     sign = 'Aries',
     signSymbol = '♈',
     chapter = 'Career & Confidence',
-    prophecy = 'A quiet shift is clearing your path. What felt delayed was merely gathering force—trust your instincts over haste. Your season of effortless authority begins now.',
-    anchorPiece = 'The Precision Keepsake',
+    prophecy = 'A long-held threshold is quietly crossed under this transit. What was once withheld in uncertainty is now yielded with grace; new authority is recognized where silent dedication was kept.',
+    anchorPiece = 'The Consecrated Keepsake',
   } = data
 
-  // 1. Deep Obsidian Luxury Canvas
-  ctx.fillStyle = '#120F0D'
-  ctx.fillRect(0, 0, width, height)
+  const isDark = theme === 'nocturne'
 
-  // 2. Subtle Radiant Amber/Gold Celestial Aura
-  const gradCenterY = format === 'story' ? height * 0.42 : height * 0.48
-  const aura = ctx.createRadialGradient(width / 2, gradCenterY, 40, width / 2, gradCenterY, width * 0.75)
-  aura.addColorStop(0, 'rgba(196, 151, 59, 0.22)')
-  aura.addColorStop(0.4, 'rgba(196, 151, 59, 0.08)')
-  aura.addColorStop(1, 'rgba(18, 15, 13, 0)')
-  ctx.fillStyle = aura
-  ctx.fillRect(0, 0, width, height)
-
-  // 3. Stardust & Constellation Accent Glyphs
-  ctx.fillStyle = 'rgba(230, 210, 165, 0.35)'
-  const stars = [
-    [160, 220, 2], [240, 360, 1.5], [890, 280, 2.5], [940, 440, 1.5],
-    [180, 1400, 1.8], [910, 1480, 2], [540, 200, 1.5], [850, 850, 1.2],
-    [220, 920, 1.5], [320, 1680, 2], [760, 1720, 1.6]
-  ]
-  for (const [sx, sy, sr] of stars) {
-    if (sy < height - 60) {
-      ctx.beginPath()
-      ctx.arc(sx, sy, sr, 0, Math.PI * 2)
-      ctx.fill()
-    }
+  // ── 1. Canvas Palette Definition ──
+  const colors = isDark ? {
+    bg: '#0D0B0A',
+    bgGrad: '#161311',
+    borderOuter: 'rgba(214, 176, 106, 0.35)',
+    borderInner: 'rgba(255, 255, 255, 0.07)',
+    crossMark: 'rgba(214, 176, 106, 0.6)',
+    brand: '#FAF7F2',
+    eyebrow: '#D6B06A',
+    divider: 'rgba(214, 176, 106, 0.25)',
+    astrolabe: '#C5A059',
+    textPrimary: '#FAF7F2',
+    textSecondary: '#E8DECC',
+    quoteGlyph: 'rgba(214, 176, 106, 0.28)',
+    pillBg: 'rgba(214, 176, 106, 0.1)',
+    pillBorder: 'rgba(214, 176, 106, 0.3)',
+    pillText: '#D6B06A',
+    footerText: '#A39688',
+    footerAccent: '#D6B06A',
+  } : {
+    // Anthropic Warm Paper Palette
+    bg: '#FAF7F2',
+    bgGrad: '#F3EDE3',
+    borderOuter: 'rgba(160, 122, 52, 0.28)',
+    borderInner: 'rgba(24, 20, 18, 0.08)',
+    crossMark: 'rgba(160, 122, 52, 0.45)',
+    brand: '#1C1917',
+    eyebrow: '#8C6F3E',
+    divider: 'rgba(160, 122, 52, 0.2)',
+    astrolabe: '#8C6F3E',
+    textPrimary: '#1C1917',
+    textSecondary: '#332D28',
+    quoteGlyph: 'rgba(160, 122, 52, 0.25)',
+    pillBg: 'rgba(160, 122, 52, 0.07)',
+    pillBorder: 'rgba(160, 122, 52, 0.22)',
+    pillText: '#6E552E',
+    footerText: '#7A6D5E',
+    footerAccent: '#8C6F3E',
   }
 
-  // 4. Elegant Double Gold Hairline Border
-  const pad = format === 'story' ? 70 : 54
-  ctx.strokeStyle = 'rgba(214, 176, 106, 0.38)'
-  ctx.lineWidth = 1.5
-  ctx.strokeRect(pad, pad, width - pad * 2, height - pad * 2)
+  // ── 2. Background Canvas & Paper Vignette ──
+  const bgGrad = ctx.createRadialGradient(width / 2, height / 2, 80, width / 2, height / 2, width * 0.8)
+  bgGrad.addColorStop(0, colors.bg)
+  bgGrad.addColorStop(1, colors.bgGrad)
+  ctx.fillStyle = bgGrad
+  ctx.fillRect(0, 0, width, height)
 
-  ctx.strokeStyle = 'rgba(214, 176, 106, 0.18)'
+  // ── 3. Double-Bezel Architectural Framing ──
+  const outerPad = format === 'feed' ? 56 : 72
+  const innerPad = outerPad + 14
+
+  // Outer Hairline
+  ctx.strokeStyle = colors.borderOuter
+  ctx.lineWidth = 1.2
+  ctx.strokeRect(outerPad, outerPad, width - outerPad * 2, height - outerPad * 2)
+
+  // Inner Hairline
+  ctx.strokeStyle = colors.borderInner
   ctx.lineWidth = 1
-  ctx.strokeRect(pad + 12, pad + 12, width - (pad + 12) * 2, height - (pad + 12) * 2)
+  ctx.strokeRect(innerPad, innerPad, width - innerPad * 2, height - innerPad * 2)
 
-  // Corner Diamond Accents
-  function drawDiamond(x, y, sz = 5) {
-    ctx.fillStyle = '#D6B06A'
+  // Precision Registration Crosshairs at 4 Corners (Swiss Lithograph Art Print style)
+  function drawRegistrationCross(x, y, arm = 8) {
+    ctx.strokeStyle = colors.crossMark
+    ctx.lineWidth = 1.2
     ctx.beginPath()
-    ctx.moveTo(x, y - sz)
-    ctx.lineTo(x + sz, y)
-    ctx.lineTo(x, y + sz)
-    ctx.lineTo(x - sz, y)
-    ctx.closePath()
-    ctx.fill()
+    ctx.moveTo(x - arm, y)
+    ctx.lineTo(x + arm, y)
+    ctx.moveTo(x, y - arm)
+    ctx.lineTo(x, y + arm)
+    ctx.stroke()
   }
-  drawDiamond(pad, pad)
-  drawDiamond(width - pad, pad)
-  drawDiamond(pad, height - pad)
-  drawDiamond(width - pad, height - pad)
+  drawRegistrationCross(outerPad, outerPad)
+  drawRegistrationCross(width - outerPad, outerPad)
+  drawRegistrationCross(outerPad, height - outerPad)
+  drawRegistrationCross(width - outerPad, height - outerPad)
 
-  // 5. Brand Header
-  const headerY = format === 'story' ? 210 : 150
+  // ── 4. Brand Masthead (Anthropic Quiet Restraint) ──
+  const mastheadY = format === 'feed' ? 148 : 220
   ctx.textAlign = 'center'
-  ctx.fillStyle = '#FAF7F2'
-  ctx.font = '300 38px "Plus Jakarta Sans", -apple-system, sans-serif'
-  ctx.letterSpacing = '10px'
-  ctx.fillText('Y O U N O Y A', width / 2 + 5, headerY)
 
-  ctx.fillStyle = '#D6B06A'
-  ctx.font = '600 16px "Plus Jakarta Sans", sans-serif'
+  // Letterspaced Brandmark
+  ctx.fillStyle = colors.brand
+  ctx.font = '400 28px "Plus Jakarta Sans", -apple-system, sans-serif'
+  ctx.letterSpacing = '14px'
+  ctx.fillText('Y O U N O Y A', width / 2 + 7, mastheadY)
+
+  // Folio Tag
+  ctx.fillStyle = colors.eyebrow
+  ctx.font = '600 13px "Plus Jakarta Sans", sans-serif'
   ctx.letterSpacing = '4px'
-  ctx.fillText('✦  CELESTIAL PROPHECY • ASTER  ✦', width / 2 + 2, headerY + 44)
+  const folioText = `FOLIO NO. 04  •  VEDIC CHRONICLES  •  ${signSymbol} ${sign.toUpperCase()}`
+  ctx.fillText(folioText, width / 2 + 2, mastheadY + 36)
 
-  // Divider Line with Central Star
-  const lineY = headerY + 80
-  ctx.strokeStyle = 'rgba(214, 176, 106, 0.3)'
+  // ── 5. Astrolabe Celestial Transit Line ──
+  const astrolabeY = mastheadY + 76
+  const lineHalfW = 160
+
+  ctx.strokeStyle = colors.divider
   ctx.lineWidth = 1
   ctx.beginPath()
-  ctx.moveTo(width / 2 - 180, lineY)
-  ctx.lineTo(width / 2 - 30, lineY)
-  ctx.moveTo(width / 2 + 30, lineY)
-  ctx.lineTo(width / 2 + 180, lineY)
+  ctx.moveTo(width / 2 - lineHalfW, astrolabeY)
+  ctx.lineTo(width / 2 - 28, astrolabeY)
+  ctx.moveTo(width / 2 + 28, astrolabeY)
+  ctx.lineTo(width / 2 + lineHalfW, astrolabeY)
   ctx.stroke()
 
-  ctx.fillStyle = '#D6B06A'
-  ctx.font = '16px serif'
+  // Central Celestial Ring & Star
+  ctx.strokeStyle = colors.astrolabe
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.arc(width / 2, astrolabeY, 12, 0, Math.PI * 2)
+  ctx.stroke()
+
+  ctx.fillStyle = colors.astrolabe
+  ctx.font = '12px serif'
   ctx.letterSpacing = '0px'
-  ctx.fillText('✧', width / 2, lineY + 5)
+  ctx.fillText('✦', width / 2, astrolabeY + 4)
 
-  // 6. Recipient Chapter Pill
-  const pillY = format === 'story' ? headerY + 160 : headerY + 130
-  const pillText = `${name.toUpperCase()}  •  ${signSymbol} ${sign.toUpperCase()}  •  ${chapter.toUpperCase()}`
-  ctx.font = '600 17px "Plus Jakarta Sans", sans-serif'
-  const pillW = Math.min(width - 240, ctx.measureText(pillText).width + 60)
-  const pillH = 46
+  // Transit Sub-tag
+  const transitTagY = astrolabeY + 36
+  ctx.fillStyle = colors.footerText
+  ctx.font = '500 12.5px "Plus Jakarta Sans", sans-serif'
+  ctx.letterSpacing = '2.5px'
+  ctx.fillText(`LUNAR TRANSIT  •  ${chapter.toUpperCase()}`, width / 2, transitTagY)
 
-  ctx.fillStyle = 'rgba(214, 176, 106, 0.12)'
-  ctx.beginPath()
-  ctx.roundRect(width / 2 - pillW / 2, pillY - pillH / 2, pillW, pillH, 23)
-  ctx.fill()
-  ctx.strokeStyle = 'rgba(214, 176, 106, 0.45)'
-  ctx.lineWidth = 1
-  ctx.stroke()
-
-  ctx.fillStyle = '#F5EBD7'
-  ctx.letterSpacing = '2px'
-  ctx.fillText(pillText, width / 2, pillY + 6)
-
-  // 7. Large Serif Quotation / Prophecy Body
-  const quoteStartY = format === 'story' ? height * 0.40 : height * 0.44
-  ctx.font = 'italic 400 50px "Cormorant Garamond", Georgia, serif'
-  ctx.letterSpacing = '-0.5px'
-  ctx.fillStyle = '#FAF7F2'
-
+  // ── 6. Central Prophecy Block (Passive Voice Poetry) ──
   // Decorative Opening Quote Symbol
-  ctx.font = 'normal 400 90px "Cormorant Garamond", Georgia, serif'
-  ctx.fillStyle = 'rgba(214, 176, 106, 0.4)'
-  ctx.fillText('“', width / 2, quoteStartY - 20)
+  const quoteStartY = format === 'feed' ? 440 : 740
+  ctx.font = 'normal 400 96px "Cormorant Garamond", Georgia, serif'
+  ctx.fillStyle = colors.quoteGlyph
+  ctx.fillText('“', width / 2, quoteStartY - 24)
 
-  // Wrap Text into clean 3-4 lines
-  ctx.font = 'normal 400 42px "Cormorant Garamond", Georgia, serif'
-  ctx.fillStyle = '#FAF7F2'
-  const maxTextWidth = width - 260
-  const lineHeight = 66
+  // Balanced Line Wrapping for Literary Serif
+  const maxTextWidth = format === 'feed' ? width - 240 : width - 240
+  const lineHeight = format === 'feed' ? 62 : 76
+  const fontSize = format === 'feed' ? 38 : 46
+
+  ctx.font = `italic 400 ${fontSize}px "Cormorant Garamond", Georgia, serif`
+  ctx.letterSpacing = '-0.2px'
+
   const words = prophecy.split(' ')
   const lines = []
   let currentLine = words[0] || ''
@@ -159,59 +193,55 @@ export async function renderSocialCardToCanvas(canvas, data, options = {}) {
   }
   lines.push(currentLine)
 
-  let textY = quoteStartY + 45
+  let textY = quoteStartY + 30
   for (let i = 0; i < lines.length; i++) {
-    // Highlight first line and key momentum words in warm gold
-    if (i === 0 || i === lines.length - 1) {
-      ctx.fillStyle = '#FDFBF7'
-    } else {
-      ctx.fillStyle = '#EBDDC5'
-    }
+    ctx.fillStyle = i === 0 ? colors.textPrimary : colors.textSecondary
     ctx.fillText(lines[i], width / 2, textY)
     textY += lineHeight
   }
 
-  // 8. Talisman / Keepsake Anchor Badge
+  // ── 7. Consecrated Anchor Footnote ──
   if (anchorPiece) {
-    const anchorY = format === 'story' ? Math.max(textY + 60, height * 0.72) : textY + 50
-    ctx.fillStyle = 'rgba(214, 176, 106, 0.16)'
-    const badgeText = `ANCHORED BY: ${anchorPiece.toUpperCase()}`
-    ctx.font = '600 15px "Plus Jakarta Sans", sans-serif'
-    ctx.letterSpacing = '3px'
-    const badgeW = ctx.measureText(badgeText).width + 48
+    const anchorY = format === 'feed' ? Math.max(textY + 44, 780) : Math.max(textY + 60, 1380)
+    const anchorText = `CONSECRATED ANCHOR  —  ${anchorPiece.toUpperCase()}`
+    ctx.font = '600 13px "Plus Jakarta Sans", sans-serif'
+    ctx.letterSpacing = '2.5px'
+
+    const pillW = Math.min(width - 240, ctx.measureText(anchorText).width + 44)
+    const pillH = 34
+
+    ctx.fillStyle = colors.pillBg
     ctx.beginPath()
-    ctx.roundRect(width / 2 - badgeW / 2, anchorY - 18, badgeW, 36, 18)
+    ctx.roundRect(width / 2 - pillW / 2, anchorY - pillH / 2, pillW, pillH, 17)
     ctx.fill()
-    ctx.strokeStyle = 'rgba(214, 176, 106, 0.35)'
+    ctx.strokeStyle = colors.pillBorder
+    ctx.lineWidth = 1
     ctx.stroke()
 
-    ctx.fillStyle = '#D6B06A'
-    ctx.fillText(badgeText, width / 2, anchorY + 5)
+    ctx.fillStyle = colors.pillText
+    ctx.fillText(anchorText, width / 2, anchorY + 4.5)
   }
 
-  // 9. Watermark Footer & Referral URL (CAC Reduction Hook)
-  const footerY = format === 'story' ? height - 160 : height - 120
-  ctx.strokeStyle = 'rgba(214, 176, 106, 0.25)'
+  // ── 8. Provenance & Referral Stamp (CAC Reduction) ──
+  const footerY = format === 'feed' ? height - 120 : height - 160
+
+  // Hairline rule
+  ctx.strokeStyle = colors.divider
   ctx.lineWidth = 1
   ctx.beginPath()
-  ctx.moveTo(width / 2 - 140, footerY - 40)
-  ctx.lineTo(width / 2 + 140, footerY - 40)
+  ctx.moveTo(width / 2 - 140, footerY - 32)
+  ctx.lineTo(width / 2 + 140, footerY - 32)
   ctx.stroke()
 
-  ctx.fillStyle = '#FAF7F2'
-  ctx.font = '500 20px "Plus Jakarta Sans", sans-serif'
-  ctx.letterSpacing = '2px'
-  ctx.fillText('DISCOVER YOUR CHAPTER AT', width / 2, footerY)
+  ctx.fillStyle = colors.footerAccent
+  ctx.font = '600 16px "Plus Jakarta Sans", sans-serif'
+  ctx.letterSpacing = '3px'
+  ctx.fillText('YOUNOYA.COM / FIND-A-GIFT', width / 2, footerY)
 
-  ctx.fillStyle = '#E5C07B'
-  ctx.font = '700 26px "Plus Jakarta Sans", sans-serif'
-  ctx.letterSpacing = '1px'
-  ctx.fillText('younoya.com/find-a-gift', width / 2, footerY + 38)
-
-  ctx.fillStyle = 'rgba(250, 247, 242, 0.5)'
-  ctx.font = '400 15px "Plus Jakarta Sans", sans-serif'
-  ctx.letterSpacing = '1px'
-  ctx.fillText('Astrology-Backed Gifting • Intentionally Curated', width / 2, footerY + 70)
+  ctx.fillStyle = colors.footerText
+  ctx.font = '400 12.5px "Plus Jakarta Sans", sans-serif'
+  ctx.letterSpacing = '1.5px'
+  ctx.fillText('Astrology-Backed Gifting  •  Intentionally Curated', width / 2, footerY + 26)
 }
 
 /**
@@ -228,7 +258,7 @@ export async function generateSocialCardBlob(data, options = {}) {
 /**
  * Trigger immediate browser download of the social card
  */
-export async function downloadSocialCard(data, options = {}, filename = 'younoya-chapter-prophecy.png') {
+export async function downloadSocialCard(data, options = {}, filename = 'younoya-1x1-prophecy-folio.png') {
   const blob = await generateSocialCardBlob(data, options)
   if (!blob) return
   const url = URL.createObjectURL(blob)

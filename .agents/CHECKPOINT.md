@@ -5,7 +5,7 @@
 ---
 
 ## 1. 📍 Executive Status & System Topology
-- **Active Phase**: Shop hero edition image tile fix pushed to main (`f504e03`); Cloudflare frontend deployment verification pending.
+- **Active Phase**: Anti-slop luxury redesign, passive-voice prophecy vault, and Inviolable Editorial Common Sense Rule implemented & verified.
 - **Last Updated**: 2026-10-19 | **Agent**: Antigravity | **Git Branch**: `main`
 - **Storefront**: `https://younoya.com` (Vite 6 + React 19 + Framer Motion + Lenis, deployed to Cloudflare Worker `ecom` via Git).
 - **Backend API**: `https://api.younoya.com` (Medusa 2.18 + Node 20 + PostgreSQL 15 `younoya_db` + Redis on VPS `ubuntu@140.245.7.165` via CF Tunnel).
@@ -258,6 +258,33 @@
   - Root `npm run build` exits 0 (23 indexable route shells, 4 excluded public/private shells, 12 admin shells).
   - 17/17 tests passing (4 in `qr-unboxing-and-social.test.mjs`, 13 in `seo.test.mjs`).
   - Puppeteer browser testing verified `/reveal/career/aries`, `/reveal/wealth/taurus`, 9:16 Story and 1:1 Feed canvas modal, and the passwordless OTP login screen.
-- Next: Ask user for explicit push permission before executing `git push origin main`.
+- **Push Verified**: User explicitly authorized push. `git push origin main` exited 0, advancing remote main from `f504e03` to `de03dd8` (`de03dd844c5fadc3c65e37aa19882d04fab78ce0`).
+- This post-push checkpoint note remains in the working tree for the next implementation commit (no checkpoint-only follow-up commit).
+
+## 29. Anti-Slop Redesign, Passive Voice Prophecy Vault & Inviolable Editorial Rule — 2026-10-19 / Antigravity
+- **Inviolable Editorial Common Sense Law Established**:
+  - Enforced in `.agents/rules/coding-style.md`, `.agents/AGENTS.md`, and `AGENTS.md`: Zero literal prompt leakage onto user-facing surfaces. Internal prompt instructions (e.g. "make the squared post as the default", "1:1 square post", "CAC reduction") must NEVER be copy-pasted verbatim into buttons, labels, titles, or badges.
+  - All customer-facing copy must use quiet, natural, consumer-first luxury editorial prose (e.g. "Download Card", "Post", "Story", "Share Keepsake").
+- **100% Passive Voice Prophecy Vault (`prophecyGenerator.js`)**:
+  - Completely excised active-voice conversational imperatives and self-help coach tropes.
+  - Rewrote 16 prophecies across the 4 gift chapters (Career, Love, Vitality, Wealth) in strictly passive / receptive voice (e.g. *"A long-held threshold is quietly crossed under this transit. What was once withheld in uncertainty is now yielded with grace; new authority is recognized where silent dedication was kept."*).
+  - Updated `PROPHECY_SYSTEM_PROMPT` to enforce passive voice and zero marketing fluff.
+- **Award-Winning Anthropic Editorial & Vercel Swiss Precision Redesign (`socialCardGenerator.js`)**:
+  - Square Post (1:1, 1080×1080) is the strict default format.
+  - Default Visual Theme: **Atelier Warm Ivory** (`#FAF7F2`) with double-bezel architectural hairline framing, Swiss lithograph corner crosshairs, letterspaced brandmark `Y O U N O Y A`, central astronomical astrolabe motif, and balanced Cormorant Garamond serif italic typography in rich deep espresso (`#1C1917`).
+  - Secondary Theme: **Nocturne Noir** (`#0D0B0A`) with champagne gold-leaf rules (`#D6B06A`).
+  - Zero muddy airbrush gradients or clip-art stars.
+- **Refined Luxury Modal Experience (`SocialShareModal.jsx` & `SocialShareModal.css`)**:
+  - Replaced tacky AI hype header with quiet editorial title *"The Written Revelation"*.
+  - Added Vercel/Geist segmented pill controls: `[ Post ]` | `[ Story ]` and `[ Atelier Ivory ]` | `[ Nocturne ]`.
+  - Replaced radioactive neon green WhatsApp button with a refined dark pill featuring a muted emerald insignia (`#34D399`).
+  - Clean primary action: *"Download Card"*.
+- **Recommendation Folio Callout (`SocialShareCard.jsx` & `SocialShareCard.css`)**:
+  - Replaced the generic AI banner with a quiet, museum-grade Chapter Folio callout with Cormorant Garamond quote and *"Share Keepsake"* action.
+- **Verification**:
+  - Root `npm run build` exits 0 (23 route shells, 4 excluded shells, 12 admin shells, dist synced).
+  - 17/17 tests passing (`qr-unboxing-and-social.test.mjs` and `seo.test.mjs`).
+  - Puppeteer browser verification: captured `/find-a-gift` folio callout, 1:1 Atelier Ivory modal, 1:1 Nocturne Noir modal, and 9:16 Story modal with clean consumer labels.
+- **Next**: Batch all changes into one single semantic commit. Ask user for explicit push permission before executing `git push origin main`.
 
 

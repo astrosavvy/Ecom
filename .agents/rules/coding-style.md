@@ -21,3 +21,17 @@
   - Blog editing requires `blogRoleGuard` (admin & marketing).
   - File uploads require `fileGuard` (`/admin/files*`).
 - **Data Schemas**: MikroORM / Medusa v2 data models with explicit migration scripts (`migrations/Migration<timestamp>.ts`).
+
+## 4. Separation of Developer Instructions from User-Facing Copy (Inviolable Law)
+- **Zero Literal Prompt Leakage**: Never copy/paste prompt instructions, technical requirements, aspect ratios, or developer jargon directly into customer- or admin-facing UI strings.
+  - Prompts communicate instructions *to the AI agent* (e.g. "make the squared post as the default", "do not say on website just saying it to you", "1:1 square post", "CAC reduction", "Cartier-grade prophecy synthesized").
+  - These technical directives must NEVER appear verbatim in buttons, labels, titles, badges, or descriptions.
+- **Customer-Facing Editorial Common Sense**:
+  - Write exclusively from the perspective of an elite, quiet luxury atelier (Anthropic, Cartier, Aesop, Apple).
+  - Buttons and labels must use natural, clean, dignified consumer language:
+    - Instead of technical aspect ratios like `"Download 1:1 Square Card"`, write `"Download Card"` or `"Save Card"`.
+    - Instead of `"1:1 Square Post"` in toggles, use `"Post"` (vs `"Story"`).
+    - Instead of `"CHAPTER FOLIO • 1:1 SQUARE POST"`, write `"Chapter Folio"` or `"Celestial Keepsake"`.
+    - Instead of `"Open 1:1 Social Folio"`, write `"Share Keepsake"` or `"Share Chapter"`.
+    - Instead of self-aggrandizing meta-hype like `"An electric, Cartier-grade prophecy synthesized for your current chapter"`, write quiet, understated human prose: `"A personal reflection drawn from your celestial transit. Prepared for your journal or story."`
+- **Pre-Output Copy Audit**: Before delivering any code, scan all user-facing strings to ensure zero internal instructions or developer artifacts are exposed.

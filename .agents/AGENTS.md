@@ -122,6 +122,9 @@ Whenever you modify application code, data models, or assets:
 >    - WITHOUT the user's explicit permission, DO NOT PUSH.
 > 2. **SINGLE FINAL COMMIT ONLY — NO MICRO-COMMITS**:
 >    - Never commit intermediate changes or make a separate commit just to record a commit hash. Update `.agents/CHECKPOINT.md` in the working tree, verify `npm run build` exits 0, and commit all changes (code, config, docs, checkpoint) together in ONE single final commit when the turn/task is complete.
+> 3. **ZERO LITERAL PROMPT LEAKAGE (STRICT EDITORIAL COMMON SENSE)**:
+>    - NEVER copy developer instructions, internal technical specs (e.g. "1:1 square post", "CAC reduction", prompt meta-language), or prompt directives directly onto customer- or admin-facing UI strings.
+>    - All customer-facing copy must be quiet, natural, consumer-first luxury editorial prose (e.g. "Download Card", "Post", "Story", "Share Keepsake").
 
 Always execute from **repository root (`F:\Savvy_Ecom`)**:
 ```bash

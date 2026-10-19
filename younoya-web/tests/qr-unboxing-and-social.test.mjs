@@ -46,16 +46,19 @@ test('qrGenerator generates valid matrix and SVG vector output', () => {
   assert.equal(svg, svgAlias)
 })
 
-test('prophecyGenerator synthesizes high-voltage 2-3 line prophecies', () => {
+test('prophecyGenerator synthesizes passive-voice contemplative 2-3 line prophecies', () => {
   const p1 = generateProphecy({ sign: 'Aries', category: 'career' })
   assert(typeof p1 === 'string')
   assert(p1.length > 50)
-  assert(p1.includes('celestial transit') || p1.includes('decisive alignment') || p1.includes('clarity'))
+  assert(p1.includes('transit') || p1.includes('threshold') || p1.includes('alignment'))
+  // Verify passive voice phrasing
+  assert(p1.includes('is quietly crossed') || p1.includes('is formed') || p1.includes('is recognized') || p1.includes('is yielded'))
 
   const p2 = generateProphecy({ name: 'Aarav', sign: 'Leo', category: 'love' })
-  assert(p2.includes('Aarav') || p2.includes('lunar cycle') || p2.includes('heart'))
+  assert(p2.includes('Aarav'))
+  assert(p2.includes('is dissolved') || p2.includes('is gently returned') || p2.includes('is revealed'))
 
-  assert(PROPHECY_SYSTEM_PROMPT.includes('Cartier-grade'))
+  assert(PROPHECY_SYSTEM_PROMPT.includes('PASSIVE'))
   assert(PROPHECY_SYSTEM_PROMPT.includes('strictly 10–15% max'))
 })
 

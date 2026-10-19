@@ -26,48 +26,52 @@ export default function SocialShareCard({ values, result }) {
   }
 
   function handleQuickWhatsApp() {
-    const text = `✨ Aster revealed my chapter prophecy for ${sign} ${signSymbol}:\n\n"${prophecy}"\n\nFind your chapter at: https://younoya.com/find-a-gift?utm_source=whatsapp_share&utm_medium=chat&utm_campaign=prophecy`
+    const text = `✦ Aster revealed my chapter prophecy for ${sign} ${signSymbol}:\n\n"${prophecy}"\n\nCurated at: https://younoya.com/find-a-gift?utm_source=whatsapp_share&utm_medium=chat&utm_campaign=prophecy`
     const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 
   return (
     <>
-      <section className="guide-prophecy-card" aria-label="Personal chapter prophecy">
-        <div className="guide-prophecy-card__content">
-          <div className="guide-prophecy-card__badge">
-            <Sparkles size={13} />
-            <span>Chapter Prophecy • {sign} {signSymbol}</span>
+      <section className="guide-prophecy-folio" aria-label="Personal chapter prophecy">
+        <div className="guide-prophecy-folio__frame">
+          <div className="guide-prophecy-folio__head">
+            <span className="guide-prophecy-folio__badge">
+              <Sparkles size={12} />
+              <span>Chapter Folio • {sign} {signSymbol}</span>
+            </span>
           </div>
 
-          <h3 className="guide-prophecy-card__title">
-            Your Personal Prophecy is Ready
-          </h3>
-
-          <p className="guide-prophecy-card__text">
+          <blockquote className="guide-prophecy-folio__quote">
             "{prophecy}"
-          </p>
+          </blockquote>
 
-          <div className="guide-prophecy-card__actions">
-            <button
-              type="button"
-              className="guide-prophecy-btn-share"
-              onClick={() => setModalOpen(true)}
-            >
-              <Share2 size={16} />
-              <span>Share to Stories & WhatsApp</span>
-            </button>
+          <footer className="guide-prophecy-folio__footer">
+            <span className="guide-prophecy-folio__citation">
+              Drawn from lunar transit • {chapterName}
+            </span>
 
-            <button
-              type="button"
-              className="guide-prophecy-btn-wa"
-              onClick={handleQuickWhatsApp}
-              title="Share directly to WhatsApp"
-            >
-              <MessageCircle size={16} />
-              <span>1-Tap WhatsApp</span>
-            </button>
-          </div>
+            <div className="guide-prophecy-folio__actions">
+              <button
+                type="button"
+                className="guide-prophecy-folio__btn-open"
+                onClick={() => setModalOpen(true)}
+              >
+                <Share2 size={15} />
+                <span>Share Keepsake</span>
+              </button>
+
+              <button
+                type="button"
+                className="guide-prophecy-folio__btn-wa"
+                onClick={handleQuickWhatsApp}
+                title="Share directly via WhatsApp"
+              >
+                <MessageCircle size={15} className="guide-prophecy-folio__btn-wa-icon" />
+                <span>Share via WhatsApp</span>
+              </button>
+            </div>
+          </footer>
         </div>
       </section>
 
