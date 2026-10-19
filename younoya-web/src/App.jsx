@@ -12,6 +12,7 @@ import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail'
 import Shop from './pages/Shop'
 import GiftFinder from './pages/GiftFinder'
+import GiftReveal from './pages/GiftReveal'
 import Checkout from './pages/Checkout'
 import PrivateOffer from './pages/PrivateOffer'
 import Blog from './pages/Blog'
@@ -71,6 +72,10 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/find-a-gift" element={<GiftFinder />} />
+              <Route path="/reveal/:category/:rashi" element={<GiftReveal />} />
+              <Route path="/unboxing/:category/:rashi" element={<GiftReveal />} />
+              <Route path="/reveal" element={<Navigate to="/find-a-gift" replace />} />
+              <Route path="/unboxing" element={<Navigate to="/find-a-gift" replace />} />
               <Route path="/checkout" element={<Checkout />} />
               {Object.keys(POLICY_ROUTES).map(path => <Route key={path} path={path} element={<PolicyPage />} />)}
               <Route path="/account/orders" element={<CustomerOrders />} />

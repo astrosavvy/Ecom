@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import GuideHistory from './GuideHistory'
 import GuideReading from './GuideReading'
 import GuideLeadOffer from './GuideLeadOffer'
+import SocialShareCard from './SocialShareCard'
 import GuideCompanions from './GuideCompanions'
 import '../../styles/GuideResult.css'
 
@@ -20,6 +21,7 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
     {values.forWhom && <GuideHistory values={values} step={4} />}
     <GuideReading values={values} result={result} lead={lead} hasProducts={hasProducts} />
     <GuideLeadOffer lead={lead} result={result} onOrder={onOrder} />
+    <SocialShareCard values={values} result={result} />
     <GuideCompanions categories={result.secondaryCategories} onOrder={onOrder} />
     <div className="guide-result__actions">
       {hasProducts && <button type="button" onClick={onSave} disabled={!lead?.variantId || saved}><Bookmark size={16} /> {saved ? 'Saved to your account' : 'Save this edit'}</button>}

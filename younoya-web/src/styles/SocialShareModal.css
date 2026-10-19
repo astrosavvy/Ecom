@@ -1,0 +1,210 @@
+/* ── YOUNOYA Social Share Card & Modal Styling ── */
+.social-share-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 6, 4, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.social-share-modal {
+  background: #14100D;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 20px;
+  max-width: 520px;
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(212, 175, 55, 0.12);
+  color: #FAF4EB;
+  font-family: var(--font-sans, "Plus Jakarta Sans", sans-serif);
+  padding: 28px 24px;
+  position: relative;
+}
+
+.social-share-modal__close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  color: #D6B06A;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.social-share-modal__close:hover {
+  background: rgba(212, 175, 55, 0.2);
+  transform: scale(1.05);
+}
+
+.social-share-modal__head {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.social-share-modal__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #D6B06A;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.social-share-modal__title {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 26px;
+  color: #FFF7EB;
+  margin-bottom: 6px;
+}
+
+.social-share-modal__desc {
+  font-size: 13px;
+  color: #A39688;
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* Format Toggles */
+.social-share-modal__toggles {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.social-share-modal__toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  color: #A39688;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.social-share-modal__toggle-btn.active {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: #D6B06A;
+  color: #D6B06A;
+  font-weight: 600;
+}
+
+/* Live Card Canvas Preview */
+.social-share-modal__canvas-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+  background: #090706;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.social-share-modal__canvas {
+  max-width: 280px;
+  max-height: 440px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.15);
+}
+
+/* Action Buttons */
+.social-share-modal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.social-share-btn-whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #25D366;
+  color: #0B2513;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  text-decoration: none;
+}
+
+.social-share-btn-whatsapp:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+.social-share-btn-story {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #D4AF37 0%, #AA822A 100%);
+  color: #120F0D;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.social-share-btn-story:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(212, 175, 55, 0.35);
+}
+
+.social-share-btn-download {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: #FAF4EB;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 12px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.social-share-btn-download:hover {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: rgba(212, 175, 55, 0.45);
+}
+
+.social-share-modal__toast {
+  text-align: center;
+  font-size: 12px;
+  color: #55E084;
+  margin-top: 10px;
+}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { api, formatINR, fmtDate, type Role } from "../api"
 import OrderOperations from './commerce/OrderOperations'
+import OrderBoxLabel from '../components/OrderBoxLabel'
 
 type OrderItem = { id: string; title: string; quantity: number; unit_price: number; total?: number; thumbnail?: string | null }
 type Order = {
@@ -93,6 +94,8 @@ export default function OrderDetail({ role }: { role: Role }) {
           <p className="ad-note">Status changes are made by the store owner.</p>
         )}
       </section>
+
+      <OrderBoxLabel order={order} />
     </div>
   )
 }

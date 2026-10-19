@@ -66,18 +66,43 @@ export async function fetchMe(): Promise<Me> {
   }
 }
 
-export async function login(email: string, password: string): Promise<Me> {
-  const res = await fetch(`${API}/auth/user/emailpass`, {
+export type ContactInput = { email?: string; phone?: string; channel?: "whatsapp" | "sms" | "email" }
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_PUBLISHABLE_KEY || 'pk_d4577228b532cf8c81a5b63e898652da2dbaf9730acd3f8f449ccda1f8482c75'
+
+export async function requestOtpCode(contact: ContactInput): Promise<{ challenge_id?: string; resend_at?: string; message?: string }> {
+  const res = await fetch(`${API}/store/otp/request`, {
+    method: "POST",
+    headers: { 
+      "content-type": "application/json",
+      "x-publishable-api-key": PUBLISHABLE_KEY,
+    },
+    body: JSON.stringify(contact),
+  })
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.message || `Could not request verification code (${res.status}).`)
+  }
+  return res.json()
+}
+
+export async function loginWithOtp(contact: ContactInput, otp: string, challengeId?: string): Promise<Me> {
+  const res = await fetch(`${API}/admin/otp-login`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ ...contact, otp, challenge_id: challengeId }),
   })
-  if (!res.ok) throw new Error("Wrong email or password.")
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.message || "Verification code is incorrect or expired.")
+  }
   const { token } = await res.json()
   if (!token) throw new Error("Sign in failed. Try again.")
   setToken(token)
   return fetchMe()
 }
+
+export const login = loginWithOtp
 
 export function logout() {
   clearToken()

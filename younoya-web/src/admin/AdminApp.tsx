@@ -13,6 +13,7 @@ import {
   Gift,
   LogOut,
   ChevronRight,
+  QrCode,
 } from "lucide-react"
 import { fetchMe, getToken, logout, type Me, type Role } from "./api"
 import Login from "./pages/Login"
@@ -31,6 +32,7 @@ import RecommendationRules from "./pages/RecommendationRules"
 import ProductMetadata from "./pages/ProductMetadata"
 import OfferManager from "./pages/OfferManager"
 import LaunchSettings from "./pages/LaunchSettings"
+import QrStickerStudio from "./pages/QrStickerStudio"
 import "../styles/Admin.css"
 
 type NavItem = {
@@ -44,6 +46,7 @@ type NavItem = {
 const MAIN_NAV: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, roles: ["admin"] },
   { to: "/admin/orders", label: "Orders", icon: ShoppingBag, roles: ["admin", "support"] },
+  { to: "/admin/stickers", label: "Box Stickers", icon: QrCode, roles: ["admin", "support"] },
   { to: "/admin/customers", label: "Customers", icon: Users, roles: ["admin", "support"] },
   { to: "/admin/products", label: "Products", icon: Sparkles, roles: ["admin"] },
   { to: "/admin/journal", label: "Journal", icon: BookOpen, roles: ["admin", "marketing"] },
@@ -168,6 +171,7 @@ export default function AdminApp() {
           <Route path="/" element={me.role === "admin" ? <Home /> : <HomeFallback me={me} />} />
           <Route path="/orders" element={<Orders role={me.role} />} />
           <Route path="/orders/:id" element={<OrderDetail role={me.role} />} />
+          <Route path="/stickers" element={<QrStickerStudio />} />
           <Route path="/customers" element={<Customers role={me.role} />} />
           <Route path="/customers/:id" element={<CustomerDetail />} />
           <Route path="/products" element={<Products />} />

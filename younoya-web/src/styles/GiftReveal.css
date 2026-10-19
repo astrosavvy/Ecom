@@ -1,0 +1,380 @@
+/* ── YOUNOYA Sacred Unboxing & Gift Reveal Styling ── */
+.gift-reveal {
+  min-height: 100vh;
+  background: #0C0A09;
+  color: #F5EEE2;
+  font-family: var(--font-sans, "Plus Jakarta Sans", sans-serif);
+  padding: 0;
+  margin: 0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background Atmosphere */
+.gift-reveal__bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: 
+    radial-gradient(circle at 50% 15%, rgba(196, 151, 59, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 80% 60%, rgba(140, 106, 36, 0.08) 0%, transparent 50%),
+    #0C0A09;
+}
+
+.gift-reveal__container {
+  position: relative;
+  z-index: 1;
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 40px 24px 100px;
+}
+
+/* Header & Emblem */
+.gift-reveal__header {
+  text-align: center;
+  padding: 20px 0 36px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+.gift-reveal__emblem {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(25, 20, 16, 0.85);
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
+}
+
+.gift-reveal__emblem img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.gift-reveal__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #D6B06A;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.gift-reveal__badge-symbol {
+  font-size: 14px;
+}
+
+.gift-reveal__title {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: #FFF7EB;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.gift-reveal__title em {
+  font-style: italic;
+  color: #E6C87C;
+}
+
+.gift-reveal__subtitle {
+  font-size: 15px;
+  color: #A39688;
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Revelation Narrative Card */
+.gift-reveal__card {
+  background: rgba(22, 18, 15, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 16px;
+  padding: 32px 28px;
+  margin: 32px 0;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+}
+
+.gift-reveal__card-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #D6B06A;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.gift-reveal__story {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: clamp(20px, 3.5vw, 24px);
+  line-height: 1.55;
+  color: #FAF4EB;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.gift-reveal__why-chosen {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: #BDB0A0;
+  border-left: 2px solid rgba(212, 175, 55, 0.4);
+  padding-left: 16px;
+}
+
+/* Treasures Section */
+.gift-reveal__section-title {
+  text-align: center;
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 26px;
+  color: #E6C87C;
+  margin: 48px 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.gift-reveal__section-title::before,
+.gift-reveal__section-title::after {
+  content: "";
+  height: 1px;
+  width: 40px;
+  background: rgba(212, 175, 55, 0.3);
+}
+
+.gift-reveal__treasures {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .gift-reveal__treasures {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.gift-reveal__treasure-item {
+  background: rgba(26, 21, 18, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.16);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gift-reveal__treasure-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #D6B06A;
+  margin-bottom: 8px;
+}
+
+.gift-reveal__treasure-name {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 20px;
+  line-height: 1.3;
+  color: #FFF7EB;
+  margin-bottom: 12px;
+}
+
+.gift-reveal__treasure-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #A39688;
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+
+.gift-reveal__treasure-placement {
+  font-size: 12px;
+  color: #D6B06A;
+  background: rgba(212, 175, 55, 0.08);
+  padding: 10px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.45;
+}
+
+/* Consecration Ritual Vidhi */
+.gift-reveal__ritual-box {
+  background: rgba(20, 16, 13, 0.85);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 16px;
+  padding: 32px 28px;
+  margin: 36px 0;
+  position: relative;
+}
+
+.gift-reveal__ritual-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+}
+
+.gift-reveal__ritual-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.gift-reveal__ritual-heading h3 {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 24px;
+  color: #FAF4EB;
+  margin-bottom: 6px;
+}
+
+.gift-reveal__ritual-heading p {
+  font-size: 13px;
+  color: #A39688;
+}
+
+.gift-reveal__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gift-reveal__step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.gift-reveal__step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #E6C87C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.gift-reveal__step-content h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #FAF4EB;
+  margin-bottom: 4px;
+}
+
+.gift-reveal__step-content p {
+  font-size: 13.5px;
+  color: #A39688;
+  line-height: 1.55;
+}
+
+/* Call to Actions & Viral Hooks */
+.gift-reveal__cta-wrap {
+  text-align: center;
+  padding: 40px 20px 20px;
+  border-top: 1px solid rgba(212, 175, 55, 0.18);
+  margin-top: 48px;
+}
+
+.gift-reveal__cta-title {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 26px;
+  color: #FFF7EB;
+  margin-bottom: 8px;
+}
+
+.gift-reveal__cta-desc {
+  font-size: 14px;
+  color: #A39688;
+  max-width: 480px;
+  margin: 0 auto 24px;
+  line-height: 1.55;
+}
+
+.gift-reveal__cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+.gift-reveal__btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #D4AF37 0%, #AA822A 100%);
+  color: #120F0D;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 14px 28px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 18px rgba(212, 175, 55, 0.25);
+  border: none;
+  cursor: pointer;
+}
+
+.gift-reveal__btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.4);
+}
+
+.gift-reveal__btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #FAF4EB;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 14px 24px;
+  border-radius: 100px;
+  text-decoration: none;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  transition: background 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.gift-reveal__btn-secondary:hover {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+.gift-reveal__footer-note {
+  margin-top: 36px;
+  font-size: 11.5px;
+  color: #6E6356;
+  letter-spacing: 0.05em;
+}

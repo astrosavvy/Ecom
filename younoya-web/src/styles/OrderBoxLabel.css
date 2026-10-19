@@ -1,0 +1,220 @@
+/* ── YOUNOYA Admin Order Box Label & Sticky QR Styling ── */
+.order-box-label-card {
+  margin-top: 24px;
+}
+
+.order-box-label__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: flex-end;
+}
+
+.order-box-label__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.order-box-label__field label {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ad-text-muted, #817568);
+}
+
+.order-box-label__field select {
+  background: var(--ad-bg-surface, #FAF7F2);
+  border: 1px solid var(--ad-border, #E4DDD3);
+  color: var(--ad-text, #1F1914);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-family: inherit;
+  outline: none;
+}
+
+.order-box-label__field select:focus {
+  border-color: #C9A84C;
+}
+
+/* Label Preview Container */
+.order-box-label__preview-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background: #F4EFE6;
+  border-radius: 12px;
+  border: 1px dashed rgba(201, 168, 76, 0.4);
+  margin-bottom: 20px;
+}
+
+/* Physical 50mm x 50mm Sticky Thermal Label */
+.order-box-label__sticker {
+  width: 260px;
+  height: 260px;
+  background: #FFFFFF;
+  color: #120F0D;
+  border-radius: 6px;
+  padding: 14px 12px 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  border: 1px solid #EAE3D6;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.order-box-label__sticker-header {
+  width: 100%;
+}
+
+.order-box-label__sticker-brand {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #1A140E;
+  display: block;
+}
+
+.order-box-label__sticker-ref {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 9.5px;
+  color: #7A6F62;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+.order-box-label__qr-wrap {
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px 0;
+}
+
+.order-box-label__qr-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.order-box-label__sticker-footer {
+  width: 100%;
+}
+
+.order-box-label__sticker-badge {
+  display: inline-block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  background: #1A140E;
+  color: #FAF4EB;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.order-box-label__sticker-instruction {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 8px;
+  color: #5C5245;
+  line-height: 1.25;
+  font-weight: 500;
+}
+
+/* Actions */
+.order-box-label__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.order-box-label__btn-print {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1F1914;
+  color: #FAF7F2;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.order-box-label__btn-print:hover {
+  background: #382D25;
+}
+
+.order-box-label__btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  color: #1F1914;
+  border: 1px solid #D8CFC2;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.order-box-label__btn-download:hover {
+  background: #F4EFE6;
+}
+
+.order-box-label__link-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #8C6A24;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 10px 12px;
+}
+
+.order-box-label__link-preview:hover {
+  text-decoration: underline;
+}
+
+/* ── PRINT MEDIA RULES FOR THERMAL / STICKY PRINTERS ── */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-box-label, #printable-box-label * {
+    visibility: visible;
+  }
+  #printable-box-label {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 50mm !important;
+    height: 50mm !important;
+    padding: 3mm !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  @page {
+    size: 50mm 50mm;
+    margin: 0;
+  }
+}
