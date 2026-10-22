@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Heart } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Heart } from 'lucide-react'
 import { KALASH_CONTENTS } from '../data/kalash'
 import { storeRequest } from '../lib/giftGuideApi'
 import { useCart } from '../context/CartContext'
@@ -13,9 +13,10 @@ import '../styles/Kalash.css'
 import '../styles/ShopFooter.css'
 
 export default function KalashDetail({product}) {
-  const {addToCart} = useCart()
+  const {addToCart, setIsOpen} = useCart()
   const {checkoutEnabled} = useSiteConfig()
   const [availability,setAvailability] = useState(null)
+  const [added, setAdded] = useState(false)
   const [saved,setSaved] = useState(() => {
     try { return JSON.parse(localStorage.getItem('younoya-saved-pieces') || '[]').includes(product.id) } catch { return false }
   })
@@ -25,7 +26,12 @@ export default function KalashDetail({product}) {
       .then(setAvailability).catch(() => setAvailability(null))
     return () => controller.abort()
   },[product.handle])
-  const available = checkoutEnabled && availability?.purchasable && availability.price === product.priceNum && availability.availableQuantity > 0
+
+  // Optimistic default: available unless the backend explicitly signals out-of-stock
+  const isExplicitlyUnavailable = availability !== null && (availability.purchasable === false || availability.availableQuantity <= 0)
+  const isPriceMismatch = availability !== null && availability.price && availability.price !== product.priceNum
+  const available = checkoutEnabled !== false && !isExplicitlyUnavailable && !isPriceMismatch
+
   function save() {
     let previous
     try { previous = JSON.parse(localStorage.getItem('younoya-saved-pieces') || '[]') } catch { previous = [] }
@@ -37,9 +43,27 @@ export default function KalashDetail({product}) {
     if (!available) return
     addToCart({id:`${product.id}::standard`,handle:product.handle,name:product.name,subtitle:product.subtitle,
       price:product.price,priceNum:product.priceNum,image:product.cardImage,chapter:'Diwali Wealth Kalash'},1)
+    setAdded(true)
+    setIsOpen(true)
+    setTimeout(() => setAdded(false), 2500)
   }
-  const purchase = <button className="navratri-button" type="button" disabled={!available} onClick={order}
-    aria-describedby={!available ? 'kalash-ordering-status' : undefined}>{available ? <>Order now <ArrowRight size={18} /></> : 'Ordering opens soon'}</button>
+  const purchase = (
+    <button 
+      className="navratri-button" 
+      type="button" 
+      disabled={!available} 
+      onClick={order}
+      aria-describedby={!available ? 'kalash-ordering-status' : undefined}
+    >
+      {added ? (
+        <><Check size={18} /> Added to your bag</>
+      ) : available ? (
+        <>Order now <ArrowRight size={18} /></>
+      ) : (
+        'Temporarily unavailable'
+      )}
+    </button>
+  )
   return <div className="navratri-page kalash-page" id="shop-top">
     <div className="navratri-shell">
       <nav className="navratri-breadcrumb" aria-label="Breadcrumb"><Link to="/shop"><ArrowLeft size={15} /> The collection</Link><span>Diwali</span></nav>
@@ -54,7 +78,7 @@ export default function KalashDetail({product}) {
           <dl className="navratri-facts"><div><dt>The collection</dt><dd>Kalash and devotional essentials</dd></div><div><dt>For your ritual</dt><dd>Diwali puja · a meaningful new beginning</dd></div><div><dt>Delivery</dt><dd>Free shipping within India<ProductDeliveryNote /></dd></div></dl>
           <button className="navratri-save" type="button" aria-pressed={saved} onClick={save}><Heart size={18} fill={saved ? 'currentColor' : 'none'} />{saved ? 'Saved' : 'Save this Kalash'}</button>
           {purchase}
-          {!available && <p className="navratri-availability" id="kalash-ordering-status">This edition is being prepared for ordering. Save it to revisit the collection.</p>}
+          {!available && <p className="navratri-availability" id="kalash-ordering-status">This edition is currently unavailable. Save it to revisit the collection.</p>}
           <a className="navratri-details-link" href="#kalash-contents">Explore the ritual essentials <ArrowRight size={15} /></a>
         </div>
       </section>

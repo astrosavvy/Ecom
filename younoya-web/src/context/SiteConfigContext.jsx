@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { storeRequest } from '../lib/giftGuideApi'
-export const initialSiteConfig = { storefrontMode: 'coming-soon', checkoutEnabled: false, policiesPublished: false, policyRevision: null,
+export const initialSiteConfig = { storefrontMode: 'coming-soon', checkoutEnabled: true, policiesPublished: false, policyRevision: null,
   shippingFee: 0, currency: 'INR', country: 'IN', business: { legalName: 'YOUNOYA HOUSE OF ASTRO PRIVATE LIMITED',
     supportEmail: 'support@younoya.com', dispatchHours: 24, deliveryMinDays: 3, deliveryMaxDays: 5 } }
 const Context = createContext({ ...initialSiteConfig, loading: true })
@@ -9,7 +9,7 @@ export function SiteConfigProvider({ children }) {
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     let active = true
-    const refresh = () => storeRequest('/store/site-config', { signal: AbortSignal.timeout(5000) }).then(data => { if (active) setConfig(data) })
+    const refresh = () => storeRequest('/store/site-config', { signal: AbortSignal.timeout(10000) }).then(data => { if (active) setConfig(data) })
       .catch(() => { /* Keep the current mode; first-load failures use the confirmed defaults. */ }).finally(() => { if (active) setLoading(false) })
     refresh(); window.addEventListener('younoya-settings', refresh)
     return () => { active = false; window.removeEventListener('younoya-settings', refresh) }

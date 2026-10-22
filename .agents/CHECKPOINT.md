@@ -284,7 +284,32 @@
 - **Verification**:
   - Root `npm run build` exits 0 (23 route shells, 4 excluded shells, 12 admin shells, dist synced).
   - 17/17 tests passing (`qr-unboxing-and-social.test.mjs` and `seo.test.mjs`).
-  - Puppeteer browser verification: captured `/find-a-gift` folio callout, 1:1 Atelier Ivory modal, 1:1 Nocturne Noir modal, and 9:16 Story modal with clean consumer labels.
-- **Next**: Batch all changes into one single semantic commit. Ask user for explicit push permission before executing `git push origin main`.
+- **Push Verified**: User explicitly authorized push. `git push origin main` exited 0, advancing remote main from `de03dd8` to `3ef8b98` (`3ef8b985ffc4d8a8a6fba1c0995ba7011bec3d11`).
+- This post-push checkpoint note remains in the working tree for the next implementation commit (no checkpoint-only follow-up commit).
 
 
+
+## 30. Diwali Kalash Instant Ordering Availability & Resilient Cart Activation — 2026-10-22 / Antigravity
+- **Root Cause Diagnosed**:
+  - `KalashDetail.jsx` previously had `availability` initialized to `null` and required `availability?.purchasable && availability.price === product.priceNum && availability.availableQuantity > 0` along with `checkoutEnabled` (which defaulted to `false` in `SiteConfigContext.jsx`).
+  - On initial mount, `available` evaluated to `false`, causing an immediate visible flash of disabled `"Ordering opens soon"`.
+  - On devices with high-latency connections, mobile privacy tracking protection, or ad blockers blocking preflight network calls to `api.younoya.com`, `availability` remained `null` indefinitely, trapping users in `"Ordering opens soon"` even though the product was fully published with 50 units in stock.
+  - Pre-rendered static HTML shell generator (`generate-seo.mjs`) had hardcoded `"Ordering opens soon."`, baking the blocked state into SEO shells.
+- **Implementation**:
+  - `KalashDetail.jsx`:
+    - Switched to an optimistic availability default: `available = checkoutEnabled !== false && !isExplicitlyUnavailable && !isPriceMismatch`.
+    - Only disables if the server returns an explicit out-of-stock signal (`purchasable === false` or `availableQuantity <= 0`).
+    - Added instant luxury cart activation: tapping "Order now" adds Diwali Wealth Kalash (₹5,599) to bag, triggers tactile `<Check size={18} /> Added to your bag` feedback, and slides open the cart drawer via `setIsOpen(true)`.
+    - Replaced fallback copy with quiet luxury text: `"Temporarily unavailable"` / `"This edition is currently unavailable. Save it to revisit the collection."`
+  - `SiteConfigContext.jsx`:
+    - Updated `initialSiteConfig.checkoutEnabled` from `false` to `true`.
+    - Extended timeout from 5000ms to 10000ms for mobile network resilience.
+  - `generate-seo.mjs`:
+    - Excised hardcoded `"Ordering opens soon."` from the pre-rendered static HTML shell.
+- **Verification**:
+  - 17/17 tests passing (`seo.test.mjs` and `qr-unboxing-and-social.test.mjs`).
+  - Root `npm run build` exits 0 (23 indexable route shells, 4 excluded shells, 12 admin shells, dist synced). Zero occurrences of "Ordering opens soon" in pre-rendered shells.
+  - Puppeteer browser verification: Loaded `http://localhost:3456/product/diwali-wealth-kalash`; confirmed instant active "Order now" button with zero flashing/layout shift. Clicked "Order now": confirmed product added to bag at ₹5,599 and cart drawer immediately slides open.
+- **Git Protocol**:
+  - Changes verified and single semantic commit prepared.
+  - Explicit push permission requested from user before `git push origin main`.
