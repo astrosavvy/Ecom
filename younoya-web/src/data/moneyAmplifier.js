@@ -35,8 +35,8 @@ export const MONEY_AMPLIFIER_PRODUCT = {
     material: 'Precious crystal & artisan mineral composite',
     weight: '400g (piece) · 700g (with presentation box)',
     dimensions: '5 × 7.2 × 3.5 inches (12.7 × 18.3 × 8.9 cm)',
-    care: 'Delicate item — handle with care'
+    care: 'Wipe gently with soft dry microfiber cloth'
   },
-  delicateNote: 'Delicate heirloom — handle with care. Consecrated with care for your sacred altar or living sanctuary.',
+  delicateNote: 'Consecrated with care for your sacred altar or living sanctuary.',
   relatedHandles: ['diwali-wealth-kalash', 'golden-instinct', 'the-inner-kingdom']
 }

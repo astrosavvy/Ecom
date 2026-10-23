@@ -67,7 +67,7 @@ export async function prepareMoneyAmplifier(scope: any) {
       weight_grams: 400,
       weight_with_box_grams: 700,
       dimensions_inches: '5 x 7.2 x 3.5',
-      care_instruction: 'Delicate item handle with care'
+      care_instruction: 'Wipe with soft microfiber cloth'
     }
 
     const content = {

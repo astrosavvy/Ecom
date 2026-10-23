@@ -78,7 +78,7 @@ export default function MoneyAmplifierDetail({ product }) {
   )
 
   return (
-    <div className="navratri-page kalash-page" id="shop-top">
+    <div className="navratri-page kalash-page amplifier-page" id="shop-top">
       <div className="navratri-shell">
         <nav className="navratri-breadcrumb" aria-label="Breadcrumb">
           <Link to="/shop"><ArrowLeft size={15} /> The collection</Link>
@@ -92,24 +92,6 @@ export default function MoneyAmplifierDetail({ product }) {
             <span className="navratri-eyebrow">YOUNOYA · THE WEALTH &amp; SHIELD EDIT</span>
             <h1 id="amplifier-title">Money Amplifier &amp; <em>Protector Set.</em></h1>
             <h2>Curated crystal Kurma &amp; Hamsa Evil Eye talisman</h2>
-
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 14px',
-              background: '#FFF5F0',
-              border: '1px solid #FED7AA',
-              borderRadius: '20px',
-              color: '#9A3412',
-              fontSize: '0.8rem',
-              fontWeight: 500,
-              letterSpacing: '0.02em',
-              margin: '8px 0 16px'
-            }}>
-              <ShieldAlert size={14} />
-              <span>Delicate heirloom — handle with care</span>
-            </div>
 
             <p className="navratri-lead">
               Whether you lack opportunities to earn money or face difficulties in saving and sustaining the money, this 2-in-1 combination curated by YOUNOYA unites a unique crystalline pairing that not only helps attract new avenues of abundance, but amplifies and shields your wealth from evil nazar.
@@ -244,7 +226,7 @@ export default function MoneyAmplifierDetail({ product }) {
           <div>
             <h2>Care &amp; handling <em>instructions.</em></h2>
             <p>
-              <strong>Delicate item — handle with care.</strong> Both the iridescent crystal Kurma and the artisan marbled Hamsa plate are precision crafted. Avoid sudden drops, rough friction, or abrasive surfaces.
+              Both the iridescent crystal Kurma and the artisan marbled Hamsa plate are precision crafted. Avoid sudden drops, rough friction, or abrasive surfaces.
             </p>
             <p>
               Clean gently with a soft dry microfiber cloth. Do not immerse in chemical solvents or hot water. Consecrated with care for your sacred altar or home sanctuary.

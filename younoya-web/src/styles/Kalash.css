@@ -25,8 +25,67 @@
 .kalash-specs > div { display: grid; grid-template-columns: 90px 1fr; gap: 20px; padding: 8px 0; }
 .kalash-specs dt { color: #756657; }
 .kalash-specs dd { margin: 0; }
+
+/* Money Amplifier & Protector Set portrait gallery overrides */
+.amplifier-page .navratri-gallery__stage {
+  aspect-ratio: 2/3;
+  max-height: 680px;
+  max-width: 454px;
+  width: 100%;
+  margin: 0 auto 0 0;
+  display: block;
+  overflow: hidden;
+  background: #f2ece2;
+  border-radius: 22px;
+}
+.amplifier-page .navratri-gallery__stage > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.amplifier-page .navratri-thumbnails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: 454px;
+  margin-top: 18px;
+}
+.amplifier-page .navratri-thumbnails button {
+  aspect-ratio: 2/3;
+  width: 56px;
+  height: 84px;
+  min-height: 0;
+  padding: 3px;
+  border-radius: 10px;
+}
+.amplifier-page .navratri-thumbnails img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+}
+.amplifier-page .kalash-gifting img {
+  max-height: 560px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 20px;
+}
+
 @media (max-width:959px) {
-  .kalash-page .navratri-thumbnails { grid-template-columns: repeat(3,minmax(0,1fr)); max-width: 270px; }
+  .kalash-page:not(.amplifier-page) .navratri-thumbnails { grid-template-columns: repeat(3,minmax(0,1fr)); max-width: 270px; }
+  .amplifier-page .navratri-gallery__stage {
+    max-width: 100%;
+    max-height: 540px;
+    margin: 0 auto;
+  }
+  .amplifier-page .navratri-thumbnails {
+    max-width: 100%;
+    justify-content: flex-start;
+  }
   .kalash-story,.kalash-gifting { grid-template-columns: 1fr; gap: 28px; padding: 44px 0; }
   .kalash-story { margin-top: 36px; }
   .kalash-contents,.kalash-intentions { padding: 44px 0; }

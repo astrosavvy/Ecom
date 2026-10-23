@@ -345,3 +345,28 @@
     - `/checkout`: entered coupon code `YOUFESTIVE` and clicked "Apply Code". Verified discount `−₹200.00` appeared, total became `₹7,599.00`, and submit button updated to `"Pay ₹7,599.00 securely"`.
 - **Git Protocol**:
   - Single final semantic commit prepared; awaiting explicit user push authorization.
+
+## 32. Money Amplifier Portrait Gallery Aspect Ratio Fix & Excised Delicate Badge — 2026-10-23 / Antigravity
+- **Root Cause Diagnosed**:
+  - `MoneyAmplifierDetail.jsx` inherited `.kalash-page .navratri-gallery__stage` which enforced a landscape `aspect-ratio: 3/2` with `overflow: hidden`.
+  - Because authentic photography of the Money Amplifier is vertical portrait (2:3 aspect ratio, 851×1274), the bottom 55% of the frame (containing the crystal Kurma tortoise and blue marbled Hamsa evil eye plate) was cut off into overflow, leaving only the water ripple caustics visible.
+- **Gallery Aspect Ratio & Framing Fix**:
+  - Scoped `.amplifier-page` styling in `younoya-web/src/styles/Kalash.css`:
+    - Set `.amplifier-page .navratri-gallery__stage` to portrait `aspect-ratio: 2/3`, `max-height: 680px`, `max-width: 454px`, `overflow: hidden`, and `border-radius: 22px`.
+    - Configured stage image with `width: 100%`, `height: 100%`, `object-fit: cover`, `object-position: center`, ensuring zero empty pillarboxing and 100% complete visibility of the crystal tortoise and Hamsa plate.
+    - Updated thumbnails in `.amplifier-page .navratri-thumbnails button` to elegant portrait miniatures (`aspect-ratio: 2/3`, `56×84px`, `object-fit: cover`, `border-radius: 10px`).
+    - Added responsive mobile breakpoints (`max-width: 959px`): Stage dynamically adapts to `max-width: 100%`, `max-height: 540px` with zero horizontal overflow on screens down to 360px.
+    - Scoped `.amplifier-page .kalash-gifting img` to `max-height: 560px` with `object-fit: cover` to preserve balanced vertical rhythm.
+- **Excised Delicate Handling Callout**:
+  - Removed the `Delicate heirloom — handle with care` badge from the buybox in `MoneyAmplifierDetail.jsx`.
+  - Cleaned up the Care & handling section in `MoneyAmplifierDetail.jsx` to remove the redundant `Delicate item — handle with care.` sentence.
+  - Updated metadata in `moneyAmplifier.js`, `generate-seo.mjs`, and `backend/.../money-amplifier-catalog.ts` (`care_instruction: 'Wipe with soft microfiber cloth'`).
+- **Verification**:
+  - 17/17 tests passing (`seo.test.mjs` and `qr-unboxing-and-social.test.mjs`).
+  - Frontend build `npm run build` exits 0 (24 indexable public route shells, 4 excluded shells, 12 admin shells, clean synchronized `dist/`).
+  - Puppeteer browser verification:
+    - Desktop (1440×900): Verified crystal Kurma tortoise and Hamsa plate are completely visible and centered with zero clipping on both views (hero caustic and ambient travertine altar); confirmed delicate badge is absent from the buybox.
+    - Mobile (390×844): Verified responsive 2:3 portrait gallery, portrait thumbnails, sticky purchase bar, and smooth scrolling with zero horizontal overflow.
+- **Git Protocol**:
+  - Verified working tree and staged all changes into a single final semantic commit.
+  - Awaiting explicit user push authorization before pushing to GitHub origin main.
