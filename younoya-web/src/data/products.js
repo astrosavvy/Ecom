@@ -1,6 +1,7 @@
 import productEditorial from './productEditorial.js'
 import { NAVRATRI_PRODUCT } from './navratri.js'
 import { KALASH_PRODUCT } from './kalash.js'
+import { MONEY_AMPLIFIER_PRODUCT } from './moneyAmplifier.js'
 
 // Product facts and editorial copy come from the updated YOUNOYA brooch collection document.
 // Names retain established storefront URLs where possible; imagery maps to P55–P64.
@@ -51,7 +52,7 @@ export const BROOCH_PRODUCTS = catalog.map((item, index) => {
   }
 })
 
-export const PRODUCTS = [KALASH_PRODUCT, NAVRATRI_PRODUCT, ...BROOCH_PRODUCTS]
+export const PRODUCTS = [KALASH_PRODUCT, MONEY_AMPLIFIER_PRODUCT, NAVRATRI_PRODUCT, ...BROOCH_PRODUCTS]
 
 export function getProductByHandle(handle) {
   return PRODUCTS.find(product => product.handle === handle)

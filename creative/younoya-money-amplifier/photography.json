@@ -1,0 +1,32 @@
+{
+  "product": "YOUNOYA Money Amplifier & Protector Set",
+  "handle": "money-amplifier-protector-set",
+  "sku": "YN-MONEY-AMPLIFIER-001",
+  "price": 7799,
+  "sources": [
+    {
+      "source": "F:/Savvy_Ecom/ce4cb5eb-3f2b-4a6c-b6fb-6551c3f927f2.jpg",
+      "id": "hero",
+      "caption": "Iridescent crystal Kurma (tortoise) resting upon blue marbled Hamsa evil eye protective altar plate under celestial aquatic light.",
+      "dimensions": { "width": 851, "height": 1274 }
+    },
+    {
+      "source": "F:/Savvy_Ecom/WhatsApp Image 2026-10-23 at 1.03.01 PM.jpeg",
+      "id": "altar",
+      "caption": "Sunlit travertine and floral ambient pool view showcasing light refraction and delicate mineral details.",
+      "dimensions": { "width": 852, "height": 1271 }
+    }
+  ],
+  "exports": {
+    "directory": "/media/money-amplifier",
+    "files": [
+      "hero-1200.webp",
+      "hero-600.webp",
+      "altar-1200.webp",
+      "altar-600.webp",
+      "card.webp",
+      "original-hero.jpg",
+      "original-altar.jpg"
+    ]
+  }
+}

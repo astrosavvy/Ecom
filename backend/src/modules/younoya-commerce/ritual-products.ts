@@ -6,6 +6,7 @@ import { storefrontSalesChannel } from '../younoya-astro/offers'
 export const RITUAL_PRODUCTS: Record<string,{ sku:string, price:number }> = {
   'navratri-shringaar-box':{ sku:'YN-NAVRATRI-9D-001',price:1499 },
   'diwali-wealth-kalash':{ sku:'YN-DIWALI-KALASH-001',price:5599 },
+  'money-amplifier-protector-set':{ sku:'YN-MONEY-AMPLIFIER-001',price:7799 },
 }
 export function ritualReleased(product: any) {
   if (!product || product.status !== 'published') return false
@@ -17,7 +18,7 @@ export function ritualReleased(product: any) {
   const approved = metadata.ritual_release_approved === true ||
     (product.handle === 'navratri-shringaar-box' && metadata.navratri_release_approved === true)
   if (!approved) return false
-  return product.handle !== 'diwali-wealth-kalash' || (metadata.gst_rate_approved === true &&
+  return (product.handle !== 'diwali-wealth-kalash' && product.handle !== 'money-amplifier-protector-set') || (metadata.gst_rate_approved === true &&
     typeof metadata.gst_rate === 'number' && metadata.gst_rate >= 0 && metadata.gst_rate <= 100 && metadata.packaging_approved === true)
 }
 export async function requireReleasedItems(scope: any, items: any[]) {
@@ -39,7 +40,7 @@ export async function ritualAvailability(scope: any, handle: string) {
   const product = data[0], variant = product?.variants?.[0]
   if (!ritualReleased(product) || !variant?.manage_inventory || variant.allow_backorder || variant.sku !== spec.sku ||
     Number(variant.prices?.find((p: any) => p.currency_code === 'inr')?.amount) !== spec.price) return unavailable
-  if (handle === 'diwali-wealth-kalash') {
+  if (handle === 'diwali-wealth-kalash' || handle === 'money-amplifier-protector-set') {
     const state = (await settings()).draft
     if (!state.variants.some(v => v.id === variant.id && v.hsn === '7116') ||
       !state.parcels.some(p => p.variantIds.includes(variant.id))) return unavailable

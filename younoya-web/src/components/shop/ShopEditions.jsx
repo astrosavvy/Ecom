@@ -3,12 +3,15 @@ import { Link } from 'react-router-dom'
 import { useReducedMotion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Pause, Play } from 'lucide-react'
 import { KALASH_PRODUCT } from '../../data/kalash'
+import { MONEY_AMPLIFIER_PRODUCT } from '../../data/moneyAmplifier'
 import { NAVRATRI_PRODUCT } from '../../data/navratri'
 import '../../styles/ShopEditions.css'
 
 const slides = [
   { product:KALASH_PRODUCT,kicker:'THE DIWALI WEALTH KALASH',title:'An auspicious start.',emphasis:'An intention to keep.',
     description:'A textured Kalash, ritual essentials and a thoughtful intention for your Diwali celebrations.',cta:'Explore the Kalash',detail:'Diwali rituals · devotional gifting' },
+  { product:MONEY_AMPLIFIER_PRODUCT,kicker:'THE WEALTH & SHIELD EDIT',title:'Continuous abundance.',emphasis:'Sacred protection.',
+    description:'An iridescent crystal Kurma and artisan blue marbled Hamsa plate to amplify wealth flow and shield against evil nazar.',cta:'Explore the Set',detail:'Consecrated 2-in-1 set · delicate heirloom' },
   { product:NAVRATRI_PRODUCT,kicker:'THE YOUNOYA NAVRATRI EDIT',title:'Nine days of devotion.',emphasis:'Kept together.',
     description:'Shringaar, colour and devotional keepsakes. Nine daily kits, brought together in one complete box.',cta:'Explore the Navratri box',detail:'Nine daily kits · one complete set' },
 ]

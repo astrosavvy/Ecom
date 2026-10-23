@@ -63,7 +63,7 @@ export async function preparePayment(cartId, address, note, promo, policyRevisio
     } })
   ]
   if (promo?.trim()) {
-    updatePromises.push(storeRequest(`/store/carts/${cartId}/promotions`, { body: { promo_codes: [promo.trim()] } }))
+    updatePromises.push(storeRequest(`/store/carts/${cartId}/promotions`, { body: { promo_codes: [promo.trim()] } }).catch(() => {}))
   }
   await Promise.all(updatePromises)
 

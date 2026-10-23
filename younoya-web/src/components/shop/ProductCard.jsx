@@ -5,7 +5,7 @@ import { Check, Heart, ShoppingBag } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 
 export default function ProductCard({ product, index, reducedMotion, onWishlist, isWishlisted }) {
-  const ritual = product.kind === 'ritual-box' || product.kind === 'kalash'
+  const ritual = product.kind === 'ritual-box' || product.kind === 'kalash' || product.kind === 'money-amplifier'
   const { addToCart, setIsOpen } = useCart()
   const [added, setAdded] = useState(false)
   const [imageFailed, setImageFailed] = useState(false)

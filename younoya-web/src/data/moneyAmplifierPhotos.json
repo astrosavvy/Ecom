@@ -1,0 +1,34 @@
+[
+  {
+    "id": "hero",
+    "src": "/media/money-amplifier/hero-1200.webp",
+    "thumbnail": "/media/money-amplifier/hero-600.webp",
+    "width": 851,
+    "height": 1274,
+    "caption": "Iridescent crystal Kurma resting upon the blue marbled Hamsa evil eye protective altar plate.",
+    "styled": false,
+    "fallback": {
+      "src": "/media/money-amplifier/original-hero.jpg",
+      "thumbnail": "/media/money-amplifier/original-hero.jpg",
+      "width": 851,
+      "height": 1274,
+      "caption": "Original authentic photograph of the Kurma and Hamsa plate"
+    }
+  },
+  {
+    "id": "altar",
+    "src": "/media/money-amplifier/altar-1200.webp",
+    "thumbnail": "/media/money-amplifier/altar-600.webp",
+    "width": 852,
+    "height": 1271,
+    "caption": "Sunlit ambient travertine setting showcasing crystal refractions and sacred floral accents.",
+    "styled": false,
+    "fallback": {
+      "src": "/media/money-amplifier/original-altar.jpg",
+      "thumbnail": "/media/money-amplifier/original-altar.jpg",
+      "width": 852,
+      "height": 1271,
+      "caption": "Original authentic photograph in sunlit ambient setting"
+    }
+  }
+]

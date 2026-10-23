@@ -39,7 +39,9 @@ export default function Checkout() {
 
   // Calculate live payable amount for initial button rendering
   const bagEstimate = offer ? Number(offer.price || 0) : bag.reduce((sum, item) => sum + Number(item.priceNum || item.price || 0) * (item.quantity || 1), 0)
-  const payableAmount = checkoutTotal(cart,bagEstimate,method)
+  const isYouFestive = (promo || '').trim().toUpperCase() === 'YOUFESTIVE'
+  const promoDiscount = Number(cart?.discount_total) > 0 ? 0 : (isYouFestive ? 200 : 0)
+  const payableAmount = Math.max(0, checkoutTotal(cart,bagEstimate,method) - promoDiscount)
 
   useEffect(() => { sessionStorage.setItem('yn_checkout_address', JSON.stringify(address)) }, [address])
   useEffect(() => { preloadCheckout() }, [])

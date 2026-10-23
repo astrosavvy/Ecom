@@ -6,7 +6,8 @@ export const money = value => `₹${Number(value || 0).toLocaleString('en-IN', {
 
 export default function CheckoutSummary({ cart, bag, session, offer, promo = '', onPromoChange, method = 'razorpay' }) {
   const [promoInput, setPromoInput] = useState(promo)
-  const [promoApplied, setPromoApplied] = useState(false)
+  const [promoApplied, setPromoApplied] = useState((promo || '').trim().toUpperCase() === 'YOUFESTIVE')
+  const [promoError, setPromoError] = useState('')
 
   const bagItems = offer
     ? [{ id: offer.id, title: offer.title, quantity: 1, thumbnail: offer.thumbnail, total: offer.price, subtitle: offer.subtitle }]
@@ -36,14 +37,23 @@ export default function CheckoutSummary({ cart, bag, session, offer, promo = '',
   const cartSubtotal = Number(cart?.original_item_total || cart?.subtotal || 0)
   const cartTotal = Number(cart?.total || 0)
 
+  const isYouFestive = (promo || '').trim().toUpperCase() === 'YOUFESTIVE'
+  const discountAmount = Number(cart?.discount_total) > 0 ? Number(cart.discount_total) : (isYouFestive ? 200 : 0)
   const subtotal = cartSubtotal > 0 ? cartSubtotal : estimate
-  const total = checkoutTotal(cart,estimate,method)
+  const total = Math.max(0, checkoutTotal(cart,estimate,method) - (Number(cart?.discount_total) > 0 ? 0 : (isYouFestive ? 200 : 0)))
 
   function handleApplyPromo(e) {
     e?.preventDefault?.()
-    if (!promoInput.trim()) return
-    onPromoChange?.(promoInput.trim())
-    setPromoApplied(true)
+    const cleaned = promoInput.trim().toUpperCase()
+    if (!cleaned) return
+    if (cleaned === 'YOUFESTIVE') {
+      onPromoChange?.('YOUFESTIVE')
+      setPromoApplied(true)
+      setPromoError('')
+    } else {
+      setPromoError('Please enter a valid promotion code')
+      setPromoApplied(false)
+    }
   }
 
   return (
@@ -90,6 +100,7 @@ export default function CheckoutSummary({ cart, bag, session, offer, promo = '',
             onChange={e => {
               setPromoInput(e.target.value)
               setPromoApplied(false)
+              setPromoError('')
             }}
           />
           <button
@@ -100,6 +111,8 @@ export default function CheckoutSummary({ cart, bag, session, offer, promo = '',
             {promoApplied ? 'Applied' : 'Apply Code'}
           </button>
         </div>
+        {promoError && <p style={{ color: '#B91C1C', fontSize: '0.8rem', marginTop: '6px' }}>{promoError}</p>}
+        {promoApplied && isYouFestive && <p style={{ color: '#15803D', fontSize: '0.8rem', marginTop: '6px' }}>✓ YOUFESTIVE applied: ₹200 off your order</p>}
       </div>
 
       {/* Financial Totals Breakdown */}
@@ -112,10 +125,10 @@ export default function CheckoutSummary({ cart, bag, session, offer, promo = '',
           <dt>Delivery:</dt>
           <dd className="checkout-shipping-free">Free</dd>
         </div>
-        {Number(cart?.discount_total) > 0 && (
-          <div className="checkout-summary__row checkout-summary__discount">
-            <dt>Discount:</dt>
-            <dd>−{money(cart.discount_total)}</dd>
+        {discountAmount > 0 && (
+          <div className="checkout-summary__row checkout-summary__discount" style={{ color: '#15803D' }}>
+            <dt>Discount {isYouFestive ? '(YOUFESTIVE)' : ''}:</dt>
+            <dd>−{money(discountAmount)}</dd>
           </div>
         )}
         <div className="checkout-summary__row checkout-summary__total-row">

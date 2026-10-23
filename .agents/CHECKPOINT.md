@@ -313,3 +313,35 @@
 - **Git Protocol**:
   - Changes verified and single semantic commit prepared.
   - Explicit push permission requested from user before `git push origin main`.
+
+## 31. Money Amplifier & Protector Set Listing and YOUFESTIVE Coupon Integration — 2026-10-23 / Antigravity
+- **New Product Curation**:
+  - Published the **Money Amplifier & Protector Set** (`money-amplifier-protector-set`, SKU `YN-MONEY-AMPLIFIER-001`, ₹7,799):
+    - Curated 2-in-1 combination uniting an iridescent crystal Kurma (tortoise) to amplify wealth flow with an artisan blue marbled Hamsa evil eye protective altar plate to shield against ill-wishing and financial drainage.
+    - Prominently displays delicate handling notice: *"Delicate heirloom — handle with care"*.
+    - Complete specifications: 400g dead weight, 700g courier packed weight ($0.70\text{ kg}$), parcel dimensions $12.7 \times 18.29 \times 8.89\text{ cm}$ ($5 \times 7.2 \times 3.5\text{ in}$), HSN `7116`.
+    - Authentic photography pipeline: Processed two high-res authentic photos via Python PIL into responsive WebP assets (`hero-1200.webp`, `hero-600.webp`, `altar-1200.webp`, `altar-600.webp`, `card.webp`) with original image fallbacks under `younoya-web/public/media/money-amplifier/`.
+    - Recorded provenance and specs in `creative/younoya-money-amplifier/photography.json`.
+- **Storefront Architecture**:
+  - `data/moneyAmplifier.js` and `data/products.js`: Added `MONEY_AMPLIFIER_PRODUCT` into `PRODUCTS` catalog.
+  - `pages/MoneyAmplifierDetail.jsx`: Built museum-grade luxury product page with tactile breadcrumbs, North-East/Kuber placement guidance, optimistic availability, instant add-to-bag with check feedback, and immediate cart drawer opening.
+  - `ShopEditions.jsx`: Featured in the festive hero carousel alongside Diwali Kalash and Navratri box.
+  - `ProductCard.jsx`: Configured catalog card with edge-to-edge luxury framing (`object-fit: cover`).
+  - Pre-rendered static HTML shell in `generate-seo.mjs` and updated sitemap for 24 indexable public pages.
+- **YOUFESTIVE Promotional Coupon Integration (₹200 Off)**:
+  - `CheckoutSummary.jsx`: Added real-time coupon validation for `YOUFESTIVE` (case-insensitive).
+  - Displays instant green confirmation: `✓ YOUFESTIVE applied: ₹200 off your order`.
+  - Itemized discount row: `Discount (YOUFESTIVE): −₹200.00`.
+  - Dynamically recalculates order total from ₹7,799.00 to ₹7,599.00.
+  - `Checkout.jsx`: Seamlessly synchronizes payment button label: `"Pay ₹7,599.00 securely"`.
+  - Backend script `backend/src/scripts/seed-festive-promo.ts` and `money-amplifier-catalog.ts` prepared.
+- **Verification**:
+  - 17/17 tests passing (`seo.test.mjs` and `qr-unboxing-and-social.test.mjs`).
+  - Monorepo `npm run build` exits 0 (24 indexable public route shells, 4 excluded shells, 12 admin shells, synchronized `dist/`).
+  - Backend TypeScript build `npm --prefix backend run build` exits 0.
+  - Puppeteer browser verification:
+    - `/product/money-amplifier-protector-set`: verified active "Order now" button, ₹7,799 price, delicate handling badge.
+    - Tapped "Order now": verified item added to bag at ₹7,799, cart drawer opened.
+    - `/checkout`: entered coupon code `YOUFESTIVE` and clicked "Apply Code". Verified discount `−₹200.00` appeared, total became `₹7,599.00`, and submit button updated to `"Pay ₹7,599.00 securely"`.
+- **Git Protocol**:
+  - Single final semantic commit prepared; awaiting explicit user push authorization.
