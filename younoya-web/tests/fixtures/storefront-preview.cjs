@@ -17,7 +17,8 @@ function reset(next='fresh') {
 reset()
 http.createServer(async(req,res)=>{
   const url=new URL(req.url,origin)
-  if(url.searchParams.has('image-failure')) failureTarget=url.searchParams.get('image-failure')==='boxed' ? 'boxed-set' : 'hero'
+  if(url.searchParams.has('image-failure')) failureTarget=url.searchParams.get('image-failure')==='reveal' ? 'reveal' : url.searchParams.get('image-failure')==='boxed' ? 'boxed-set' : 'hero'
+  if(failureTarget==='reveal' && /^\/media\/reveal\/black-horse-(480|800|1200)\.webp$/.test(url.pathname)) {res.writeHead(404);return res.end()}
   if(failureTarget && new RegExp(`^/media/kalash/${failureTarget}-(600|1200)\\.webp$`).test(url.pathname)) {res.writeHead(404);return res.end()}
   const json=(value,status=200)=>{res.writeHead(status,{'content-type':'application/json'});res.end(JSON.stringify(value))}
   if(url.pathname==='/qa/requests') return json(requests)

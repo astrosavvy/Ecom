@@ -13,6 +13,8 @@
  */
 
 export async function renderSocialCardToCanvas(canvas, data, options = {}) {
+  if (typeof document !== 'undefined' && document.fonts?.ready) await document.fonts.ready
+  if (data.presentation === 'gift') return renderGiftNote(canvas, data, options)
   const {
     format = 'feed', // 'feed' (1:1 Square - Default) or 'story' (9:16)
     theme = 'atelier', // 'atelier' (Warm Ivory - Default) or 'nocturne' (Deep Obsidian)
@@ -260,7 +262,7 @@ export async function generateSocialCardBlob(data, options = {}) {
  */
 export async function downloadSocialCard(data, options = {}, filename = 'younoya-1x1-prophecy-folio.png') {
   const blob = await generateSocialCardBlob(data, options)
-  if (!blob) return
+  if (!blob) return false
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
@@ -269,4 +271,66 @@ export async function downloadSocialCard(data, options = {}, filename = 'younoya
   a.click()
   document.body.removeChild(a)
   setTimeout(() => URL.revokeObjectURL(url), 1000)
+  return true
+}
+
+// The public edition note has no computed transit or recipient-specific claim.
+function renderGiftNote(canvas, data, { format = 'feed', theme = 'atelier' } = {}) {
+  canvas.width = 1080
+  canvas.height = format === 'story' ? 1920 : 1080
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
+  const dark = theme === 'nocturne'
+  const ink = dark ? '#faf7f2' : '#241c17'
+  const muted = dark ? '#c9baa7' : '#655b50'
+  const rule = dark ? '#5d4c36' : '#dcd2c3'
+  const width = canvas.width
+  const height = canvas.height
+  ctx.fillStyle = dark ? '#17120f' : '#faf7f2'
+  ctx.fillRect(0, 0, width, height)
+  ctx.textAlign = 'left'
+  ctx.letterSpacing = '0px'
+  const wrap = (text, size, font, maxWidth = 880) => {
+    ctx.font = `${size}px ${font}`
+    const lines = []
+    let line = ''
+    for (const word of String(text || '').split(/\s+/)) {
+      const next = line ? `${line} ${word}` : word
+      if (line && ctx.measureText(next).width > maxWidth) { lines.push(line); line = word }
+      else line = next
+    }
+    if (line) lines.push(line)
+    return lines
+  }
+  ctx.fillStyle = ink
+  ctx.font = '30px "Plus Jakarta Sans", sans-serif'
+  ctx.fillText('YOUNOYA', 100, 130)
+  ctx.fillStyle = muted
+  ctx.font = '21px "Plus Jakarta Sans", sans-serif'
+  ctx.fillText(data.chapter, 100, 220)
+  const titleLines = wrap(data.anchorPiece, 76, '"Cormorant Garamond", Georgia, serif')
+  ctx.fillStyle = ink
+  titleLines.forEach((line, i) => ctx.fillText(line, 100, 310 + i * 80))
+  const signY = 348 + (titleLines.length - 1) * 80
+  ctx.fillStyle = muted
+  ctx.font = '22px "Plus Jakarta Sans", sans-serif'
+  ctx.fillText(data.sign, 100, signY)
+  const footerY = height - 110
+  const startY = format === 'story' ? Math.max(730, signY + 130) : signY + 100
+  let size = format === 'story' ? 52 : 44
+  let lines = wrap(data.prophecy, size, '"Cormorant Garamond", Georgia, serif')
+  while (size > 28 && startY + lines.length * size * 1.3 > footerY - 80) {
+    size -= 2
+    lines = wrap(data.prophecy, size, '"Cormorant Garamond", Georgia, serif')
+  }
+  ctx.fillStyle = ink
+  lines.forEach((line, i) => ctx.fillText(line, 100, startY + i * size * 1.3))
+  ctx.strokeStyle = rule
+  ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(100, footerY - 35); ctx.lineTo(width - 100, footerY - 35); ctx.stroke()
+  ctx.fillStyle = muted
+  ctx.font = '20px "Plus Jakarta Sans", sans-serif'
+  ctx.fillText('For every chapter.', 100, footerY + 10)
+  ctx.textAlign = 'right'
+  ctx.fillText('YOUNOYA.COM', width - 100, footerY + 10)
 }

@@ -156,8 +156,8 @@ export function getSeo(pathname, storefrontMode = 'coming-soon', posts = KNOWN_P
 
   if (path.startsWith('/reveal') || path.startsWith('/unboxing')) return {
     path,
-    title: 'Your Sacred Unboxing | Younoya',
-    description: 'Your intentional gift reveal and activation ritual.',
+    title: 'Your gift edition | Younoya',
+    description: 'The pieces, meaning and intention behind your Younoya gift edition.',
     noindex: true,
   }
 

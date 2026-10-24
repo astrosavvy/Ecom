@@ -1,0 +1,724 @@
+{
+  "date": "2026-10-24",
+  "canonicalRoutes": [
+    {
+      "edition": "career/aries",
+      "heroImage": "Black running horse",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/aries",
+      "photoTop": 235.1875,
+      "title": "The Precision Set",
+      "width": 360
+    },
+    {
+      "edition": "career/taurus",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/taurus",
+      "photoTop": 279.28125,
+      "title": "The Adaptive Confidence Set",
+      "width": 360
+    },
+    {
+      "edition": "career/gemini",
+      "heroImage": "Citrine tortoise",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/gemini",
+      "photoTop": 279.28125,
+      "title": "The One Brilliant Thing Set",
+      "width": 360
+    },
+    {
+      "edition": "career/cancer",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/cancer",
+      "photoTop": 235.1875,
+      "title": "The Perspective Set",
+      "width": 360
+    },
+    {
+      "edition": "career/leo",
+      "heroImage": "Citrine tortoise",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/leo",
+      "photoTop": 279.28125,
+      "title": "The Strategic Voice Set",
+      "width": 360
+    },
+    {
+      "edition": "career/virgo",
+      "heroImage": "Citrine tortoise",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/virgo",
+      "photoTop": 279.28125,
+      "title": "The Good Enough to Go Set",
+      "width": 360
+    },
+    {
+      "edition": "career/libra",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/libra",
+      "photoTop": 279.28125,
+      "title": "The Choose Yourself Set",
+      "width": 360
+    },
+    {
+      "edition": "career/scorpio",
+      "heroImage": "Black running horse",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/scorpio",
+      "photoTop": 279.28125,
+      "title": "The Controlled Power Set",
+      "width": 360
+    },
+    {
+      "edition": "career/sagittarius",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/sagittarius",
+      "photoTop": 279.28125,
+      "title": "The Make It Real Set",
+      "width": 360
+    },
+    {
+      "edition": "career/capricorn",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/capricorn",
+      "photoTop": 323.375,
+      "title": "The Adapt Without Losing Direction Set",
+      "width": 360
+    },
+    {
+      "edition": "career/aquarius",
+      "heroImage": "Black running horse",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/aquarius",
+      "photoTop": 279.28125,
+      "title": "The Make Them See It Set",
+      "width": 360
+    },
+    {
+      "edition": "career/pisces",
+      "heroImage": "White running horse",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/career/pisces",
+      "photoTop": 279.28125,
+      "title": "The Give the Idea a Shape Set",
+      "width": 360
+    },
+    {
+      "edition": "love/aries",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/aries",
+      "photoTop": 279.28125,
+      "title": "The Thoughtful Connection Set",
+      "width": 360
+    },
+    {
+      "edition": "love/taurus",
+      "heroImage": "Rose quartz hamsa, lotus & ducks",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/taurus",
+      "photoTop": 279.28125,
+      "title": "The Evolving Together Set",
+      "width": 360
+    },
+    {
+      "edition": "love/gemini",
+      "heroImage": "Heart-shaped bismuth bowl",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/gemini",
+      "photoTop": 279.28125,
+      "title": "The Stay in the Conversation Set",
+      "width": 360
+    },
+    {
+      "edition": "love/cancer",
+      "heroImage": "Rose quartz hamsa, lotus & ducks",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/cancer",
+      "photoTop": 279.28125,
+      "title": "The Say It Gently Set",
+      "width": 360
+    },
+    {
+      "edition": "love/leo",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/leo",
+      "photoTop": 279.28125,
+      "title": "The Hear Them Too Set",
+      "width": 360
+    },
+    {
+      "edition": "love/virgo",
+      "heroImage": "Amethyst cluster in a brass cup",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/virgo",
+      "photoTop": 279.28125,
+      "title": "The Leave Room for Human Set",
+      "width": 360
+    },
+    {
+      "edition": "love/libra",
+      "heroImage": "Jade & bismuth tray",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/libra",
+      "photoTop": 279.28125,
+      "title": "The Honest Harmony Set",
+      "width": 360
+    },
+    {
+      "edition": "love/scorpio",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/scorpio",
+      "photoTop": 279.28125,
+      "title": "The Ask, Don't Assume Set",
+      "width": 360
+    },
+    {
+      "edition": "love/sagittarius",
+      "heroImage": "Rose quartz hamsa, lotus & ducks",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/sagittarius",
+      "photoTop": 279.28125,
+      "title": "The Truth With Warmth Set",
+      "width": 360
+    },
+    {
+      "edition": "love/capricorn",
+      "heroImage": "Heart-shaped bismuth bowl",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/capricorn",
+      "photoTop": 279.28125,
+      "title": "The Say What Matters Set",
+      "width": 360
+    },
+    {
+      "edition": "love/aquarius",
+      "heroImage": "Seven-colour crystal tree",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/aquarius",
+      "photoTop": 279.28125,
+      "title": "The Beyond the Conversation Set",
+      "width": 360
+    },
+    {
+      "edition": "love/pisces",
+      "heroImage": "Illustration for selenite & rose quartz horses; not an exact product photograph",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/love/pisces",
+      "photoTop": 279.28125,
+      "title": "The Feel Without Carrying Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/aries",
+      "heroImage": "Rose quartz hamsa, lotus & ducks",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/aries",
+      "photoTop": 279.28125,
+      "title": "The Mental Quiet Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/taurus",
+      "heroImage": "Seven-chakra massager",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/taurus",
+      "photoTop": 279.28125,
+      "title": "The Release the Routine Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/gemini",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/gemini",
+      "photoTop": 235.1875,
+      "title": "The Less Noise Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/cancer",
+      "heroImage": "Amethyst cluster in a brass cup",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/cancer",
+      "photoTop": 279.28125,
+      "title": "The Feel, Then Release Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/leo",
+      "heroImage": "Rose quartz hamsa, lotus & ducks",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/leo",
+      "photoTop": 235.1875,
+      "title": "The Off-Stage Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/virgo",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/virgo",
+      "photoTop": 279.28125,
+      "title": "The Simplify the Day Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/libra",
+      "heroImage": "Rose quartz hamsa, lotus & ducks",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/libra",
+      "photoTop": 279.28125,
+      "title": "The Return to Yourself Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/scorpio",
+      "heroImage": "Nazar mineral wall hanging",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/scorpio",
+      "photoTop": 279.28125,
+      "title": "The Lower Your Guard Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/sagittarius",
+      "heroImage": "Jade & bismuth tray",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/sagittarius",
+      "photoTop": 279.28125,
+      "title": "The Come Back to Now Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/capricorn",
+      "heroImage": "Citrine tortoise",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/capricorn",
+      "photoTop": 279.28125,
+      "title": "The Nothing to Prove Tonight Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/aquarius",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/aquarius",
+      "photoTop": 279.28125,
+      "title": "The Get Out of Your Head Set",
+      "width": 360
+    },
+    {
+      "edition": "vitality/pisces",
+      "heroImage": "Fluorite butterfly",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/vitality/pisces",
+      "photoTop": 279.28125,
+      "title": "The Quiet Mind Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/aries",
+      "heroImage": "Citrine tortoise",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/aries",
+      "photoTop": 279.28125,
+      "title": "The Smart Opportunity Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/taurus",
+      "heroImage": "Citrine tortoise",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/taurus",
+      "photoTop": 279.28125,
+      "title": "The Considered Growth Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/gemini",
+      "heroImage": "Rose quartz hamsa, lotus & ducks",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/gemini",
+      "photoTop": 279.28125,
+      "title": "The Idea to Income Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/cancer",
+      "heroImage": "Citrine tortoise",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/cancer",
+      "photoTop": 279.28125,
+      "title": "The Secure Decision Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/leo",
+      "heroImage": "Citrine cluster in a brass cup",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/leo",
+      "photoTop": 279.28125,
+      "title": "The Smart Expansion Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/virgo",
+      "heroImage": "Citrine cluster in a brass cup",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/virgo",
+      "photoTop": 279.28125,
+      "title": "The Decision Filter Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/libra",
+      "heroImage": "Citrine cluster in a brass cup",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/libra",
+      "photoTop": 279.28125,
+      "title": "The Clear Choice Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/scorpio",
+      "heroImage": "Heart-shaped bismuth bowl",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/scorpio",
+      "photoTop": 279.28125,
+      "title": "The Due Diligence Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/sagittarius",
+      "heroImage": "Citrine tortoise",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/sagittarius",
+      "photoTop": 279.28125,
+      "title": "The Opportunity Filter Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/capricorn",
+      "heroImage": "Citrine cluster in a brass cup",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/capricorn",
+      "photoTop": 279.28125,
+      "title": "The Flexible Strategy Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/aquarius",
+      "heroImage": "Jade & bismuth tray",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/aquarius",
+      "photoTop": 279.28125,
+      "title": "The Future That Works Set",
+      "width": 360
+    },
+    {
+      "edition": "wealth/pisces",
+      "heroImage": "Citrine tortoise",
+      "objects": 2,
+      "overflow": false,
+      "path": "/reveal/wealth/pisces",
+      "photoTop": 279.28125,
+      "title": "The Intuition With Evidence Set",
+      "width": 360
+    }
+  ],
+  "responsive": [
+    {
+      "contentTop": 100,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/career/aries",
+      "title": "The Precision Set",
+      "width": 320
+    },
+    {
+      "contentTop": 100,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/love/pisces",
+      "title": "The Feel Without Carrying Set",
+      "width": 320
+    },
+    {
+      "contentTop": 100,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/vitality/taurus",
+      "title": "The Release the Routine Set",
+      "width": 320
+    },
+    {
+      "contentTop": 100,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/wealth/taurus",
+      "title": "The Considered Growth Set",
+      "width": 320
+    },
+    {
+      "contentTop": 100,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/career/aries",
+      "title": "The Precision Set",
+      "width": 430
+    },
+    {
+      "contentTop": 100,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/love/pisces",
+      "title": "The Feel Without Carrying Set",
+      "width": 430
+    },
+    {
+      "contentTop": 100,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/vitality/taurus",
+      "title": "The Release the Routine Set",
+      "width": 430
+    },
+    {
+      "contentTop": 100,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/wealth/taurus",
+      "title": "The Considered Growth Set",
+      "width": 430
+    },
+    {
+      "contentTop": 112,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/career/aries",
+      "title": "The Precision Set",
+      "width": 768
+    },
+    {
+      "contentTop": 112,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/love/pisces",
+      "title": "The Feel Without Carrying Set",
+      "width": 768
+    },
+    {
+      "contentTop": 112,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/vitality/taurus",
+      "title": "The Release the Routine Set",
+      "width": 768
+    },
+    {
+      "contentTop": 112,
+      "headerBottom": 72,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/wealth/taurus",
+      "title": "The Considered Growth Set",
+      "width": 768
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/career/aries",
+      "title": "The Precision Set",
+      "width": 1024
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/love/pisces",
+      "title": "The Feel Without Carrying Set",
+      "width": 1024
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/vitality/taurus",
+      "title": "The Release the Routine Set",
+      "width": 1024
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/wealth/taurus",
+      "title": "The Considered Growth Set",
+      "width": 1024
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/career/aries",
+      "title": "The Precision Set",
+      "width": 1440
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/love/pisces",
+      "title": "The Feel Without Carrying Set",
+      "width": 1440
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/vitality/taurus",
+      "title": "The Release the Routine Set",
+      "width": 1440
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/wealth/taurus",
+      "title": "The Considered Growth Set",
+      "width": 1440
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/career/aries",
+      "title": "The Precision Set",
+      "width": 1920
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/love/pisces",
+      "title": "The Feel Without Carrying Set",
+      "width": 1920
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/vitality/taurus",
+      "title": "The Release the Routine Set",
+      "width": 1920
+    },
+    {
+      "contentTop": 120,
+      "headerBottom": 80,
+      "heroImageVisible": true,
+      "overflow": false,
+      "path": "/reveal/wealth/taurus",
+      "title": "The Considered Growth Set",
+      "width": 1920
+    }
+  ],
+  "qrAlias": "unboxing/confidence-power/mesha -> career/aries",
+  "invalidRoute": "unavailable state, no default identity",
+  "imageFailure": "missing hero retains edition text and presents image-unavailable state",
+  "keyboard": "focus cycles in native dialog, Escape restores trigger",
+  "qna": "original caller contract, non-gift theme, Post/Story canvas and focus restoration verified",
+  "downloads": [
+    {
+      "file": "share-post.png",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "file": "share-story.png",
+      "width": 1080,
+      "height": 1920
+    }
+  ],
+  "limitations": [
+    "No real-device touch/keyboard or operating-system reduced-motion toggle test",
+    "No external message, payment or order created"
+  ]
+}

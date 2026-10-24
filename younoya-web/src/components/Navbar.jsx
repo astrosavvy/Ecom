@@ -7,14 +7,14 @@ export default function Navbar() {
   const { pathname } = useLocation()
   const { totalItems, setIsOpen } = useCart()
   const isReveal = pathname.startsWith('/reveal') || pathname.startsWith('/unboxing')
-  const light = !pathname.startsWith('/admin') && !isReveal
+  const light = !pathname.startsWith('/admin')
   const shop = pathname === '/shop' || pathname === '/'
   const guide = pathname === '/find-a-gift'
   const checkout = pathname === '/checkout'
-  const fullNavigation = !guide && !checkout
+  const fullNavigation = !guide && !checkout && !isReveal
 
   return (
-    <header className={`navbar${light ? ' navbar--light' : ''}${isReveal ? ' navbar--dark navbar--reveal' : ''}${shop ? ' navbar--shop' : ''}${guide ? ' navbar--guide' : ''}${checkout ? ' navbar--checkout' : ''}`}>
+    <header className={`navbar${light ? ' navbar--light' : ''}${isReveal ? ' navbar--reveal' : ''}${shop ? ' navbar--shop' : ''}${guide ? ' navbar--guide' : ''}${checkout ? ' navbar--checkout' : ''}`}>
       <div className="navbar__left">
         <Link className="navbar__brand" to="/" aria-label="Younoya home">
           <img src="/brand-legacy.webp" alt="Younoya" />
@@ -36,6 +36,7 @@ export default function Navbar() {
       )}
 
       <div className="navbar__right">
+        {isReveal && <Link className="navbar__reveal-collection" to="/shop">Collection</Link>}
         {fullNavigation && (
           <>
             <Link to="/shop?search=1#pieces" className="navbar__icon-link" aria-label="Search collection">

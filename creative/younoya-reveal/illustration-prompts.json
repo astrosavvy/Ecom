@@ -1,0 +1,20 @@
+[
+  {
+    "id": "bottle-study",
+    "prompt": "Create a single premium editorial illustration for an ivory Indian gifting website, portrait 4:5. A slender reusable glass water bottle with a plain metal lid and a separate slender crystal insert visible in its lower chamber. An artist's graphite and translucent watercolor study on warm ivory cotton paper, charcoal contours, very restrained muted champagne accents, subtle paper grain, generous negative space, realistic bottle proportions. Clearly a drawing, not a photograph. No coloured gemstone specificity, no labels, branding, words, people, props, glow, sparkles, zodiac symbols, or claims. The illustration represents a bottle format rather than exact merchandise.",
+    "tool": "built-in imagegen",
+    "review": "Generated illustrative study; visibly labelled as illustration, never an exact product photograph."
+  },
+  {
+    "id": "itr-study",
+    "prompt": "Create a single premium editorial illustration for an ivory Indian gifting website, portrait 4:5. A small unlabelled fragrance vial with simple cap and faint liquid inside, a few understated angular mineral fragments drawn beside it. Beautiful fine graphite lines and transparent sepia watercolor on warm ivory cotton paper. Clearly hand-rendered study, not product photography. Spare composition, charcoal details and muted champagne wash, soft physical shadows, ample negative space. No specific gemstone colours, no floral props, no text or numbers, no branding, no glitter, no astrology effects. This is an illustrative study of personal fragrance, not a certified product depiction.",
+    "tool": "built-in imagegen",
+    "review": "Generated illustrative study; visibly labelled as illustration, never an exact product photograph."
+  },
+  {
+    "id": "horse-study",
+    "prompt": "Create a single refined editorial still-life illustration for a premium Indian gifting website, portrait 4:5. Two small decorative running horse figurines, one translucent milky white suggesting selenite, one softly rose pink suggesting rose quartz. Restrained fine graphite contour drawing and pale natural watercolor on warm ivory cotton paper, beautifully observed sculptural forms and movement, subtle shared ground shadow, ample quiet space. Clearly an artist's illustration rather than merchandise photography; no pedestals, jewellery, wings, extra objects, text, labels, logo, stars, gold glow, cosmic decoration or claims. Refined and tactile, not cartoon-like. Keep both horses fully visible.",
+    "tool": "built-in imagegen",
+    "review": "Generated illustrative study; visibly labelled as illustration, never an exact product photograph."
+  }
+]

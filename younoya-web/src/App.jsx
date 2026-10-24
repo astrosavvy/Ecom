@@ -49,8 +49,7 @@ function StoreNavigation() {
   const { pathname } = useLocation()
   const { storefrontMode, loading } = useSiteConfig()
   const comingSoon = pathname === '/' && (loading || storefrontMode === 'coming-soon')
-  const isReveal = pathname.startsWith('/reveal') || pathname.startsWith('/unboxing')
-  const lightStorefront = !comingSoon && !pathname.startsWith('/admin') && !isReveal
+  const lightStorefront = !comingSoon && !pathname.startsWith('/admin')
   useEffect(() => {
     document.documentElement.classList.toggle('store-light', lightStorefront)
     return () => document.documentElement.classList.remove('store-light')

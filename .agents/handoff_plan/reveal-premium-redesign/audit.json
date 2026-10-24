@@ -1,0 +1,679 @@
+{
+  "date": "2026-10-24",
+  "baseline": "47b11ee760471c55b124aee9305bd473e31d35ac",
+  "matrixSha256": "0ffbb8bb0f70557fc5a646b6c759bcad3bed21d28e44781152509fcdc07e8209",
+  "matrixRecords": 96,
+  "canonicalRevealCombinations": 48,
+  "missingCompleteVisibleText": 44,
+  "liveSamples": [
+    "/reveal/career/aries",
+    "/reveal/wealth/taurus",
+    "/reveal/love/cancer",
+    "/reveal/vitality/gemini",
+    "/reveal/career/sagittarius",
+    "/reveal/wealth/pisces",
+    "/unboxing/career/aries"
+  ],
+  "browserObservations": {
+    "mainImagesPerSample": 1,
+    "onlyMainImage": "brand emblem",
+    "desktop1440ContentWidth": 860,
+    "mobile360VitalityGeminiApproxDocumentHeight": 3380,
+    "mobile360VitalityGeminiHeroBottom": 491,
+    "sharePanel": "Opening not confirmed in audit browser; custom modal source inspected only"
+  },
+  "routes": [
+    {
+      "path": "/reveal/career/aries",
+      "matrixKey": "ARIES-Mercury-confidence-power",
+      "combinationId": "ARI-MER-CON-01",
+      "setTitle": "The Precision Set",
+      "keepsake": "Black Running Horse Showpiece with Single Red Embellishment — KEEPSAKE",
+      "ritual": "7 Chakra Stimulating Body Massager with Wooden Base — RITUAL / MERCURY EXCLUSIVE",
+      "missingFields": []
+    },
+    {
+      "path": "/reveal/career/taurus",
+      "matrixKey": "TAURUS-Mercury-confidence-power",
+      "combinationId": "TAU-MER-CON-01",
+      "setTitle": "The Adaptive Confidence Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Lapis Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/career/gemini",
+      "matrixKey": "GEMINI-Mercury-confidence-power",
+      "combinationId": "GEM-MER-CON-01",
+      "setTitle": "The One Brilliant Thing Set",
+      "keepsake": "Citrine Tortoise — KEEPSAKE",
+      "ritual": "Clear Quartz Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/career/cancer",
+      "matrixKey": "CANCER-Mercury-confidence-power",
+      "combinationId": "CAN-MER-CON-01",
+      "setTitle": "The Perspective Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Carnelian Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/career/leo",
+      "matrixKey": "LEO-Mercury-confidence-power",
+      "combinationId": "LEO-MER-CON-01",
+      "setTitle": "The Strategic Voice Set",
+      "keepsake": "Citrine Tortoise — KEEPSAKE",
+      "ritual": "Lapis Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/career/virgo",
+      "matrixKey": "VIRGO-Mercury-confidence-power",
+      "combinationId": "VIR-MER-CON-01",
+      "setTitle": "The Good Enough to Go Set",
+      "keepsake": "Citrine Tortoise — KEEPSAKE",
+      "ritual": "Clear Quartz Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/career/libra",
+      "matrixKey": "LIBRA-Mercury-confidence-power",
+      "combinationId": "LIB-MER-CON-01",
+      "setTitle": "The Choose Yourself Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Carnelian Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/career/scorpio",
+      "matrixKey": "SCORPIO-Mercury-confidence-power",
+      "combinationId": "SCO-MER-CON-01",
+      "setTitle": "The Controlled Power Set",
+      "keepsake": "Black Running Horse — KEEPSAKE",
+      "ritual": "Amethyst Chunk Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/career/sagittarius",
+      "matrixKey": "SAGITTARIUS-Mercury-confidence-power",
+      "combinationId": "SAG-MER-CON-01",
+      "setTitle": "The Make It Real Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Tiger Eye Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/career/capricorn",
+      "matrixKey": "CAPRICORN-Mercury-confidence-power",
+      "combinationId": "CAP-MER-CON-01",
+      "setTitle": "The Adapt Without Losing Direction Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Carnelian Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/career/aquarius",
+      "matrixKey": "AQUARIUS-Mercury-confidence-power",
+      "combinationId": "AQU-MER-CON-01",
+      "setTitle": "The Make Them See It Set",
+      "keepsake": "Black Running Horse — KEEPSAKE",
+      "ritual": "Fluorite Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/career/pisces",
+      "matrixKey": "PISCES-Mercury-confidence-power",
+      "combinationId": "PIS-MER-CON-01",
+      "setTitle": "The Give the Idea a Shape Set",
+      "keepsake": "White Running Horse — KEEPSAKE",
+      "ritual": "Fluorite Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/aries",
+      "matrixKey": "ARIES-Mercury-love-connection",
+      "combinationId": "ARI-MER-LOV-01",
+      "setTitle": "The Thoughtful Connection Set",
+      "keepsake": "Metal Stand with a Fluorite Butterfly Attached — KEEPSAKE / MERCURY EXCLUSIVE",
+      "ritual": "10 ml Scented Itr Oil with Raw Moonstone Crystal Chunks — RITUAL",
+      "missingFields": []
+    },
+    {
+      "path": "/reveal/love/taurus",
+      "matrixKey": "TAURUS-Mercury-love-connection",
+      "combinationId": "TAU-MER-LOV-01",
+      "setTitle": "The Evolving Together Set",
+      "keepsake": "Rose Quartz Hamsa + Ducks + Lotus — KEEPSAKE",
+      "ritual": "Fluorite Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/gemini",
+      "matrixKey": "GEMINI-Mercury-love-connection",
+      "combinationId": "GEM-MER-LOV-01",
+      "setTitle": "The Stay in the Conversation Set",
+      "keepsake": "Heart-Shaped Bismuth Bowl — KEEPSAKE",
+      "ritual": "7 Chakra Massager — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/cancer",
+      "matrixKey": "CANCER-Mercury-love-connection",
+      "combinationId": "CAN-MER-LOV-01",
+      "setTitle": "The Say It Gently Set",
+      "keepsake": "Rose Quartz Hamsa + Ducks + Lotus — KEEPSAKE",
+      "ritual": "Garnet Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/leo",
+      "matrixKey": "LEO-Mercury-love-connection",
+      "combinationId": "LEO-MER-LOV-01",
+      "setTitle": "The Hear Them Too Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Moonstone Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/virgo",
+      "matrixKey": "VIRGO-Mercury-love-connection",
+      "combinationId": "VIR-MER-LOV-01",
+      "setTitle": "The Leave Room for Human Set",
+      "keepsake": "Amethyst Cluster Brass Cup — KEEPSAKE",
+      "ritual": "Amethyst Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/libra",
+      "matrixKey": "LIBRA-Mercury-love-connection",
+      "combinationId": "LIB-MER-LOV-01",
+      "setTitle": "The Honest Harmony Set",
+      "keepsake": "Jade Hexagon + Bismuth Tray — KEEPSAKE",
+      "ritual": "Amethyst Chunk Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/scorpio",
+      "matrixKey": "SCORPIO-Mercury-love-connection",
+      "combinationId": "SCO-MER-LOV-01",
+      "setTitle": "The Ask, Don't Assume Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Lapis Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/sagittarius",
+      "matrixKey": "SAGITTARIUS-Mercury-love-connection",
+      "combinationId": "SAG-MER-LOV-01",
+      "setTitle": "The Truth With Warmth Set",
+      "keepsake": "Rose Quartz Hamsa + Lotus + Ducks — KEEPSAKE",
+      "ritual": "Carnelian Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/capricorn",
+      "matrixKey": "CAPRICORN-Mercury-love-connection",
+      "combinationId": "CAP-MER-LOV-01",
+      "setTitle": "The Say What Matters Set",
+      "keepsake": "Heart-Shaped Bismuth Bowl — KEEPSAKE",
+      "ritual": "Amethyst Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/aquarius",
+      "matrixKey": "AQUARIUS-Mercury-love-connection",
+      "combinationId": "AQU-MER-LOV-01",
+      "setTitle": "The Beyond the Conversation Set",
+      "keepsake": "Seven-Colour Crystal Tree — KEEPSAKE",
+      "ritual": "Amethyst Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/love/pisces",
+      "matrixKey": "PISCES-Mercury-love-connection",
+      "combinationId": "PIS-MER-LOV-01",
+      "setTitle": "The Feel Without Carrying Set",
+      "keepsake": "Selenite + Rose Quartz Horses — KEEPSAKE",
+      "ritual": "Amethyst Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/aries",
+      "matrixKey": "ARIES-Mercury-vitality-balance",
+      "combinationId": "ARI-MER-VIT-01",
+      "setTitle": "The Mental Quiet Set",
+      "keepsake": "Rose Quartz Hamsa + Lotus + Love Ducks — KEEPSAKE / MERCURY EXCLUSIVE",
+      "ritual": "Metal-Base Glass Water Bottle with Howlite Crystal Tower — RITUAL",
+      "missingFields": []
+    },
+    {
+      "path": "/reveal/vitality/taurus",
+      "matrixKey": "TAURUS-Mercury-vitality-balance",
+      "combinationId": "TAU-MER-VIT-01",
+      "setTitle": "The Release the Routine Set",
+      "keepsake": "Element-Balancing Wall Hanging — KEEPSAKE",
+      "ritual": "7 Chakra Massager — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/gemini",
+      "matrixKey": "GEMINI-Mercury-vitality-balance",
+      "combinationId": "GEM-MER-VIT-01",
+      "setTitle": "The Less Noise Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Howlite Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/cancer",
+      "matrixKey": "CANCER-Mercury-vitality-balance",
+      "combinationId": "CAN-MER-VIT-01",
+      "setTitle": "The Feel, Then Release Set",
+      "keepsake": "Amethyst Cluster in Brass Cup — KEEPSAKE",
+      "ritual": "7 Chakra Massager — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/leo",
+      "matrixKey": "LEO-Mercury-vitality-balance",
+      "combinationId": "LEO-MER-VIT-01",
+      "setTitle": "The Off-Stage Set",
+      "keepsake": "Rose Quartz Hamsa + Ducks + Lotus — KEEPSAKE",
+      "ritual": "7 Chakra Massager — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/virgo",
+      "matrixKey": "VIRGO-Mercury-vitality-balance",
+      "combinationId": "VIR-MER-VIT-01",
+      "setTitle": "The Simplify the Day Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Copper Kalash — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/libra",
+      "matrixKey": "LIBRA-Mercury-vitality-balance",
+      "combinationId": "LIB-MER-VIT-01",
+      "setTitle": "The Return to Yourself Set",
+      "keepsake": "Rose Quartz Hamsa + Ducks + Lotus — KEEPSAKE",
+      "ritual": "Sage + Palo Santo Ritual — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/scorpio",
+      "matrixKey": "SCORPIO-Mercury-vitality-balance",
+      "combinationId": "SCO-MER-VIT-01",
+      "setTitle": "The Lower Your Guard Set",
+      "keepsake": "Nazar Mineral Wall Hanging — KEEPSAKE",
+      "ritual": "7 Chakra Massager — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/sagittarius",
+      "matrixKey": "SAGITTARIUS-Mercury-vitality-balance",
+      "combinationId": "SAG-MER-VIT-01",
+      "setTitle": "The Come Back to Now Set",
+      "keepsake": "Jade + Bismuth Tray — KEEPSAKE",
+      "ritual": "7 Chakra Massager — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/capricorn",
+      "matrixKey": "CAPRICORN-Mercury-vitality-balance",
+      "combinationId": "CAP-MER-VIT-01",
+      "setTitle": "The Nothing to Prove Tonight Set",
+      "keepsake": "Citrine Tortoise — KEEPSAKE",
+      "ritual": "Sage + Palo Santo Ritual — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/aquarius",
+      "matrixKey": "AQUARIUS-Mercury-vitality-balance",
+      "combinationId": "AQU-MER-VIT-01",
+      "setTitle": "The Get Out of Your Head Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Selenite Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/vitality/pisces",
+      "matrixKey": "PISCES-Mercury-vitality-balance",
+      "combinationId": "PIS-MER-VIT-01",
+      "setTitle": "The Quiet Mind Set",
+      "keepsake": "Fluorite Butterfly — KEEPSAKE",
+      "ritual": "Amethyst Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/aries",
+      "matrixKey": "ARIES-Mercury-wealth-prosperity",
+      "combinationId": "ARI-MER-WEA-01",
+      "setTitle": "The Smart Opportunity Set",
+      "keepsake": "Raw Citrine Cluster on Golden Tortoise Lamp Base — KEEPSAKE / MERCURY EXCLUSIVE",
+      "ritual": "10 ml Scented Itr Oil with Raw Lapis Lazuli Crystal Chunks — RITUAL",
+      "missingFields": []
+    },
+    {
+      "path": "/reveal/wealth/taurus",
+      "matrixKey": "TAURUS-Mercury-wealth-prosperity",
+      "combinationId": "TAU-MER-WEA-01",
+      "setTitle": "The Considered Growth Set",
+      "keepsake": "Citrine Tortoise — KEEPSAKE",
+      "ritual": "Tiger Eye Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/gemini",
+      "matrixKey": "GEMINI-Mercury-wealth-prosperity",
+      "combinationId": "GEM-MER-WEA-01",
+      "setTitle": "The Idea to Income Set",
+      "keepsake": "Rose Quartz Hamsa + Ducks + Lotus — KEEPSAKE",
+      "ritual": "Tiger Eye Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/cancer",
+      "matrixKey": "CANCER-Mercury-wealth-prosperity",
+      "combinationId": "CAN-MER-WEA-01",
+      "setTitle": "The Secure Decision Set",
+      "keepsake": "Citrine Tortoise — KEEPSAKE",
+      "ritual": "Green Aventurine Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/leo",
+      "matrixKey": "LEO-Mercury-wealth-prosperity",
+      "combinationId": "LEO-MER-WEA-01",
+      "setTitle": "The Smart Expansion Set",
+      "keepsake": "Citrine Cluster in Brass Cup — KEEPSAKE",
+      "ritual": "Amethyst Chunk Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/virgo",
+      "matrixKey": "VIRGO-Mercury-wealth-prosperity",
+      "combinationId": "VIR-MER-WEA-01",
+      "setTitle": "The Decision Filter Set",
+      "keepsake": "Citrine Cluster in Brass Cup — KEEPSAKE",
+      "ritual": "Fluorite Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/libra",
+      "matrixKey": "LIBRA-Mercury-wealth-prosperity",
+      "combinationId": "LIB-MER-WEA-01",
+      "setTitle": "The Clear Choice Set",
+      "keepsake": "Citrine Cluster in Brass Cup — KEEPSAKE",
+      "ritual": "7 Chakra Massager — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/scorpio",
+      "matrixKey": "SCORPIO-Mercury-wealth-prosperity",
+      "combinationId": "SCO-MER-WEA-01",
+      "setTitle": "The Due Diligence Set",
+      "keepsake": "Heart-Shaped Bismuth Bowl — KEEPSAKE",
+      "ritual": "Fluorite Chunk Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/sagittarius",
+      "matrixKey": "SAGITTARIUS-Mercury-wealth-prosperity",
+      "combinationId": "SAG-MER-WEA-01",
+      "setTitle": "The Opportunity Filter Set",
+      "keepsake": "Citrine Tortoise — KEEPSAKE",
+      "ritual": "Lapis Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/capricorn",
+      "matrixKey": "CAPRICORN-Mercury-wealth-prosperity",
+      "combinationId": "CAP-MER-WEA-01",
+      "setTitle": "The Flexible Strategy Set",
+      "keepsake": "Citrine Cluster in Brass Cup — KEEPSAKE",
+      "ritual": "Fluorite Itr — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/aquarius",
+      "matrixKey": "AQUARIUS-Mercury-wealth-prosperity",
+      "combinationId": "AQU-MER-WEA-01",
+      "setTitle": "The Future That Works Set",
+      "keepsake": "Jade + Bismuth Tray — KEEPSAKE",
+      "ritual": "7 Chakra Massager — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    },
+    {
+      "path": "/reveal/wealth/pisces",
+      "matrixKey": "PISCES-Mercury-wealth-prosperity",
+      "combinationId": "PIS-MER-WEA-01",
+      "setTitle": "The Intuition With Evidence Set",
+      "keepsake": "Citrine Tortoise Lamp — KEEPSAKE",
+      "ritual": "Citrine Bottle — RITUAL",
+      "missingFields": [
+        "story",
+        "whyChosen",
+        "keepsake.description",
+        "ritual.description"
+      ]
+    }
+  ]
+}

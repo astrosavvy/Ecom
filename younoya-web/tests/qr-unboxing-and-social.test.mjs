@@ -66,7 +66,7 @@ test('SEO protection: reveal pages are strictly hidden with noindex and omitted 
   // Test direct route getSeo()
   const revealSeo = getSeo('/reveal/career/aries')
   assert.equal(revealSeo.noindex, true)
-  assert.equal(revealSeo.title, 'Your Sacred Unboxing | Younoya')
+  assert.equal(revealSeo.title, 'Your gift edition | Younoya')
 
   const unboxingSeo = getSeo('/unboxing/love/leo')
   assert.equal(unboxingSeo.noindex, true)

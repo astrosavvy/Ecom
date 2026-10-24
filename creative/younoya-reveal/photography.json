@@ -1,0 +1,377 @@
+[
+  {
+    "id": "black-horse",
+    "source": "New_Edited_Pics\\P2\\1A8A1798.jpg",
+    "sourceSha256": "52c428aae78f4e32dacad285ad0a9d7923d64fee67628a550964a597da8e63a8",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\black-horse-480.webp",
+        "width": 480,
+        "height": 672,
+        "sha256": "b76da69baf7c1f531996a05d53b5352b9a6d0d7fbd732d8c6c77126c6690e33b"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\black-horse-800.webp",
+        "width": 800,
+        "height": 1120,
+        "sha256": "cb1837c047123010802e195bcaeeefafa90e44b8ce5d110527aefe4c09dadf90"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\black-horse-1200.webp",
+        "width": 1200,
+        "height": 1680,
+        "sha256": "9e3e078e453348c05b88c217e780ddf9734e629c77d14687fee572cf082e68b8"
+      }
+    ]
+  },
+  {
+    "id": "fluorite-butterfly",
+    "source": "New_Edited_Pics\\P37\\1A8A2206.jpg",
+    "sourceSha256": "f513fb56ad2dfaf50312e8339dcba908340791eeacadca1001a101f205ee264e",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\fluorite-butterfly-480.webp",
+        "width": 480,
+        "height": 672,
+        "sha256": "fd4cdc58fc34bbe1c0b01d957c8dbc9d1e21acb6a151d4917c9a48484e977e80"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\fluorite-butterfly-800.webp",
+        "width": 800,
+        "height": 1120,
+        "sha256": "2c79d6484458fdaf46449bee902752e2200158c09f6da7c2f4d5ce366c810e8a"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\fluorite-butterfly-1200.webp",
+        "width": 1200,
+        "height": 1680,
+        "sha256": "1e18f6979d89364ceb64cb0af2818d352140cfc63f1dbd5dc90768e1202c1959"
+      }
+    ]
+  },
+  {
+    "id": "rose-quartz-composition",
+    "source": "New_Edited_Pics\\P13\\1A8A1898.jpg",
+    "sourceSha256": "23a1a97c326083fe4c17d4142d9a52ab7047a69596065c4de04c953a6ab3235c",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\rose-quartz-composition-480.webp",
+        "width": 480,
+        "height": 672,
+        "sha256": "983ebbadda911544373369d58ebff8fbf74cc1c27a81c34618d8e9e88d00e0fe"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\rose-quartz-composition-800.webp",
+        "width": 800,
+        "height": 1120,
+        "sha256": "5c1afce0b2f6795362feb4c8fa93f01f498ce7c4618ba84338df670a891aca93"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\rose-quartz-composition-1200.webp",
+        "width": 1200,
+        "height": 1680,
+        "sha256": "7f239019a9223c40c721cc86089b25c489c3ea3ddfb9b1861fa80c08be7da81f"
+      }
+    ]
+  },
+  {
+    "id": "citrine-tortoise",
+    "source": "New_Edited_Pics\\P38\\1A8A2210.jpg",
+    "sourceSha256": "beb25ef0fb3ddda653d97baacb9a2c7390cda072593c549cc3fbcb69fd38adf7",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\citrine-tortoise-480.webp",
+        "width": 480,
+        "height": 343,
+        "sha256": "4389d970c1db4f88eef48972f3b61be1e43a7daa45b1526ed01d5cc1d8a23791"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\citrine-tortoise-800.webp",
+        "width": 800,
+        "height": 571,
+        "sha256": "64cc9d0fa4b483d15525c093bc0f8cae0afbd12c67fc6436ea931a1b7a389114"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\citrine-tortoise-1200.webp",
+        "width": 1200,
+        "height": 857,
+        "sha256": "77c058306ed2764395b723398ad85281f8fe37b0212f2e61270f98bde674132c"
+      }
+    ]
+  },
+  {
+    "id": "chakra-massager",
+    "source": "New_Edited_Pics\\P31\\1A8A2124.jpg",
+    "sourceSha256": "f59dfbc02d27454dcb2ebf862ea1082251e6d7949492ca8c8e8c928d9eee2a55",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\chakra-massager-480.webp",
+        "width": 480,
+        "height": 672,
+        "sha256": "fbf5fbff12d6895c4d9068afc51e5869f82e78565f8aad5aae2d6c750927efd0"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\chakra-massager-800.webp",
+        "width": 800,
+        "height": 1120,
+        "sha256": "75aeb2b24c9adfba7ee98827fef74b0976debc2016ffa748d1e0e885d32210f9"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\chakra-massager-1200.webp",
+        "width": 1200,
+        "height": 1680,
+        "sha256": "24bcfe3082572c6de40e6c82203b5aa2128d9e615e08dae557808c073edf4336"
+      }
+    ]
+  },
+  {
+    "id": "bismuth-heart",
+    "source": "New_Edited_Pics\\P26\\1A8A2056.jpg",
+    "sourceSha256": "e9bf9a56ba3b721ee94203a97ec1e9310913db7680818bc5dc499bd279248207",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\bismuth-heart-480.webp",
+        "width": 480,
+        "height": 343,
+        "sha256": "5d99d84c2cc194439b8d390615c59f8d3b837a68ab5fe25abafeb3576dae750c"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\bismuth-heart-800.webp",
+        "width": 800,
+        "height": 571,
+        "sha256": "f6d9aacbf20927cd2602cd0ac1be69dfb9ad185a97c55e12af17c0fad8490347"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\bismuth-heart-1200.webp",
+        "width": 1200,
+        "height": 857,
+        "sha256": "aedd874bd532dd930f18d0b221c3fe55eabea52de295196be4cbcbc0d9f7b6f8"
+      }
+    ]
+  },
+  {
+    "id": "amethyst-cup",
+    "source": "New_Edited_Pics\\P27\\1A8A2072.jpg",
+    "sourceSha256": "898cde5c876b15b2b0636eadc7283c141b90ebd890c4cb19d07c9c082e4f978e",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\amethyst-cup-480.webp",
+        "width": 480,
+        "height": 672,
+        "sha256": "e6dc2005a7659fc5dcd9933d5b72777582a6c04e97692d8f7c0a243ff95ef77b"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\amethyst-cup-800.webp",
+        "width": 800,
+        "height": 1120,
+        "sha256": "fb8b6840fb07d1be24746e05cac3ef8b8e504e07d8295773603be8e7491700c1"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\amethyst-cup-1200.webp",
+        "width": 1200,
+        "height": 1680,
+        "sha256": "1342f496cd147ad422631f8a855c10d7b6492d74e46fbd5dfaf4572c814cf6a6"
+      }
+    ]
+  },
+  {
+    "id": "citrine-cup",
+    "source": "New_Edited_Pics\\P25\\1A8A2038.jpg",
+    "sourceSha256": "01e475d83bf834e4e79d7ba143882896a5c8789d2534fafffb9890e6d361850f",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\citrine-cup-480.webp",
+        "width": 480,
+        "height": 672,
+        "sha256": "96cf71a6885d75d5524017148321d1699501ca426cc52b83da35b959e72bf46b"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\citrine-cup-800.webp",
+        "width": 800,
+        "height": 1120,
+        "sha256": "a605ac9a5db619ce4bb8f8f8908ad38ea145bdbc872dc8b404bab9748870c7ec"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\citrine-cup-1200.webp",
+        "width": 1200,
+        "height": 1680,
+        "sha256": "46e3670e745dabe07fef197bfdae0528595d2ef2615937614f16e5d65cf27281"
+      }
+    ]
+  },
+  {
+    "id": "crystal-tree",
+    "source": "New_Edited_Pics\\P24\\1A8A2025.jpg",
+    "sourceSha256": "9b54ccdd55e0a43fe0b48643291c4392e978186d0fdc30741dc8b4f53429b255",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\crystal-tree-480.webp",
+        "width": 480,
+        "height": 672,
+        "sha256": "50741804755bbc5dab950f1857bd84b50d71b0e659260946f7e751bd225d8e66"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\crystal-tree-800.webp",
+        "width": 800,
+        "height": 1120,
+        "sha256": "cf63e6410439dd9f69d51bf40e3971b63c209a92eec94b6428a4493bbb85cd2a"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\crystal-tree-1200.webp",
+        "width": 1200,
+        "height": 1680,
+        "sha256": "0f484b42767f39f44ab7f23765f5c45f3486c0d748a10e20fec943daa4f6cc5a"
+      }
+    ]
+  },
+  {
+    "id": "white-horse",
+    "source": "New_Edited_Pics\\P18\\1A8A1960.jpg",
+    "sourceSha256": "16cf529731a47c5fcaffbb46f37f320cebf94d9e54720fad0f9f17c89181d918",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\white-horse-480.webp",
+        "width": 480,
+        "height": 343,
+        "sha256": "eb4ee82ce3947e2a7300f46fa6668c4f6b5e143e6e77f29769be310ec9fc48c2"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\white-horse-800.webp",
+        "width": 800,
+        "height": 572,
+        "sha256": "3d274812c201d5a319ec111d9bec401461a675ddc659fb8297cd8e7cef8971d5"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\white-horse-1200.webp",
+        "width": 1200,
+        "height": 857,
+        "sha256": "13fcf2900170f1a832b3e298832cc1530487c230c00e2e613722eb7375bac3dd"
+      }
+    ]
+  },
+  {
+    "id": "nazar-wall",
+    "source": "New_Edited_Pics\\P66\\1A8A2562.jpg",
+    "sourceSha256": "610ca04d3154ae677a5f19acef0c02ddaa827f86fcf4a6e4e4428676272bb1ff",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\nazar-wall-480.webp",
+        "width": 480,
+        "height": 672,
+        "sha256": "3a0e9a89cfd6a01130f139ca507eb628c6322b34d7273145ff329cbf605fc3ed"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\nazar-wall-800.webp",
+        "width": 800,
+        "height": 1120,
+        "sha256": "b8c23c61993a63fd88a5823dace56e1f19827d04c44214f2cc9e6e04670b048f"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\nazar-wall-1200.webp",
+        "width": 1200,
+        "height": 1680,
+        "sha256": "187fa8e680df39bccd5d8c13514d0a12e8b4c6cb178b79ebfb146bb410695a3f"
+      }
+    ]
+  },
+  {
+    "id": "jade-bismuth",
+    "source": "New_Edited_Pics\\P40\\1A8A2238.jpg",
+    "sourceSha256": "c31064d842c2121b0efeccb05b34cf805b56342a374090e3ed6fa8cbc3d2a92f",
+    "review": "Object visually compared in numbered contact sheet; no SKU-number inference. Original scene retained.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\jade-bismuth-480.webp",
+        "width": 480,
+        "height": 343,
+        "sha256": "70d1e01cfad912586e66e4d5ba0d7cd47e3a77e7f083c699f8cc9e2c87cf68cf"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\jade-bismuth-800.webp",
+        "width": 800,
+        "height": 571,
+        "sha256": "eca7b9f49da7f84e5ab34a0be71d1d0eafccd2acbcbcb4b0d0e24f1be7ff3324"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\jade-bismuth-1200.webp",
+        "width": 1200,
+        "height": 857,
+        "sha256": "89e87e435397a5a9c09ebf24e75acd17cd0fd8a31ce6c93c85428161da45b935"
+      }
+    ]
+  },
+  {
+    "id": "bottle-study",
+    "source": "C:\\Users\\Palak\\.codex\\generated_images\\01a0be94-7a1b-7bb3-89c2-898a82466177\\exec-cf79ebd6-e194-4e85-89a8-0eb5a2f03f17.png",
+    "sourceSha256": "82ebb2a55dfe7a7111820456ab0ce2a4f53a7c0be4be06fd29b34a15a85433ed",
+    "type": "illustration",
+    "review": "Clearly a drawing, not exact merchandise. Owner requested creation for missing imagery. Label in UI and alt text.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\bottle-study-480.webp",
+        "width": 480,
+        "height": 600,
+        "sha256": "23c327781f0b053a22c6e9de2ecced982e177e45f7dd1b002effe9407146e2bc"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\bottle-study-800.webp",
+        "width": 800,
+        "height": 1000,
+        "sha256": "fe76f296bff0adfce3cb355631d27bae2359a643e224f311774e6bb757939a5e"
+      }
+    ]
+  },
+  {
+    "id": "itr-study",
+    "source": "C:\\Users\\Palak\\.codex\\generated_images\\01a0be94-7a1b-7bb3-89c2-898a82466177\\exec-d21b692d-3286-4374-afc8-33039a06ff04.png",
+    "sourceSha256": "c6fbb2b5dd5c3d21c853623815c8099f4e4edbd96f726bf49d53864efb68c62e",
+    "type": "illustration",
+    "review": "Clearly a drawing, not exact merchandise. Owner requested creation for missing imagery. Label in UI and alt text.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\itr-study-480.webp",
+        "width": 480,
+        "height": 600,
+        "sha256": "3eba051f36ac3f6579dd26aabdd49c6a10aa8dcd908387165ec8b70c09b70db2"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\itr-study-800.webp",
+        "width": 800,
+        "height": 1000,
+        "sha256": "9ffb070c20cbffa8362e3675c35d660d9fd1df5ef54a0dcb0913c33057abdb21"
+      }
+    ]
+  },
+  {
+    "id": "horse-study",
+    "source": "C:\\Users\\Palak\\.codex\\generated_images\\01a0be94-7a1b-7bb3-89c2-898a82466177\\exec-9dd2b45e-7a74-4773-b32d-c4769481d74e.png",
+    "sourceSha256": "795db2e66175608b18f6737886163b98d5ac0c198ec202714f472983a47f818b",
+    "type": "illustration",
+    "review": "Clearly a drawing, not exact merchandise. Owner requested creation for missing imagery. Label in UI and alt text.",
+    "exports": [
+      {
+        "path": "younoya-web\\public\\media\\reveal\\horse-study-480.webp",
+        "width": 480,
+        "height": 600,
+        "sha256": "e8231e1a913549ae658a3e73319a5f64a610e90e56cf20c9888586d09dfff1df"
+      },
+      {
+        "path": "younoya-web\\public\\media\\reveal\\horse-study-800.webp",
+        "width": 800,
+        "height": 1000,
+        "sha256": "181291b7b7abac53741288e8bd54b1c24ba3fefe3582d9b7e7b3566400a0328b"
+      }
+    ]
+  }
+]

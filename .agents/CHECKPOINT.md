@@ -5,8 +5,8 @@
 ---
 
 ## 1. 📍 Executive Status & System Topology
-- **Active Phase**: Anti-slop luxury redesign, passive-voice prophecy vault, and Inviolable Editorial Common Sense Rule implemented & verified.
-- **Last Updated**: 2026-10-19 | **Agent**: Antigravity | **Git Branch**: `main`
+- **Active Phase**: Premium ivory category/rashi reveal redesign implemented and verified locally across 48 editions. Single final local commit prepared; fresh GitHub push permission pending. Production unchanged.
+- **Last Updated**: 2026-10-24 | **Agent**: Codex | **Git Branch**: `main`
 - **Storefront**: `https://younoya.com` (Vite 6 + React 19 + Framer Motion + Lenis, deployed to Cloudflare Worker `ecom` via Git).
 - **Backend API**: `https://api.younoya.com` (Medusa 2.18 + Node 20 + PostgreSQL 15 `younoya_db` + Redis on VPS `ubuntu@140.245.7.165` via CF Tunnel).
 - **Admin Console**: Hosted exclusively on frontend edge (`https://younoya.com/admin/*`). ZERO VPS admin builds (956MB RAM OOM ceiling).
@@ -440,6 +440,9 @@
 - **Git Protocol**:
   - Staged all changes into one single final semantic commit.
   - Strict push permission rule: Stop and ask user before pushing to GitHub origin main.
+- **Push Verified**: User explicitly authorized push. `git push origin main` exited 0, advancing remote main from `79bc3e3` to `47b11ee` (`47b11ee760471c55b124aee9305bd473e31d35ac`).
+- This post-push checkpoint note remains in the working tree for the next implementation commit (no checkpoint-only follow-up commit).
+
 
 ## 36. Gift Reveal & Unboxing Revamp: Dark Rich Theme & Header Clearance Fix — 2026-10-24 / Antigravity
 - **Header Overlap Defect Resolved**:
@@ -475,7 +478,34 @@
 - **Git Protocol**:
   - Staged all changes into one single final semantic commit.
   - Strict push permission rule: Stop and ask user before pushing to GitHub origin main.
+- **Push Verified**: User explicitly authorized push. `git push origin main` exited 0, advancing remote main from `79bc3e3` to `47b11ee` (`47b11ee760471c55b124aee9305bd473e31d35ac`).
+- This post-push checkpoint note remains in the working tree for the next implementation commit (no checkpoint-only follow-up commit).
 
 
 
 
+
+
+
+## 37. Premium category/rashi reveal audit and plan — 2026-10-24 / Codex
+- User requested planning, not implementation, for /reveal/career/aries and other category/rashi pages. Used redesign-existing-projects and handoff_plan skills. User explicitly selected warm ivory with product photography in the preference reply.
+- Read-only live browser review covered career/Aries, wealth/Taurus, love/Cancer, vitality/Gemini, career/Sagittarius, wealth/Pisces and the career/Aries unboxing alias. Current renderer shows the same ornamental template and no product images (only its brand emblem). Desktop 1440px uses an 860px container. Mobile 360px Gemini vitality measured about 3380px document height, with hero ending about 491px down before any object photograph. No horizontal overflow observed in that sample; this was not a full accessibility audit.
+- Source audit covered all 96 matrix records and all 48 canonical category/rashi routes. Mercury is always preferred; only four Mercury records (Aries, one per category) contain story/rationale/product descriptions. Other 44 use generic fallback copy. All 48 lack mapped product imagery. Ketu has stories but different record identity and incomplete ritual descriptions; never use it to fill Mercury blanks. Current fallback incorrectly describes bottles as botanical sensory products. Shared recommendation matrix must remain unchanged by the presentation redesign.
+- Other planned corrections: remove universal North-East/60-second guidance without item evidence, hard-coded transit/future claims and misleading private-link copy; add strict reveal-only route validation without changing shared admin fallback functions; preserve printed QR routes and current noindex behavior. Shared share modal needs scoped neutral copy and accessibility verification; browser opening was not confirmed in this audit, so sharing is not reported as tested.
+- Canonical plan: .agents/handoff_plan/reveal-premium-redesign/PLAN.md, status ready / execution_authorization not_requested. Evidence: audit.json includes every route, current matrix ID, missing fields and source hash. Registry: .agents/handoff_plan/README.md. Full spec defines open ivory editorial layout, large authentic photography, 48 authored editions, content/media gates, scoped App/Navbar/share changes, task order, assumption safeguards and responsive/regression acceptance.
+- Plan artifact paths, all 48 unique routes/IDs and missing-content count verified. Website source, assets, backend, builds and production settings untouched. No build/test run, image generation, commit, deployment or push this planning turn. Existing dirty checkpoint notes preserved. Temporary browser tab closed and viewport reset.
+- Next: await authorization to implement this plan, then perform T01 exact item/photo/fact mapping and T02 desktop/mobile visual pilot before coding/scaling. Missing media/facts must not become invented products/instructions. Fresh GitHub push permission remains required after a future verified single final implementation commit.
+
+
+## 38. Premium gift edition implementation — 2026-10-24 / Codex
+- User authorized the plan with "implement this carefully" and resumed with "continue building from where it left". Owner requested creating missing imagery ("Build it on your own"); generated three explicitly labelled illustrative studies rather than inventing exact product photographs. No publication/push authorized.
+- Replaced the dark stars/glow/double-card reveal template with warm ivory editorial sections, object-led split hero, compact light logo/Collection/bag header, larger readable typography and mobile stacking. All 48 category/rashi notes rewritten in a separate presentation registry; printed QR reveal/unboxing URLs, canonical edition IDs and source object choices retained. Strict public resolver rejects invalid inputs while admin fallback functions remain unchanged. Original combinations.json SHA unchanged; Q&A/recommendation source untouched.
+- Removed generic oil-for-bottle fallbacks, fixed placement/60-second prescriptions, invented transit/future predictions and misleading private-link copy. Separate item registry has explicit aliases, known descriptions, no invented care/material certification/quantities. Current reveal noindex/sitemap exclusion retained; metadata wording updated to Your gift edition.
+- Inspected all 70 edited-photo group contacts; mapped 12 actual object photographs visually (photo-folder numbering differs from SKU). Exported 42 responsive WebPs: 12 photos plus three bottle/itr/horse illustrations. All original photos/generation files retained; 57 source/export hashes verified. Three lower items with no verified photo intentionally use text; all 48 heroes have genuine photos or labelled illustrations. Prompts/provenance and QA evidence: creative/younoya-reveal/.
+- Share modal now uses native dialog/portal, explicit keyboard cycle, Escape, trigger focus restoration, body/Lenis locking and 44px controls. Gift-only neutral payload and canvas preserve Q&A default contract. Post and Story wait for fonts; cancel is not an error and share failure does not auto-download. Verified actual 1080-square/1080x1920 downloads and Q&A-caller compatibility. Fixed mobile canvas overflow discovered in QA.
+- Verification: 24 automated reveal/SEO/QR/prophecy tests pass, including all 48 IDs/aliases/item choices, unchanged source hash, safe missing/invalid cases and 96 mock export layouts. Final root frontend build exit 0: 24 indexable/four excluded/12 admin shells. Worker dry-run exit 0 (56.67 KiB / 15.79 KiB gzip, ASSETS only; read 310 asset files per Wrangler). Existing Vite large-chunk advisory remains.
+- Browser: all 48 canonical routes at 360px; 24 representative cases at actual 320/430/768/1024/1440/1920 widths passed with no horizontal overflow/header overlap and loaded heroes. Native keyboard/focus, forced-image failure, alias/invalid routes and real local downloads verified. Shop/Navratri/Q&A/admin login/mocked guest checkout checked. No policy/payment controls clicked, external message, OTP, real charge/order/refund/pickup or backend mutation. Hardware touch/keyboard and OS reduced-motion toggle remain manual; reduced-motion CSS reviewed and reveal JS entrance animation removed.
+- Final scans: 258 matching root/frontend distribution files; 11 distinct private values absent from browser/Worker output. Ivory contrast ratios: ink 15.68, body 6.21, deep gold 4.68. Saved actual built-page screenshots and browser check report. An intermediate wrong-tab viewport capture was discarded/replaced after verifying dimensions.
+- Documentation: docs/premium-gift-reveal.md and creative media README. Canonical plan marked completed with task evidence and owner-approved illustration adjustment; index updated. Single local final commit includes all source/assets/tests/dist/docs/checkpoint; no intermediate commits. Next: obtain fresh explicit GitHub push permission and verify the frontend release afterward. No backend SSH rollout is needed.
+- Cleanup: valid temporary QA browser tabs closed, viewport reset, and all three owned pilot/dev/mock server processes stopped. No QA fixture left running.
+- Pre-commit: source/document whitespace checks pass. The generated JavaScript retains an intentional two-space Markdown hard break already present in the baseline dependency bundle; verified unchanged rather than altering generated semantics. Staged secret/original-file exclusion scan completed before commit.

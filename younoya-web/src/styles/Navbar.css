@@ -219,3 +219,6 @@
   .navbar--guide .navbar__cart { width: 44px; min-width: 44px; padding: 0; }
   .navbar--guide .navbar__cart-label { display: none; }
 }
+
+/* The recipient guide has its own quiet, light header. */
+.navbar--reveal{position:relative;inset:auto;height:80px;padding:0 max(48px,calc((100vw - 1240px)/2));background:#faf7f2;backdrop-filter:none;border-bottom:1px solid #dcd2c3;pointer-events:auto}.navbar--reveal .navbar__brand img{height:58px;width:110px}.navbar--reveal .navbar__right{gap:28px}.navbar--reveal .navbar__cart{width:44px;height:44px;color:#241c17}.navbar__reveal-collection{font-size:14px;color:#241c17;min-height:44px;display:flex;align-items:center}.navbar--reveal :is(a,button):focus-visible{outline:2px solid #8c6a24;outline-offset:4px}.navbar--reveal .navbar__cart-count{background:#241c17;color:#faf7f2}@media(max-width:1023px){.navbar--reveal{padding-inline:32px}}@media(max-width:767px){.navbar--reveal{height:68px;padding-inline:20px}.navbar--reveal .navbar__brand img{width:100px;height:52px}.navbar--reveal .navbar__reveal-collection{display:none}}@media(max-width:359px){.navbar--reveal{padding-inline:16px}}
