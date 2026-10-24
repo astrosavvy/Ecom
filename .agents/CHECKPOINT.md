@@ -370,3 +370,22 @@
 - **Git Protocol**:
   - Verified working tree and staged all changes into a single final semantic commit.
   - Awaiting explicit user push authorization before pushing to GitHub origin main.
+
+## 33. Savvy Admin User Creation & Dual-Mode (Password + OTP) Admin Login — 2026-10-24 / Antigravity
+- **Admin User Provisioning (`savvy@younoya.com`)**:
+  - Provisioned new administrator `savvy@younoya.com` on VPS production Medusa instance (`user_01M5P6DE79SSVZFEQNS4AGF68K`, role: `admin`).
+  - Generated strong, non-predictable ambiguous password: `pAE8rF9R%Jg5gh5BzTp3` (hashed via scrypt in Medusa `provider_identity` under `emailpass`).
+  - Updated VPS `.env.production` `ADMIN_CORS` and `AUTH_CORS` to authorize local development ports (`5173`, `3456`) alongside production domains (`https://younoya.com`, `https://www.younoya.com`, `https://api.younoya.com`), reloaded PM2 `younoya-backend` with `--update-env` (process healthy, port 9000).
+- **Dual-Mode Admin Login Architecture (`younoya-web/src/admin/pages/Login.tsx` & `api.ts`)**:
+  - Added segmented luxury tab switcher between **Password** and **One-Time Code (OTP)**.
+  - Password mode is active by default, allowing administrators to sign in instantly with their email and password without waiting for or depending on an OTP delivery.
+  - One-time Code (OTP) tab allows switching to passwordless verification via WhatsApp/Email when preferred.
+  - Implemented `loginWithPassword(email, password)` in `api.ts` connecting to `POST /auth/user/emailpass`, persisting `yn_admin_token`, and retrieving admin profile via `GET /admin/users/me`.
+- **Verification**:
+  - 17/17 automated tests passing (`tests/seo.test.mjs` and `tests/qr-unboxing-and-social.test.mjs`).
+  - Monorepo `npm run build` exits 0 (24 indexable public route shells, 4 excluded shells, 12 admin shells, clean synchronized `dist/`).
+  - Browser E2E authentication verified: Successfully authenticated `savvy@younoya.com`, redirected to `/admin` Atelier Console showing "Savvy" / "ATELIER OWNER" with live dashboard analytics (orders, revenue, customer list).
+- **Git Protocol**:
+  - Staged all changes into one single final semantic commit.
+  - Strict push permission rule: Stop and ask user before pushing to GitHub origin main.
+

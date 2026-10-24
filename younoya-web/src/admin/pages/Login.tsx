@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react"
-import { requestOtpCode, loginWithOtp, type Me, type ContactInput } from "../api"
+import { loginWithPassword, requestOtpCode, loginWithOtp, type Me, type ContactInput } from "../api"
 
 export default function Login({ onDone }: { onDone: (me: Me) => void }) {
+  const [authMode, setAuthMode] = useState<"password" | "otp">("password")
+
+  // Password mode state
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  // OTP mode state
   const [identifier, setIdentifier] = useState("")
   const [step, setStep] = useState<"contact" | "otp">("contact")
   const [otp, setOtp] = useState("")
   const [challengeId, setChallengeId] = useState<string | undefined>(undefined)
+  const [resendTimer, setResendTimer] = useState(0)
+
+  // Shared state
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [resendTimer, setResendTimer] = useState(0)
 
   // Countdown ticker for OTP resend cooldown
   useEffect(() => {
@@ -28,6 +37,21 @@ export default function Login({ onDone }: { onDone: (me: Me) => void }) {
     const digits = trimmed.replace(/\D/g, "")
     const mobile = digits.length === 10 ? `+91${digits}` : digits.startsWith("91") && digits.length === 12 ? `+${digits}` : trimmed
     return { phone: mobile, channel: "whatsapp" }
+  }
+
+  async function handlePasswordLogin(e?: React.FormEvent) {
+    e?.preventDefault()
+    if (!email.trim() || !password) return
+    setBusy(true)
+    setError(null)
+    try {
+      const me = await loginWithPassword(email.trim(), password)
+      onDone(me)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Invalid email or password.")
+    } finally {
+      setBusy(false)
+    }
   }
 
   async function handleRequestCode(e?: React.FormEvent) {
@@ -87,10 +111,97 @@ export default function Login({ onDone }: { onDone: (me: Me) => void }) {
           <img className="ad-login__brand" src="/brand.webp" alt="YOUNOYA" />
           <p className="ad-login__eyebrow">Younoya Console</p>
           <h1>Good to see you</h1>
+
+          {/* Mode Switcher */}
+          <div style={{
+            display: "flex",
+            background: "#F7F3EC",
+            padding: "4px",
+            borderRadius: "12px",
+            margin: "18px 0 20px",
+            border: "1px solid #EBE4D8"
+          }}>
+            <button
+              type="button"
+              onClick={() => { setAuthMode("password"); setError(null) }}
+              style={{
+                flex: 1,
+                padding: "8px 12px",
+                fontSize: "12px",
+                fontWeight: 600,
+                letterSpacing: "0.03em",
+                borderRadius: "9px",
+                border: "none",
+                cursor: "pointer",
+                background: authMode === "password" ? "#FFFFFF" : "transparent",
+                color: authMode === "password" ? "#1F1914" : "#7A6F62",
+                boxShadow: authMode === "password" ? "0 2px 6px rgba(0,0,0,0.06)" : "none",
+                transition: "all 0.2s ease"
+              }}
+            >
+              Password
+            </button>
+            <button
+              type="button"
+              onClick={() => { setAuthMode("otp"); setError(null) }}
+              style={{
+                flex: 1,
+                padding: "8px 12px",
+                fontSize: "12px",
+                fontWeight: 600,
+                letterSpacing: "0.03em",
+                borderRadius: "9px",
+                border: "none",
+                cursor: "pointer",
+                background: authMode === "otp" ? "#FFFFFF" : "transparent",
+                color: authMode === "otp" ? "#1F1914" : "#7A6F62",
+                boxShadow: authMode === "otp" ? "0 2px 6px rgba(0,0,0,0.06)" : "none",
+                transition: "all 0.2s ease"
+              }}
+            >
+              One-Time Code (OTP)
+            </button>
+          </div>
           
           {error && <p className="ad-login__error">{error}</p>}
 
-          {step === "contact" ? (
+          {authMode === "password" ? (
+            <form onSubmit={handlePasswordLogin} className="ad-login__form">
+              <div className="ad-field">
+                <span>Email Address</span>
+                <input
+                  type="email"
+                  autoComplete="username"
+                  placeholder="name@younoya.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={busy}
+                  autoFocus
+                />
+              </div>
+
+              <div className="ad-field" style={{ marginTop: "12px" }}>
+                <span>Password</span>
+                <input
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder="••••••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={busy}
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                className="ad-btn" 
+                disabled={busy || !email.trim() || !password} 
+                style={{ width: "100%", marginTop: "18px" }}
+              >
+                {busy ? "Signing in…" : "Sign In to Console"}
+              </button>
+            </form>
+          ) : step === "contact" ? (
             <form onSubmit={handleRequestCode} className="ad-login__form">
               <div className="ad-field">
                 <span>Email or Mobile Number</span>
@@ -109,7 +220,7 @@ export default function Login({ onDone }: { onDone: (me: Me) => void }) {
                 type="submit" 
                 className="ad-btn" 
                 disabled={busy || !identifier.trim()} 
-                style={{ width: "100%", marginTop: "12px" }}
+                style={{ width: "100%", marginTop: "18px" }}
               >
                 {busy ? "Sending Code…" : "Send Verification Code"}
               </button>
@@ -148,7 +259,7 @@ export default function Login({ onDone }: { onDone: (me: Me) => void }) {
                 type="submit" 
                 className="ad-btn" 
                 disabled={busy || otp.length < 6} 
-                style={{ width: "100%", marginTop: "12px" }}
+                style={{ width: "100%", marginTop: "18px" }}
               >
                 {busy ? "Verifying…" : "Sign In to Console"}
               </button>
@@ -173,7 +284,7 @@ export default function Login({ onDone }: { onDone: (me: Me) => void }) {
             </form>
           )}
 
-          <p className="ad-login__fine">Only for the Younoya team. Customers don't need an account to shop.</p>
+          <p className="ad-login__fine" style={{ marginTop: "20px" }}>Only for the Younoya team. Customers don't need an account to shop.</p>
         </div>
       </div>
     </div>

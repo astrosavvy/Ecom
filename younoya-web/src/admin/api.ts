@@ -102,7 +102,23 @@ export async function loginWithOtp(contact: ContactInput, otp: string, challenge
   return fetchMe()
 }
 
-export const login = loginWithOtp
+export async function loginWithPassword(email: string, password: string): Promise<Me> {
+  const res = await fetch(`${API}/auth/user/emailpass`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
+  })
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.message || "Invalid email or password.")
+  }
+  const { token } = await res.json()
+  if (!token) throw new Error("Sign in failed. Try again.")
+  setToken(token)
+  return fetchMe()
+}
+
+export const login = loginWithPassword
 
 export function logout() {
   clearToken()
