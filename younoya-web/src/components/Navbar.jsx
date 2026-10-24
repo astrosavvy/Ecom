@@ -6,14 +6,15 @@ import '../styles/Navbar.css'
 export default function Navbar() {
   const { pathname } = useLocation()
   const { totalItems, setIsOpen } = useCart()
-  const light = !pathname.startsWith('/admin')
+  const isReveal = pathname.startsWith('/reveal') || pathname.startsWith('/unboxing')
+  const light = !pathname.startsWith('/admin') && !isReveal
   const shop = pathname === '/shop' || pathname === '/'
   const guide = pathname === '/find-a-gift'
   const checkout = pathname === '/checkout'
-  const fullNavigation = light && !guide && !checkout
+  const fullNavigation = !guide && !checkout
 
   return (
-    <header className={`navbar${light ? ' navbar--light' : ''}${shop ? ' navbar--shop' : ''}${guide ? ' navbar--guide' : ''}${checkout ? ' navbar--checkout' : ''}`}>
+    <header className={`navbar${light ? ' navbar--light' : ''}${isReveal ? ' navbar--dark navbar--reveal' : ''}${shop ? ' navbar--shop' : ''}${guide ? ' navbar--guide' : ''}${checkout ? ' navbar--checkout' : ''}`}>
       <div className="navbar__left">
         <Link className="navbar__brand" to="/" aria-label="Younoya home">
           <img src="/brand-legacy.webp" alt="Younoya" />

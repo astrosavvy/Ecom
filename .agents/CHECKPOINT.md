@@ -441,5 +441,41 @@
   - Staged all changes into one single final semantic commit.
   - Strict push permission rule: Stop and ask user before pushing to GitHub origin main.
 
+## 36. Gift Reveal & Unboxing Revamp: Dark Rich Theme & Header Clearance Fix — 2026-10-24 / Antigravity
+- **Header Overlap Defect Resolved**:
+  - Global `<Navbar />` fixed header height is ~88–97px; previous `.gift-reveal__container` had only `40px` top padding, causing the brand emblem, celestial aura orb, and rashi badge to be partially clipped/obscured behind the navbar.
+  - Expanded `.gift-reveal__container` top padding to `clamp(124px, 16vh, 160px)`, establishing a verified positive 27px of breathing room above the brand emblem and 100% full visibility of all header elements across all viewports.
+- **Frosted Obsidian Navbar Mode (`.navbar--dark`)**:
+  - `App.jsx`: Excluded `/reveal/*` and `/unboxing/*` routes from attaching the `store-light` class to `document.documentElement`, ensuring dark canvas integrity while preserving warm ivory on `/shop`, `/product/*`, etc.
+  - `Navbar.jsx`: Added route detection for `/reveal/*` and `/unboxing/*` to apply `navbar--dark navbar--reveal`.
+  - `Navbar.css`: Styled `.navbar--dark` with frosted obsidian glass (`rgba(8, 6, 5, 0.82)`), 16px backdrop blur, gold hairline border (`rgba(214, 176, 106, 0.16)`), champagne gold navigation links (`#C2B4A3`), gold hover glow (`#E6C87C`), and gold cart counter.
+- **Awwwards-Tier Nocturne Obsidian Theme & Dynamic Cosmic Nebulas (`GiftReveal.jsx` & `GiftReveal.css`)**:
+  - Deepest obsidian canvas (`#080605`) with micro-stardust celestial overlay.
+  - Dynamic element-specific cosmic aura gradients based on Rashi's elemental lord:
+    - **Fire** (Aries, Leo, Sagittarius): Molten solar amber corona (`rgba(224, 135, 38, 0.16)`).
+    - **Earth** (Taurus, Virgo, Capricorn): Consecrated emerald & champagne bronze mist (`rgba(46, 138, 92, 0.16)`).
+    - **Air** (Gemini, Libra, Aquarius): Celestial amethyst stardust & platinum illumination (`rgba(142, 92, 218, 0.15)`).
+    - **Water** (Cancer, Scorpio, Pisces): Royal sapphire ocean glow & pearl moonlight (`rgba(42, 106, 220, 0.16)`).
+- **Double-Bezel Architecture & Illuminated Consecration Timeline**:
+  - **Chapter Insight Card**: Wrapped in double-bezel architecture (`.gift-reveal__card-shell` with ambient gold rim > `.gift-reveal__card-core` with obsidian gradient and 16px blur).
+  - **Unboxed Treasures Bento Grid**: 2-column double-bezel cards with gold tags, Cormorant Garamond typography, and tactile placement badges.
+  - **Three-Step Activation Vidhi**: Redesigned as an illuminated vertical timeline with a glowing connecting gold hairline, numbered circular nodes (`01`, `02`, `03`) with radial gold rim, and ritual affirmations.
+  - **Luxury Action Suite**: Nested button-in-button CTAs (`.gift-reveal__btn-primary` with trailing circle arrow badge) and dark-mode Social Share modal integration (`defaultTheme: 'nocturne'`).
+- **Verification**:
+  - 17/17 automated regression tests passing (`tests/seo.test.mjs` and `tests/qr-unboxing-and-social.test.mjs`).
+  - Monorepo `npm run build` exits 0 (24 indexable public route shells, 4 excluded shells, 12 admin shells, synchronized `dist/`).
+  - Puppeteer browser verification:
+    - `/reveal/career/aries`: Verified dark frosted navbar (`.navbar--dark`), zero header overlap (`clearanceAboveEmblem: 27px`), solar amber nebula, double-bezel cards.
+    - `/reveal/wealth/taurus`: Verified `gift-reveal--earth` with emerald bronze aura.
+    - `/reveal/love/cancer`: Verified `gift-reveal--water` with sapphire pearl aura.
+    - `/reveal/vitality/gemini`: Verified `gift-reveal--air` with amethyst aura.
+    - `/unboxing/career/aries`: Verified alias route functionality.
+    - `SocialShareModal`: Verified default load in Nocturne dark theme with 1080×1080 art canvas.
+    - `/shop`: Verified normal storefront routes remain in warm ivory light mode.
+- **Git Protocol**:
+  - Staged all changes into one single final semantic commit.
+  - Strict push permission rule: Stop and ask user before pushing to GitHub origin main.
+
+
 
 

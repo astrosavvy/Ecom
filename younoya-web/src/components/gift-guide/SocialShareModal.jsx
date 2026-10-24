@@ -7,7 +7,7 @@ export default function SocialShareModal({ data, onClose }) {
   const canvasRef = useRef(null)
   // Default format is strictly 1:1 Square Post ('feed') as requested
   const [format, setFormat] = useState('feed') 
-  const [theme, setTheme] = useState('atelier') // 'atelier' (Warm Ivory) or 'nocturne' (Deep Obsidian)
+  const [theme, setTheme] = useState(data?.defaultTheme || 'atelier') // 'atelier' (Warm Ivory) or 'nocturne' (Deep Obsidian)
   const [toast, setToast] = useState('')
 
   useEffect(() => {

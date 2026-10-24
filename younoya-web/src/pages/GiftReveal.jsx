@@ -34,6 +34,9 @@ export default function GiftReveal() {
   const ritualDesc = combo.ritual?.description || 
     `A sensory anchor crafted with botanical essences to calm the nervous system before important conversations and rituals.`
 
+  // Elemental class for dynamic cosmic aura (fire, earth, air, water)
+  const elementClass = rashi?.element ? `gift-reveal--${rashi.element.toLowerCase()}` : 'gift-reveal--fire'
+
   const shareData = {
     name: 'You',
     sign: rashi.name,
@@ -41,22 +44,31 @@ export default function GiftReveal() {
     chapter: category.label,
     prophecy: `Under your ${rashi.name} transit, a quiet shift is clearing your path. What felt delayed was merely gathering force—trust your instincts over haste. Your season of effortless authority begins now.`,
     anchorPiece: keepsakeName.split('—')[0].trim(),
+    defaultTheme: 'nocturne',
   }
 
   return (
-    <div className="gift-reveal">
-      <div className="gift-reveal__bg" />
+    <div className={`gift-reveal ${elementClass}`}>
+      <div className="gift-reveal__bg" aria-hidden="true">
+        <div className="gift-reveal__nebula gift-reveal__nebula--primary" />
+        <div className="gift-reveal__nebula gift-reveal__nebula--secondary" />
+        <div className="gift-reveal__stars" />
+      </div>
       
       <div className="gift-reveal__container">
         {/* Header / Brand Emblem */}
         <header className="gift-reveal__header">
-          <div className="gift-reveal__emblem">
-            <img src="/brand.webp" alt="YOUNOYA" />
+          <div className="gift-reveal__emblem-halo">
+            <div className="gift-reveal__emblem">
+              <img src="/brand.webp" alt="YOUNOYA" />
+            </div>
           </div>
 
-          <div className="gift-reveal__badge">
-            <span className="gift-reveal__badge-symbol">{rashi.symbol}</span>
-            <span>{rashi.name} ({rashi.sanskrit}) • {category.label}</span>
+          <div className="gift-reveal__badge-wrap">
+            <div className="gift-reveal__badge">
+              <span className="gift-reveal__badge-symbol">{rashi.symbol}</span>
+              <span>{rashi.name} ({rashi.sanskrit}) • {category.label}</span>
+            </div>
           </div>
 
           <h1 className="gift-reveal__title">
@@ -67,24 +79,26 @@ export default function GiftReveal() {
           </p>
         </header>
 
-        {/* Narrative Revelation Card */}
+        {/* Narrative Revelation Card (Double-Bezel Architecture) */}
         <motion.div 
-          className="gift-reveal__card"
+          className="gift-reveal__card-shell"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <div className="gift-reveal__card-eyebrow">
-            <Sparkles size={14} />
-            <span>The Chapter Insight • {setTitle}</span>
-          </div>
+          <div className="gift-reveal__card-core">
+            <div className="gift-reveal__card-eyebrow">
+              <Sparkles size={14} />
+              <span>The Chapter Insight • {setTitle}</span>
+            </div>
 
-          <div className="gift-reveal__story">
-            "{story}"
-          </div>
+            <div className="gift-reveal__story">
+              "{story}"
+            </div>
 
-          <div className="gift-reveal__why-chosen">
-            <strong>Why this was consecrated for you:</strong> {whyChosen}
+            <div className="gift-reveal__why-chosen">
+              <strong>Why this was consecrated for you:</strong> {whyChosen}
+            </div>
           </div>
         </motion.div>
 
@@ -95,57 +109,72 @@ export default function GiftReveal() {
 
         <div className="gift-reveal__treasures">
           {/* Keepsake Card */}
-          <div className="gift-reveal__treasure-item">
-            <span className="gift-reveal__treasure-tag">The Sacred Keepsake</span>
-            <h3 className="gift-reveal__treasure-name">{keepsakeName.split('—')[0].trim()}</h3>
-            <p className="gift-reveal__treasure-desc">{keepsakeDesc}</p>
-            <div className="gift-reveal__treasure-placement">
-              <Compass size={15} style={{ flexShrink: 0, marginTop: 2 }} />
-              <span><strong>Placement:</strong> Position in the North-East corner of your desk or bedside table to ground positive momentum.</span>
+          <div className="gift-reveal__treasure-shell">
+            <div className="gift-reveal__treasure-item">
+              <span className="gift-reveal__treasure-tag">The Sacred Keepsake</span>
+              <h3 className="gift-reveal__treasure-name">{keepsakeName.split('—')[0].trim()}</h3>
+              <p className="gift-reveal__treasure-desc">{keepsakeDesc}</p>
+              <div className="gift-reveal__treasure-placement">
+                <Compass size={15} style={{ flexShrink: 0, marginTop: 2 }} />
+                <span><strong>Placement:</strong> Position in the North-East corner of your desk or bedside table to ground positive momentum.</span>
+              </div>
             </div>
           </div>
 
           {/* Ritual Card */}
-          <div className="gift-reveal__treasure-item">
-            <span className="gift-reveal__treasure-tag">The Consecration Ritual</span>
-            <h3 className="gift-reveal__treasure-name">{ritualName.split('—')[0].trim()}</h3>
-            <p className="gift-reveal__treasure-desc">{ritualDesc}</p>
-            <div className="gift-reveal__treasure-placement">
-              <Heart size={15} style={{ flexShrink: 0, marginTop: 2 }} />
-              <span><strong>Ritual:</strong> Engage with this sensory tool for 60 seconds whenever you need to quiet mental turbulence.</span>
+          <div className="gift-reveal__treasure-shell">
+            <div className="gift-reveal__treasure-item">
+              <span className="gift-reveal__treasure-tag">The Consecration Ritual</span>
+              <h3 className="gift-reveal__treasure-name">{ritualName.split('—')[0].trim()}</h3>
+              <p className="gift-reveal__treasure-desc">{ritualDesc}</p>
+              <div className="gift-reveal__treasure-placement">
+                <Heart size={15} style={{ flexShrink: 0, marginTop: 2 }} />
+                <span><strong>Ritual:</strong> Engage with this sensory tool for 60 seconds whenever you need to quiet mental turbulence.</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* 3-Step Consecration Vidhi */}
-        <div className="gift-reveal__ritual-box">
-          <div className="gift-reveal__ritual-heading">
-            <h3>Three-Step Activation Vidhi</h3>
-            <p>Perform this simple consecration upon unboxing to dedicate your keepsake to your chapter.</p>
-          </div>
-
-          <div className="gift-reveal__steps">
-            <div className="gift-reveal__step">
-              <div className="gift-reveal__step-num">1</div>
-              <div className="gift-reveal__step-content">
-                <h4>Shuddhi • The Awakening</h4>
-                <p>Hold the keepsake gently between your palms. Inhale deeply for three counts under natural morning light to awaken the object's presence in your hands.</p>
-              </div>
+        {/* 3-Step Consecration Vidhi (Illuminated Timeline) */}
+        <div className="gift-reveal__ritual-shell">
+          <div className="gift-reveal__ritual-box">
+            <div className="gift-reveal__ritual-heading">
+              <span className="gift-reveal__ritual-eyebrow">Consecration Protocol</span>
+              <h3>Three-Step Activation Vidhi</h3>
+              <p>Perform this simple consecration upon unboxing to dedicate your keepsake to your chapter.</p>
             </div>
 
-            <div className="gift-reveal__step">
-              <div className="gift-reveal__step-num">2</div>
-              <div className="gift-reveal__step-content">
-                <h4>Sankalpa • The Intention</h4>
-                <p>Silently hold your core chapter intention: <em>"{category.tagline}"</em>. Allow this affirmation to anchor what you are cultivating in this phase of life.</p>
-              </div>
-            </div>
+            <div className="gift-reveal__steps">
+              <div className="gift-reveal__timeline-line" aria-hidden="true" />
 
-            <div className="gift-reveal__step">
-              <div className="gift-reveal__step-num">3</div>
-              <div className="gift-reveal__step-content">
-                <h4>Sthapana • Sacred Placement</h4>
-                <p>Place your keepsake in its dedicated sanctuary space. It now serves as an unwavering physical anchor of clarity whenever your eyes meet it.</p>
+              <div className="gift-reveal__step">
+                <div className="gift-reveal__step-num-wrap">
+                  <div className="gift-reveal__step-num">01</div>
+                </div>
+                <div className="gift-reveal__step-content">
+                  <h4>Shuddhi • The Awakening</h4>
+                  <p>Hold the keepsake gently between your palms. Inhale deeply for three counts under natural morning light to awaken the object's presence in your hands.</p>
+                </div>
+              </div>
+
+              <div className="gift-reveal__step">
+                <div className="gift-reveal__step-num-wrap">
+                  <div className="gift-reveal__step-num">02</div>
+                </div>
+                <div className="gift-reveal__step-content">
+                  <h4>Sankalpa • The Intention</h4>
+                  <p>Silently hold your core chapter intention: <em>"{category.tagline}"</em>. Allow this affirmation to anchor what you are cultivating in this phase of life.</p>
+                </div>
+              </div>
+
+              <div className="gift-reveal__step">
+                <div className="gift-reveal__step-num-wrap">
+                  <div className="gift-reveal__step-num">03</div>
+                </div>
+                <div className="gift-reveal__step-content">
+                  <h4>Sthapana • Sacred Placement</h4>
+                  <p>Place your keepsake in its dedicated sanctuary space. It now serves as an unwavering physical anchor of clarity whenever your eyes meet it.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -165,6 +194,9 @@ export default function GiftReveal() {
             >
               <Gift size={16} />
               <span>Curate a Gift for Someone</span>
+              <span className="gift-reveal__btn-arrow" aria-hidden="true">
+                <ArrowRight size={14} />
+              </span>
             </Link>
 
             <button
