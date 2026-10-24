@@ -387,5 +387,29 @@
   - Browser E2E authentication verified: Successfully authenticated `savvy@younoya.com`, redirected to `/admin` Atelier Console showing "Savvy" / "ATELIER OWNER" with live dashboard analytics (orders, revenue, customer list).
 - **Git Protocol**:
   - Staged all changes into one single final semantic commit.
-  - Strict push permission rule: Stop and ask user before pushing to GitHub origin main.
+  - Strict push permission rule: Push to GitHub origin main executed with explicit authorization (commit `5be5c20`).
+
+## 34. Production Database Purge of Legacy Owner, Oct 9 Test Orders & Dummy Customers — 2026-10-24 / Antigravity
+- **Pre-Cleanup Safeguards**:
+  - Full PostgreSQL dump created on VPS host: `/tmp/younoya_backup_pre_cleanup_.sql` (679 KB).
+  - Executed atomic, transactional cleanup script (`scripts/cleanup_test_data.sql`).
+- **Targeted Database Cleanups**:
+  - **Admin User Removal (`owner@younoya.com`)**:
+    - Deleted `provider_identity` (scrypt password entry) and linked `auth_identity` record (`authid_01M1BZFDB7W6METGJPZX3TE8WC`).
+    - Deleted `user` record (`user_01M1BZFCXQ02525DBV70E3VGH6`).
+    - Remaining active console users: `savvy@younoya.com` (Owner/Admin), `marketing@younoya.com` (Marketing), `support@younoya.com` (Support).
+  - **Oct 9 Test Orders Purged (#1 to #5)**:
+    - Removed orders `order_01M4FNQBWB6AMHYKWBDMMDHJQM` (#1), `order_01M4FW2BZG60F1HY4N7R30YNNB` (#2), `order_01M4G1FVBF597QFSTAQ67QTV9B` (#3), `order_01M4G3KMA02RKHMQ3B33NK688K` (#4), `order_01M4G98A41TQRQGJKDDT2HQXAH` (#5).
+    - Cascaded cleanup across `order_item`, `order_summary`, `order_shipping`, `order_transaction`, `order_change`, and `order_credit_line`.
+    - Explicitly deleted linked foreign records in `commerce_operation`, `commerce_shipment`, `order_cart`, `order_payment_collection`, and `order_address`.
+    - Retained real Order #6 (`order_01M4J9GKZG15JWSMY4E0A72Q8Y`) from Oct 10th for `savvysingh2000@gmail.com`.
+  - **Dummy Test Customers Purged**:
+    - Removed 8 synthetic test accounts: `test@younoya.com`, `buyer_1791465443627@example.com`, `customer_1791465595622@gmail.com`, `customer_1791465698932@gmail.com`, `customer.test@younoya.com`, `devotee@younoya.com`, `hjfg@mail.com`, and `lenvthank@gmail.com`.
+    - Dissociated orphaned test cart foreign keys (`customer_id = NULL`).
+    - Preserved authentic customer `savvysingh2000@gmail.com` (`cus_01M4J9DFCE435HG7AWNAJYXW99`).
+- **Live Verification**:
+  - Medusa backend health: HTTP 200 `OK`.
+  - Live Admin API verification via JWT bearer token (`GET /admin/orders` and `GET /admin/customers`): confirmed exact counts: `Orders count: 1`, `Customers count: 1`.
+  - Atelier console analytics updated to clean state.
+
 
