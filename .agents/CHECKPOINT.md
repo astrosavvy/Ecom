@@ -411,5 +411,35 @@
   - Medusa backend health: HTTP 200 `OK`.
   - Live Admin API verification via JWT bearer token (`GET /admin/orders` and `GET /admin/customers`): confirmed exact counts: `Orders count: 1`, `Customers count: 1`.
   - Atelier console analytics updated to clean state.
+  - Push to GitHub origin main executed with explicit authorization (commit `1bc9988`).
+
+## 35. Atelier Orders Command Center Rebuild & Slide-Over Detail Drawer — 2026-10-24 / Antigravity
+- **Atelier Search & Status Filter Suite (`Orders.tsx`)**:
+  - Replaced the plain, unstyled search input with a Cartier-grade enclosure (`.ad-search-wrap`) featuring gold hairline border, search icon (`<Search size={16} />`), gold focus glow (`box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.15)`), and 1-tap clear button (`<X size={14} />`).
+  - Added real-time result count badge (`X orders displayed`) and segmented status filter pills: `All Orders`, `Paid (Razorpay)`, `Cash on Delivery`, `Dispatched`, `Awaiting Action`.
+  - Expanded backend query projection (`fields=*shipping_address,*customer,*items,%2Bmetadata`) to eliminate legacy empty dashes (`—`) and populate authentic recipient names, phone numbers, and destination cities.
+- **Interactive Full-Row Clickability**:
+  - The entire table row is clickable (`.ad-row-clickable`) with smooth hover state, cursor pointer, and trailing view chevron (`<ChevronRight size={16} />`).
+- **Instant Slide-Over Detail Drawer (`OrderSlideOver.tsx`)**:
+  - Mounted smooth slide-over modal drawer on `/admin/orders` with blurred obsidian backdrop (`rgba(18, 15, 13, 0.45)`), spring animation, and `Escape` key listener.
+  - **4-Card Integration Intelligence Matrix**:
+    1. **Razorpay Payment**: Capture status, collected total, and payment method details.
+    2. **Confirmation Email**: Dispatch status (`Sent & Delivered`), recipient email, and timestamp.
+    3. **Shiprocket Logistics**: Booking status, Merchant Order ID (`YOU-2026-0006`), Shiprocket Order ID (`1643602396`), Shipment ID (`1639514995`), AWB, and document links.
+    4. **Packaging Specs**: Parcel dimensions ($33.02 \times 22.86 \times 8.89\text{ cm}$), dead weight ($0.70\text{ kg}$), and HSN code (`62149090`).
+  - **Customer & Shipping Card**: Name, Phone (with direct tel/call link), Email (with mailto link), complete delivery address with landmark, and WhatsApp customer quick action.
+  - **Keepsakes Line Items**: High-res product thumbnails, SKU, quantity, unit price, and item totals.
+  - **Warehouse & QR Modules**: Embedded `OrderOperations` (courier quote selector, AWB assign, pickup approval) and `OrderBoxLabel` (vector QR unboxing preview, thermal label print).
+  - Header shortcut: *"Full Page ↗"* linking to dedicated `/admin/orders/:id`.
+- **Dedicated Order Page Elevation (`OrderDetail.tsx`)**:
+  - Synchronized dedicated page with the identical luxury card matrix and navigation breadcrumbs.
+- **Verification**:
+  - 17/17 automated regression tests passing (`tests/seo.test.mjs` and `tests/qr-unboxing-and-social.test.mjs`).
+  - Root monorepo `npm run build` exits 0 (24 indexable public route shells, 4 excluded shells, 12 admin shells, clean synchronized `dist/`).
+  - Browser verification in Puppeteer: Verified table row formatting for Order `#YOU-0006`, search bar, status pills, drawer slide-over animation, and verified data across Razorpay, Confirmation Email, and Shiprocket cards.
+- **Git Protocol**:
+  - Staged all changes into one single final semantic commit.
+  - Strict push permission rule: Stop and ask user before pushing to GitHub origin main.
+
 
 
