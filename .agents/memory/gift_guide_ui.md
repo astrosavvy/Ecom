@@ -40,3 +40,13 @@ Review the local preview at http://127.0.0.1:5175/find-a-gift. Push only after f
 - Root build passed with the existing bundle warning, and source diff whitespace check passed. Measured narrative reveal at about 2.5s for the live 214/232-character paragraphs; heights remained stable. Live anonymous recommendation succeeded with synthetic answers and blank birth data. Order/save opened login only; no OTP or persisted order/save was submitted.
 - Desktop: 1024 x 768 and 1920 x 1080 result views; all five occasion answers and final fields fit the laptop. Mobile: 430 x 932 and 360 x 800 clock/form fit with no horizontal overflow. Checked exact 10:37 PM, midnight/noon, minute keyboard increments, pointer drag, draft cancellation, clear and focus return. Calendar and normal /shop header retained. Reduced motion source-reviewed, not OS-emulated. A transient development import warning was resolved once the new stylesheet existed.
 - Proof: .tmp/gift-guide-reading-desktop.jpg, .tmp/gift-guide-selection-mobile.jpg, .tmp/gift-guide-clock-desktop.jpg, .tmp/gift-guide-clock-mobile.jpg. Temporary browser tab closed and viewport reset; existing Vite remains on port 5175. One final local commit; no push without fresh explicit user permission.
+
+
+## Single-Product Law & Dual-Experience Unboxing Architecture (2026-10-26)
+- **Single-Product Recommendation Law**: The astrology quiz results view (GuideResult.jsx) displays strictly ONE hero piece/curated hamper. All companion grids and <GuideCompanions /> are permanently deprecated and removed from the active UI. The recommendation engine returns secondaryCategories: [] and strictly 1 item in offers.
+- **Universal Dual-Experience Awareness**:
+  - Gifting Someone Else (orWhom === 'other'): Experience 01 manuscript presentation. Chapter 01: 'A Chapter Worth Celebrating'; Chapter 02: 'Why this was chosen for them'; Intention Box: 'The Giver's Intention' with celebratory blessing.
+  - Buying For Myself (orWhom === 'self'): Experience 02 manuscript presentation. Chapter 01: 'The Chapter You're In'; Chapter 02: 'Why this was chosen for you'; Intention Box: 'Your Personal Intention' with self-permission statement and contemplative thought prompt.
+- **Sanctuary Direction & Vastu Guidance (WhatIsInside.jsx)**:
+  - When astuPlacement exists (e.g. Taurus Moon Dashas), a dedicated luxury card renders with a <Compass /> badge indicating the authentic sacred direction (Northeast, East, Southwest, South, North) and room placement instructions.
+- **Social Share Card Integration**: Chapter Prophecy / Intention quote seamlessly populates into the downloadable/shareable luxury card (SocialShareCard.jsx).

@@ -14,7 +14,10 @@ export default function SocialShareCard({ values, result }) {
   const chapterName = result?.primaryCategory?.categoryName || 'Career & Confidence'
   const anchorPiece = result?.primaryOffer?.title || result?.combination?.keepsake?.name?.split('—')[0]?.trim() || 'Sacred Keepsake'
 
-  const prophecy = generateProphecy({ name, sign, category })
+  const prophecy = result?.intentionStatement || generateProphecy({ name, sign, category })
+  const citation = result?.intentionHeading 
+    ? `${result.intentionHeading} • ${chapterName}` 
+    : `Drawn from lunar transit • ${chapterName}`
 
   const shareData = {
     name,
@@ -48,7 +51,7 @@ export default function SocialShareCard({ values, result }) {
 
           <footer className="guide-prophecy-folio__footer">
             <span className="guide-prophecy-folio__citation">
-              Drawn from lunar transit • {chapterName}
+              {citation}
             </span>
 
             <div className="guide-prophecy-folio__actions">

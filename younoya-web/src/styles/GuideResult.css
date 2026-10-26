@@ -77,4 +77,11 @@
   .guide-result--fluid .guide-secondary-chapter-card__image-link { width:72px; height:84px; }
   .guide-result--fluid .guide-secondary-chapter-card__btn { padding:10px; font-size:11px; }
 }
+.guide-reading__intention-box { margin:28px 0 0; padding:20px 22px; background:rgba(207,182,138,.05); border:1px solid rgba(207,182,138,.22); border-radius:12px; }
+.guide-reading__intention-head { display:flex; align-items:center; gap:8px; color:var(--reading-accent); font-size:11px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; margin-bottom:12px; }
+.guide-reading__gift-meaning { color:var(--reading-text); font-size:13.5px; line-height:1.7; margin:0 0 14px; }
+.guide-reading__intention-quote { margin:0; padding:0 0 0 14px; border-left:2px solid var(--reading-accent); color:var(--reading-text); font-family:'Cormorant Garamond',Georgia,serif; font-size:18px; font-style:italic; line-height:1.5; }
+.guide-reading__contemplation-prompt { margin:14px 0 0; padding-top:12px; border-top:1px solid rgba(207,182,138,.15); font-size:12px; line-height:1.6; color:var(--reading-muted); }
+.guide-reading__contemplation-prompt small { display:block; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--reading-accent); margin-bottom:2px; }
+
 @media(prefers-reduced-motion:reduce) { .typewriter-cursor { animation:none; } }

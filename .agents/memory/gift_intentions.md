@@ -77,7 +77,29 @@ The Toolkit Flow is Younoya's flagship interactive discovery engine:
 2. **Context & Relevance**: Nuanced focus area (e.g., Career -> Direction, Confidence, Transition, Recognition).
 3. **Recipient Selection**: Self, Partner, Parent, Friend, Sibling, Colleague.
 4. **Personal Astrology Profile (Optional)**: Name, Date of Birth, Time of Birth, Place of Birth. Computed in background (Moon Sign / Nakshatra / Dasha) without exposing deterministic formulas.
-5. **Curation Engine Output**:
-   - 3–5 complementary pieces assembled into a custom gift hamper.
-   - Gentle poetic explanation of why each item resonates with the recipient's intention.
-   - One-click "Add Toolkit to Bag" or "Build My Hamper" with custom wax seal and inscription options.
+5. **Curation Engine Output (Single-Product Recommendation Law & Dual Experience)**:
+   - **Single Curated Hero**: Exactly ONE curated piece or hamper assembled with intentional focus. Secondary companion products are permanently deprecated and excised (Single-Product Law).
+   - **Dual Experience Mode**:
+     - *Gifting Someone Else*: Experience 01 manuscript presentation ("A Chapter Worth Celebrating", "Why this was chosen for them", "The Giver's Intention" with celebratory blessing).
+     - *Buying For Myself*: Experience 02 manuscript presentation ("The Chapter You're In", "Why this was chosen for you", "Your Personal Intention" with self-permission statement & contemplation prompt).
+   - **Sacred Spatial Alignment (Vastu)**: Authentic orientation guidelines (East, North, Northeast, Southwest, South) and room placement instructions.
+   - One-click "Order this selection" with private recommendation token security.
+
+---
+
+## 5. Authentic Taurus Moon 9-Dasha Ensembles (Vedic Astrology Guide)
+
+| Dasha | Collection Title | Curated Keepsake | Daily Sensory Ritual | Vastu Placement |
+|:---|:---|:---|:---|:---|
+| **Ketu** | The Beauty of Enough Set | Golden 7 Running Horses on Rose Quartz (Selenite border) | Pink Scented Candle | Northeast (Console, shelf or desk) |
+| **Venus** | The Art of Adoration Set | Multicoloured Crystal Cufflinks | Rose Quartz Crystal-Infused Itr | Dressing sanctuary / Wardrobe |
+| **Sun** | The Dignity & Protection Set | Rose Quartz Hamsa Hand (Engraved Evil Eye) | Black Walking Lion Brooch | East (Living room or study; NE for reflection) |
+| **Moon** | The Belonging & Serenity Set | Rose Quartz Hamsa with Pair of Ducks | Selenite Tower Glass Bottle | Southwest (Bedroom/living; NE for bottle) |
+| **Mars** | The Courage & Transformation Set | Crescent Bismuth Crystal Sculpture | White Perfume-Bottle Scented Candle | South (Study or workspace; NE for candle) |
+| **Rahu** | The Instinct & Tactical Ambition Set | Crocodile Pocket Brooch | Garnet Crystal-Infused Attar | North (Wardrobe or dressing space) |
+| **Jupiter** | The Wisdom & New Horizons Set | Turquoise Hamsa with Aura Quartz Oyster Shell | White Perfume-Bottle Scented Candle | Northeast (Study, living or reflection space) |
+| **Saturn** | The Endurance & Abundance Set | Amethyst Crystal Brass Cup | Blue Perfume-Bottle Scented Candle | North (Study or workspace for prosperity) |
+| **Mercury** | The Focus & Time Wisdom Set | Seven-Chakra Crystal Clock | Rare Sun-Moonstone Crystal-Infused Attar | North or Northeast (Study or workspace) |
+
+> [!NOTE]
+> All 9 Dashas are strictly scoped to **Taurus Moon (`TAURUS`)**. Other signs retain their canonical Mercury and Ketu matrices.

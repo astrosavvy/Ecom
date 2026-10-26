@@ -48,6 +48,8 @@ Navratra/
 # OS / Editor Files
 .DS_Store
 Thumbs.db
+__pycache__/
+*.py[cod]
 .idea/
 .vscode/
 .kilo/

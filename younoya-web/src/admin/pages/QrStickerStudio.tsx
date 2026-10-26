@@ -7,9 +7,11 @@ import '../../styles/QrStickerStudio.css'
 export default function QrStickerStudio() {
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [rashiFilter, setRashiFilter] = useState<string>('all')
+  const [dashaFilter, setDashaFilter] = useState<string>('all')
+  const [experienceFilter, setExperienceFilter] = useState<string>('other')
 
   const items = useMemo(() => {
-    const list: Array<{ category: any; rashi: any; url: string; key: string }> = []
+    const list: Array<{ category: any; rashi: any; url: string; key: string; dasha?: string; exp?: string }> = []
     
     const cats = categoryFilter === 'all' 
       ? Object.values(CATEGORIES) 
@@ -21,17 +23,25 @@ export default function QrStickerStudio() {
 
     for (const cat of cats) {
       for (const r of rashis) {
+        let url = `https://younoya.com/reveal/${cat.slug}/${r.slug}`
+        let key = `${cat.slug}-${r.slug}`
+        if (r.slug === 'taurus' && dashaFilter !== 'all') {
+          url += `?dasha=${dashaFilter}&exp=${experienceFilter}`
+          key += `-${dashaFilter}-${experienceFilter}`
+        }
         list.push({
           category: cat,
           rashi: r,
-          url: `https://younoya.com/reveal/${cat.slug}/${r.slug}`,
-          key: `${cat.slug}-${r.slug}`,
+          url,
+          key,
+          dasha: r.slug === 'taurus' && dashaFilter !== 'all' ? dashaFilter : undefined,
+          exp: r.slug === 'taurus' && dashaFilter !== 'all' ? experienceFilter : undefined,
         })
       }
     }
 
     return list
-  }, [categoryFilter, rashiFilter])
+  }, [categoryFilter, rashiFilter, dashaFilter, experienceFilter])
 
   function handlePrintSheet() {
     window.print()
@@ -147,6 +157,42 @@ export default function QrStickerStudio() {
               ))}
             </select>
           </div>
+
+          {(rashiFilter === 'taurus' || rashiFilter === 'all') && (
+            <>
+              <div className="sticker-studio__field">
+                <label>Taurus Dasha Chapter</label>
+                <select 
+                  value={dashaFilter} 
+                  onChange={(e) => setDashaFilter(e.target.value)}
+                >
+                  <option value="all">Standard (Mercury Matrix)</option>
+                  <option value="Ketu">Ketu (The Beauty of Enough)</option>
+                  <option value="Venus">Venus (The Art of Adoration)</option>
+                  <option value="Sun">Sun (Leads with Heart)</option>
+                  <option value="Moon">Moon (Feels Like Home)</option>
+                  <option value="Mars">Mars (Inspires to Grow)</option>
+                  <option value="Rahu">Rahu (Tactical Ambition)</option>
+                  <option value="Jupiter">Jupiter (Hope & Perspective)</option>
+                  <option value="Saturn">Saturn (Endurance & Abundance)</option>
+                  <option value="Mercury">Mercury (Time Wisdom)</option>
+                </select>
+              </div>
+
+              {dashaFilter !== 'all' && (
+                <div className="sticker-studio__field">
+                  <label>Experience Tone</label>
+                  <select 
+                    value={experienceFilter} 
+                    onChange={(e) => setExperienceFilter(e.target.value)}
+                  >
+                    <option value="other">Gifting Someone Else</option>
+                    <option value="self">Buying For Myself</option>
+                  </select>
+                </div>
+              )}
+            </>
+          )}
         </div>
 
         {/* Sticker Grid */}

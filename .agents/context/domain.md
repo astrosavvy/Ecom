@@ -83,8 +83,11 @@ The Personalised Toolkit flow is a core conversion pathway with astrology operat
    - Myself, Partner, Friend, Parent, Sibling, Colleague, Someone special.
 4. **Step 4 — Optional Personal Inputs**:
    - Name, Date of Birth, Time/Place of Birth, occasion, budget, personal note.
-5. **Step 5 — Curated Results**:
-   - 3–5 recommended items gently explained with emotional and symbolic relevance. Option to customize, “Build My Hamper”, or add the full toolkit to bag.
+5. **Step 5 — Curated Results (Single-Product Law & Dual Experience)**:
+   - **Single Curated Hero**: Exactly ONE curated piece or hamper returned with intentional conviction. Companion offerings and multi-card grids are excised from the results flow (Single-Product Law).
+   - **Universal Dual Experience**: Differentiates between *Gifting Someone Else* (Experience 01: "A Chapter Worth Celebrating", "The Giver's Intention" quote & celebratory blessing) and *Buying For Myself* (Experience 02: "The Chapter You're In", "Your Personal Intention" self-permission quote & contemplation prompt).
+   - **Sanctuary Direction (Vastu)**: Sacred spatial alignment guidance (Northeast, East, Southwest, South, North) and contemplative placement instruction.
+   - **Inside-the-Box QR Unboxing**: Physical boxes feature a luxury 50mm QR sticker linking to `/reveal/:category/:rashi?dasha=...&exp=...` rendering the full unboxing narrative.
 
 **Messaging Rule**: Never expose deterministic formulas (e.g. *"Aries + Venus = buy this"*). Present findings as: *"Curated around your intention and personal resonance."*
 

@@ -479,3 +479,118 @@
     aspect-ratio:auto
   }
 }
+
+
+/* Dasha inside-the-box unboxing styles */
+.gift-reveal--dasha .gift-reveal__role-tag {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #8c6a24;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.gift-reveal__chapter,
+.gift-reveal__inside-box,
+.gift-reveal__vastu,
+.gift-reveal__how-to-use {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 80px;
+  border-top: 1px solid var(--reveal-rule);
+  padding-top: 48px;
+  margin-top: 88px;
+}
+.gift-reveal__chapter h2,
+.gift-reveal__inside-box h2,
+.gift-reveal__vastu h2,
+.gift-reveal__how-to-use h2 {
+  margin-top: 16px;
+}
+.gift-reveal__chapter>p,
+.gift-reveal__inside-box>div>p,
+.gift-reveal__vastu>div>p,
+.gift-reveal__how-to-use>div>p {
+  font-size: 17px;
+  line-height: 1.75;
+  max-width: 60ch;
+  color: var(--reveal-muted);
+}
+.gift-reveal__intention-block {
+  margin: 28px 0 0;
+  padding: 24px;
+  background: rgba(140, 106, 36, .04);
+  border: 1px solid rgba(140, 106, 36, .18);
+  border-radius: 8px;
+}
+.gift-reveal__intention-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #8c6a24;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.gift-reveal__statement {
+  margin: 0;
+  padding: 0 0 0 16px;
+  border-left: 2px solid #8c6a24;
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 1.8vw, 24px);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--reveal-ink);
+}
+.gift-reveal__contemplation {
+  margin: 20px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(140, 106, 36, .15);
+}
+.gift-reveal__contemplation small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #8c6a24;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.gift-reveal__contemplation p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--reveal-muted);
+}
+.gift-reveal__vastu-room {
+  margin-top: 16px !important;
+  font-size: 13.5px !important;
+  color: #8c6a24 !important;
+}
+.gift-reveal__disclaimer {
+  margin-top: 64px;
+  padding: 20px 24px;
+  background: rgba(140, 106, 36, .03);
+  border: 1px solid rgba(140, 106, 36, .12);
+  border-radius: 6px;
+}
+.gift-reveal__disclaimer p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--reveal-muted);
+}
+@media(max-width: 767px) {
+  .gift-reveal__chapter,
+  .gift-reveal__inside-box,
+  .gift-reveal__vastu,
+  .gift-reveal__how-to-use {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 56px;
+    padding-top: 36px;
+  }
+}

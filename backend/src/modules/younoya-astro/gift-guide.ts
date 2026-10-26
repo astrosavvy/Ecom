@@ -70,6 +70,7 @@ export function numerology(dob: string, now = new Date()) {
 }
 
 import combinations from "./data/combinations.json"
+import taurusDashas from "./data/taurusDashas.json"
 
 export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?: string) {
   const answers = validateAnswers(raw)
@@ -102,15 +103,28 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
     method = "numerology"
   }
 
-  // Strict Dasha Gate: Only Mercury and Ketu have curated hampers in the portfolio
+  // Strict Dasha Gate: 9 Dashas strictly for Taurus Moon; other signs are Mercury and Ketu
+  const isTaurus = astrologyData?.moonSign?.toLowerCase() === "taurus"
+  const TAURUS_DASHAS = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
   const isSupportedDasha = astrologyData
-    ? (astrologyData.antardasha === "Mercury" || astrologyData.antardasha === "Ketu")
+    ? (isTaurus ? TAURUS_DASHAS.includes(astrologyData.antardasha) : (astrologyData.antardasha === "Mercury" || astrologyData.antardasha === "Ketu"))
     : true
 
   const matrixKey = astrologyData ? `${astrologyData.moonSign.toUpperCase()}-${astrologyData.antardasha}-${answers.intention}` : ""
-  const combination = (matrixKey && Object.prototype.hasOwnProperty.call(combinations, matrixKey))
+  let combination = (matrixKey && Object.prototype.hasOwnProperty.call(combinations, matrixKey))
     ? (combinations as Record<string, any>)[matrixKey]
     : null
+
+  if (isTaurus && astrologyData?.antardasha) {
+    const dashaKey = `TAURUS-${astrologyData.antardasha}-${answers.intention}`
+    const baseKey = astrologyData.antardasha
+    if (Object.prototype.hasOwnProperty.call(taurusDashas, dashaKey)) {
+      combination = (taurusDashas as Record<string, any>)[dashaKey]
+    } else if (Object.prototype.hasOwnProperty.call(taurusDashas, baseKey)) {
+      combination = (taurusDashas as Record<string, any>)[baseKey]
+    }
+  }
+
   const setTitle = combination?.setTitle || (matrixKey && Object.prototype.hasOwnProperty.call(matrix, matrixKey)
     ? (matrix as Record<string, string>)[matrixKey]
     : null)
@@ -175,8 +189,41 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
   const primaryOffers = getOffersForIntention(answers.intention)
   const primaryLead = primaryOffers[0] || (inStock[0] ? presentOffer(inStock[0]) : null)
 
+  const isSelf = answers.forWhom === "self"
+  const activeExperienceKey = isSelf ? "buying_for_myself" : "gifting_someone_else"
+  const activeExp = combination?.experiences?.[activeExperienceKey] || null
+
   let primaryOffer: any = null
-  if (combination) {
+  if (combination && activeExp) {
+    primaryOffer = {
+      id: combination.combinationId,
+      isHamper: true,
+      combinationId: combination.combinationId,
+      handle: `hamper-${combination.combinationId.toLowerCase()}`,
+      title: combination.setTitle,
+      tagline: activeExp.headline || combination.tagline,
+      story: activeExp.chapterText || combination.story,
+      price: 549900, // ₹5,499 in paise
+      currency: "inr",
+      privateOffer: true,
+      keepsake: combination.keepsake,
+      ritual: combination.ritual,
+      luxuryAddOn: combination.luxuryAddOn,
+      challenge: combination.challenge,
+      desiredShift: combination.desiredShift,
+      components: [combination.keepsake?.name || "Sacred Keepsake", combination.ritual?.name || "Sensory Ritual"],
+      variantId: primaryLead?.variantId || "variant_curated_hamper",
+      image: primaryLead?.image || "/media/shop-wild-poise-card.webp",
+      categoryName: INTENTION_META[answers.intention]?.label,
+      vastuPlacement: combination.vastuPlacement,
+      activeExperience: activeExperienceKey,
+      intentionHeading: activeExp.intentionHeading,
+      intentionStatement: activeExp.intentionStatement,
+      whatThisGiftMeans: activeExp.whatThisGiftMeans,
+      contemplationPrompt: activeExp.contemplationPrompt || combination.vastuPlacement?.contemplationPrompt || null,
+      disclaimer: combination.disclaimer,
+    }
+  } else if (combination) {
     primaryOffer = {
       id: combination.combinationId,
       isHamper: true,
@@ -197,6 +244,8 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
       variantId: primaryLead?.variantId || "variant_curated_hamper",
       image: primaryLead?.image || "/media/shop-wild-poise-card.webp",
       categoryName: INTENTION_META[answers.intention]?.label,
+      vastuPlacement: combination.vastuPlacement || null,
+      disclaimer: combination.disclaimer || null,
     }
   } else if (primaryLead) {
     primaryOffer = {
@@ -208,46 +257,52 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
     }
   }
 
-  // 2. Secondary & Tertiary Categories (The remaining 3 intentions)
-  const otherIntentions = INTENTIONS.filter(i => i !== answers.intention)
-  const secondaryCategories = otherIntentions.map(int => {
-    const meta = INTENTION_META[int]
-    const items = getOffersForIntention(int)
-    const featured = items[0] || null
-    return {
-      intention: int,
-      categoryName: meta.label,
-      subtitle: meta.subtitle,
-      description: meta.description,
-      leadProduct: featured,
-      products: items.slice(0, 2),
+  // Single-Product Recommendation Law:
+  // Strictly only ONE product/hamper is shown after the astrology quiz.
+  // In existing recommendation fallbacks, the first product in the list will only be shown.
+  // Secondary categories are strictly empty [].
+  const singleOffer = primaryOffer || (primaryOffers[0] ? presentOffer(primaryOffers[0]) : (inStock[0] ? presentOffer(inStock[0]) : null))
+  const returnedOffers = singleOffer ? [singleOffer] : []
+  const secondaryCategories: any[] = []
+
+  let narrative: { whatYouMightBeGoingThrough: string; whyChosen: string; explanation: string }
+  if (activeExp) {
+    narrative = {
+      whatYouMightBeGoingThrough: activeExp.chapterText,
+      whyChosen: activeExp.whyChosen,
+      explanation: `${activeExp.chapterText}\n\n${activeExp.whyChosen}`.trim(),
     }
-  })
-
-  const returnedPrimaryOffers = [primaryOffer, ...primaryOffers.filter((o: any) => o.id !== primaryOffer?.id)].filter(Boolean)
-
-  const narrative = await narrate({
-    name: answers.name,
-    relation: answers.forWhom === "self" ? "self" : answers.relation,
-    intention: answers.intention,
-    intentionLabel: INTENTION_META[answers.intention]?.label || answers.intention,
-    moonSign: astrologyData?.moonSign,
-    dasha: astrologyData?.antardasha,
-    setTitle: primaryOffer?.title,
-    combination,
-    hasProducts: true,
-    fallback: `To support you through this chapter, these pieces have been curated to anchor your intention for ${INTENTION_META[answers.intention]?.label}.`,
-    titles: [primaryOffer?.title, ...primaryOffers.map((o: any) => o.title)].filter(Boolean),
-  })
+  } else {
+    narrative = await narrate({
+      name: answers.name,
+      relation: answers.forWhom === "self" ? "self" : answers.relation,
+      intention: answers.intention,
+      intentionLabel: INTENTION_META[answers.intention]?.label || answers.intention,
+      moonSign: astrologyData?.moonSign,
+      dasha: astrologyData?.antardasha,
+      setTitle: primaryOffer?.title,
+      combination,
+      hasProducts: Boolean(singleOffer),
+      fallback: `To support you through this chapter, these pieces have been curated to anchor your intention for ${INTENTION_META[answers.intention]?.label}.`,
+      titles: [primaryOffer?.title, ...primaryOffers.map((o: any) => o.title)].filter(Boolean),
+    })
+  }
 
   return {
     method,
-    hasProducts: true,
+    hasProducts: Boolean(singleOffer),
     whatYouMightBeGoingThrough: narrative.whatYouMightBeGoingThrough,
     whyChosen: narrative.whyChosen,
     explanation: narrative.explanation,
     setTitle: primaryOffer?.title || null,
     combination: combination || null,
+    vastuPlacement: combination?.vastuPlacement || null,
+    intentionHeading: activeExp?.intentionHeading || null,
+    intentionStatement: activeExp?.intentionStatement || null,
+    whatThisGiftMeans: activeExp?.whatThisGiftMeans || null,
+    contemplationPrompt: activeExp?.contemplationPrompt || combination?.vastuPlacement?.contemplationPrompt || null,
+    activeExperience: activeExp ? activeExperienceKey : null,
+    disclaimer: combination?.disclaimer || null,
     primaryCategory: {
       intention: answers.intention,
       categoryName: INTENTION_META[answers.intention]?.label,
@@ -260,8 +315,8 @@ export async function buildGuideResult(scope: any, raw: unknown, salesChannelId?
       mahadasha: astrologyData.mahadasha,
       coverage: "personalized-alignment",
     } : null,
-    primaryOffer,
-    offers: returnedPrimaryOffers.map(({ score, exact, ...offer }: any) => offer),
+    primaryOffer: singleOffer,
+    offers: returnedOffers,
     secondaryCategories,
   }
 }

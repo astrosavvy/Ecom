@@ -5,7 +5,7 @@
 ---
 
 ## 1. 📍 Executive Status & System Topology
-- **Active Phase**: Premium ivory category/rashi reveal redesign implemented and verified locally across 48 editions. Single final local commit prepared; fresh GitHub push permission pending. Production unchanged.
+- **Active Phase**: Premium ivory category/rashi reveal redesign pushed to GitHub main with explicit owner permission. Remote commit verified; frontend deployment verification pending.
 - **Last Updated**: 2026-10-24 | **Agent**: Codex | **Git Branch**: `main`
 - **Storefront**: `https://younoya.com` (Vite 6 + React 19 + Framer Motion + Lenis, deployed to Cloudflare Worker `ecom` via Git).
 - **Backend API**: `https://api.younoya.com` (Medusa 2.18 + Node 20 + PostgreSQL 15 `younoya_db` + Redis on VPS `ubuntu@140.245.7.165` via CF Tunnel).
@@ -509,3 +509,46 @@
 - Documentation: docs/premium-gift-reveal.md and creative media README. Canonical plan marked completed with task evidence and owner-approved illustration adjustment; index updated. Single local final commit includes all source/assets/tests/dist/docs/checkpoint; no intermediate commits. Next: obtain fresh explicit GitHub push permission and verify the frontend release afterward. No backend SSH rollout is needed.
 - Cleanup: valid temporary QA browser tabs closed, viewport reset, and all three owned pilot/dev/mock server processes stopped. No QA fixture left running.
 - Pre-commit: source/document whitespace checks pass. The generated JavaScript retains an intentional two-space Markdown hard break already present in the baseline dependency bundle; verified unchanged rather than altering generated semantics. Staged secret/original-file exclusion scan completed before commit.
+
+
+## 39. Premium reveal push verified — 2026-10-24 / Codex
+- User explicitly requested git push. git push origin main exited 0, advancing main from 47b11ee to ce2ecae. Independent git ls-remote verified full SHA ce2ecaed393297218583bb28f6efb6a80a8d6149 equals local HEAD.
+- Prior verified frontend build, 24 tests, 48-route/responsive QA, Worker dry-run and security scans remain applicable; no source change, new build, backend deployment or provider operation this turn.
+- Push triggers the established frontend pipeline. Deployment completion is not inferred from push success. Next: verify the public ivory reveal pages and new static assets after the Cloudflare release.
+- This post-push checkpoint note remains in the working tree for the next implementation commit. No checkpoint-only follow-up commit.
+
+
+## 40. Vedic Astrology Q&A Guide & Taurus 9-Dasha Integration — 2026-10-26 / Antigravity
+- **Vedic Astrology & Gifting Guide Ingestion (383BABD2 (1).pdf)**:
+  - Ingested all 21 pages of authentic manuscript text across all 9 Dashas for Taurus Moon (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury).
+  - Decoded Word-export ROT-3 font shifted quotes for authentic Giver's and Personal Intentions and contemplation prompts.
+  - Formatted dedicated living SSOT in younoya-web/src/data/taurusDashas.json and backend/src/modules/younoya-astro/data/taurusDashas.json (63 structured lookup keys), preserving exact combinations.json baseline SHA (0ffbb8bb0f...).
+- **Single-Product Recommendation Law**:
+  - Enforced single-product conviction across backend (/store/gift-guide/recommend in gift-guide.ts) and storefront (/find-a-gift in GuideResult.jsx).
+  - result.offers returns strictly 1 item; result.secondaryCategories is strictly empty [].
+  - Permanently excised and deprecated <GuideCompanions /> from the recommendations result flow.
+- **Universal Dual-Experience Awareness (forWhom === 'other' vs 'self')**:
+  - Gifting Someone Else (forWhom === 'other'): Renders Experience 01 ('A Chapter Worth Celebrating', 'Why this was chosen for them', 'The Giver's Intention' quote block with celebratory blessing).
+  - Buying For Myself (forWhom === 'self'): Renders Experience 02 ('The Chapter You're In', 'Why this was chosen for you', 'Your Personal Intention' quote block with self-permission statement & contemplation prompt).
+- **Sanctuary Direction & Vastu Spatial Alignment (WhatIsInside.jsx & GuideReading.jsx)**:
+  - Added dedicated Vastu Sanctuary Alignment card featuring a gold <Compass size={13} /> badge, room placement instructions, and authentic sacred direction (Ketu: Northeast, Venus: Dressing sanctuary, Sun: East, Moon: Southwest, Mars: South, Rahu: North, Jupiter: Northeast, Saturn: North, Mercury: North or Northeast).
+- **Strict Sign-Scoping Law**:
+  - Scoped all 9 Dashas strictly to **Taurus Moon (TAURUS)** in both backend resolver and frontend unboxing.
+  - Other 11 zodiac signs remain grounded in their approved Mercury & Ketu matrix records with zero data leakage.
+- **Shareable QR & Inside-the-Box Unboxing (/reveal/* & GiftReveal.jsx)**:
+  - Enhanced getRevealEdition(category, rashi, { dasha, experience }) to resolve Dasha query parameters (?dasha=...&exp=...).
+  - When scanned for a Taurus Dasha box, dynamically renders the authentic 'Inside the Box' unboxing layout ('What This Gift Means', Giver's/Personal Intention, Sacred Direction Vastu card, Ritual & Care, and official disclaimer).
+  - Preserved 100% backward compatibility for all 48 canonical Mercury reveal editions.
+  - Added Taurus Dasha and Experience selectors to admin OrderBoxLabel.tsx and QrStickerStudio.tsx.
+- **Living Knowledge Base Modernization**:
+  - Updated .agents/rules/architecture.md (Sections 9, 10, 11, 12).
+  - Updated .agents/memory/gift_guide_ui.md (Single-Product Law & Dual Experience).
+  - Updated .agents/memory/gift_intentions.md (Taurus Moon 9-Dasha Ensembles matrix).
+  - Updated .agents/context/domain.md (Single Curated Hero & Vastu orientation).
+- **Verification & Builds**:
+  - Backend TypeScript compilation: npm --prefix backend run build exited 0.
+  - Frontend production build: root npm run build exited 0 (24 indexable shells, 4 excluded shells, 12 admin shells, clean synchronized dist/).
+  - Automated tests: 29/29 tests passing across 4 suites (taurus-dasha-matrix.test.mjs, gift-reveal.test.mjs, qr-unboxing-and-social.test.mjs, seo.test.mjs).
+- **Inviolable Git Protocol**:
+  - All changes staged together in the working tree for ONE single final semantic commit.
+  - Push permission: Stopped and requesting explicit user permission before executing git push origin main.

@@ -4,8 +4,9 @@ export default function WhatIsInside({ combination, offer }) {
   const keepsake = combination?.keepsake || (offer?.keepsake ? offer.keepsake : null)
   const ritual = combination?.ritual || (offer?.ritual ? offer.ritual : null)
   const luxury = combination?.luxuryAddOn || (offer?.luxuryAddOn ? offer.luxuryAddOn : null)
+  const vastu = combination?.vastuPlacement || (offer?.vastuPlacement ? offer.vastuPlacement : null)
 
-  if (!keepsake && !ritual) return null
+  if (!keepsake && !ritual && !vastu) return null
 
   return (
     <div className="what-is-inside">
@@ -48,6 +49,18 @@ export default function WhatIsInside({ combination, offer }) {
             </div>
             <h4 className="what-is-inside__item-name">{luxury.title}</h4>
             <span className="what-is-inside__price-note">{luxury.priceRange || 'Suggested Signature Add-On'}</span>
+          </div>
+        )}
+
+        {vastu?.direction && (
+          <div className="what-is-inside__card vastu-card">
+            <div className="what-is-inside__badge">
+              <Compass size={13} /> Sanctuary Direction (Vastu) • {vastu.direction}
+            </div>
+            <h4 className="what-is-inside__item-name">Sacred Spatial Alignment</h4>
+            {vastu.instructions && (
+              <p className="what-is-inside__item-desc">{vastu.instructions}</p>
+            )}
           </div>
         )}
       </div>

@@ -66,3 +66,33 @@
     ```
 
 
+
+
+## 9. Single-Product Recommendation Law (Zero Distraction / Zero Multi-Offer)
+- **Single Curated Hero**: Following the Vedic Astrology & Gifting Guide, the recommendation engine (/store/gift-guide/recommend and /find-a-gift) MUST return strictly ONE curated piece or hamper (offers array length is strictly 1).
+- **Zero Secondary Categories**: secondaryCategories is strictly empty [].
+- **UI Excision**: <GuideCompanions /> is deprecated and removed from the results flow (GuideResult.jsx). The customer is shown one single, definitive, intentional gift piece with complete conviction.
+- **Fallback Rule**: In fallback or numerology modes, only the single top-ranked product (offers[0]) is returned.
+
+## 10. Universal Dual-Experience Awareness Protocol
+- **Experience 01 — Gifting Someone Else (forWhom === 'other')**:
+  - Narrative chapter: 'A Chapter Worth Celebrating'.
+  - Emotional rationale: 'Why this was chosen for them'.
+  - Sacred intent: 'The Giver's Intention' with decoded quote and celebratory blessing.
+- **Experience 02 — Buying For Myself (forWhom === 'self')**:
+  - Narrative chapter: 'The Chapter You're In'.
+  - Emotional rationale: 'Why this was chosen for you'.
+  - Sacred intent: 'Your Personal Intention' with self-permission statement and contemplative thought prompt.
+
+## 11. Taurus Moon 9-Dasha Scoping Law (Strict Sign-Scoping)
+- **Taurus Moon Scope**: The complete 9-Dasha Vimshottari progression (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury) from the manuscript is strictly scoped to **Taurus Moon (TAURUS)**.
+- **Non-Taurus Preservation**: The other 11 zodiac signs remain grounded in their approved Mercury & Ketu matrix records. Never leak or guess unmapped Dashas for non-Taurus signs.
+
+## 12. Shareable QR & 'Inside the Box' Unboxing Protocol
+- **Dual Query Resolution**: Route /reveal/:category/:rashi supports optional query parameters ?dasha=<name>&exp=<self|other>.
+- **Inside the Box Content**: When scanned for a Taurus Dasha box, it renders the exact 'Inside the Box' chapter from the manuscript:
+  - 'What This Gift Means'.
+  - 'The Giver's / Personal Intention' with authenticated quotes.
+  - 'Sanctuary Placement & Sacred Direction (Vastu)' (e.g. Northeast, East, Southwest, South, North).
+  - 'Ritual & Care' usage instructions and official disclaimer.
+- **100% Backward Compatibility**: Scanning or browsing without query params preserves the standard 48 canonical Mercury reveal editions.

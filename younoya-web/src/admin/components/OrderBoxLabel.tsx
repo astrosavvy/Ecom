@@ -40,11 +40,19 @@ export default function OrderBoxLabel({ order }: OrderBoxLabelProps) {
 
   const [selectedCatSlug, setSelectedCatSlug] = useState(defaultDetection.category)
   const [selectedRashiSlug, setSelectedRashiSlug] = useState(defaultDetection.rashi)
+  const [selectedDasha, setSelectedDasha] = useState<string>('')
+  const [selectedExperience, setSelectedExperience] = useState<string>('other')
 
   const activeCategory = resolveCategory(selectedCatSlug)
   const activeRashi = resolveRashi(selectedRashiSlug)
 
-  const revealUrl = `https://younoya.com/reveal/${activeCategory.slug}/${activeRashi.slug}`
+  const queryParams = new URLSearchParams()
+  if (selectedRashiSlug === 'taurus' && selectedDasha) {
+    queryParams.set('dasha', selectedDasha)
+    if (selectedExperience) queryParams.set('exp', selectedExperience)
+  }
+  const queryString = queryParams.toString() ? `?${queryParams.toString()}` : ''
+  const revealUrl = `https://younoya.com/reveal/${activeCategory.slug}/${activeRashi.slug}${queryString}`
   const orderRef = order.display_id ? `#YOU-${String(order.display_id).padStart(4, '0')}` : `#${order.id.slice(0, 8)}`
   const recipientName = [order.shipping_address?.first_name, order.shipping_address?.last_name].filter(Boolean).join(' ')
 
@@ -168,6 +176,40 @@ export default function OrderBoxLabel({ order }: OrderBoxLabelProps) {
             ))}
           </select>
         </div>
+
+        {selectedRashiSlug === 'taurus' && (
+          <>
+            <div className="order-box-label__field">
+              <label>Taurus Dasha Chapter</label>
+              <select 
+                value={selectedDasha} 
+                onChange={(e) => setSelectedDasha(e.target.value)}
+              >
+                <option value="">Default (Mercury Baseline)</option>
+                <option value="Ketu">Ketu (The Beauty of Enough)</option>
+                <option value="Venus">Venus (The Art of Adoration)</option>
+                <option value="Sun">Sun (Leads with Heart)</option>
+                <option value="Moon">Moon (Feels Like Home)</option>
+                <option value="Mars">Mars (Inspires to Grow)</option>
+                <option value="Rahu">Rahu (Tactical Ambition)</option>
+                <option value="Jupiter">Jupiter (Hope & Perspective)</option>
+                <option value="Saturn">Saturn (Endurance & Abundance)</option>
+                <option value="Mercury">Mercury (Time Wisdom)</option>
+              </select>
+            </div>
+
+            <div className="order-box-label__field">
+              <label>Experience Tone</label>
+              <select 
+                value={selectedExperience} 
+                onChange={(e) => setSelectedExperience(e.target.value)}
+              >
+                <option value="other">Gifting Someone Else</option>
+                <option value="self">Buying For Myself</option>
+              </select>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Sticker Preview */}

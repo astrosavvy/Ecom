@@ -5,7 +5,6 @@ import GuideHistory from './GuideHistory'
 import GuideReading from './GuideReading'
 import GuideLeadOffer from './GuideLeadOffer'
 import SocialShareCard from './SocialShareCard'
-import GuideCompanions from './GuideCompanions'
 import '../../styles/GuideResult.css'
 
 export default function GuideResult({ values, result, onSave, onOrder, onRestart, saved, notice }) {
@@ -22,7 +21,6 @@ export default function GuideResult({ values, result, onSave, onOrder, onRestart
     <GuideReading values={values} result={result} lead={lead} hasProducts={hasProducts} />
     <GuideLeadOffer lead={lead} result={result} onOrder={onOrder} />
     <SocialShareCard values={values} result={result} />
-    <GuideCompanions categories={result.secondaryCategories} onOrder={onOrder} />
     <div className="guide-result__actions">
       {hasProducts && <button type="button" onClick={onSave} disabled={!lead?.variantId || saved}><Bookmark size={16} /> {saved ? 'Saved to your account' : 'Save this edit'}</button>}
       <button type="button" className="guide-btn-luxury-secondary" onClick={onRestart}><RotateCcw size={14} /><span>Begin again</span></button>
